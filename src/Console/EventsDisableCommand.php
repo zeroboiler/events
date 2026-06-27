@@ -1,0 +1,44 @@
+<?php
+/**
+ * This file is part of ZeroBoiler, licensed under the proprietary license.
+ */
+
+declare(strict_types=1);
+
+namespace ZeroBoiler\Events\Console;
+
+use Illuminate\Console\Command;
+use ZeroBoiler\Events\EventManager;
+use ZeroBoiler\Events\Models\Trigger;
+
+class EventsDisableCommand extends Command
+{
+    protected $signature = 'zeroboiler:events:disable {id : Trigger ID}';
+
+    protected $description = 'Disable an event trigger';
+
+    public function handle(): int
+    {
+        $id = $this->argument('id');
+
+        $trigger = Trigger::find($id);
+
+        if (! $trigger) {
+            $this->error("Trigger '{$id}' not found.");
+
+            return Command::FAILURE;
+        }
+
+        if (! $trigger->enabled) {
+            $this->info("Trigger '{$trigger->name}' is already disabled.");
+
+            return Command::SUCCESS;
+        }
+
+        app(EventManager::class)->disable($id);
+
+        $this->info("Trigger '{$trigger->name}' disabled successfully.");
+
+        return Command::SUCCESS;
+    }
+}

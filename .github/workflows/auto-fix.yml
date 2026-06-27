@@ -1,0 +1,46 @@
+name: Auto-fix
+
+on:
+  push:
+    branches: [main, develop]
+
+jobs:
+  auto-fix:
+    runs-on: ubuntu-latest
+
+    if: github.actor == 'dependabot[bot]' || github.actor == 'github-actions[bot]'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: dom, curl, mbstring, zip, pdo, sqlite, pdo_sqlite
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Run Pint
+        run: ./vendor/bin/pint
+
+      - name: Run Rector
+        run: ./vendor/bin/rector process
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add -A
+          git diff --quiet && git diff --staged --quiet || git commit -m "style: auto-fix code style and deprecations"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

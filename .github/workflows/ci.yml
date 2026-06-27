@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: ['8.5']
+
+    name: PHP ${{ matrix.php }} Tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, mbstring, zip, pdo, sqlite, pdo_sqlite
+          coverage: none
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Run Pint
+        run: ./vendor/bin/pint --test
+
+      - name: Run Rector
+        run: ./vendor/bin/rector process --dry-run
+
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan analyse --no-progress
+
+      - name: Run Pest
+        run: ./vendor/bin/pest --coverage
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false

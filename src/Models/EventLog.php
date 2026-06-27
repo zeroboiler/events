@@ -1,0 +1,177 @@
+<?php
+/**
+ * This file is part of ZeroBoiler, licensed under the proprietary license.
+ */
+
+declare(strict_types=1);
+
+namespace ZeroBoiler\Events\Models;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
+use ZeroBoiler\Events\Database\Factories\EventLogFactory;
+
+/**
+ * @property string $id
+ * @property string $trigger_id
+ * @property string $event
+ * @property array<string, mixed> $payload
+ * @property string $status
+ * @property string|null $error
+ * @property int|null $duration_ms
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Trigger $trigger
+ *
+ * @mixin \Eloquent
+ */
+class EventLog extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
+
+    /** @var string */
+    protected $keyType = 'string';
+
+    /** @var bool */
+    public $incrementing = false;
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (self $model) {
+            if (empty($model->id)) {
+                $model->id = (string) Str::uuid();
+            }
+        });
+    }
+
+    public const STATUS_PENDING = 'pending';
+
+    public const STATUS_DISPATCHED = 'dispatched';
+
+    public const STATUS_COMPLETED = 'completed';
+
+    public const STATUS_FAILED = 'failed';
+
+    /** @var array<int, string> */
+    public static array $statuses = [
+        self::STATUS_PENDING,
+        self::STATUS_DISPATCHED,
+        self::STATUS_COMPLETED,
+        self::STATUS_FAILED,
+    ];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'payload' => 'array',
+        'duration_ms' => 'int',
+    ];
+
+    /** @var array<int, string> */
+    protected $fillable = [
+        'id',
+        'trigger_id',
+        'event',
+        'payload',
+        'status',
+        'error',
+        'duration_ms',
+    ];
+
+    /** @var array<int, string> */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
+    /**
+     * @return BelongsTo<Trigger, EventLog>
+     */
+    public function trigger(): BelongsTo
+    {
+        return $this->belongsTo(Trigger::class, 'trigger_id');
+    }
+
+    /**
+     * Scope a query to only include logs with a specific status.
+     *
+     * @param  Builder<EventLog>  $query
+     * @return Builder<EventLog>
+     */
+    public function scopeWithStatus($query, string $status): Builder
+    {
+        return $query->where('status', $status);
+    }
+
+    /**
+     * Scope a query to only include failed logs.
+     *
+     * @param  Builder<EventLog>  $query
+     * @return Builder<EventLog>
+     */
+    public function scopeFailed($query): Builder
+    {
+        return $query->where('status', self::STATUS_FAILED);
+    }
+
+    /**
+     * Scope a query to only include pending logs.
+     *
+     * @param  Builder<EventLog>  $query
+     * @return Builder<EventLog>
+     */
+    public function scopePending($query): Builder
+    {
+        return $query->where('status', self::STATUS_PENDING);
+    }
+
+    /**
+     * Scope a query to only include completed logs.
+     *
+     * @param  Builder<EventLog>  $query
+     * @return Builder<EventLog>
+     */
+    public function scopeCompleted($query): Builder
+    {
+        return $query->where('status', self::STATUS_COMPLETED);
+    }
+
+    /**
+     * Mark the log as completed.
+     */
+    public function markAsCompleted(int $durationMs): void
+    {
+        $this->update([
+            'status' => self::STATUS_COMPLETED,
+            'duration_ms' => $durationMs,
+        ]);
+    }
+
+    /**
+     * Mark the log as failed.
+     */
+    public function markAsFailed(string $error): void
+    {
+        $this->update([
+            'status' => self::STATUS_FAILED,
+            'error' => $error,
+        ]);
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory<EventLog>
+     */
+    protected static function newFactory(): Factory
+    {
+        return EventLogFactory::new();
+    }
+}

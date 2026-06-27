@@ -1,0 +1,13 @@
+/vendor/
+node_modules/
+.phpunit.result.cache
+.phpunit.cache/
+.husky/
+.php-cs-fixer.cache
+rector.php
+pint.json
+phpstan.neon
+.phpstan.cache
+composer.lock
+.DS_Store
+*.log

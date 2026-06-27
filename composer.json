@@ -1,0 +1,69 @@
+{
+    "name": "zeroboiler/events",
+    "description": "DB-driven dynamic event manager for Laravel — manage triggers via admin panel, API, or CLI without code changes",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.1.0",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^11.0",
+        "illuminate/support": "^11.0",
+        "illuminate/database": "^11.0",
+        "illuminate/queue": "^11.0",
+        "illuminate/log": "^11.0",
+        "illuminate/config": "^11.51",
+        "phpoption/phpoption": "^1.9",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "require-dev": {
+        "pestphp/pest": "^3.8",
+        "phpstan/phpstan": "^2.2",
+        "laravel/pint": "^1.29",
+        "rector/rector": "^2.5",
+        "fakerphp/faker": "^1.24",
+        "rector/rector-laravel": "^2.5",
+        "driftingly/rector-laravel": "^2.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZeroBoiler\\Events\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZeroBoiler\\Events\\Tests\\": "tests/",
+            "ZeroBoiler\\Events\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "analyse": "phpstan analyse",
+        "lint": "pint",
+        "rector": "rector",
+        "php-artisan-test": "php artisan test",
+        "ci": [
+            "@lint",
+            "@analyse",
+            "@rector",
+            "@test",
+            "@php-artisan-test"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ZeroBoiler\\Events\\EventsServiceProvider"
+            ],
+            "aliases": {
+                "EventManager": "ZeroBoiler\\Events\\Facades\\EventManager"
+            }
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}

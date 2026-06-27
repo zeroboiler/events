@@ -1,0 +1,53 @@
+<?php
+/**
+ * This file is part of ZeroBoiler, licensed under the proprietary license.
+ */
+
+declare(strict_types=1);
+
+namespace ZeroBoiler\Events;
+
+use Illuminate\Support\ServiceProvider;
+use ZeroBoiler\Events\Console\EventsDisableCommand;
+use ZeroBoiler\Events\Console\EventsEnableCommand;
+use ZeroBoiler\Events\Console\EventsFireCommand;
+use ZeroBoiler\Events\Console\EventsListCommand;
+use ZeroBoiler\Events\Console\EventsLogCommand;
+use ZeroBoiler\Events\Console\EventsRegisterCommand;
+use ZeroBoiler\Events\Console\EventsRetryCommand;
+
+class EventsServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/events.php',
+            'events'
+        );
+
+        $this->app->singleton(ConditionEngine::class);
+        $this->app->singleton(ActionResolver::class);
+        $this->app->singleton(EventManager::class);
+    }
+
+    public function boot(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../config/events.php' => config_path('events.php'),
+            ], 'events-config');
+
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+            $this->commands([
+                EventsListCommand::class,
+                EventsRegisterCommand::class,
+                EventsFireCommand::class,
+                EventsLogCommand::class,
+                EventsRetryCommand::class,
+                EventsEnableCommand::class,
+                EventsDisableCommand::class,
+            ]);
+        }
+    }
+}
