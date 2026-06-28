@@ -8,15 +8,14 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events\Tests;
 
-use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Cache\CacheManager;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Hashing\HashManager;
 use Illuminate\Log\LogManager;
 use Illuminate\Queue\QueueManager;
@@ -39,12 +38,12 @@ trait CreatesApplication
 
             public function configPath(string $path = ''): string
             {
-                return __DIR__ . '/../config' . ($path !== '' ? '/' . $path : '');
+                return __DIR__.'/../config'.($path !== '' ? '/'.$path : '');
             }
 
             public function databasePath(string $path = ''): string
             {
-                return __DIR__ . '/../database' . ($path !== '' ? '/' . $path : '');
+                return __DIR__.'/../database'.($path !== '' ? '/'.$path : '');
             }
         };
 
@@ -69,27 +68,7 @@ trait CreatesApplication
         $app->instance('db', $db);
         $app->alias('db', DatabaseManager::class);
 
-        // Bind core services
-        $app->singleton('events', fn (): Dispatcher => new Dispatcher($app));
-        $app->singleton('queue', fn (): QueueManager => new QueueManager($app));
-        $app->singleton('hash', fn (): HashManager => new HashManager($app));
-
-        // Bind log service so Log facade works in tests
-        $app->singleton('log', fn (): LogManager => new LogManager($app));
-
-        // Bind cache service so Cache facade works in tests
-        $app->singleton('cache', fn (): CacheManager => new CacheManager($app));
-        $app->alias('cache', CacheManager::class);
-
-        // Bind Schema facade - get grammar from the connection
-        $app->instance('db.schema', $db->connection()->getSchemaBuilder());
-        $app->alias('db.schema', Builder::class);
-
-        // Bind Faker for factories
-        $app->singleton(Generator::class, fn () => Factory::create('en_US'));
-        $app->alias(Generator::class, 'faker');
-
-        // Create a simple config repository and bind it
+        // Create and bind config early so other services can access it
         $config = new Repository([
             'database' => [
                 'default' => 'default',
@@ -127,6 +106,26 @@ trait CreatesApplication
             ],
         ]);
         $app->instance('config', $config);
+
+        // Bind core services
+        $app->singleton('events', fn (): Dispatcher => new Dispatcher($app));
+        $app->singleton('queue', fn (): QueueManager => new QueueManager($app));
+        $app->singleton('hash', fn (): HashManager => new HashManager($app));
+
+        // Bind log service so Log facade works in tests
+        $app->singleton('log', fn (): LogManager => new LogManager($app));
+
+        // Bind cache service so Cache facade works in tests
+        $app->singleton('cache', fn (): CacheManager => new CacheManager($app));
+        $app->alias('cache', \Illuminate\Contracts\Cache\Factory::class);
+
+        // Bind Schema facade - get grammar from the connection
+        $app->instance('db.schema', $db->connection()->getSchemaBuilder());
+        $app->alias('db.schema', Builder::class);
+
+        // Bind Faker for factories
+        $app->singleton(Generator::class, fn () => Factory::create('en_US'));
+        $app->alias(Generator::class, 'faker');
 
         // Boot facades
         Facade::setFacadeApplication($app);
