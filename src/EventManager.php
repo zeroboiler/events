@@ -87,21 +87,11 @@ class EventManager
     ): string {
         $trigger = $this->register($event)
             ->action(WebhookAction::class)
+            ->actionParams(['url' => $url])
             ->when($conditions)
             ->priority($priority)
+            ->name("Webhook: {$event} → {$url}")
             ->save();
-
-        // Store the webhook URL in the trigger's action configuration
-        // by encoding both the action class and parameters as JSON,
-        // so WebhookAction receives the URL when resolved.
-        $actionConfig = [
-            'class' => WebhookAction::class,
-            'params' => ['url' => $url],
-        ];
-
-        $trigger->action = json_encode($actionConfig);
-        $trigger->name = "Webhook: {$event} → {$url}";
-        $trigger->save();
 
         return $trigger->id;
     }

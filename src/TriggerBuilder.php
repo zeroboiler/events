@@ -29,6 +29,9 @@ class TriggerBuilder
 
     protected int $priority = 0;
 
+    /** @var array<string, mixed> */
+    protected array $actionParams = [];
+
     public function __construct(
         protected EventManager $eventManager
     ) {}
@@ -108,6 +111,21 @@ class TriggerBuilder
     }
 
     /**
+     * Set action handler parameters (e.g. webhook URL).
+     *
+     * These are merged into the action handler's constructor args
+     * when the trigger is dispatched.
+     *
+     * @param  array<string, mixed>  $params
+     */
+    public function actionParams(array $params): self
+    {
+        $this->actionParams = $params;
+
+        return $this;
+    }
+
+    /**
      * Save the trigger to the database.
      *
      * Uses a single INSERT to avoid the race condition where a double
@@ -134,6 +152,14 @@ class TriggerBuilder
             $actionString = json_encode($this->actions);
         } elseif (($actionString === '' || $actionString === '0') && $this->actions !== []) {
             $actionString = $this->actions[0];
+        }
+
+        // If action params are set, encode them with the action class
+        if ($this->actionParams !== []) {
+            $actionString = json_encode([
+                'class' => $actionString,
+                'params' => $this->actionParams,
+            ]);
         }
 
         $trigger = new Trigger([
