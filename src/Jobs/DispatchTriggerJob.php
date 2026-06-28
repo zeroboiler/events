@@ -50,6 +50,14 @@ class DispatchTriggerJob implements ShouldQueue
             return;
         }
 
+        // Bug #407: Reset status to 'pending' before each attempt so the
+        // EventLog does not stay 'dispatched' between retry attempts.
+        // This makes the true state visible between job attempts.
+        if ($log->status === EventLog::STATUS_DISPATCHED) {
+            $log->status = EventLog::STATUS_PENDING;
+            $log->save();
+        }
+
         $eventManager = app(EventManager::class);
         $eventManager->executeTrigger($trigger, $log);
     }

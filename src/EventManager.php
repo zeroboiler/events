@@ -9,6 +9,7 @@ namespace ZeroBoiler\Events;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
@@ -21,6 +22,16 @@ use ZeroBoiler\Events\Models\Trigger;
 
 class EventManager
 {
+    /**
+     * Cache key for the enabled wildcard triggers collection.
+     */
+    protected const TRIGGER_CACHE_KEY = 'zeroboiler:events:enabled_triggers';
+
+    /**
+     * Cache TTL in seconds (5 minutes).
+     */
+    protected const TRIGGER_CACHE_TTL = 300;
+
     public function __construct(
         protected ConditionEngine $conditionEngine,
         protected ActionResolver $actionResolver
@@ -35,6 +46,16 @@ class EventManager
         $builder->on($event);
 
         return $builder;
+    }
+
+    /**
+     * Invalidate the trigger cache.
+     *
+     * Call after register / unregister / enable / disable.
+     */
+    public function invalidateTriggerCache(): void
+    {
+        Cache::forget(self::TRIGGER_CACHE_KEY);
     }
 
     /**
@@ -122,7 +143,13 @@ class EventManager
      */
     public function enable(string $triggerId): bool
     {
-        return Trigger::where('id', $triggerId)->update(['enabled' => true]) > 0;
+        $result = Trigger::where('id', $triggerId)->update(['enabled' => true]) > 0;
+
+        if ($result) {
+            $this->invalidateTriggerCache();
+        }
+
+        return $result;
     }
 
     /**
@@ -130,25 +157,36 @@ class EventManager
      */
     public function disable(string $triggerId): bool
     {
-        return Trigger::where('id', $triggerId)->update(['enabled' => false]) > 0;
+        $result = Trigger::where('id', $triggerId)->update(['enabled' => false]) > 0;
+
+        if ($result) {
+            $this->invalidateTriggerCache();
+        }
+
+        return $result;
     }
 
     /**
      * Get all triggers matching an event (including wildcards).
      *
+     * Uses a cached collection of enabled triggers with wildcards to avoid
+     * loading all triggers on every fire() call. Exact (non-wildcard) matches
+     * are queried directly from the DB for freshness.
+     *
      * @return Collection<int, Trigger>
      */
     protected function getMatchingTriggers(string $event): Collection
     {
-        // Get exact matches
+        // Exact matches — always queried directly (cheap, indexed lookup)
         $triggers = Trigger::enabled()
             ->where('event', $event)
             ->orderByPriority()
             ->get();
 
-        // Get wildcard matches
-        $allTriggers = Trigger::enabled()->get();
-        foreach ($allTriggers as $trigger) {
+        // Wildcard matches — use cached collection of enabled wildcard triggers
+        $wildcardTriggers = $this->getEnabledWildcardTriggers();
+
+        foreach ($wildcardTriggers as $trigger) {
             if (WildcardMatcher::matches($trigger->event, $event)) {
                 $exists = $triggers->firstWhere('id', $trigger->id);
                 if (! $exists) {
@@ -158,6 +196,23 @@ class EventManager
         }
 
         return $triggers->sortByDesc('priority')->values();
+    }
+
+    /**
+     * Get all enabled triggers whose event pattern contains a wildcard.
+     *
+     * Results are cached with a TTL and invalidated on register / enable / disable.
+     *
+     * @return Collection<int, Trigger>
+     */
+    protected function getEnabledWildcardTriggers(): Collection
+    {
+        return Cache::remember(self::TRIGGER_CACHE_KEY, self::TRIGGER_CACHE_TTL, function (): Collection {
+            return Trigger::enabled()
+                ->where('event', 'like', '%*%')
+                ->orderByPriority()
+                ->get();
+        });
     }
 
     /**

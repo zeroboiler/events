@@ -12,6 +12,11 @@ use ZeroBoiler\Events\Contracts\ConditionEngineContract;
 class ConditionEngine implements ConditionEngineContract
 {
     /**
+     * Maximum regex length for 'matches' operator to prevent ReDoS.
+     */
+    private const MAX_REGEX_LENGTH = 500;
+
+    /**
      * Evaluate conditions against a payload.
      *
      * @param  array<string, mixed>  $conditions
@@ -42,11 +47,12 @@ class ConditionEngine implements ConditionEngineContract
             $operator = $expected[0];
             $value = $expected[1] ?? null;
 
+            // Guard against null actual values for comparison operators
             return match ($operator) {
-                '>' => $actual > $value,
-                '>=' => $actual >= $value,
-                '<' => $actual < $value,
-                '<=' => $actual <= $value,
+                '>' => $actual !== null && is_numeric($actual) && $actual > $value,
+                '>=' => $actual !== null && is_numeric($actual) && $actual >= $value,
+                '<' => $actual !== null && is_numeric($actual) && $actual < $value,
+                '<=' => $actual !== null && is_numeric($actual) && $actual <= $value,
                 '=' => $actual == $value,
                 '===' => $actual === $value,
                 '!=' => $actual != $value,
@@ -55,20 +61,54 @@ class ConditionEngine implements ConditionEngineContract
                 'not_in' => ! in_array($actual, (array) $value, true),
                 'contains' => $this->contains($actual, $value),
                 'not_contains' => ! $this->contains($actual, $value),
-                'between' => $this->between($actual, $value),
+                'between' => $actual !== null && $this->between($actual, $value),
                 'null' => $actual === null,
                 'not_null' => $actual !== null,
                 'empty' => empty($actual),
                 'not_empty' => ! empty($actual),
                 'starts_with' => str_starts_with((string) $actual, (string) $value),
                 'ends_with' => str_ends_with((string) $actual, (string) $value),
-                'matches' => (bool) preg_match((string) $value, (string) $actual),
+                'matches' => $this->safeRegexMatch((string) $value, (string) $actual),
                 default => $actual == $expected,
             };
         }
 
         // Simple equality check
         return $actual == $expected;
+    }
+
+    /**
+     * Safely match a regex pattern against a subject.
+     *
+     * Prevents ReDoS by:
+     * - Limiting pattern length to 500 characters
+     * - Limiting PCRE backtrack limit to 1000
+     * - Rejecting common catastrophic backtracking patterns (nested quantifiers)
+     * - Returning false on any error
+     */
+    protected function safeRegexMatch(string $pattern, string $subject): bool
+    {
+        if (strlen($pattern) > self::MAX_REGEX_LENGTH) {
+            return false;
+        }
+
+        // Reject common catastrophic backtracking patterns:
+        // nested quantifiers like (a+)+ or (a*)*  etc.
+        if (preg_match('/\([^)]*[+*?][^)]*\)[+*{]/', $pattern)) {
+            return false;
+        }
+
+        $previousBacktrack = @ini_set('pcre.backtrack_limit', '1000');
+
+        try {
+            $result = @preg_match($pattern, $subject);
+
+            return $result === 1;
+        } finally {
+            if ($previousBacktrack !== false) {
+                @ini_set('pcre.backtrack_limit', $previousBacktrack);
+            }
+        }
     }
 
     /**
@@ -109,6 +149,10 @@ class ConditionEngine implements ConditionEngineContract
     protected function between(mixed $actual, mixed $value): bool
     {
         if (! is_array($value) || count($value) !== 2) {
+            return false;
+        }
+
+        if (! is_numeric($actual)) {
             return false;
         }
 

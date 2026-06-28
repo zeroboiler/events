@@ -108,6 +108,9 @@ class TriggerBuilder
 
     /**
      * Save the trigger to the database.
+     *
+     * Uses a single INSERT to avoid the race condition where a double
+     * INSERT→UPDATE could collide on the UUID primary key.
      */
     public function save(): Trigger
     {
@@ -124,11 +127,19 @@ class TriggerBuilder
             $this->name = $this->event.' Trigger';
         }
 
+        // Build the final action string once — no second save() needed
+        $actionString = $this->action;
+        if (! empty($this->actions) && count($this->actions) > 1) {
+            $actionString = json_encode($this->actions);
+        } elseif (empty($actionString) && ! empty($this->actions)) {
+            $actionString = $this->actions[0];
+        }
+
         $trigger = new Trigger([
             'id' => (string) Str::uuid(),
             'name' => $this->name,
             'event' => $this->event,
-            'action' => $this->action ?: ($this->actions[0] ?? ''),
+            'action' => $actionString,
             'conditions' => $this->conditions,
             'async' => $this->async,
             'priority' => $this->priority,
@@ -136,11 +147,9 @@ class TriggerBuilder
         ]);
         $trigger->save();
 
-        // Store additional actions in the action field as JSON if needed
-        if (! empty($this->actions) && count($this->actions) > 1) {
-            $trigger->action = json_encode($this->actions);
-            $trigger->save();
-        }
+        // Invalidate the EventManager trigger cache so the new trigger
+        // is visible immediately.
+        $this->eventManager->invalidateTriggerCache();
 
         return $trigger;
     }
