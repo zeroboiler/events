@@ -13,9 +13,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Throwable;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Models\EventLog;
+use ZeroBoiler\Events\Models\Trigger;
 
 class DispatchTriggerJob implements ShouldQueue
 {
@@ -28,37 +30,46 @@ class DispatchTriggerJob implements ShouldQueue
     /** @var array<int, int> */
     public int|array $backoff = [60, 300, 900];
 
+    /**
+     * @param  array<string, mixed>  $payload
+     */
     public function __construct(
-        public string $eventLogId
+        public string $triggerId,
+        public string $event,
+        public array $payload,
     ) {}
+
+    /**
+     * The EventLog ID once created, stored on the instance so failed()
+     * can reference it without a DB lookup by construction-time ID.
+     */
+    protected ?string $eventLogId = null;
 
     public function handle(): void
     {
-        $log = EventLog::find($this->eventLogId);
-
-        if (! $log) {
-            Log::warning('EventLog not found', ['event_log_id' => $this->eventLogId]);
-
-            return;
-        }
-
-        $trigger = $log->trigger;
+        $trigger = Trigger::find($this->triggerId);
 
         if (! $trigger || ! $trigger->enabled) {
             Log::warning('Trigger not found or disabled', [
-                'trigger_id' => $log->trigger_id,
+                'trigger_id' => $this->triggerId,
             ]);
 
             return;
         }
 
-        // Bug #407: Reset status to 'pending' before each attempt so the
-        // EventLog does not stay 'dispatched' between retry attempts.
-        // This makes the true state visible between job attempts.
-        if ($log->status === EventLog::STATUS_DISPATCHED) {
-            $log->status = EventLog::STATUS_PENDING;
-            $log->save();
-        }
+        // Create the EventLog here — inside the job — so that if the job
+        // never runs (queue down, Redis flushed), no orphaned log entry is
+        // left behind. See bug #632.
+        $log = new EventLog([
+            'id' => (string) Str::uuid(),
+            'trigger_id' => $trigger->id,
+            'event' => $this->event,
+            'payload' => $this->payload,
+            'status' => EventLog::STATUS_PENDING,
+        ]);
+        $log->save();
+
+        $this->eventLogId = $log->id;
 
         $eventManager = app(EventManager::class);
         $eventManager->executeTrigger($trigger, $log);
@@ -67,15 +78,22 @@ class DispatchTriggerJob implements ShouldQueue
     public function failed(Throwable $exception): void
     {
         Log::error('DispatchTriggerJob failed permanently', [
+            'trigger_id' => $this->triggerId,
+            'event' => $this->event,
             'event_log_id' => $this->eventLogId,
             'error' => $exception->getMessage(),
         ]);
 
-        $log = EventLog::find($this->eventLogId);
-        if ($log) {
-            $log->status = EventLog::STATUS_FAILED;
-            $log->error = $exception->getMessage();
-            $log->save();
+        // If the EventLog was created before the failure, mark it as failed.
+        // If the job failed before creating the log (e.g. DB down), there is
+        // nothing to update — and no orphaned entry left behind.
+        if ($this->eventLogId !== null) {
+            $log = EventLog::find($this->eventLogId);
+            if ($log) {
+                $log->status = EventLog::STATUS_FAILED;
+                $log->error = $exception->getMessage();
+                $log->save();
+            }
         }
     }
 }

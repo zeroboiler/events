@@ -234,18 +234,25 @@ class EventManager
      */
     protected function dispatchTrigger(Trigger $trigger, string $event, array $payload): void
     {
-        $log = new EventLog([
-            'id' => (string) Str::uuid(),
-            'trigger_id' => $trigger->id,
-            'event' => $event,
-            'payload' => $payload,
-            'status' => EventLog::STATUS_PENDING,
-        ]);
-        $log->save();
-
         if ($trigger->async) {
-            Queue::push(new DispatchTriggerJob($log->id));
+            // Create the EventLog inside the job so that if the job never
+            // runs (queue down, Redis flushed, etc.) no orphaned log entry
+            // is left behind in the database. See bug #632.
+            Queue::push(new DispatchTriggerJob(
+                $trigger->id,
+                $event,
+                $payload,
+            ));
         } else {
+            $log = new EventLog([
+                'id' => (string) Str::uuid(),
+                'trigger_id' => $trigger->id,
+                'event' => $event,
+                'payload' => $payload,
+                'status' => EventLog::STATUS_PENDING,
+            ]);
+            $log->save();
+
             $this->executeTrigger($trigger, $log);
         }
     }

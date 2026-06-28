@@ -60,7 +60,14 @@ class EventsRetryCommand extends Command
             }
 
             if ($trigger->async) {
-                Queue::push(new DispatchTriggerJob($log->id));
+                // Re-dispatch with the new job signature — a fresh EventLog
+                // will be created inside the job. The old log remains as a
+                // historical record of the previous attempt.
+                Queue::push(new DispatchTriggerJob(
+                    $trigger->id,
+                    $log->event,
+                    $log->payload,
+                ));
             } else {
                 try {
                     app(EventManager::class)->executeTrigger($trigger, $log);
