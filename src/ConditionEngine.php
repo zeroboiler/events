@@ -67,9 +67,9 @@ class ConditionEngine implements ConditionEngineContract
                 'not_null' => $actual !== null,
                 'empty' => empty($actual),
                 'not_empty' => ! empty($actual),
-                'starts_with' => str_starts_with((string) $actual, (string) $value),
-                'ends_with' => str_ends_with((string) $actual, (string) $value),
-                'matches' => $this->safeRegexMatch((string) $value, (string) $actual),
+                'starts_with' => is_string($actual) && str_starts_with($actual, (string) $value),
+                'ends_with' => is_string($actual) && str_ends_with($actual, (string) $value),
+                'matches' => is_string($actual) && $this->safeRegexMatch((string) $value, $actual),
                 default => $actual == $expected,
             };
         }
