@@ -61,15 +61,14 @@ class EventsRetryCommand extends Command
             } else {
                 try {
                     app(EventManager::class)->executeTrigger($trigger, $log);
-                    $count++;
                 } catch (\Throwable $e) {
                     $this->error("Failed to execute trigger {$trigger->id}: {$e->getMessage()}");
+
+                    continue;
                 }
             }
 
-            if ($trigger->async) {
-                $count++;
-            }
+            $count++;
         }
 
         $this->info("Queued/executed {$count} log(s) for retry.");

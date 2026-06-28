@@ -14,16 +14,33 @@ class EventsFireCommand extends Command
 {
     protected $signature = 'zeroboiler:events:fire 
                            {event : The event name}
-                           {--payload=* : Key=value pairs for payload}';
+                           {--payload=* : Key=value pairs for payload}
+                           {--json= : JSON string (or @file path) for complex/nested payloads}';
 
     protected $description = 'Manually fire an event';
 
     public function handle(): int
     {
         $event = $this->argument('event');
-        $payloadOptions = $this->option('payload');
 
         $payload = [];
+
+        // Process --json option if provided (takes precedence over --payload)
+        $jsonOption = $this->option('json');
+        if ($jsonOption !== null && $jsonOption !== '') {
+            $jsonPayload = $this->parseJsonOption($jsonOption);
+
+            if ($jsonPayload === null) {
+                $this->error('Invalid JSON provided to --json');
+
+                return Command::FAILURE;
+            }
+
+            $payload = $jsonPayload;
+        }
+
+        // Merge in --payload key=value pairs (json takes precedence for keys)
+        $payloadOptions = $this->option('payload');
         foreach ($payloadOptions as $item) {
             if (! str_contains($item, '=')) {
                 continue;
@@ -38,7 +55,10 @@ class EventsFireCommand extends Command
         if (! empty($payload)) {
             $this->info('Payload:');
             foreach ($payload as $key => $value) {
-                $this->line("  {$key}: {$value}");
+                $display = is_array($value) || is_object($value)
+                    ? json_encode($value)
+                    : (string) $value;
+                $this->line("  {$key}: {$display}");
             }
         }
 
@@ -53,5 +73,44 @@ class EventsFireCommand extends Command
 
             return Command::FAILURE;
         }
+    }
+
+    /**
+     * Parse the --json option value.
+     *
+     * Supports:
+     * - Direct JSON string: --json='{"key":"value"}'
+     * - File reference: --json=@path/to/file.json
+     *
+     * @return array<string, mixed>|null
+     */
+    protected function parseJsonOption(string $input): ?array
+    {
+        $jsonString = $input;
+
+        // Support @file syntax
+        if (str_starts_with($input, '@')) {
+            $path = substr($input, 1);
+
+            if (! file_exists($path)) {
+                $this->error("File not found: {$path}");
+
+                return null;
+            }
+
+            $jsonString = file_get_contents($path);
+
+            if ($jsonString === false) {
+                return null;
+            }
+        }
+
+        $decoded = json_decode($jsonString, true);
+
+        if (! is_array($decoded)) {
+            return null;
+        }
+
+        return $decoded;
     }
 }

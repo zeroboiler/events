@@ -13,14 +13,10 @@ class WildcardMatcher
      * Match a pattern with wildcards against an event string.
      *
      * Supports:
-     * - Single wildcard (*): matches one or more characters including dots
-     *   e.g. order.* matches order.placed, order.shipped, order.created.premium
+     * - Single wildcard (*): matches one dot-delimited segment
+     *   e.g. order.* matches order.placed, order.shipped but NOT order.placed.extra
      * - Multiple wildcards: user.*.created matches user.profile.created
      * - Wildcard only: * matches anything including dotted events
-     *
-     * Bug #406: Previously `*` was converted to `[^.]*` which only matched
-     * a single dot-delimited segment. Now `*` is converted to `.*` so it
-     * matches across multiple segments.
      *
      * @param  string  $pattern  The pattern with * wildcards (e.g., "order.*")
      * @param  string  $event  The event to match (e.g., "order.placed")
@@ -33,8 +29,8 @@ class WildcardMatcher
         }
 
         // Escape regex special chars (except our * wildcards), then convert
-        // * to .* so it matches one or more characters including dots.
-        $regex = str_replace('\*', '.*', preg_quote($pattern, '/'));
+        // * to [^.]* so it matches zero or more characters within a single segment.
+        $regex = str_replace('\*', '[^.]*', preg_quote($pattern, '/'));
 
         $regex = '/^' . $regex . '$/';
 

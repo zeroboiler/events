@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events\Tests;
 
+use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
@@ -15,6 +16,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Hashing\HashManager;
 use Illuminate\Log\LogManager;
 use Illuminate\Queue\QueueManager;
@@ -75,6 +77,10 @@ trait CreatesApplication
         // Bind log service so Log facade works in tests
         $app->singleton('log', fn (): LogManager => new LogManager($app));
 
+        // Bind cache service so Cache facade works in tests
+        $app->singleton('cache', fn (): CacheManager => new CacheManager($app));
+        $app->alias('cache', CacheManager::class);
+
         // Bind Schema facade - get grammar from the connection
         $app->instance('db.schema', $db->connection()->getSchemaBuilder());
         $app->alias('db.schema', Builder::class);
@@ -96,6 +102,15 @@ trait CreatesApplication
                 ],
             ],
             'queue' => ['default' => 'sync'],
+            'cache' => [
+                'default' => 'array',
+                'stores' => [
+                    'array' => [
+                        'driver' => 'array',
+                    ],
+                ],
+                'prefix' => 'zb_events_',
+            ],
             'events' => [
                 'table_names' => [
                     'triggers' => 'triggers',
