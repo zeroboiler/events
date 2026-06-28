@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -12,11 +13,13 @@ use ZeroBoiler\Events\EventManager;
 
 class EventsFireCommand extends Command
 {
-    protected $signature = 'zeroboiler:events:fire 
+    /** @var string */
+    protected $signature = 'zeroboiler:events:fire
                            {event : The event name}
                            {--payload=* : Key=value pairs for payload}
                            {--json= : JSON string (or @file path) for complex/nested payloads}';
 
+    /** @var string */
     protected $description = 'Manually fire an event';
 
     public function handle(): int
@@ -42,17 +45,17 @@ class EventsFireCommand extends Command
         // Merge in --payload key=value pairs (json takes precedence for keys)
         $payloadOptions = $this->option('payload');
         foreach ($payloadOptions as $item) {
-            if (! str_contains($item, '=')) {
+            if (! str_contains((string) $item, '=')) {
                 continue;
             }
 
-            [$key, $value] = explode('=', $item, 2);
+            [$key, $value] = explode('=', (string) $item, 2);
             $payload[$key] = $value;
         }
 
         $this->info("Firing event: {$event}");
 
-        if (! empty($payload)) {
+        if ($payload !== []) {
             $this->info('Payload:');
             foreach ($payload as $key => $value) {
                 $display = is_array($value) || is_object($value)

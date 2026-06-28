@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -12,13 +13,15 @@ use ZeroBoiler\Events\EventManager;
 
 class EventsRegisterCommand extends Command
 {
-    protected $signature = 'zeroboiler:events:register 
+    /** @var string */
+    protected $signature = 'zeroboiler:events:register
                            {event : The event name}
                            {action : The action handler class FQN}
                            {--name= : Trigger name}
                            {--async : Dispatch asynchronously}
                            {--priority=0 : Trigger priority (higher first)}';
 
+    /** @var string */
     protected $description = 'Register a new event trigger';
 
     public function handle(): int

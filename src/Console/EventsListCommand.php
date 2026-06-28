@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -12,6 +13,7 @@ use ZeroBoiler\Events\Models\Trigger;
 
 class EventsListCommand extends Command
 {
+    /** @var string */
     protected $signature = 'zeroboiler:events:list
                            {--event= : Filter by event name (supports wildcards)}
                            {--enabled : Show only enabled triggers}
@@ -19,6 +21,7 @@ class EventsListCommand extends Command
                            {--per-page=20 : Number of results per page}
                            {--page=1 : Page number}';
 
+    /** @var string */
     protected $description = 'List event triggers with optional filtering';
 
     public function handle(): int
@@ -58,7 +61,7 @@ class EventsListCommand extends Command
             ->get();
 
         $headers = ['ID', 'Name', 'Event', 'Action', 'Async', 'Priority', 'Enabled', 'Created At'];
-        $rows = $triggers->map(fn (Trigger $t) => [
+        $rows = $triggers->map(fn (Trigger $t): array => [
             $t->id,
             $t->name,
             $t->event,
@@ -72,7 +75,7 @@ class EventsListCommand extends Command
         $this->table($headers, $rows);
 
         $totalPages = (int) ceil($total / $perPage);
-        $this->info("Page {$page} of {$totalPages} ({$total} trigger(s) total, showing " . $triggers->count() . ")");
+        $this->info("Page {$page} of {$totalPages} ({$total} trigger(s) total, showing ".$triggers->count().')');
 
         return Command::SUCCESS;
     }

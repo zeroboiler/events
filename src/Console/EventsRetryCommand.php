@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -16,9 +17,11 @@ use ZeroBoiler\Events\Models\Trigger;
 
 class EventsRetryCommand extends Command
 {
-    protected $signature = 'zeroboiler:events:retry 
+    /** @var string */
+    protected $signature = 'zeroboiler:events:retry
                            {--status=failed : Status to retry (failed|pending)}';
 
+    /** @var string */
     protected $description = 'Retry failed or pending event dispatches';
 
     public function handle(): int

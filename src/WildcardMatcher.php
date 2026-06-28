@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -25,14 +26,14 @@ class WildcardMatcher
     {
         // Handle wildcard-only pattern specially — matches everything
         if ($pattern === '*') {
-            return ! empty($event);
+            return $event !== '' && $event !== '0';
         }
 
         // Escape regex special chars (except our * wildcards), then convert
         // * to [^.]* so it matches zero or more characters within a single segment.
         $regex = str_replace('\*', '[^.]*', preg_quote($pattern, '/'));
 
-        $regex = '/^' . $regex . '$/';
+        $regex = '/^'.$regex.'$/';
 
         return (bool) preg_match($regex, $event);
     }
@@ -45,7 +46,7 @@ class WildcardMatcher
      */
     public static function findMatchingPatterns(array $patterns, string $event): array
     {
-        return array_filter($patterns, fn (string $pattern) => self::matches($pattern, $event));
+        return array_filter($patterns, fn (string $pattern): bool => self::matches($pattern, $event));
     }
 
     /**

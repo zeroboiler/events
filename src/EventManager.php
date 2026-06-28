@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -15,7 +16,6 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
 use Throwable;
 use ZeroBoiler\Events\Actions\WebhookAction;
-use ZeroBoiler\Events\Contracts\Triggerable;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
@@ -207,12 +207,10 @@ class EventManager
      */
     protected function getEnabledWildcardTriggers(): Collection
     {
-        return Cache::remember(self::TRIGGER_CACHE_KEY, self::TRIGGER_CACHE_TTL, function (): Collection {
-            return Trigger::enabled()
-                ->where('event', 'like', '%*%')
-                ->orderByPriority()
-                ->get();
-        });
+        return Cache::remember(self::TRIGGER_CACHE_KEY, self::TRIGGER_CACHE_TTL, fn (): Collection => Trigger::enabled()
+            ->where('event', 'like', '%*%')
+            ->orderByPriority()
+            ->get());
     }
 
     /**
@@ -276,7 +274,6 @@ class EventManager
                     $actionParams = [];
                 }
 
-                /** @var Triggerable $handler */
                 $handler = $this->actionResolver->resolve($actionClass);
 
                 // Merge trigger-level params (e.g. webhook URL) into the

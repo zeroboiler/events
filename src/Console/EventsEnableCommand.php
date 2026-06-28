@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -13,8 +14,10 @@ use ZeroBoiler\Events\Models\Trigger;
 
 class EventsEnableCommand extends Command
 {
+    /** @var string */
     protected $signature = 'zeroboiler:events:enable {id : Trigger ID}';
 
+    /** @var string */
     protected $description = 'Enable an event trigger';
 
     public function handle(): int

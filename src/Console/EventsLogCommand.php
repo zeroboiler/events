@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -12,11 +13,13 @@ use ZeroBoiler\Events\Models\EventLog;
 
 class EventsLogCommand extends Command
 {
-    protected $signature = 'zeroboiler:events:log 
+    /** @var string */
+    protected $signature = 'zeroboiler:events:log
                            {--trigger= : Filter by trigger ID}
                            {--status= : Filter by status (pending|dispatched|completed|failed)}
                            {--limit=50 : Number of logs to show}';
 
+    /** @var string */
     protected $description = 'View event logs';
 
     public function handle(): int
@@ -46,10 +49,10 @@ class EventsLogCommand extends Command
         }
 
         $headers = ['ID', 'Event', 'Trigger', 'Status', 'Duration', 'Created At'];
-        $rows = $logs->map(fn (EventLog $log) => [
+        $rows = $logs->map(fn (EventLog $log): array => [
             $log->id,
             $log->event,
-            $log->trigger?->name ?? 'N/A',
+            $log->trigger->name ?? 'N/A',
             $this->formatStatus($log->status),
             $log->duration_ms ? "{$log->duration_ms}ms" : 'N/A',
             $log->created_at->format('Y-m-d H:i:s'),

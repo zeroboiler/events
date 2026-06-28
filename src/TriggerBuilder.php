@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -114,24 +115,24 @@ class TriggerBuilder
      */
     public function save(): Trigger
     {
-        if (empty($this->event)) {
+        if ($this->event === '' || $this->event === '0') {
             throw new \InvalidArgumentException('Event name is required');
         }
 
-        if (empty($this->action) && empty($this->actions)) {
+        if (($this->action === '' || $this->action === '0') && $this->actions === []) {
             throw new \InvalidArgumentException('At least one action is required');
         }
 
         // Generate name from event if not provided
-        if (empty($this->name)) {
+        if ($this->name === '' || $this->name === '0') {
             $this->name = $this->event.' Trigger';
         }
 
         // Build the final action string once — no second save() needed
         $actionString = $this->action;
-        if (! empty($this->actions) && count($this->actions) > 1) {
+        if ($this->actions !== [] && count($this->actions) > 1) {
             $actionString = json_encode($this->actions);
-        } elseif (empty($actionString) && ! empty($this->actions)) {
+        } elseif (($actionString === '' || $actionString === '0') && $this->actions !== []) {
             $actionString = $this->actions[0];
         }
 

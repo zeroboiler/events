@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -9,11 +10,11 @@ use Illuminate\Support\Facades\App;
 use ZeroBoiler\Events\ActionResolver;
 use ZeroBoiler\Events\Contracts\Triggerable;
 
-beforeEach(function () {
+beforeEach(function (): void {
     App::clearResolvedInstances();
 });
 
-test('action resolver resolves triggerable class', function () {
+test('action resolver resolves triggerable class', function (): void {
     $resolver = app(ActionResolver::class);
 
     $handler = $resolver->resolve(TestAction::class);
@@ -22,7 +23,7 @@ test('action resolver resolves triggerable class', function () {
         ->and($handler)->toBeInstanceOf(Triggerable::class);
 });
 
-test('action resolver uses container to instantiate', function () {
+test('action resolver uses container to instantiate', function (): void {
     $resolver = app(ActionResolver::class);
 
     $handler1 = $resolver->resolve(TestActionWithDependency::class);
@@ -33,7 +34,7 @@ test('action resolver uses container to instantiate', function () {
         ->and($handler2)->toBeInstanceOf(TestActionWithDependency::class);
 });
 
-test('resolved handler can be called', function () {
+test('resolved handler can be called', function (): void {
     $resolver = app(ActionResolver::class);
 
     $handler = $resolver->resolve(TestAction::class);

@@ -1,0 +1,97 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Console/EventsDisableCommand.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Console/EventsEnableCommand.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<ZeroBoiler\\Events\\Models\\Trigger\>\:\:orderByPriority\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Console/EventsListCommand.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int,stdClass\>\:\:map\(\) expects callable\(stdClass, int\)\: array\{string, string, string, string, ''N/A''\|\(lowercase\-string&non\-falsy\-string\), non\-falsy\-string\}, Closure\(ZeroBoiler\\Events\\Models\\EventLog\)\: array\{string, string, string, string, ''N/A''\|\(lowercase\-string&non\-falsy\-string\), non\-falsy\-string\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsLogCommand.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\EventLog\:\:withStatus\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:enabled\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: src/EventManager.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: src/EventManager.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\EventLog\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: src/Jobs/DispatchTriggerJob.php
+
+		-
+			message: '#^Class ZeroBoiler\\Events\\Models\\EventLog uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Models/EventLog.php
+
+		-
+			message: '#^Method ZeroBoiler\\Events\\Models\\EventLog\:\:trigger\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<ZeroBoiler\\Events\\Models\\Trigger, ZeroBoiler\\Events\\Models\\EventLog\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<ZeroBoiler\\Events\\Models\\Trigger, \$this\(ZeroBoiler\\Events\\Models\\EventLog\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Models/EventLog.php
+
+		-
+			message: '#^PHPDoc tag @mixin contains unknown class Eloquent\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Models/EventLog.php
+
+		-
+			message: '#^Class ZeroBoiler\\Events\\Models\\Trigger uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Models/Trigger.php
+
+		-
+			message: '#^Generic type Illuminate\\Database\\Eloquent\\Relations\\HasMany\<ZeroBoiler\\Events\\Models\\EventLog\> in PHPDoc tag @return does not specify all template types of class Illuminate\\Database\\Eloquent\\Relations\\HasMany\: TRelatedModel, TDeclaringModel$#'
+			identifier: generics.lessTypes
+			count: 1
+			path: src/Models/Trigger.php
+
+		-
+			message: '#^Method ZeroBoiler\\Events\\Models\\Trigger\:\:eventLogs\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<ZeroBoiler\\Events\\Models\\EventLog\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<ZeroBoiler\\Events\\Models\\EventLog, \$this\(ZeroBoiler\\Events\\Models\\Trigger\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Models/Trigger.php
+
+		-
+			message: '#^Method ZeroBoiler\\Events\\Models\\Trigger\:\:scopeOrderByPriority\(\) should return Illuminate\\Database\\Eloquent\\Builder\<ZeroBoiler\\Events\\Models\\Trigger\> but returns Illuminate\\Database\\Query\\Builder\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Models/Trigger.php
+
+		-
+			message: '#^PHPDoc tag @mixin contains unknown class Eloquent\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Models/Trigger.php

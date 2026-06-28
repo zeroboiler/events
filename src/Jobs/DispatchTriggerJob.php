@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -24,6 +25,7 @@ class DispatchTriggerJob implements ShouldQueue
 
     public int $tries = 3;
 
+    /** @var array<int, int> */
     public int|array $backoff = [60, 300, 900];
 
     public function __construct(

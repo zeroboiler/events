@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -37,7 +38,7 @@ abstract class TestCase extends BaseTestCase
         Model::clearBootedModels();
 
         // Clear resolved instances between tests
-        if (self::$app) {
+        if (self::$app instanceof Container) {
             foreach (self::$app->getBindings() as $key => $binding) {
                 self::$app->forgetInstance($key);
             }
