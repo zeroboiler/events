@@ -14,10 +14,11 @@ class WildcardMatcher
      * Match a pattern with wildcards against an event string.
      *
      * Supports:
-     * - Single wildcard (*): matches one dot-delimited segment
+     * - Wildcard-only pattern (*): matches ANY event name (catch-all),
+     *   including multi-segment dotted events like order.placed.extra
+     * - Single wildcard segment in pattern: matches one dot-delimited segment
      *   e.g. order.* matches order.placed, order.shipped but NOT order.placed.extra
      * - Multiple wildcards: user.*.created matches user.profile.created
-     * - Wildcard only: * matches anything including dotted events
      *
      * @param  string  $pattern  The pattern with * wildcards (e.g., "order.*")
      * @param  string  $event  The event to match (e.g., "order.placed")
