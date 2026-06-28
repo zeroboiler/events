@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -42,11 +43,27 @@ class EventLog extends Model
     /** @var bool */
     public $incrementing = false;
 
+    /** @var array<int, string> */
+    protected $fillable = [
+        'id',
+        'trigger_id',
+        'event',
+        'payload',
+        'status',
+        'error',
+        'duration_ms',
+    ];
+
+    /** @var array<int, string> */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
     protected static function boot(): void
     {
         parent::boot();
 
-        static::creating(function (self $model) {
+        static::creating(function (self $model): void {
             if (empty($model->id)) {
                 $model->id = (string) Str::uuid();
             }
@@ -69,28 +86,6 @@ class EventLog extends Model
         self::STATUS_FAILED,
     ];
 
-    /** @var array<string, string> */
-    protected $casts = [
-        'payload' => 'array',
-        'duration_ms' => 'int',
-    ];
-
-    /** @var array<int, string> */
-    protected $fillable = [
-        'id',
-        'trigger_id',
-        'event',
-        'payload',
-        'status',
-        'error',
-        'duration_ms',
-    ];
-
-    /** @var array<int, string> */
-    protected $hidden = [
-        'deleted_at',
-    ];
-
     /**
      * @return BelongsTo<Trigger, EventLog>
      */
@@ -105,7 +100,7 @@ class EventLog extends Model
      * @param  Builder<EventLog>  $query
      * @return Builder<EventLog>
      */
-    public function scopeWithStatus($query, string $status): Builder
+    public function scopeWithStatus(Builder $query, string $status): Builder
     {
         return $query->where('status', $status);
     }
@@ -116,7 +111,7 @@ class EventLog extends Model
      * @param  Builder<EventLog>  $query
      * @return Builder<EventLog>
      */
-    public function scopeFailed($query): Builder
+    public function scopeFailed(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_FAILED);
     }
@@ -127,7 +122,7 @@ class EventLog extends Model
      * @param  Builder<EventLog>  $query
      * @return Builder<EventLog>
      */
-    public function scopePending($query): Builder
+    public function scopePending(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_PENDING);
     }
@@ -138,7 +133,7 @@ class EventLog extends Model
      * @param  Builder<EventLog>  $query
      * @return Builder<EventLog>
      */
-    public function scopeCompleted($query): Builder
+    public function scopeCompleted(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_COMPLETED);
     }
@@ -173,5 +168,15 @@ class EventLog extends Model
     protected static function newFactory(): Factory
     {
         return EventLogFactory::new();
+    }
+
+    /**
+     * @return array<string, string> */
+    protected function casts(): array
+    {
+        return [
+            'payload' => 'array',
+            'duration_ms' => 'int',
+        ];
     }
 }

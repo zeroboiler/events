@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -44,25 +45,6 @@ class Trigger extends Model
     /** @var bool */
     public $incrementing = false;
 
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::creating(function (self $model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
-            }
-        });
-    }
-
-    /** @var array<string, string> */
-    protected $casts = [
-        'conditions' => 'array',
-        'async' => 'boolean',
-        'enabled' => 'boolean',
-        'priority' => 'int',
-    ];
-
     /** @var array<int, string> */
     protected $fillable = [
         'id',
@@ -80,6 +62,17 @@ class Trigger extends Model
         'deleted_at',
     ];
 
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (self $model): void {
+            if (empty($model->id)) {
+                $model->id = (string) Str::uuid();
+            }
+        });
+    }
+
     /**
      * @return HasMany<EventLog>
      */
@@ -94,7 +87,7 @@ class Trigger extends Model
      * @param  Builder<Trigger>  $query
      * @return Builder<Trigger>
      */
-    public function scopeEnabled($query): Builder
+    public function scopeEnabled(Builder $query): Builder
     {
         return $query->where('enabled', true);
     }
@@ -105,7 +98,7 @@ class Trigger extends Model
      * @param  Builder<Trigger>  $query
      * @return Builder<Trigger>
      */
-    public function scopeAsync($query): Builder
+    public function scopeAsync(Builder $query): Builder
     {
         return $query->where('async', true);
     }
@@ -116,7 +109,7 @@ class Trigger extends Model
      * @param  Builder<Trigger>  $query
      * @return Builder<Trigger>
      */
-    public function scopeOrderByPriority($query): Builder
+    public function scopeOrderByPriority(Builder $query): Builder
     {
         return $query->orderBy('priority', 'desc');
     }
@@ -129,5 +122,17 @@ class Trigger extends Model
     protected static function newFactory(): Factory
     {
         return TriggerFactory::new();
+    }
+
+    /**
+     * @return array<string, string> */
+    protected function casts(): array
+    {
+        return [
+            'conditions' => 'array',
+            'async' => 'boolean',
+            'enabled' => 'boolean',
+            'priority' => 'int',
+        ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -19,19 +20,29 @@ use Illuminate\Log\LogManager;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Support\Facades\Facade;
 use ZeroBoiler\Events\EventsServiceProvider;
+use ZeroBoiler\Events\Tests\Faker\Factory;
+use ZeroBoiler\Events\Tests\Faker\Generator;
 
 trait CreatesApplication
 {
     public function createApplication(): Container
     {
-        $basePath = dirname(__DIR__);
-
         // Create a simple application-like container
         $app = new class extends Container
         {
             public function runningInConsole(): bool
             {
                 return true;
+            }
+
+            public function configPath(string $path = ''): string
+            {
+                return __DIR__ . '/../config' . ($path !== '' ? '/' . $path : '');
+            }
+
+            public function databasePath(string $path = ''): string
+            {
+                return __DIR__ . '/../database' . ($path !== '' ? '/' . $path : '');
             }
         };
 
@@ -57,20 +68,20 @@ trait CreatesApplication
         $app->alias('db', DatabaseManager::class);
 
         // Bind core services
-        $app->singleton('events', fn () => new Dispatcher($app));
-        $app->singleton('queue', fn () => new QueueManager($app));
-        $app->singleton('hash', fn () => new HashManager($app));
+        $app->singleton('events', fn (): Dispatcher => new Dispatcher($app));
+        $app->singleton('queue', fn (): QueueManager => new QueueManager($app));
+        $app->singleton('hash', fn (): HashManager => new HashManager($app));
 
         // Bind log service so Log facade works in tests
-        $app->singleton('log', fn () => new LogManager($app));
+        $app->singleton('log', fn (): LogManager => new LogManager($app));
 
         // Bind Schema facade - get grammar from the connection
         $app->instance('db.schema', $db->connection()->getSchemaBuilder());
         $app->alias('db.schema', Builder::class);
 
         // Bind Faker for factories
-        $app->singleton(Faker\Generator::class, fn () => Faker\Factory::create('en_US'));
-        $app->alias(Faker\Generator::class, 'faker');
+        $app->singleton(Generator::class, fn () => Factory::create('en_US'));
+        $app->alias(Generator::class, 'faker');
 
         // Create a simple config repository and bind it
         $config = new Repository([
