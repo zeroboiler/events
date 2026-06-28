@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
 use Throwable;
+use ZeroBoiler\Events\Actions\WebhookAction;
 use ZeroBoiler\Events\Contracts\Triggerable;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
@@ -42,6 +43,46 @@ class EventManager
     public function register(string $event): TriggerBuilder
     {
         return $this->on($event);
+    }
+
+    /**
+     * Subscribe an external webhook URL to an event.
+     *
+     * Registers a trigger that dispatches an HTTP POST to the given
+     * URL whenever the event fires. Optional conditions can be provided
+     * to filter when the webhook is actually called.
+     *
+     * @param  string  $event  Event name (supports wildcards)
+     * @param  string  $url  Webhook endpoint URL
+     * @param  array<string, mixed>  $conditions  Optional condition filters
+     * @param  int  $priority  Trigger priority (higher = first)
+     * @return string The created trigger ID
+     */
+    public function subscribeWebhook(
+        string $event,
+        string $url,
+        array $conditions = [],
+        int $priority = 0,
+    ): string {
+        $trigger = $this->register($event)
+            ->action(WebhookAction::class)
+            ->when($conditions)
+            ->priority($priority)
+            ->save();
+
+        // Store the webhook URL in the trigger's action configuration
+        // by encoding both the action class and parameters as JSON,
+        // so WebhookAction receives the URL when resolved.
+        $actionConfig = [
+            'class' => WebhookAction::class,
+            'params' => ['url' => $url],
+        ];
+
+        $trigger->action = json_encode($actionConfig);
+        $trigger->name = "Webhook: {$event} → {$url}";
+        $trigger->save();
+
+        return $trigger->id;
     }
 
     /**
@@ -168,10 +209,29 @@ class EventManager
         try {
             $actions = $this->parseActions($trigger->action);
 
-            foreach ($actions as $actionClass) {
+            foreach ($actions as $entry) {
+                // parseActions returns a normalised array where each entry
+                // is either a class name string or an array with 'class'
+                // and optional 'params'.
+                if (is_array($entry)) {
+                    $actionClass = $entry['class'] ?? '';
+                    $actionParams = $entry['params'] ?? [];
+                } else {
+                    $actionClass = (string) $entry;
+                    $actionParams = [];
+                }
+
                 /** @var Triggerable $handler */
                 $handler = $this->actionResolver->resolve($actionClass);
-                $handler->handle($log->payload);
+
+                // Merge trigger-level params (e.g. webhook URL) into the
+                // event payload so the action has everything it needs.
+                $payload = $log->payload;
+                if (! empty($actionParams)) {
+                    $payload = array_merge($actionParams, $payload);
+                }
+
+                $handler->handle($payload);
             }
 
             $duration = (int) ((microtime(true) - $startTime) * 1000);
@@ -190,16 +250,37 @@ class EventManager
     }
 
     /**
-     * Parse action string into array of classes.
+     * Parse action string into normalised array of action entries.
      *
-     * @return array<int, string>
+     * Each entry is either:
+     * - A class name string (simple format):  ["App\\Actions\\Foo"]
+     * - An array with 'class' and 'params':  [['class' => '...', 'params' => [...]]]
+     *
+     * Supports:
+     * - Single class name string:  "App\\Actions\\Foo"
+     * - JSON array of class names:  ["App\\Actions\\Foo", "App\\Actions\\Bar"]
+     * - JSON object with class + params:  {"class": "...", "params": {...}}
+     * - JSON array of objects:  [{"class": "...", "params": {...}}, ...]
+     *
+     * @return array<int, mixed>
      */
     protected function parseActions(string $action): array
     {
         // Try to decode as JSON first
         $decoded = json_decode($action, true);
+
         if (is_array($decoded)) {
-            return $decoded;
+            // Associative array → single action with class + params
+            if (array_is_list($decoded)) {
+                // List of entries — normalise each one
+                return array_map(
+                    fn (mixed $entry): mixed => is_array($entry) ? $entry : (string) $entry,
+                    $decoded,
+                );
+            }
+
+            // Associative array → single action with class + params
+            return [$decoded];
         }
 
         return [$action];
