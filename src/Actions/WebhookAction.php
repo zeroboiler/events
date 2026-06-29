@@ -41,7 +41,7 @@ class WebhookAction implements Triggerable
         if (empty($url)) {
             Log::warning('WebhookAction invoked without a URL', ['payload' => $payload]);
 
-            return;
+            throw new \InvalidArgumentException('WebhookAction requires a non-empty "url" in the payload.');
         }
 
         // Extract the webhook URL from the payload, then remove
