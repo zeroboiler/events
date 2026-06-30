@@ -28,7 +28,7 @@ class DispatchTriggerJob implements ShouldQueue
     public int $tries = 3;
 
     /** @var array<int, int> */
-    public int|array $backoff = [60, 300, 900];
+    public array $backoff = [60, 300, 900];
 
     /**
      * @param  array<string, mixed>  $payload
