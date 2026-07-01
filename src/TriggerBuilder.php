@@ -149,17 +149,29 @@ class TriggerBuilder
         // Build the final action string once — no second save() needed
         $actionString = $this->action;
         if ($this->actions !== [] && count($this->actions) > 1) {
-            $actionString = json_encode($this->actions);
+            // Encode as a JSON array of action classes. When actionParams are
+            // also set, they apply to ALL actions uniformly (#684 fix).
+            $actionString = json_encode($this->actions, \JSON_THROW_ON_ERROR);
         } elseif (($actionString === '' || $actionString === '0') && $this->actions !== []) {
             $actionString = $this->actions[0];
         }
 
-        // If action params are set, encode them with the action class
+        // If action params are set, encode them with the action class(es).
+        // For multiple actions, use "classes" key instead of "class" (#684):
+        // Single:  {"class": "Foo", "params": {...}}
+        // Multiple: {"classes": ["Foo", "Bar"], "params": {...}}
         if ($this->actionParams !== []) {
-            $actionString = json_encode([
-                'class' => $actionString,
-                'params' => $this->actionParams,
-            ]);
+            if (count($this->actions) > 1) {
+                $actionString = json_encode([
+                    'classes' => $this->actions,
+                    'params' => $this->actionParams,
+                ], \JSON_THROW_ON_ERROR);
+            } else {
+                $actionString = json_encode([
+                    'class' => $actionString,
+                    'params' => $this->actionParams,
+                ], \JSON_THROW_ON_ERROR);
+            }
         }
 
         $trigger = new Trigger([
