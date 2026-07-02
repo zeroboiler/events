@@ -54,9 +54,9 @@ class ConditionEngine implements ConditionEngineContract
                 '>=' => $actual !== null && is_numeric($actual) && $actual >= $value,
                 '<' => $actual !== null && is_numeric($actual) && $actual < $value,
                 '<=' => $actual !== null && is_numeric($actual) && $actual <= $value,
-                '=' => $actual == $value,
+                '=' => $this->strictEquals($actual, $value),
                 '===' => $actual === $value,
-                '!=' => $actual != $value,
+                '!=' => ! $this->strictEquals($actual, $value),
                 '!==' => $actual !== $value,
                 'in' => in_array($actual, (array) $value, true),
                 'not_in' => ! in_array($actual, (array) $value, true),
@@ -70,12 +70,32 @@ class ConditionEngine implements ConditionEngineContract
                 'starts_with' => is_string($actual) && str_starts_with($actual, (string) $value),
                 'ends_with' => is_string($actual) && str_ends_with($actual, (string) $value),
                 'matches' => is_string($actual) && $this->safeRegexMatch((string) $value, $actual),
-                default => $actual == $expected,
+                default => $this->strictEquals($actual, $expected),
             };
         }
 
         // Simple equality check
-        return $actual == $expected;
+        return $this->strictEquals($actual, $expected);
+    }
+
+    /**
+     * Type-safe equality comparison.
+     *
+     * Uses strict comparison when types are compatible, falls back to
+     * string comparison for scalar values of different types.
+     */
+    private function strictEquals(mixed $actual, mixed $expected): bool
+    {
+        if (get_debug_type($actual) === get_debug_type($expected)) {
+            return $actual === $expected;
+        }
+
+        // Different types: compare as strings only if both are scalar
+        if (is_scalar($actual) && is_scalar($expected)) {
+            return (string) $actual === (string) $expected;
+        }
+
+        return false;
     }
 
     /**
