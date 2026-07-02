@@ -90,12 +90,10 @@ class TriggerBuilder
     {
         $all = $this->actions;
 
-        if ($this->action !== '' && $this->action !== '0') {
-            // If both action() and actions() were called, merge them.
-            // Prepend the single action only if it's not already in the list.
-            if (! in_array($this->action, $all, true)) {
-                array_unshift($all, $this->action);
-            }
+        // If both action() and actions() were called, merge them.
+        // Prepend the single action only if it's not already in the list.
+        if ($this->action !== '' && $this->action !== '0' && ! in_array($this->action, $all, true)) {
+            array_unshift($all, $this->action);
         }
 
         return $all;
