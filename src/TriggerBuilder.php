@@ -79,6 +79,29 @@ class TriggerBuilder
     }
 
     /**
+     * Resolve the final action classes list, merging single action() and actions() calls.
+     *
+     * If both were called, the single action is prepended to the list to avoid
+     * silently discarding it (BUG-2 fix).
+     *
+     * @return list<string>
+     */
+    private function resolveActions(): array
+    {
+        $all = $this->actions;
+
+        if ($this->action !== '' && $this->action !== '0') {
+            // If both action() and actions() were called, merge them.
+            // Prepend the single action only if it's not already in the list.
+            if (! in_array($this->action, $all, true)) {
+                array_unshift($all, $this->action);
+            }
+        }
+
+        return $all;
+    }
+
+    /**
      * Set the conditions.
      *
      * @param  array<string, mixed>  $conditions
@@ -146,33 +169,27 @@ class TriggerBuilder
             $this->name = $this->event.' Trigger';
         }
 
-        // Build the final action string once — no second save() needed
-        $actionString = $this->action;
-        if ($this->actions !== [] && count($this->actions) > 1) {
-            // Encode as a JSON array of action classes. When actionParams are
-            // also set, they apply to ALL actions uniformly (#684 fix).
-            $actionString = json_encode($this->actions, \JSON_THROW_ON_ERROR);
-        } elseif (($actionString === '' || $actionString === '0') && $this->actions !== []) {
-            $actionString = $this->actions[0];
-        }
+        // Resolve the final list of action classes, merging action() and actions().
+        $resolvedActions = $this->resolveActions();
 
+        // Build the final action string.
         // If action params are set, encode them with the action class(es).
         // For multiple actions, use "classes" key instead of "class" (#684):
         // Single:  {"class": "Foo", "params": {...}}
         // Multiple: {"classes": ["Foo", "Bar"], "params": {...}}
-        if ($this->actionParams !== []) {
-            if (count($this->actions) > 1) {
-                $actionString = json_encode([
-                    'classes' => $this->actions,
-                    'params' => $this->actionParams,
-                ], \JSON_THROW_ON_ERROR);
-            } else {
-                $actionString = json_encode([
-                    'class' => $actionString,
-                    'params' => $this->actionParams,
-                ], \JSON_THROW_ON_ERROR);
-            }
-        }
+        $actionString = match (true) {
+            $this->actionParams !== [] && count($resolvedActions) > 1 => json_encode([
+                'classes' => $resolvedActions,
+                'params' => $this->actionParams,
+            ], \JSON_THROW_ON_ERROR),
+            $this->actionParams !== [] => json_encode([
+                'class' => $resolvedActions[0] ?? '',
+                'params' => $this->actionParams,
+            ], \JSON_THROW_ON_ERROR),
+            count($resolvedActions) > 1 => json_encode($resolvedActions, \JSON_THROW_ON_ERROR),
+            $resolvedActions !== [] => $resolvedActions[0],
+            default => '',
+        };
 
         $trigger = new Trigger([
             'id' => (string) Str::uuid(),
