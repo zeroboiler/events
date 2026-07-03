@@ -44,23 +44,21 @@ class WebhookAction implements Triggerable
             throw new \InvalidArgumentException('WebhookAction requires a non-empty "url" in the payload.');
         }
 
-        // Extract the webhook URL from the payload, then remove
-        // internal keys before sending the remainder as webhook data.
+        // Extract internal keys from the payload so they don't leak into webhook data.
         $webhookData = $payload;
-        unset($webhookData['url']);
+        unset($webhookData['url'], $webhookData['event'], $webhookData['headers']);
+
+        // Allow custom headers to be passed via payload
+        $headers = $payload['headers'] ?? [];
+        if (! is_array($headers)) {
+            $headers = [];
+        }
 
         $body = [
             'event' => $payload['event'] ?? null,
             'data' => $webhookData,
             'timestamp' => now()->toIso8601String(),
         ];
-
-        // Allow custom headers to be passed via payload
-        $headers = $payload['headers'] ?? [];
-        if (is_array($headers)) {
-            unset($webhookData['headers']);
-            unset($body['data']['headers']);
-        }
 
         try {
             $response = Http::withHeaders($headers)
