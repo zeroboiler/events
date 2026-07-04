@@ -43,13 +43,11 @@
         "analyse": "phpstan analyse",
         "lint": "pint",
         "rector": "rector",
-        "php-artisan-test": "php artisan test",
         "ci": [
             "@lint",
             "@analyse",
             "@rector",
-            "@test",
-            "@php-artisan-test"
+            "@test"
         ]
     },
     "extra": {

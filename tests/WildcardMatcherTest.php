@@ -119,7 +119,19 @@ test('wildcard only matches everything', function (): void {
     expect(WildcardMatcher::matches('*', 'anything'))
         ->toBeTrue()
         ->and(WildcardMatcher::matches('*', 'order.placed'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('*', '0'))
         ->toBeTrue();
+});
+
+test('wildcard pattern matches event named "0"', function (): void {
+    // BUG-5 R33: "0" was incorrectly rejected for catch-all "*" pattern.
+    // An event named "0" is unusual but valid and should match "*".
+    expect(WildcardMatcher::matches('*', '0'))->toBeTrue();
+});
+
+test('wildcard pattern still rejects empty string', function (): void {
+    expect(WildcardMatcher::matches('*', ''))->toBeFalse();
 });
 
 test('extracts single wildcard from wildcard only pattern', function (): void {

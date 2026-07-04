@@ -27,7 +27,7 @@ class WildcardMatcher
     {
         // Handle wildcard-only pattern specially — matches everything
         if ($pattern === '*') {
-            return $event !== '' && $event !== '0';
+            return $event !== '';
         }
 
         // Escape regex special chars (except our * wildcards), then convert
