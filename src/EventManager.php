@@ -121,7 +121,18 @@ class EventManager
     {
         $event = $modelClass.'.'.$action;
 
+        // Flatten model attributes into the payload root so the condition
+        // engine can access them directly (e.g. condition "status == 'active'"
+        // instead of "model.status == 'active'").
+        $modelData = [];
+        if (method_exists($model, 'attributesToArray')) {
+            $modelData = $model->attributesToArray();
+        } elseif (method_exists($model, 'toArray')) {
+            $modelData = $model->toArray();
+        }
+
         $this->fire($event, [
+            ...$modelData,
             'model' => $model,
             'model_class' => $modelClass,
             'action' => $action,
