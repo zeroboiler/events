@@ -186,8 +186,8 @@ class EventManager
         }
 
         // Sort by priority DESC, then by created_at ASC as a tiebreaker for equal priorities.
-        // This ensures deterministic execution order when multiple triggers share the same priority.
-        return $triggers->sortBy(callback: fn (Trigger $t): array => [-$t->priority, $t->created_at->timestamp ?? 0], options: SORT_REGULAR)->values();
+        // Add trigger id as final tiebreaker for fully deterministic ordering.
+        return $triggers->sortBy(callback: fn (Trigger $t): array => [-$t->priority, $t->created_at->timestamp ?? 0, $t->id], options: SORT_REGULAR)->values();
     }
 
     /**
