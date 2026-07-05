@@ -265,7 +265,7 @@ test('getMatchingTriggers does not load all enabled triggers for non-wildcard ev
     EventManagerFacade::fire('order.placed', ['order_id' => 123]);
 
     $queries = DB::getQueryLog();
-    $selectQueries = array_filter($queries, fn (array $q) => str_contains($q['query'], 'select'));
+    $selectQueries = array_filter($queries, fn (array $q): bool => str_contains((string) $q['query'], 'select'));
 
     // Verify no query loads ALL enabled triggers without a wildcard or exact filter
     foreach ($selectQueries as $query) {
@@ -274,7 +274,7 @@ test('getMatchingTriggers does not load all enabled triggers for non-wildcard ev
         // Every trigger query must have either an exact event lookup or a wildcard LIKE filter
 
         // A query that selects from triggers table must include event filtering
-        if (str_contains($sql, '"triggers"')) {
+        if (str_contains((string) $sql, '"triggers"')) {
             expect($sql)
                 ->toContain('"event"')
                 ->and($sql)
@@ -302,7 +302,7 @@ test('getMatchingTriggers uses LIKE wildcard filter for pattern triggers', funct
 
     // The wildcard query should have a LIKE clause with '%*%' as a binding
     $wildcardQuery = collect($queries)->first(function (array $q): bool {
-        $hasLike = str_contains(strtolower($q['query']), 'like');
+        $hasLike = str_contains(strtolower((string) $q['query']), 'like');
         $hasWildcardBinding = in_array('%*%', $q['bindings'], true);
 
         return $hasLike && $hasWildcardBinding;
