@@ -177,6 +177,10 @@ class ConditionEngine implements ConditionEngineContract
             return false;
         }
 
-        return $actual >= $value[0] && $actual <= $value[1];
+        // Auto-normalize inverted ranges (e.g., [100, 50] → [50, 100])
+        $min = min($value[0], $value[1]);
+        $max = max($value[0], $value[1]);
+
+        return $actual >= $min && $actual <= $max;
     }
 }

@@ -109,6 +109,15 @@ test('matches between condition', function (): void {
         ->and($engine->matches(['amount' => ['between', [100, 500]]], ['amount' => 500]))
         ->toBeTrue()
         ->and($engine->matches(['amount' => ['between', [100, 500]]], ['amount' => 50]))
+        ->toBeFalse()
+        // BUG-4 R35: Inverted ranges should be auto-normalized
+        ->and($engine->matches(['amount' => ['between', [500, 100]]], ['amount' => 250]))
+        ->toBeTrue()
+        ->and($engine->matches(['amount' => ['between', [500, 100]]], ['amount' => 100]))
+        ->toBeTrue()
+        ->and($engine->matches(['amount' => ['between', [500, 100]]], ['amount' => 500]))
+        ->toBeTrue()
+        ->and($engine->matches(['amount' => ['between', [500, 100]]], ['amount' => 50]))
         ->toBeFalse();
 });
 
