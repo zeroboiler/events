@@ -11,6 +11,7 @@ use App\Actions\LogOrderCreated;
 use App\Actions\LogOrderEvent;
 use App\Actions\LowPriority;
 use App\Actions\SendOrderNotification;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Facades\EventManager as EventManagerFacade;
@@ -230,4 +231,115 @@ test('on method is alias for register', function (): void {
 
     expect($builder1)->toBeInstanceOf(TriggerBuilder::class)
         ->and($builder2)->toBeInstanceOf(TriggerBuilder::class);
+});
+
+test('getMatchingTriggers does not load all enabled triggers for non-wildcard events', function (): void {
+    // Create a mix of triggers: exact, wildcard, and unrelated
+    Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => SendOrderNotification::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    Trigger::factory()->create([
+        'event' => 'order.*',
+        'action' => LogOrderEvent::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    // An enabled trigger that should NOT be loaded (no wildcard, different event)
+    Trigger::factory()->create([
+        'event' => 'user.created',
+        'action' => SendOrderNotification::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    DB::enableQueryLog();
+
+    EventManagerFacade::fire('order.placed', ['order_id' => 123]);
+
+    $queries = DB::getQueryLog();
+    $selectQueries = array_filter($queries, fn (array $q) => str_contains($q['query'], 'select'));
+
+    // Verify no query loads ALL enabled triggers without a wildcard or exact filter
+    foreach ($selectQueries as $query) {
+        $sql = $query['query'];
+
+        // Every trigger query must have either an exact event lookup or a wildcard LIKE filter
+
+        // A query that selects from triggers table must include event filtering
+        if (str_contains($sql, '"triggers"')) {
+            expect($sql)
+                ->toContain('"event"')
+                ->and($sql)
+                ->not->toBe('select * from "triggers"');
+        }
+    }
+
+    DB::disableQueryLog();
+});
+
+test('getMatchingTriggers uses LIKE wildcard filter for pattern triggers', function (): void {
+    Trigger::factory()->create([
+        'event' => 'order.*',
+        'action' => LogOrderEvent::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    DB::enableQueryLog();
+
+    EventManagerFacade::fire('order.placed', ['order_id' => 123]);
+
+    $queries = DB::getQueryLog();
+
+    // The wildcard query should have a LIKE clause with '%*%' as a binding
+    $wildcardQuery = collect($queries)->first(function (array $q): bool {
+        $hasLike = str_contains(strtolower($q['query']), 'like');
+        $hasWildcardBinding = in_array('%*%', $q['bindings'], true);
+
+        return $hasLike && $hasWildcardBinding;
+    });
+
+    expect($wildcardQuery)->not->toBeNull('Expected a query with LIKE %*% filter for wildcard triggers');
+
+    DB::disableQueryLog();
+});
+
+test('getMatchingTriggers deduplicates exact and wildcard matches', function (): void {
+    // Trigger matching both exact and wildcard patterns
+    Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => SendOrderNotification::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+        'priority' => 50,
+    ]);
+
+    // Wildcard that also matches 'order.placed'
+    Trigger::factory()->create([
+        'event' => 'order.*',
+        'action' => LogOrderEvent::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+        'priority' => 50,
+    ]);
+
+    DB::enableQueryLog();
+
+    EventManagerFacade::fire('order.placed', ['order_id' => 123]);
+
+    // Should produce exactly 2 event logs (one per unique trigger), not duplicates
+    expect(EventLog::count())->toBe(2);
+
+    DB::disableQueryLog();
 });

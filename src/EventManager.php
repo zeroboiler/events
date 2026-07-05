@@ -25,7 +25,7 @@ class EventManager
     /**
      * Cache key for the enabled wildcard triggers collection.
      */
-    protected const TRIGGER_CACHE_KEY = 'zeroboiler:events:enabled_triggers';
+    protected const WILDCARD_TRIGGER_CACHE_KEY = 'zeroboiler:events:enabled_wildcard_triggers';
 
     /**
      * Cache TTL in seconds (5 minutes).
@@ -55,7 +55,7 @@ class EventManager
      */
     public function invalidateTriggerCache(): void
     {
-        Cache::forget(self::TRIGGER_CACHE_KEY);
+        Cache::forget(self::WILDCARD_TRIGGER_CACHE_KEY);
     }
 
     /**
@@ -199,7 +199,7 @@ class EventManager
      */
     protected function getEnabledWildcardTriggers(): Collection
     {
-        return Cache::remember(self::TRIGGER_CACHE_KEY, self::TRIGGER_CACHE_TTL, fn (): Collection => Trigger::enabled()
+        return Cache::remember(self::WILDCARD_TRIGGER_CACHE_KEY, self::TRIGGER_CACHE_TTL, fn (): Collection => Trigger::enabled()
             ->where('event', 'like', '%*%')
             ->orderByPriority()
             ->get());
