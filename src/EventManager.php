@@ -18,6 +18,7 @@ use Throwable;
 use ZeroBoiler\Events\Actions\WebhookAction;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
+use ZeroBoiler\Events\Models\Subscription;
 use ZeroBoiler\Events\Models\Trigger;
 
 class EventManager
@@ -46,6 +47,78 @@ class EventManager
         $builder->on($event);
 
         return $builder;
+    }
+
+    /**
+     * Start building a webhook subscription for an external system.
+     *
+     * Creates a SubscriptionBuilder that registers a webhook trigger
+     * when saved. Includes HMAC signing, condition filtering, and
+     * delivery tracking.
+     *
+     * @param  string  $event  Event name (supports wildcards)
+     * @param  string  $url  Webhook endpoint URL
+     */
+    public function subscribe(string $event, string $url): SubscriptionBuilder
+    {
+        $builder = App::make(SubscriptionBuilder::class);
+        $builder->on($event)->to($url);
+
+        return $builder;
+    }
+
+    /**
+     * Remove a webhook subscription by its ID.
+     *
+     * Deletes the subscription record. Does not delete the associated
+     * trigger (use disable() for that if needed).
+     */
+    public function unsubscribe(string $subscriptionId): bool
+    {
+        $subscription = Subscription::find($subscriptionId);
+
+        if ($subscription === null) {
+            return false;
+        }
+
+        $subscription->delete();
+
+        return true;
+    }
+
+    /**
+     * List webhook subscriptions with optional filtering.
+     *
+     * @param  string|null  $event  Filter by event name (supports wildcards)
+     * @param  bool  $activeOnly  Show only active subscriptions
+     * @return Collection<int, Subscription>
+     */
+    public function listSubscriptions(?string $event = null, bool $activeOnly = false): Collection
+    {
+        $query = Subscription::query();
+
+        if ($event !== null && $event !== '') {
+            if (str_contains($event, '*')) {
+                $likePattern = str_replace('*', '%', $event);
+                $query->where('event', 'like', $likePattern);
+            } else {
+                $query->where('event', $event);
+            }
+        }
+
+        if ($activeOnly) {
+            $query->active();
+        }
+
+        return $query->orderByPriority()->get();
+    }
+
+    /**
+     * Get a subscription by ID.
+     */
+    public function getSubscription(string $subscriptionId): ?Subscription
+    {
+        return Subscription::find($subscriptionId);
     }
 
     /**

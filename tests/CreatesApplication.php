@@ -17,6 +17,7 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Hashing\HashManager;
+use Illuminate\Http\Client\Factory as HttpClientFactory;
 use Illuminate\Log\LogManager;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Support\Facades\Facade;
@@ -36,6 +37,11 @@ trait CreatesApplication
                 return true;
             }
 
+            public function runningUnitTests(): bool
+            {
+                return true;
+            }
+
             public function configPath(string $path = ''): string
             {
                 return __DIR__.'/../config'.($path !== '' ? '/'.$path : '');
@@ -44,6 +50,11 @@ trait CreatesApplication
             public function databasePath(string $path = ''): string
             {
                 return __DIR__.'/../database'.($path !== '' ? '/'.$path : '');
+            }
+
+            public function storagePath(string $path = ''): string
+            {
+                return sys_get_temp_dir().'/zb_events_test'.($path !== '' ? '/'.$path : '');
             }
         };
 
@@ -114,6 +125,12 @@ trait CreatesApplication
 
         // Bind log service so Log facade works in tests
         $app->singleton('log', fn (): LogManager => new LogManager($app));
+
+        // Bind HTTP client so Http facade works in tests
+        $httpClientFactory = new HttpClientFactory($app->make('events'));
+        $app->singleton('http', fn (): HttpClientFactory => $httpClientFactory);
+        $app->alias(HttpClientFactory::class, 'http');
+        $app->instance(HttpClientFactory::class, $httpClientFactory);
 
         // Bind cache service so Cache facade works in tests
         $cacheManager = new CacheManager($app);

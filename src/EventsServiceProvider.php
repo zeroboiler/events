@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -13,8 +14,12 @@ use ZeroBoiler\Events\Console\EventsEnableCommand;
 use ZeroBoiler\Events\Console\EventsFireCommand;
 use ZeroBoiler\Events\Console\EventsListCommand;
 use ZeroBoiler\Events\Console\EventsLogCommand;
+use ZeroBoiler\Events\Console\EventsRedeliverCommand;
 use ZeroBoiler\Events\Console\EventsRegisterCommand;
 use ZeroBoiler\Events\Console\EventsRetryCommand;
+use ZeroBoiler\Events\Console\EventsSubscribeCommand;
+use ZeroBoiler\Events\Console\EventsSubscriptionsCommand;
+use ZeroBoiler\Events\Console\EventsUnsubscribeCommand;
 
 class EventsServiceProvider extends ServiceProvider
 {
@@ -28,6 +33,9 @@ class EventsServiceProvider extends ServiceProvider
         $this->app->singleton(ConditionEngine::class);
         $this->app->singleton(ActionResolver::class);
         $this->app->singleton(EventManager::class);
+
+        // Register SubscriptionBuilder as a transient (not shared) service
+        $this->app->bind(SubscriptionBuilder::class);
     }
 
     public function boot(): void
@@ -47,6 +55,11 @@ class EventsServiceProvider extends ServiceProvider
                 EventsRetryCommand::class,
                 EventsEnableCommand::class,
                 EventsDisableCommand::class,
+                // Subscription commands
+                EventsSubscribeCommand::class,
+                EventsUnsubscribeCommand::class,
+                EventsSubscriptionsCommand::class,
+                EventsRedeliverCommand::class,
             ]);
         }
     }
