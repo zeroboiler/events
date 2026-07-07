@@ -99,7 +99,9 @@ class EventManager
 
         if ($event !== null && $event !== '') {
             if (str_contains($event, '*')) {
-                $likePattern = str_replace('*', '%', $event);
+                // Escape LIKE special characters before substituting wildcard
+                $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $event);
+                $likePattern = str_replace('*', '%', $escaped);
                 $query->where('event', 'like', $likePattern);
             } else {
                 $query->where('event', $event);
