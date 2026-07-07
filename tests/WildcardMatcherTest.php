@@ -153,3 +153,56 @@ test('multiple consecutive wildcards work as expected', function (): void {
         ->and(WildcardMatcher::matches('a.*.*.b', 'a.x.b'))
         ->toBeFalse();
 });
+
+test('double wildcard matches across segments', function (): void {
+    // BUG-3 R41: ** should match across dot boundaries
+    expect(WildcardMatcher::matches('order.**', 'order.placed'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('order.**', 'order.placed.extra'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('order.**', 'order.placed.shipped.via.email'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('order.**', 'order'))
+        ->toBeFalse()
+        ->and(WildcardMatcher::matches('order.**', 'payment.placed'))
+        ->toBeFalse();
+});
+
+test('double wildcard at start matches across segments', function (): void {
+    expect(WildcardMatcher::matches('**.placed', 'order.placed'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('**.placed', 'order.nested.placed'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('**.placed', 'placed'))
+        ->toBeFalse();
+});
+
+test('double wildcard in middle matches across segments', function (): void {
+    expect(WildcardMatcher::matches('api.**.store', 'api.v1.users.store'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('api.**.store', 'api.store'))
+        ->toBeFalse()
+        ->and(WildcardMatcher::matches('api.**.store', 'api.users.v1.admin.store'))
+        ->toBeTrue();
+});
+
+test('double wildcard only matches everything', function (): void {
+    expect(WildcardMatcher::matches('**', 'anything'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('**', 'order.placed.nested'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('**', ''))
+        ->toBeFalse();
+});
+
+test('mixed single and double wildcards work together', function (): void {
+    // user.*.created matches single segment, user.**.created matches multi
+    expect(WildcardMatcher::matches('user.*.**', 'user.profile.created'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('user.*.**', 'user.profile.created.nested'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('**.*.end', 'a.b.c.end'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('**.*.end', 'a.end'))
+        ->toBeFalse();
+});
