@@ -13,7 +13,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Throwable;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Models\EventLog;
@@ -61,7 +60,6 @@ class DispatchTriggerJob implements ShouldQueue
         // never runs (queue down, Redis flushed), no orphaned log entry is
         // left behind. See bug #632.
         $log = new EventLog([
-            'id' => (string) Str::uuid(),
             'trigger_id' => $trigger->id,
             'event' => $this->event,
             'payload' => $this->payload,

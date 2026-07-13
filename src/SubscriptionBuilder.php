@@ -133,7 +133,6 @@ class SubscriptionBuilder
         }
 
         $subscription = new Subscription([
-            'id' => (string) Str::uuid(),
             'event' => $this->event,
             'url' => $this->url,
             'conditions' => $this->conditions !== [] ? $this->conditions : null,

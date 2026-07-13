@@ -14,6 +14,7 @@ use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Hashing\HashManager;
@@ -145,6 +146,10 @@ trait CreatesApplication
         // Bind Faker for factories
         $app->singleton(Generator::class, fn () => Factory::create('en_US'));
         $app->alias(Generator::class, 'faker');
+
+        // Set the event dispatcher on Eloquent Model so model events
+        // (creating, updating, etc.) fire properly in tests.
+        Model::setEventDispatcher($app['events']);
 
         // Boot facades
         Facade::setFacadeApplication($app);

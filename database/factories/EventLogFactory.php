@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -8,7 +9,6 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
@@ -25,7 +25,6 @@ class EventLogFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => (string) Str::uuid(),
             'trigger_id' => Trigger::factory(),
             'event' => fake()->word().'.'.fake()->word(),
             'payload' => [
