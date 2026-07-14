@@ -13,6 +13,36 @@ parameters:
 			path: src/Actions/WebhookAction.php
 
 		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Console/EventsDisableCommand.php
+
+		-
+			message: '#^Function app not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: src/Console/EventsDisableCommand.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Console/EventsEnableCommand.php
+
+		-
+			message: '#^Function app not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: src/Console/EventsEnableCommand.php
+
+		-
+			message: '#^Function app not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: src/Console/EventsFireCommand.php
+
+		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<ZeroBoiler\\Events\\Models\\Trigger\>\:\:orderByPriority\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -31,16 +61,40 @@ parameters:
 			path: src/Console/EventsRedeliverCommand.php
 
 		-
+			message: '#^Function app not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: src/Console/EventsRegisterCommand.php
+
+		-
 			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\EventLog\:\:withStatus\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
 			path: src/Console/EventsRetryCommand.php
 
 		-
+			message: '#^Function app not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Function app not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: src/Console/EventsSubscribeCommand.php
+
+		-
 			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int,stdClass\>\:\:map\(\) expects callable\(stdClass, int\)\: array\{string, string, string, int, ''No''\|''Yes'', int, non\-falsy\-string, non\-falsy\-string\}, Closure\(ZeroBoiler\\Events\\Models\\Subscription\)\: array\{string, string, string, int, ''No''\|''Yes'', int, non\-falsy\-string, non\-falsy\-string\} given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Console/EventsSubscriptionsCommand.php
+
+		-
+			message: '#^Function app not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: src/Console/EventsUnsubscribeCommand.php
 
 		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<ZeroBoiler\\Events\\Models\\Subscription\>\:\:active\(\)\.$#'
@@ -79,8 +133,26 @@ parameters:
 			path: src/EventManager.php
 
 		-
+			message: '#^Function config_path not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: src/EventsServiceProvider.php
+
+		-
 			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\EventLog\:\:find\(\)\.$#'
 			identifier: staticMethod.notFound
+			count: 1
+			path: src/Jobs/DispatchTriggerJob.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Jobs/DispatchTriggerJob.php
+
+		-
+			message: '#^Function app not found\.$#'
+			identifier: function.notFound
 			count: 1
 			path: src/Jobs/DispatchTriggerJob.php
 
