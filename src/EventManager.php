@@ -174,18 +174,48 @@ class EventManager
     /**
      * Fire an event and dispatch all matching triggers.
      *
+     * Triggers are dispatched in priority order. If a sync trigger
+     * throws, the exception is caught and logged so remaining
+     * triggers still fire. After all triggers have been attempted,
+     * collected errors are re-thrown as a single composite exception
+     * so the caller knows something went wrong.
+     *
      * @param  array<string, mixed>  $payload
+     *
+     * @throws TriggerDispatchException When one or more sync triggers failed.
      */
     public function fire(string $event, array $payload = []): void
     {
         $triggers = $this->getMatchingTriggers($event);
+
+        /** @var array<int, string> $errors */
+        $errors = [];
 
         foreach ($triggers as $trigger) {
             if (! $this->shouldDispatch($trigger, $payload)) {
                 continue;
             }
 
-            $this->dispatchTrigger($trigger, $event, $payload);
+            try {
+                $this->dispatchTrigger($trigger, $event, $payload);
+            } catch (Throwable $e) {
+                // executeTrigger() already logged and marked the EventLog
+                // as failed. Record the error and continue so remaining
+                // triggers are not silently skipped.
+                $errors[] = \sprintf(
+                    'Trigger %s (%s): %s',
+                    $trigger->id,
+                    $trigger->name,
+                    $e->getMessage(),
+                );
+            }
+        }
+
+        if ($errors !== []) {
+            throw new TriggerDispatchException(
+                'One or more triggers failed during event dispatch.',
+                $errors,
+            );
         }
     }
 

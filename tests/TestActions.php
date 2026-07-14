@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -46,5 +47,13 @@ class LogOrderCreated implements Triggerable
     public function handle(array $payload): void
     {
         // Log order created
+    }
+}
+
+class FailingAction implements Triggerable
+{
+    public function handle(array $payload): void
+    {
+        throw new \RuntimeException('Action failed intentionally');
     }
 }

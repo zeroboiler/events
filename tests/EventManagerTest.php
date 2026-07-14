@@ -6,6 +6,7 @@
 
 declare(strict_types=1);
 
+use App\Actions\FailingAction;
 use App\Actions\HighPriority;
 use App\Actions\LogOrderCreated;
 use App\Actions\LogOrderEvent;
@@ -19,6 +20,7 @@ use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\TriggerBuilder;
+use ZeroBoiler\Events\TriggerDispatchException;
 
 // Load test action classes (App\Actions namespace)
 require_once __DIR__.'/TestActions.php';
@@ -311,6 +313,117 @@ test('getMatchingTriggers uses LIKE wildcard filter for pattern triggers', funct
     expect($wildcardQuery)->not->toBeNull('Expected a query with LIKE %*% filter for wildcard triggers');
 
     DB::disableQueryLog();
+});
+
+test('fire continues remaining triggers when one fails', function (): void {
+    // First trigger will fail
+    Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => FailingAction::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+        'priority' => 100,
+    ]);
+
+    // Second trigger should still fire
+    Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => SendOrderNotification::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+        'priority' => 50,
+    ]);
+
+    // Third trigger should also still fire
+    Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => LogOrderEvent::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+        'priority' => 10,
+    ]);
+
+    try {
+        EventManagerFacade::fire('order.placed', ['order_id' => 123]);
+    } catch (TriggerDispatchException $e) {
+        // Expected
+    }
+
+    // All 3 triggers should have produced event logs
+    expect(EventLog::count())->toBe(3);
+
+    $failed = EventLog::where('status', EventLog::STATUS_FAILED)->get();
+    $completed = EventLog::where('status', EventLog::STATUS_COMPLETED)->get();
+
+    expect($failed)->toHaveCount(1)
+        ->and($completed)->toHaveCount(2);
+});
+
+test('fire throws TriggerDispatchException when a sync trigger fails', function (): void {
+    Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => FailingAction::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    EventManagerFacade::fire('order.placed', ['order_id' => 123]);
+})->throws(TriggerDispatchException::class);
+
+test('fire does not throw when all triggers succeed', function (): void {
+    Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => SendOrderNotification::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => LogOrderEvent::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    // Should not throw
+    EventManagerFacade::fire('order.placed', ['order_id' => 123]);
+
+    expect(EventLog::where('status', EventLog::STATUS_COMPLETED)->count())->toBe(2);
+});
+
+test('fire exception contains all trigger errors', function (): void {
+    Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => FailingAction::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+        'priority' => 100,
+    ]);
+
+    Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => FailingAction::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+        'priority' => 50,
+    ]);
+
+    try {
+        EventManagerFacade::fire('order.placed', ['order_id' => 123]);
+        expect(false)->toBeTrue('Should have thrown');
+    } catch (TriggerDispatchException $e) {
+        expect($e->getErrors())->toHaveCount(2)
+            ->and($e->getErrors()[0])->toContain('Action failed intentionally')
+            ->and($e->getErrors()[1])->toContain('Action failed intentionally');
+    }
 });
 
 test('getMatchingTriggers deduplicates exact and wildcard matches', function (): void {
