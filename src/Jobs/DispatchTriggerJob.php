@@ -57,6 +57,23 @@ class DispatchTriggerJob implements ShouldQueue
             return;
         }
 
+        // Deduplication guard: check if another EventLog for the same
+        // trigger and event already reached a terminal state (completed/failed).
+        // This prevents duplicate action execution on job retries (#7).
+        $alreadyProcessed = EventLog::where('trigger_id', $this->triggerId)
+            ->where('event', $this->event)
+            ->whereIn('status', [EventLog::STATUS_COMPLETED, EventLog::STATUS_DISPATCHED])
+            ->exists();
+
+        if ($alreadyProcessed) {
+            Log::info('Skipping duplicate DispatchTriggerJob — trigger already processed', [
+                'trigger_id' => $this->triggerId,
+                'event' => $this->event,
+            ]);
+
+            return;
+        }
+
         // Create the EventLog here — inside the job — so that if the job
         // never runs (queue down, Redis flushed), no orphaned log entry is
         // left behind. See bug #632.

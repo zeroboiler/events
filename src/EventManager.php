@@ -340,9 +340,27 @@ class EventManager
      */
     public function executeTrigger(Trigger $trigger, EventLog $log): void
     {
+        // Atomic status transition: only proceed if the log is still PENDING.
+        // This prevents race conditions when multiple queue workers process
+        // the same trigger concurrently (retry or duplicate dispatch scenarios).
+        $updated = EventLog::where('id', $log->id)
+            ->where('status', EventLog::STATUS_PENDING)
+            ->update(['status' => EventLog::STATUS_DISPATCHED]);
+
+        if ($updated === 0) {
+            Log::info('EventLog already dispatched, skipping duplicate execution', [
+                'event_log_id' => $log->id,
+                'trigger_id' => $trigger->id,
+                'event' => $log->event,
+            ]);
+
+            return;
+        }
+
+        // Refresh the model to sync the in-memory status with the DB
+        $log->refresh();
+
         $startTime = microtime(true);
-        $log->status = EventLog::STATUS_DISPATCHED;
-        $log->save();
 
         try {
             $actions = $this->parseActions($trigger->action);
