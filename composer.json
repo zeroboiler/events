@@ -1,6 +1,6 @@
 {
     "name": "zeroboiler/events",
-    "description": "DB-driven dynamic event manager for Laravel — manage triggers via admin panel, API, or CLI without code changes",
+    "description": "DB-driven dynamic event manager for Laravel \u2014 manage triggers via admin panel, API, or CLI without code changes",
     "type": "library",
     "license": "proprietary",
     "version": "0.1.0",
@@ -65,5 +65,8 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
+    },
+    "suggest": {
+        "zeroboiler/observability": "Enables #[Trace] auto-instrumentation for event dispatch pipeline"
     }
 }

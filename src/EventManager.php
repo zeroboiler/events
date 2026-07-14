@@ -20,6 +20,8 @@ use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Subscription;
 use ZeroBoiler\Events\Models\Trigger;
+use ZeroBoiler\Observability\Span;
+use ZeroBoiler\Observability\Trace;
 
 class EventManager
 {
@@ -176,6 +178,7 @@ class EventManager
      *
      * @param  array<string, mixed>  $payload
      */
+    #[Trace(operation: 'events.fire')]
     public function fire(string $event, array $payload = []): void
     {
         $triggers = $this->getMatchingTriggers($event);
@@ -192,6 +195,7 @@ class EventManager
     /**
      * Fire an event for a model action.
      */
+    #[Trace(operation: 'events.fire_model')]
     public function fireModel(string $modelClass, string $action, object $model): void
     {
         $event = $modelClass.'.'.$action;
@@ -338,6 +342,7 @@ class EventManager
     /**
      * Execute a trigger synchronously.
      */
+    #[Trace(operation: 'events.execute_trigger')]
     public function executeTrigger(Trigger $trigger, EventLog $log): void
     {
         $startTime = microtime(true);
