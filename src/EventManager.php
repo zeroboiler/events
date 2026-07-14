@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
 use Throwable;
 use ZeroBoiler\Events\Actions\WebhookAction;
+use ZeroBoiler\Observability\Trace;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Subscription;
@@ -41,6 +42,7 @@ class EventManager
     /**
      * Start building a new trigger.
      */
+    #[Trace(operation: 'events.on')]
     public function on(string $event): TriggerBuilder
     {
         $builder = App::make(TriggerBuilder::class);
@@ -176,6 +178,7 @@ class EventManager
      *
      * @param  array<string, mixed>  $payload
      */
+    #[Trace(operation: 'events.fire', attributes: ['event.name' => 'event'])]
     public function fire(string $event, array $payload = []): void
     {
         $triggers = $this->getMatchingTriggers($event);
@@ -338,6 +341,7 @@ class EventManager
     /**
      * Execute a trigger synchronously.
      */
+    #[Trace(operation: 'events.executeTrigger')]
     public function executeTrigger(Trigger $trigger, EventLog $log): void
     {
         $startTime = microtime(true);
