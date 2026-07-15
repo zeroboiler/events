@@ -11,6 +11,8 @@ use App\Actions\LogOrderCreated;
 use App\Actions\LogOrderEvent;
 use App\Actions\LowPriority;
 use App\Actions\SendOrderNotification;
+use App\Actions\TrackingActionOne;
+use App\Actions\TrackingActionTwo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use ZeroBoiler\Events\EventManager;
@@ -342,4 +344,95 @@ test('getMatchingTriggers deduplicates exact and wildcard matches', function ():
     expect(EventLog::count())->toBe(2);
 
     DB::disableQueryLog();
+});
+
+// ---------------------------------------------------------------------------
+// Regression tests for issue #6: TriggerBuilder loses multiple actions when
+// action params are used (the "classes" JSON key was not parsed).
+// ---------------------------------------------------------------------------
+
+beforeEach(function (): void {
+    TrackingActionOne::reset();
+    TrackingActionTwo::reset();
+});
+
+test('fire trigger with multiple actions and params executes all actions', function (): void {
+    // Build a trigger using actions() + actionParams() — this creates the
+    // {"classes":[...],"params":{...}} format that was silently broken (#6).
+    $builder = app(TriggerBuilder::class);
+    $builder
+        ->on('order.placed')
+        ->actions([TrackingActionOne::class, TrackingActionTwo::class])
+        ->actionParams(['webhook_url' => 'https://example.com/hook'])
+        ->save();
+
+    EventManagerFacade::fire('order.placed', ['order_id' => 42]);
+
+    expect(TrackingActionOne::$fired)->toBeTrue('TrackingActionOne should have been dispatched')
+        ->and(TrackingActionTwo::$fired)->toBeTrue('TrackingActionTwo should have been dispatched')
+        ->and(TrackingActionOne::$lastPayload)->toHaveKey('webhook_url')
+        ->and(TrackingActionOne::$lastPayload['webhook_url'])->toBe('https://example.com/hook')
+        ->and(TrackingActionOne::$lastPayload)->toHaveKey('order_id')
+        ->and(TrackingActionTwo::$lastPayload)->toHaveKey('webhook_url');
+});
+
+test('fire trigger with single action and params works correctly', function (): void {
+    $builder = app(TriggerBuilder::class);
+    $builder
+        ->on('order.shipped')
+        ->action(TrackingActionOne::class)
+        ->actionParams(['channel' => 'email'])
+        ->save();
+
+    EventManagerFacade::fire('order.shipped', ['order_id' => 99]);
+
+    expect(TrackingActionOne::$fired)->toBeTrue()
+        ->and(TrackingActionOne::$lastPayload)->toHaveKey('channel')
+        ->and(TrackingActionOne::$lastPayload['channel'])->toBe('email')
+        ->and(TrackingActionOne::$lastPayload)->toHaveKey('order_id');
+});
+
+test('fire trigger with multiple actions without params executes all actions', function (): void {
+    $builder = app(TriggerBuilder::class);
+    $builder
+        ->on('user.created')
+        ->actions([TrackingActionOne::class, TrackingActionTwo::class])
+        ->save();
+
+    EventManagerFacade::fire('user.created', ['user_id' => 7]);
+
+    expect(TrackingActionOne::$fired)->toBeTrue()
+        ->and(TrackingActionTwo::$fired)->toBeTrue();
+});
+
+test('action and actions merge includes both when called together', function (): void {
+    // When both action() and actions() are called, resolveActions() merges them.
+    $builder = app(TriggerBuilder::class);
+    $builder
+        ->on('user.updated')
+        ->action(TrackingActionOne::class)
+        ->actions([TrackingActionTwo::class])
+        ->save();
+
+    EventManagerFacade::fire('user.updated', ['user_id' => 3]);
+
+    expect(TrackingActionOne::$fired)->toBeTrue('Merged action() class should fire')
+        ->and(TrackingActionTwo::$fired)->toBeTrue('actions() class should fire');
+});
+
+test('trigger builder saves classes key format for multiple actions with params', function (): void {
+    $builder = app(TriggerBuilder::class);
+    $trigger = $builder
+        ->on('order.cancelled')
+        ->actions([TrackingActionOne::class, TrackingActionTwo::class])
+        ->actionParams(['url' => 'https://hook.example.com'])
+        ->save();
+
+    $decoded = json_decode($trigger->action, true);
+
+    expect($decoded)->toBeArray()
+        ->and($decoded)->toHaveKey('classes')
+        ->and($decoded['classes'])->toBe([TrackingActionOne::class, TrackingActionTwo::class])
+        ->and($decoded)->toHaveKey('params')
+        ->and($decoded['params'])->toBe(['url' => 'https://hook.example.com']);
 });

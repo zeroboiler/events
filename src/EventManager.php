@@ -407,12 +407,24 @@ class EventManager
         $decoded = json_decode($action, true);
 
         if (is_array($decoded)) {
-            // Associative array → single action with class + params
             if (array_is_list($decoded)) {
                 // List of entries — normalise each one
                 return array_map(
                     fn (mixed $entry): mixed => is_array($entry) ? $entry : (string) $entry,
                     $decoded,
+                );
+            }
+
+            // "classes" key → multiple actions with shared params (TriggerBuilder format).
+            // Normalise into individual [class, params] entries so executeTrigger
+            // can iterate uniformly.  Fixes #6: silent data loss when multiple
+            // actions were saved with action params.
+            if (isset($decoded['classes']) && is_array($decoded['classes'])) {
+                $params = $decoded['params'] ?? [];
+
+                return array_map(
+                    fn (string $class): array => ['class' => $class, 'params' => $params],
+                    $decoded['classes'],
                 );
             }
 

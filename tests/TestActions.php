@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -46,5 +47,43 @@ class LogOrderCreated implements Triggerable
     public function handle(array $payload): void
     {
         // Log order created
+    }
+}
+
+class TrackingActionOne implements Triggerable
+{
+    public static bool $fired = false;
+
+    public static array $lastPayload = [];
+
+    public function handle(array $payload): void
+    {
+        self::$fired = true;
+        self::$lastPayload = $payload;
+    }
+
+    public static function reset(): void
+    {
+        self::$fired = false;
+        self::$lastPayload = [];
+    }
+}
+
+class TrackingActionTwo implements Triggerable
+{
+    public static bool $fired = false;
+
+    public static array $lastPayload = [];
+
+    public function handle(array $payload): void
+    {
+        self::$fired = true;
+        self::$lastPayload = $payload;
+    }
+
+    public static function reset(): void
+    {
+        self::$fired = false;
+        self::$lastPayload = [];
     }
 }
