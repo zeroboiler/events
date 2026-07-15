@@ -24,9 +24,9 @@ use ZeroBoiler\Events\Models\Trigger;
 class EventManager
 {
     /**
-     * Cache key for the enabled wildcard triggers collection.
+     * Cache key for all enabled triggers collection.
      */
-    protected const WILDCARD_TRIGGER_CACHE_KEY = 'zeroboiler:events:enabled_wildcard_triggers';
+    protected const ENABLED_TRIGGERS_CACHE_KEY = 'zeroboiler:events:enabled_triggers';
 
     /**
      * Cache TTL in seconds (5 minutes).
@@ -130,7 +130,7 @@ class EventManager
      */
     public function invalidateTriggerCache(): void
     {
-        Cache::forget(self::WILDCARD_TRIGGER_CACHE_KEY);
+        Cache::forget(self::ENABLED_TRIGGERS_CACHE_KEY);
     }
 
     /**
@@ -243,50 +243,50 @@ class EventManager
     }
 
     /**
-     * Get all triggers matching an event (including wildcards).
+     * Get all triggers matching an event (exact + wildcard).
      *
-     * Uses a cached collection of enabled triggers with wildcards to avoid
-     * loading all triggers on every fire() call. Exact (non-wildcard) matches
-     * are queried directly from the DB for freshness.
+     * Loads all enabled triggers in a single cached query, then partitions
+     * into exact and wildcard matches in PHP. This avoids per-fire() DB
+     * queries for exact matches and eliminates the N+1 problem where every
+     * enabled trigger was loaded on each dispatch.
      *
      * @return Collection<int, Trigger>
      */
     protected function getMatchingTriggers(string $event): Collection
     {
-        // Exact matches — always queried directly (cheap, indexed lookup)
-        $triggers = Trigger::enabled()
-            ->where('event', $event)
-            ->orderByPriority()
-            ->get();
+        $allTriggers = $this->getEnabledTriggers();
 
-        // Wildcard matches — use cached collection of enabled wildcard triggers
-        $wildcardTriggers = $this->getEnabledWildcardTriggers();
-
-        foreach ($wildcardTriggers as $trigger) {
-            if (WildcardMatcher::matches($trigger->event, $event)) {
-                $exists = $triggers->firstWhere('id', $trigger->id);
-                if (! $exists) {
-                    $triggers->push($trigger);
-                }
+        $matched = $allTriggers->filter(function (Trigger $trigger) use ($event): bool {
+            // Exact match — no wildcard processing needed
+            if ($trigger->event === $event) {
+                return true;
             }
-        }
+
+            // Wildcard match — only run matcher for patterns containing '*'
+            if (str_contains($trigger->event, '*')) {
+                return WildcardMatcher::matches($trigger->event, $event);
+            }
+
+            return false;
+        });
 
         // Sort by priority DESC, then by created_at ASC as a tiebreaker for equal priorities.
         // Add trigger id as final tiebreaker for fully deterministic ordering.
-        return $triggers->sortBy(callback: fn (Trigger $t): array => [-$t->priority, $t->created_at?->timestamp ?? 0, $t->id], options: SORT_REGULAR)->values();
+        return $matched->sortBy(callback: fn (Trigger $t): array => [-$t->priority, $t->created_at?->timestamp ?? 0, $t->id], options: SORT_REGULAR)->values();
     }
 
     /**
-     * Get all enabled triggers whose event pattern contains a wildcard.
+     * Get all enabled triggers (cached).
      *
-     * Results are cached with a TTL and invalidated on register / enable / disable.
+     * A single DB query populates the cache; subsequent fire() calls
+     * within the TTL serve from cache — zero DB queries.
+     * Cache is invalidated on register / enable / disable.
      *
      * @return Collection<int, Trigger>
      */
-    protected function getEnabledWildcardTriggers(): Collection
+    protected function getEnabledTriggers(): Collection
     {
-        return Cache::remember(self::WILDCARD_TRIGGER_CACHE_KEY, self::TRIGGER_CACHE_TTL, fn (): Collection => Trigger::enabled()
-            ->where('event', 'like', '%*%')
+        return Cache::remember(self::ENABLED_TRIGGERS_CACHE_KEY, self::TRIGGER_CACHE_TTL, fn (): Collection => Trigger::enabled()
             ->orderByPriority()
             ->get());
     }
