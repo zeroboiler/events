@@ -337,12 +337,36 @@ class EventManager
 
     /**
      * Execute a trigger synchronously.
+     *
+     * Uses atomic status transition (pending → dispatched) to prevent
+     * concurrent execution by retry workers. If the EventLog is no longer
+     * pending, execution is skipped.
      */
     public function executeTrigger(Trigger $trigger, EventLog $log): void
     {
+        // Atomically transition from PENDING → DISPATCHED to prevent
+        // concurrent execution by retry workers (issue #7).
+        $updated = EventLog::where('id', $log->id)
+            ->where('status', EventLog::STATUS_PENDING)
+            ->update([
+                'status' => EventLog::STATUS_DISPATCHED,
+                'updated_at' => now(),
+            ]);
+
+        if ($updated === 0) {
+            // Another worker already picked up this log — skip execution.
+            Log::info('EventLog already dispatched by another worker, skipping', [
+                'event_log_id' => $log->id,
+                'trigger_id' => $trigger->id,
+            ]);
+
+            return;
+        }
+
+        // Refresh the model to get the latest state
+        $log->refresh();
+
         $startTime = microtime(true);
-        $log->status = EventLog::STATUS_DISPATCHED;
-        $log->save();
 
         try {
             $actions = $this->parseActions($trigger->action);
