@@ -24,8 +24,12 @@ class EventsUnsubscribeCommand extends Command
     {
         $id = (string) $this->argument('id');
 
-        /** @var EventManager $manager */
         $manager = app(EventManager::class);
+        if (! $manager instanceof EventManager) {
+            $this->error('EventManager not found in container.');
+
+            return Command::FAILURE;
+        }
 
         if ($manager->unsubscribe($id)) {
             $this->info("✅ Subscription {$id} removed successfully.");
