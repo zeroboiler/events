@@ -233,7 +233,7 @@ test('on method is alias for register', function (): void {
         ->and($builder2)->toBeInstanceOf(TriggerBuilder::class);
 });
 
-test('getMatchingTriggers does not load all enabled triggers for non-wildcard events', function (): void {
+test('getMatchingTriggers fires zero DB queries on cache hit', function (): void {
     // Create a mix of triggers: exact, wildcard, and unrelated
     Trigger::factory()->create([
         'event' => 'order.placed',
@@ -251,41 +251,25 @@ test('getMatchingTriggers does not load all enabled triggers for non-wildcard ev
         'async' => false,
     ]);
 
-    // An enabled trigger that should NOT be loaded (no wildcard, different event)
-    Trigger::factory()->create([
-        'event' => 'user.created',
-        'action' => SendOrderNotification::class,
-        'conditions' => null,
-        'enabled' => true,
-        'async' => false,
-    ]);
+    // First fire() populates the cache (single DB query for all enabled triggers)
+    EventManagerFacade::fire('order.placed', ['order_id' => 123]);
 
+    // Second fire() should serve entirely from cache — zero DB queries
     DB::enableQueryLog();
 
-    EventManagerFacade::fire('order.placed', ['order_id' => 123]);
+    EventManagerFacade::fire('order.shipped', ['order_id' => 456]);
 
     $queries = DB::getQueryLog();
     $selectQueries = array_filter($queries, fn (array $q): bool => str_contains((string) $q['query'], 'select'));
 
-    // Verify no query loads ALL enabled triggers without a wildcard or exact filter
-    foreach ($selectQueries as $query) {
-        $sql = $query['query'];
-
-        // Every trigger query must have either an exact event lookup or a wildcard LIKE filter
-
-        // A query that selects from triggers table must include event filtering
-        if (str_contains((string) $sql, '"triggers"')) {
-            expect($sql)
-                ->toContain('"event"')
-                ->and($sql)
-                ->not->toBe('select * from "triggers"');
-        }
-    }
+    // On cache hit, no trigger queries should hit the DB
+    $triggerSelectQueries = array_filter($selectQueries, fn (array $q): bool => str_contains((string) $q['query'], '"triggers"'));
+    expect($triggerSelectQueries)->toBeEmpty();
 
     DB::disableQueryLog();
 });
 
-test('getMatchingTriggers uses LIKE wildcard filter for pattern triggers', function (): void {
+test('getMatchingTriggers uses single cached query for all enabled triggers', function (): void {
     Trigger::factory()->create([
         'event' => 'order.*',
         'action' => LogOrderEvent::class,
@@ -294,21 +278,24 @@ test('getMatchingTriggers uses LIKE wildcard filter for pattern triggers', funct
         'async' => false,
     ]);
 
+    Trigger::factory()->create([
+        'event' => 'user.created',
+        'action' => SendOrderNotification::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    // First fire — cache miss, should execute exactly ONE trigger query
     DB::enableQueryLog();
 
     EventManagerFacade::fire('order.placed', ['order_id' => 123]);
 
     $queries = DB::getQueryLog();
+    $triggerQueries = array_filter($queries, fn (array $q): bool => str_contains((string) $q['query'], '"triggers"'));
 
-    // The wildcard query should have a LIKE clause with '%*%' as a binding
-    $wildcardQuery = collect($queries)->first(function (array $q): bool {
-        $hasLike = str_contains(strtolower((string) $q['query']), 'like');
-        $hasWildcardBinding = in_array('%*%', $q['bindings'], true);
-
-        return $hasLike && $hasWildcardBinding;
-    });
-
-    expect($wildcardQuery)->not->toBeNull('Expected a query with LIKE %*% filter for wildcard triggers');
+    // Single query to load all enabled triggers (no LIKE filter, no event filter)
+    expect($triggerQueries)->toHaveCount(1);
 
     DB::disableQueryLog();
 });
@@ -342,4 +329,72 @@ test('getMatchingTriggers deduplicates exact and wildcard matches', function ():
     expect(EventLog::count())->toBe(2);
 
     DB::disableQueryLog();
+});
+
+test('cache is invalidated when a trigger is enabled', function (): void {
+    // Start with a disabled trigger
+    $trigger = Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => SendOrderNotification::class,
+        'conditions' => null,
+        'enabled' => false,
+        'async' => false,
+    ]);
+
+    // Prime the cache — trigger is disabled, won't be in results
+    EventManagerFacade::fire('order.placed', ['order_id' => 123]);
+    expect(EventLog::count())->toBe(0);
+
+    // Enable the trigger — should invalidate cache
+    EventManagerFacade::enable($trigger->id);
+
+    // Now fire() should see the newly-enabled trigger
+    EventManagerFacade::fire('order.placed', ['order_id' => 456]);
+    expect(EventLog::count())->toBe(1);
+});
+
+test('cache is invalidated when a trigger is disabled', function (): void {
+    $trigger = Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => SendOrderNotification::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    // Prime the cache — trigger fires
+    EventManagerFacade::fire('order.placed', ['order_id' => 123]);
+    expect(EventLog::count())->toBe(1);
+
+    // Disable the trigger — should invalidate cache
+    EventManagerFacade::disable($trigger->id);
+
+    // Now fire() should NOT trigger the disabled trigger
+    EventManagerFacade::fire('order.placed', ['order_id' => 456]);
+    expect(EventLog::count())->toBe(1); // Still 1 — no new log from second fire
+});
+
+test('getMatchingTriggers does not match unrelated non-wildcard events', function (): void {
+    Trigger::factory()->create([
+        'event' => 'order.placed',
+        'action' => SendOrderNotification::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    // Unrelated exact event
+    Trigger::factory()->create([
+        'event' => 'user.created',
+        'action' => LogOrderEvent::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    EventManagerFacade::fire('order.placed', ['order_id' => 123]);
+
+    // Only the matching trigger should fire
+    expect(EventLog::count())->toBe(1);
+    expect(EventLog::first()->trigger_id)->not->toBeNull();
 });
