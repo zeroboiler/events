@@ -174,18 +174,46 @@ class EventManager
     /**
      * Fire an event and dispatch all matching triggers.
      *
+     * If a trigger throws, the exception is logged and the loop continues
+     * so that one failing trigger does not prevent later triggers from
+     * firing. The first exception (if any) is re-thrown after all triggers
+     * have been attempted, preserving the original error for the caller
+     * while avoiding partial dispatch.
+     *
      * @param  array<string, mixed>  $payload
      */
     public function fire(string $event, array $payload = []): void
     {
         $triggers = $this->getMatchingTriggers($event);
 
+        $firstException = null;
+
         foreach ($triggers as $trigger) {
             if (! $this->shouldDispatch($trigger, $payload)) {
                 continue;
             }
 
-            $this->dispatchTrigger($trigger, $event, $payload);
+            try {
+                $this->dispatchTrigger($trigger, $event, $payload);
+            } catch (Throwable $e) {
+                // Log the failure and continue so other triggers still fire.
+                if ($firstException === null) {
+                    $firstException = $e;
+                }
+
+                Log::warning('EventManager: trigger dispatch failed, continuing with remaining triggers', [
+                    'event' => $event,
+                    'trigger_id' => $trigger->id,
+                    'trigger_name' => $trigger->name,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        // Re-throw the first exception after all triggers have been attempted
+        // so the caller knows something went wrong.
+        if ($firstException !== null) {
+            throw $firstException;
         }
     }
 
