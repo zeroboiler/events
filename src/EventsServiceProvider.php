@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events;
 
-use Illuminate\Support\ServiceProvider;
+use IlluminateSupport\ServiceProvider;
 use ZeroBoiler\Events\Console\EventsDisableCommand;
 use ZeroBoiler\Events\Console\EventsEnableCommand;
 use ZeroBoiler\Events\Console\EventsFireCommand;
@@ -20,6 +20,7 @@ use ZeroBoiler\Events\Console\EventsRetryCommand;
 use ZeroBoiler\Events\Console\EventsSubscribeCommand;
 use ZeroBoiler\Events\Console\EventsSubscriptionsCommand;
 use ZeroBoiler\Events\Console\EventsUnsubscribeCommand;
+use ZeroBoiler\Events\Domain\DomainEventDispatcher;
 
 class EventsServiceProvider extends ServiceProvider
 {
@@ -33,6 +34,27 @@ class EventsServiceProvider extends ServiceProvider
         $this->app->singleton(ConditionEngine::class);
         $this->app->singleton(ActionResolver::class);
         $this->app->singleton(EventManager::class);
+
+        // Register DomainEventDispatcher — domain event support
+        $this->app->singleton(DomainEventDispatcher::class, function (): DomainEventDispatcher {
+            $laravelDispatcher = $this->app->bound(\Illuminate\Contracts\Events\Dispatcher::class)
+                ? $this->app->make(\Illuminate\Contracts\Events\Dispatcher::class)
+                : null;
+
+            $dispatcher = new DomainEventDispatcher($laravelDispatcher);
+
+            // Wire domain events to fire through EventManager automatically
+            $dispatcher->setEventForwarder(function (string $eventType, array $payload): void {
+                try {
+                    $this->app->make(EventManager::class)->fire($eventType, $payload, 'domain');
+                } catch (\Throwable) {
+                    // Silently fail — domain events should not break
+                    // if the event system has issues.
+                }
+            });
+
+            return $dispatcher;
+        });
 
         // Register SubscriptionBuilder as a transient (not shared) service
         $this->app->bind(SubscriptionBuilder::class);

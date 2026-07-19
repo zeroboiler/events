@@ -23,6 +23,7 @@ use ZeroBoiler\Events\Database\Factories\TriggerFactory;
  * @property string $id
  * @property string $name
  * @property string $event
+ * @property string $type
  * @property string $action
  * @property array<string, mixed> $conditions
  * @property bool $async
@@ -50,6 +51,7 @@ class Trigger extends Model
         'id',
         'name',
         'event',
+        'type',
         'action',
         'conditions',
         'async',

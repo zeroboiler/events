@@ -17,7 +17,8 @@
         "illuminate/config": "^11.51",
         "phpoption/phpoption": "^1.9",
         "vlucas/phpdotenv": "^5.6",
-        "illuminate/http": "^11.0"
+        "illuminate/http": "^11.0",
+        "ramsey/uuid": "^4.7"
     },
     "require-dev": {
         "pestphp/pest": "^3.8",
@@ -57,7 +58,8 @@
                 "ZeroBoiler\\Events\\EventsServiceProvider"
             ],
             "aliases": {
-                "EventManager": "ZeroBoiler\\Events\\Facades\\EventManager"
+                "EventManager": "ZeroBoiler\\Events\\Facades\\EventManager",
+                "DomainEventDispatcher": "ZeroBoiler\\Events\\Domain\\Facades\\DomainEventDispatcher"
             }
         }
     },

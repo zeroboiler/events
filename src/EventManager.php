@@ -182,11 +182,12 @@ class EventManager
      * while avoiding partial dispatch.
      *
      * @param  array<string, mixed>  $payload
+     * @param  string  $type  Event type filter: 'domain', 'integration', or 'system'. Default 'integration'.
      */
     #[Trace(operation: 'events.fire')]
-    public function fire(string $event, array $payload = []): void
+    public function fire(string $event, array $payload = [], string $type = 'integration'): void
     {
-        $triggers = $this->getMatchingTriggers($event);
+        $triggers = $this->getMatchingTriggers($event, $type);
 
         $firstException = null;
 
@@ -221,9 +222,11 @@ class EventManager
 
     /**
      * Fire an event for a model action.
+     *
+     * @param  string  $type  Event type filter. Default 'integration'.
      */
     #[Trace(operation: 'events.fire_model')]
-    public function fireModel(string $modelClass, string $action, object $model): void
+    public function fireModel(string $modelClass, string $action, object $model, string $type = 'integration'): void
     {
         $event = $modelClass.'.'.$action;
 
@@ -242,7 +245,7 @@ class EventManager
             'model' => $model,
             'model_class' => $modelClass,
             'action' => $action,
-        ]);
+        ], $type);
     }
 
     /**
@@ -281,13 +284,18 @@ class EventManager
      * queries for exact matches and eliminates the N+1 problem where every
      * enabled trigger was loaded on each dispatch.
      *
+     * @param  string  $type  Filter by trigger type ('domain', 'integration', 'system', or null for all).
      * @return Collection<int, Trigger>
      */
-    protected function getMatchingTriggers(string $event): Collection
+    protected function getMatchingTriggers(string $event, ?string $type = null): Collection
     {
         $allTriggers = $this->getEnabledTriggers();
 
-        $matched = $allTriggers->filter(function (Trigger $trigger) use ($event): bool {
+        $matched = $allTriggers->filter(function (Trigger $trigger) use ($event, $type): bool {
+            // Filter by type if specified
+            if ($type !== null && $trigger->type !== $type) {
+                return false;
+            }
             // Exact match — no wildcard processing needed
             if ($trigger->event === $event) {
                 return true;

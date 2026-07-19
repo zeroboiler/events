@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * This file is part of ZeroBoiler, licensed under the proprietary license.
+ */
+
+declare(strict_types=1);
+
+namespace ZeroBoiler\Events\Domain;
+
+use DateTimeImmutable;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
+
+final readonly class DomainEvent
+{
+    public UuidInterface $eventId;
+
+    public DateTimeImmutable $occurredAt;
+
+    /**
+     * @param  array<string, mixed>  $payload
+     */
+    public function __construct(
+        public string $eventType,
+        public array $payload = [],
+        ?UuidInterface $eventId = null,
+        ?DateTimeImmutable $occurredAt = null,
+    ) {
+        $this->eventId = $eventId ?? Uuid::uuid4();
+        $this->occurredAt = $occurredAt ?? new DateTimeImmutable;
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     */
+    public static function occur(string $eventType, array $payload = []): self
+    {
+        return new self($eventType, $payload);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return [
+            'eventId' => $this->eventId->toString(),
+            'eventType' => $this->eventType,
+            'payload' => $this->payload,
+            'occurredAt' => $this->occurredAt->format(DateTimeImmutable::ATOM),
+        ];
+    }
+
+    /**
+     * Reconstruct an event from persisted data, preserving the original
+     * eventId and occurredAt to prevent information loss during event replay.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public static function fromArray(array $data): self
+    {
+        $eventId = isset($data['eventId'])
+            ? Uuid::fromString((string) $data['eventId'])
+            : null;
+
+        $occurredAt = isset($data['occurredAt'])
+            ? new DateTimeImmutable($data['occurredAt'])
+            : null;
+
+        return new self(
+            $data['eventType'],
+            $data['payload'],
+            $eventId,
+            $occurredAt,
+        );
+    }
+}
