@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Str;
 use Throwable;
 use ZeroBoiler\Events\Actions\WebhookAction;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
@@ -323,7 +322,6 @@ class EventManager
             ));
         } else {
             $log = new EventLog([
-                'id' => (string) Str::uuid(),
                 'trigger_id' => $trigger->id,
                 'event' => $event,
                 'payload' => $payload,
