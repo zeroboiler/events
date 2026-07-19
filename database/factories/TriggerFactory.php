@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use ZeroBoiler\Events\Models\Trigger;
 
 /**
@@ -27,7 +26,6 @@ class TriggerFactory extends Factory
         $event = fake()->word().'.'.fake()->word();
 
         return [
-            'id' => (string) Str::uuid(),
             'name' => ucfirst(str_replace('.', ' ', $event)).' Trigger',
             'event' => $event,
             'action' => fake()->sentence(),

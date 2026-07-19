@@ -27,7 +27,6 @@ class SubscriptionFactory extends Factory
         $event = fake()->word().'.'.fake()->word();
 
         return [
-            'id' => (string) Str::uuid(),
             'event' => $event,
             'url' => fake()->url(),
             'conditions' => null,
