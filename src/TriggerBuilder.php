@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events;
 
-use Illuminate\Support\Str;
 use ZeroBoiler\Events\Models\Trigger;
 
 class TriggerBuilder
@@ -190,7 +189,6 @@ class TriggerBuilder
         };
 
         $trigger = new Trigger([
-            'id' => (string) Str::uuid(),
             'name' => $this->name,
             'event' => $this->event,
             'action' => $actionString,

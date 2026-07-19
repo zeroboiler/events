@@ -71,6 +71,11 @@ class WildcardMatcher
      */
     public static function extractWildcards(string $pattern, string $event): array
     {
+        // Handle bare * catch-all: return the entire event as the wildcard value
+        if ($pattern === '*') {
+            return $event !== '' ? [$event] : [];
+        }
+
         $parts = explode('.', $pattern);
         $eventParts = explode('.', $event);
 
