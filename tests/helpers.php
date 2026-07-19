@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
 
 declare(strict_types=1);
+
 use Faker\Generator;
 use Faker\Provider\DateTime;
 use Faker\Provider\en_US\Address;
