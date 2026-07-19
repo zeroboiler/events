@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -41,6 +42,9 @@ if (! function_exists('set_test_app')) {
 }
 
 if (! function_exists('app')) {
+    /**
+     * @param  array<string, mixed>  $parameters
+     */
     function app(?string $abstract = null, array $parameters = []): mixed
     {
         global $__testAppInstance;

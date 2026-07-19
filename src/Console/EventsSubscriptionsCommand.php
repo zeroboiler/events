@@ -29,12 +29,12 @@ class EventsSubscriptionsCommand extends Command
         $query = Subscription::query();
 
         $eventFilter = $this->option('event');
-        if ($eventFilter !== null && $eventFilter !== '') {
-            if (str_contains((string) $eventFilter, '*')) {
-                $likePattern = str_replace('*', '%', (string) $eventFilter);
+        if (is_string($eventFilter) && $eventFilter !== '') {
+            if (str_contains($eventFilter, '*')) {
+                $likePattern = str_replace('*', '%', $eventFilter);
                 $query->where('event', 'like', $likePattern);
             } else {
-                $query->where('event', (string) $eventFilter);
+                $query->where('event', $eventFilter);
             }
         }
 

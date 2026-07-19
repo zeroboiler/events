@@ -14,6 +14,7 @@ use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Hashing\HashManager;
@@ -119,9 +120,14 @@ trait CreatesApplication
         $app->instance('config', $config);
 
         // Bind core services
-        $app->singleton('events', fn (): Dispatcher => new Dispatcher($app));
+        $eventDispatcher = new Dispatcher($app);
+        $app->singleton('events', fn (): Dispatcher => $eventDispatcher);
         $app->singleton('queue', fn (): QueueManager => new QueueManager($app));
         $app->singleton('hash', fn (): HashManager => new HashManager($app));
+
+        // Set the event dispatcher on Eloquent so model lifecycle
+        // callbacks (creating, saving, etc.) actually fire.
+        Model::setEventDispatcher($eventDispatcher);
 
         // Bind log service so Log facade works in tests
         $app->singleton('log', fn (): LogManager => new LogManager($app));

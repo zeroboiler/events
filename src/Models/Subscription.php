@@ -37,7 +37,7 @@ use ZeroBoiler\Events\Database\Factories\SubscriptionFactory;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
- * @mixin \Eloquent
+ * @mixin Builder
  */
 class Subscription extends Model
 {
@@ -125,7 +125,9 @@ class Subscription extends Model
      */
     public function scopeOrderByPriority(Builder $query): Builder
     {
-        return $query->orderByDesc('priority');
+        $query->orderByDesc('priority');
+
+        return $query;
     }
 
     /**

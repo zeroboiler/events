@@ -30,7 +30,7 @@ use ZeroBoiler\Events\Database\Factories\EventLogFactory;
  * @property Carbon $updated_at
  * @property-read Trigger $trigger
  *
- * @mixin \Eloquent
+ * @mixin Builder
  */
 class EventLog extends Model
 {
@@ -171,7 +171,8 @@ class EventLog extends Model
     }
 
     /**
-     * @return array<string, string> */
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

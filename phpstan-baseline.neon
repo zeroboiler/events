@@ -1,20 +1,206 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Subscription\:\:find\(\)\.$#'
-			identifier: staticMethod.notFound
-			count: 3
-			path: src/Actions/WebhookAction.php
-
-		-
-			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$failure_count\.$#'
+			identifier: property.notFound
 			count: 1
 			path: src/Actions/WebhookAction.php
 
 		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/WebhookAction.php
+
+		-
+			message: '#^Binary operation "\." between ''sha256\='' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Actions/WebhookAction.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:hasExceededFailures\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Actions/WebhookAction.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:recordDelivery\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Actions/WebhookAction.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:recordFailure\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Actions/WebhookAction.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:signPayload\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Actions/WebhookAction.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$enabled\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Console/EventsDisableCommand.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Console/EventsDisableCommand.php
+
+		-
+			message: '#^Cannot cast array\|bool\|string\|null to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Console/EventsDisableCommand.php
+
+		-
+			message: '#^Parameter \#1 \$triggerId of method ZeroBoiler\\Events\\EventManager\:\:disable\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsDisableCommand.php
+
+		-
+			message: '#^Part \$id \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Console/EventsDisableCommand.php
+
+		-
+			message: '#^Part \$trigger\-\>name \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: src/Console/EventsDisableCommand.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$enabled\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Console/EventsEnableCommand.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Console/EventsEnableCommand.php
+
+		-
+			message: '#^Cannot cast array\|bool\|string\|null to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Console/EventsEnableCommand.php
+
+		-
+			message: '#^Parameter \#1 \$triggerId of method ZeroBoiler\\Events\\EventManager\:\:enable\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsEnableCommand.php
+
+		-
+			message: '#^Part \$id \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Console/EventsEnableCommand.php
+
+		-
+			message: '#^Part \$trigger\-\>name \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: src/Console/EventsEnableCommand.php
+
+		-
+			message: '#^Cannot cast array\|bool\|non\-empty\-string to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Console/EventsFireCommand.php
+
+		-
+			message: '#^Cannot cast array\|bool\|string\|null to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Console/EventsFireCommand.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 2
+			path: src/Console/EventsFireCommand.php
+
+		-
+			message: '#^Parameter \#1 \$event of method ZeroBoiler\\Events\\EventManager\:\:fire\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsFireCommand.php
+
+		-
+			message: '#^Parameter \#1 \$input of method ZeroBoiler\\Events\\Console\\EventsFireCommand\:\:parseJsonOption\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsFireCommand.php
+
+		-
+			message: '#^Part \$event \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Console/EventsFireCommand.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Console/EventsListCommand.php
+
+		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<ZeroBoiler\\Events\\Models\\Trigger\>\:\:orderByPriority\(\)\.$#'
 			identifier: method.notFound
+			count: 1
+			path: src/Console/EventsListCommand.php
+
+		-
+			message: '#^Cannot call method count\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Console/EventsListCommand.php
+
+		-
+			message: '#^Cannot call method get\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Console/EventsListCommand.php
+
+		-
+			message: '#^Cannot call method limit\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Console/EventsListCommand.php
+
+		-
+			message: '#^Cannot call method map\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Console/EventsListCommand.php
+
+		-
+			message: '#^Cannot call method offset\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Console/EventsListCommand.php
+
+		-
+			message: '#^Cannot call method toArray\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Console/EventsListCommand.php
+
+		-
+			message: '#^Parameter \#2 \$rows of method Illuminate\\Console\\Command\:\:table\(\) expects array\|Illuminate\\Contracts\\Support\\Arrayable, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Console/EventsListCommand.php
 
@@ -25,10 +211,106 @@ parameters:
 			path: src/Console/EventsLogCommand.php
 
 		-
-			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Subscription\:\:find\(\)\.$#'
-			identifier: staticMethod.notFound
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, ZeroBoiler\\Events\\Models\\EventLog\>\|ZeroBoiler\\Events\\Models\\EventLog\:\:\$event\.$#'
+			identifier: property.notFound
 			count: 2
 			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, ZeroBoiler\\Events\\Models\\EventLog\>\|ZeroBoiler\\Events\\Models\\EventLog\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, ZeroBoiler\\Events\\Models\\EventLog\>\|ZeroBoiler\\Events\\Models\\EventLog\:\:\$payload\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, ZeroBoiler\\Events\\Models\\EventLog\>\|ZeroBoiler\\Events\\Models\\EventLog\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Binary operation "\." between ''sha256\='' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, ZeroBoiler\\Events\\Models\\EventLog\>\|ZeroBoiler\\Events\\Models\\EventLog\:\:markAsCompleted\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:recordDelivery\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:signPayload\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Cannot cast array\|bool\|string\|null to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Parameter \#1 \$url of method Illuminate\\Http\\Client\\PendingRequest\:\:post\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Part \$logId \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Part \$url \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: src/Console/EventsRedeliverCommand.php
+
+		-
+			message: '#^Cannot cast array\|bool\|string\|null to string\.$#'
+			identifier: cast.string
+			count: 2
+			path: src/Console/EventsRegisterCommand.php
+
+		-
+			message: '#^Parameter \#1 \$class of method ZeroBoiler\\Events\\TriggerBuilder\:\:action\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsRegisterCommand.php
+
+		-
+			message: '#^Parameter \#1 \$event of method ZeroBoiler\\Events\\EventManager\:\:on\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsRegisterCommand.php
+
+		-
+			message: '#^Parameter \#1 \$name of method ZeroBoiler\\Events\\TriggerBuilder\:\:name\(\) expects string, array\|string\|true given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsRegisterCommand.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Console/EventsRetryCommand.php
 
 		-
 			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\EventLog\:\:withStatus\(\)\.$#'
@@ -37,10 +319,166 @@ parameters:
 			path: src/Console/EventsRetryCommand.php
 
 		-
+			message: '#^Cannot access property \$async on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Cannot access property \$enabled on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Cannot access property \$event on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Cannot access property \$id on mixed\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Cannot access property \$payload on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Cannot access property \$trigger on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Cannot call method count\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Cannot call method get\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Cannot call method isEmpty\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Cannot call method with\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Cannot cast array\|bool\|string\|null to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Parameter \#1 \$trigger of method ZeroBoiler\\Events\\EventManager\:\:executeTrigger\(\) expects ZeroBoiler\\Events\\Models\\Trigger, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Parameter \#1 \$triggerId of class ZeroBoiler\\Events\\Jobs\\DispatchTriggerJob constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Parameter \#2 \$event of class ZeroBoiler\\Events\\Jobs\\DispatchTriggerJob constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Parameter \#2 \$log of method ZeroBoiler\\Events\\EventManager\:\:executeTrigger\(\) expects ZeroBoiler\\Events\\Models\\EventLog, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Parameter \#3 \$payload of class ZeroBoiler\\Events\\Jobs\\DispatchTriggerJob constructor expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Part \$log\-\>id \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Part \$logs\-\>count\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Part \$trigger\-\>id \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Console/EventsRetryCommand.php
+
+		-
+			message: '#^Cannot cast array\|bool\|string\|null to string\.$#'
+			identifier: cast.string
+			count: 2
+			path: src/Console/EventsSubscribeCommand.php
+
+		-
+			message: '#^Parameter \#1 \$event of method ZeroBoiler\\Events\\EventManager\:\:subscribe\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsSubscribeCommand.php
+
+		-
+			message: '#^Parameter \#2 \$url of method ZeroBoiler\\Events\\EventManager\:\:subscribe\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsSubscribeCommand.php
+
+		-
 			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int,stdClass\>\:\:map\(\) expects callable\(stdClass, int\)\: array\{string, string, string, int, ''No''\|''Yes'', int, non\-falsy\-string, non\-falsy\-string\}, Closure\(ZeroBoiler\\Events\\Models\\Subscription\)\: array\{string, string, string, int, ''No''\|''Yes'', int, non\-falsy\-string, non\-falsy\-string\} given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Console/EventsSubscriptionsCommand.php
+
+		-
+			message: '#^Cannot cast array\|bool\|string\|null to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Console/EventsUnsubscribeCommand.php
+
+		-
+			message: '#^Parameter \#1 \$subscriptionId of method ZeroBoiler\\Events\\EventManager\:\:unsubscribe\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Console/EventsUnsubscribeCommand.php
+
+		-
+			message: '#^Part \$id \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: src/Console/EventsUnsubscribeCommand.php
+
+		-
+			message: '#^Anonymous function should return Illuminate\\Database\\Eloquent\\Collection but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/EventManager.php
 
 		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<ZeroBoiler\\Events\\Models\\Subscription\>\:\:active\(\)\.$#'
@@ -55,32 +493,158 @@ parameters:
 			path: src/EventManager.php
 
 		-
-			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Subscription\:\:find\(\)\.$#'
-			identifier: staticMethod.notFound
-			count: 2
-			path: src/EventManager.php
-
-		-
 			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:enabled\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 2
 			path: src/EventManager.php
 
 		-
-			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:where\(\)\.$#'
-			identifier: staticMethod.notFound
-			count: 2
-			path: src/EventManager.php
-
-		-
-			message: '#^Using nullsafe property access "\?\-\>timestamp" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
-			identifier: nullsafe.neverNull
+			message: '#^Cannot call method firstWhere\(\) on mixed\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: src/EventManager.php
 
 		-
-			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\EventLog\:\:find\(\)\.$#'
-			identifier: staticMethod.notFound
+			message: '#^Cannot call method get\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: src/EventManager.php
+
+		-
+			message: '#^Cannot call method on\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/EventManager.php
+
+		-
+			message: '#^Cannot call method orderByPriority\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/EventManager.php
+
+		-
+			message: '#^Cannot call method push\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Cannot call method sortBy\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Cannot call method to\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Cannot call method values\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Cannot call method where\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/EventManager.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 2
+			path: src/EventManager.php
+
+		-
+			message: '#^Method ZeroBoiler\\Events\\EventManager\:\:getEnabledWildcardTriggers\(\) should return Illuminate\\Database\\Eloquent\\Collection\<int, ZeroBoiler\\Events\\Models\\Trigger\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Method ZeroBoiler\\Events\\EventManager\:\:getMatchingTriggers\(\) should return Illuminate\\Database\\Eloquent\\Collection\<int, ZeroBoiler\\Events\\Models\\Trigger\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Method ZeroBoiler\\Events\\EventManager\:\:getSubscription\(\) should return ZeroBoiler\\Events\\Models\\Subscription\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Method ZeroBoiler\\Events\\EventManager\:\:listSubscriptions\(\) should return Illuminate\\Database\\Eloquent\\Collection\<int, ZeroBoiler\\Events\\Models\\Subscription\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Method ZeroBoiler\\Events\\EventManager\:\:on\(\) should return ZeroBoiler\\Events\\TriggerBuilder but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Method ZeroBoiler\\Events\\EventManager\:\:subscribe\(\) should return ZeroBoiler\\Events\\SubscriptionBuilder but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Parameter \#1 \$class of method ZeroBoiler\\Events\\ActionResolver\:\:resolve\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Parameter \#1 \$payload of method ZeroBoiler\\Events\\Contracts\\Triggerable\:\:handle\(\) expects array\<string, mixed\>, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Parameter \#1 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between Illuminate\\Support\\Carbon and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/EventManager.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$enabled\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Jobs/DispatchTriggerJob.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$error\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Jobs/DispatchTriggerJob.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Jobs/DispatchTriggerJob.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Jobs/DispatchTriggerJob.php
+
+		-
+			message: '#^Parameter \#1 \$trigger of method ZeroBoiler\\Events\\EventManager\:\:executeTrigger\(\) expects ZeroBoiler\\Events\\Models\\Trigger, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Jobs/DispatchTriggerJob.php
 
@@ -97,8 +661,8 @@ parameters:
 			path: src/Models/EventLog.php
 
 		-
-			message: '#^PHPDoc tag @mixin contains unknown class Eloquent\.$#'
-			identifier: class.notFound
+			message: '#^PHPDoc tag @mixin contains generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Models/EventLog.php
 
@@ -109,14 +673,8 @@ parameters:
 			path: src/Models/Subscription.php
 
 		-
-			message: '#^Method ZeroBoiler\\Events\\Models\\Subscription\:\:scopeOrderByPriority\(\) should return Illuminate\\Database\\Eloquent\\Builder\<ZeroBoiler\\Events\\Models\\Subscription\> but returns Illuminate\\Database\\Query\\Builder\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Models/Subscription.php
-
-		-
-			message: '#^PHPDoc tag @mixin contains unknown class Eloquent\.$#'
-			identifier: class.notFound
+			message: '#^PHPDoc tag @mixin contains generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Models/Subscription.php
 
@@ -127,25 +685,1177 @@ parameters:
 			path: src/Models/Trigger.php
 
 		-
-			message: '#^Generic type Illuminate\\Database\\Eloquent\\Relations\\HasMany\<ZeroBoiler\\Events\\Models\\EventLog\> in PHPDoc tag @return does not specify all template types of class Illuminate\\Database\\Eloquent\\Relations\\HasMany\: TRelatedModel, TDeclaringModel$#'
-			identifier: generics.lessTypes
-			count: 1
-			path: src/Models/Trigger.php
-
-		-
-			message: '#^Method ZeroBoiler\\Events\\Models\\Trigger\:\:eventLogs\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<ZeroBoiler\\Events\\Models\\EventLog\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<ZeroBoiler\\Events\\Models\\EventLog, \$this\(ZeroBoiler\\Events\\Models\\Trigger\)\>\.$#'
+			message: '#^Method ZeroBoiler\\Events\\Models\\Trigger\:\:eventLogs\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<ZeroBoiler\\Events\\Models\\EventLog, ZeroBoiler\\Events\\Models\\Trigger\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<ZeroBoiler\\Events\\Models\\EventLog, \$this\(ZeroBoiler\\Events\\Models\\Trigger\)\>\.$#'
 			identifier: return.type
 			count: 1
 			path: src/Models/Trigger.php
 
 		-
-			message: '#^Method ZeroBoiler\\Events\\Models\\Trigger\:\:scopeOrderByPriority\(\) should return Illuminate\\Database\\Eloquent\\Builder\<ZeroBoiler\\Events\\Models\\Trigger\> but returns Illuminate\\Database\\Query\\Builder\.$#'
-			identifier: return.type
+			message: '#^PHPDoc tag @mixin contains generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Models/Trigger.php
 
 		-
-			message: '#^PHPDoc tag @mixin contains unknown class Eloquent\.$#'
+			message: '#^Cannot access property \$wasCalled on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/ActionResolverTest.php
+
+		-
+			message: '#^Cannot call method handle\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/ActionResolverTest.php
+
+		-
+			message: '#^Cannot call method resolve\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: tests/ActionResolverTest.php
+
+		-
+			message: '#^Cannot access property \$action on mixed\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: tests/BugFixTest.php
+
+		-
+			message: '#^Cannot access property \$payload on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 5
+			path: tests/BugFixTest.php
+
+		-
+			message: '#^Cannot call method action\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 5
+			path: tests/BugFixTest.php
+
+		-
+			message: '#^Cannot call method on\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: tests/BugFixTest.php
+
+		-
+			message: '#^Cannot call method save\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: tests/BugFixTest.php
+
+		-
+			message: '#^Method class@anonymous/tests/BugFixTest\.php\:93\:\:attributesToArray\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/BugFixTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/BugFixTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of function count expects array\|Countable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/BugFixTest.php
+
+		-
+			message: '#^Property class@anonymous/tests/BugFixTest\.php\:93\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: tests/BugFixTest.php
+
+		-
+			message: '#^Property class@anonymous/tests/BugFixTest\.php\:93\:\:\$status has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: tests/BugFixTest.php
+
+		-
+			message: '#^Unable to resolve the template type TAndValue in call to method Pest\\Expectation\<mixed\>\:\:and\(\)$#'
+			identifier: argument.templateType
+			count: 5
+			path: tests/BugFixTest.php
+
+		-
+			message: '#^Cannot call method matches\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 48
+			path: tests/ConditionEngineTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:refresh\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot access offset ''amount'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot access offset ''order_id'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot access property \$action on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot access property \$async on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot access property \$enabled on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot access property \$name on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot access property \$payload on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot access property \$priority on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot call method getDefinition\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 11
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot call method run\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 11
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot call method setHelperSet\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Cannot call method setLaravel\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 11
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Parameter \#1 \$stream of method Symfony\\Component\\Console\\Input\\Input\:\:setStream\(\) expects resource, resource\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Parameter \#2 \$definition of class Symfony\\Component\\Console\\Input\\ArrayInput constructor expects Symfony\\Component\\Console\\Input\\InputDefinition\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 11
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Unable to resolve the template type TAndValue in call to method Pest\\Expectation\<mixed\>\:\:and\(\)$#'
+			identifier: argument.templateType
+			count: 6
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function expect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/ConsoleCommandTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$event\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 17
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$payload\.$#'
+			identifier: property.notFound
+			count: 6
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$trigger\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:delete\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:completed\(\)\.$#'
+			identifier: method.notFound
+			count: 6
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:dispatched\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:failed\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:pending\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\EventLog\:\:completed\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\EventLog\:\:failed\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\EventLog\:\:pending\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\EventLog\:\:withStatus\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot access offset ''name'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot access offset ''order'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot access offset ''total'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot access offset ''user'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot access property \$duration_ms on mixed\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot access property \$error on mixed\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot access property \$id on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot access property \$status on mixed\.$#'
+			identifier: property.nonObject
+			count: 9
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot call method count\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 8
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot call method create\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 11
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot call method every\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot call method get\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 5
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot call method make\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot call method markAsCompleted\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot call method markAsFailed\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Cannot call method refresh\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Unable to resolve the template type TAndValue in call to method Pest\\Expectation\<mixed\>\:\:and\(\)$#'
+			identifier: argument.templateType
+			count: 5
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function expect$#'
+			identifier: argument.templateType
+			count: 4
+			path: tests/EventLogTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$enabled\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:refresh\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Call to protected method expectException\(\) of class PHPUnit\\Framework\\TestCase\.$#'
+			identifier: method.protected
+			count: 2
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot access offset ''query'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot access property \$action on mixed\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot access property \$enabled on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot access property \$event on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot access property \$event on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot access property \$name on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot access property \$status on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot call method action\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot call method name\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot call method on\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot call method register\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot call method save\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 3
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:first\(\) expects \(callable\(mixed, int\|string\)\: bool\)\|null, Closure\(array\)\: bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Parameter \#1 \$triggerId of static method ZeroBoiler\\Events\\Facades\\EventManager\:\:disable\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Parameter \#1 \$triggerId of static method ZeroBoiler\\Events\\Facades\\EventManager\:\:enable\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Parameter \#2 \$callback of function array_filter expects \(callable\(mixed\)\: bool\)\|null, Closure\(array\)\: bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of function in_array expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Property class@anonymous/tests/EventManagerTest\.php\:174\:\:\$id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Unable to resolve the template type TAndValue in call to method Pest\\Expectation\<int\|null\>\:\:and\(\)$#'
+			identifier: argument.templateType
+			count: 2
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function expect$#'
+			identifier: argument.templateType
+			count: 3
+			path: tests/EventManagerTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$active\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$delivery_count\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$failure_count\.$#'
+			identifier: property.notFound
+			count: 5
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 9
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$last_fired_at\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Access to an undefined property Pest\\Mixins\\Expectation\<mixed\>\:\:\$event\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Access to an undefined property Pest\\Mixins\\Expectation\<mixed\>\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:hasExceededFailures\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:recordDelivery\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:recordFailure\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:refresh\(\)\.$#'
+			identifier: method.notFound
+			count: 7
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:resetFailures\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:active\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:forEvent\(\)\.$#'
+			identifier: method.notFound
+			count: 10
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:inactive\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:withSecret\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:withoutSecret\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Facades\\EventManager\:\:getSubscription\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Facades\\EventManager\:\:listSubscriptions\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 4
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Facades\\EventManager\:\:subscribe\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 6
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Facades\\EventManager\:\:unsubscribe\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Subscription\:\:active\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Subscription\:\:forEvent\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Call to protected method expectException\(\) of class PHPUnit\\Framework\\TestCase\.$#'
+			identifier: method.protected
+			count: 3
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access offset ''class'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access offset ''params'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access offset ''url'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access property \$action on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access property \$active on mixed\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access property \$conditions on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access property \$event on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access property \$id on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access property \$priority on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access property \$secret on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot access property \$url on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method and\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method create\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 18
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method first\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method get\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method hasHeader\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method header\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method matchesEvent\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 7
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method on\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method priority\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method save\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 9
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method signPayload\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method to\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method toArray\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method toBe\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 6
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method toBeTrue\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method withFilter\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot call method withSecret\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function str_starts_with expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Unable to resolve the template type TAndValue in call to method Pest\\Expectation\<mixed\>\:\:and\(\)$#'
+			identifier: argument.templateType
+			count: 4
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function expect$#'
+			identifier: argument.templateType
+			count: 17
+			path: tests/SubscriptionTest.php
+
+		-
+			message: '#^Anonymous function has invalid return type Illuminate\\Hashing\\HashManager\.$#'
 			identifier: class.notFound
 			count: 1
-			path: src/Models/Trigger.php
+			path: tests/TestCase.php
+
+		-
+			message: '#^Argument of an invalid type list\<string\>\|false supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Call to static method create\(\) on an unknown class ZeroBoiler\\Events\\Tests\\Faker\\Factory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Cannot call method up\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Class ZeroBoiler\\Events\\Tests\\Faker\\Generator not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/TestCase.php
+
+		-
+			message: '#^Instantiated class Illuminate\\Hashing\\HashManager not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Parameter \#1 \$app of class Illuminate\\Cache\\CacheManager constructor expects Illuminate\\Contracts\\Foundation\\Application, Illuminate\\Container\\Container@anonymous/tests/CreatesApplication\.php\:34 given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Parameter \#1 \$app of class Illuminate\\Log\\LogManager constructor expects Illuminate\\Contracts\\Foundation\\Application, Illuminate\\Container\\Container@anonymous/tests/CreatesApplication\.php\:34 given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Parameter \#1 \$app of class Illuminate\\Queue\\QueueManager constructor expects Illuminate\\Contracts\\Foundation\\Application, Illuminate\\Container\\Container@anonymous/tests/CreatesApplication\.php\:34 given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Parameter \#1 \$app of class ZeroBoiler\\Events\\EventsServiceProvider constructor expects Illuminate\\Contracts\\Foundation\\Application, Illuminate\\Container\\Container@anonymous/tests/CreatesApplication\.php\:34 given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Parameter \#1 \$app of static method Illuminate\\Support\\Facades\\Facade\:\:setFacadeApplication\(\) expects Illuminate\\Contracts\\Foundation\\Application\|null, Illuminate\\Container\\Container@anonymous/tests/CreatesApplication\.php\:34 given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Parameter \#1 \$dispatcher of class Illuminate\\Http\\Client\\Factory constructor expects Illuminate\\Contracts\\Events\\Dispatcher\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$action\.$#'
+			identifier: property.notFound
+			count: 3
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$conditions\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$event\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$eventLogs\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:\$priority\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:delete\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:refresh\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\Model\:\:update\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:async\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:disabled\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:enabled\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:priority\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Factories\\Factory\:\:sync\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:async\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:enabled\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Call to an undefined static method ZeroBoiler\\Events\\Models\\Trigger\:\:orderByPriority\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Cannot access offset 1 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Cannot access offset 2 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Cannot access property \$async on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Cannot access property \$enabled on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Cannot access property \$name on mixed\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Cannot access property \$priority on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Cannot call method count\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Cannot call method create\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 12
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Cannot call method get\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Unable to resolve the template type TAndValue in call to method Pest\\Expectation\<mixed\>\:\:and\(\)$#'
+			identifier: argument.templateType
+			count: 7
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function expect$#'
+			identifier: argument.templateType
+			count: 6
+			path: tests/TriggerModelTest.php
+
+		-
+			message: '#^Cannot access offset ''config'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/helpers.php
+
+		-
+			message: '#^Cannot call method make\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/helpers.php

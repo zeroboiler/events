@@ -26,13 +26,20 @@ class EventsRegisterCommand extends Command
 
     public function handle(): int
     {
-        $event = $this->argument('event');
-        $action = $this->argument('action');
+        $event = (string) $this->argument('event');
+        $action = (string) $this->argument('action');
         $name = $this->option('name');
         $async = $this->option('async') === true;
         $priority = (int) $this->option('priority');
 
-        $builder = app(EventManager::class)->on($event);
+        $eventManager = app(EventManager::class);
+        if (! $eventManager instanceof EventManager) {
+            $this->error('EventManager not found in container.');
+
+            return Command::FAILURE;
+        }
+
+        $builder = $eventManager->on($event);
 
         if ($name) {
             $builder->name($name);

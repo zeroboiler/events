@@ -24,7 +24,7 @@ use ZeroBoiler\Events\Database\Factories\TriggerFactory;
  * @property string $name
  * @property string $event
  * @property string $action
- * @property array<string, mixed> $conditions
+ * @property array<string, mixed>|null $conditions
  * @property bool $async
  * @property int $priority
  * @property bool $enabled
@@ -32,7 +32,7 @@ use ZeroBoiler\Events\Database\Factories\TriggerFactory;
  * @property Carbon $updated_at
  * @property-read Collection<int, EventLog> $eventLogs
  *
- * @mixin \Eloquent
+ * @mixin Builder
  */
 class Trigger extends Model
 {
@@ -74,7 +74,7 @@ class Trigger extends Model
     }
 
     /**
-     * @return HasMany<EventLog>
+     * @return HasMany<EventLog, Trigger>
      */
     public function eventLogs(): HasMany
     {
@@ -111,7 +111,9 @@ class Trigger extends Model
      */
     public function scopeOrderByPriority(Builder $query): Builder
     {
-        return $query->orderByDesc('priority');
+        $query->orderByDesc('priority');
+
+        return $query;
     }
 
     /**
@@ -125,7 +127,8 @@ class Trigger extends Model
     }
 
     /**
-     * @return array<string, string> */
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

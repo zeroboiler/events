@@ -35,6 +35,7 @@ abstract class TestCase extends BaseTestCase
         Facade::clearResolvedInstances();
 
         // Clear Eloquent booted models so they re-boot with new connection resolvers
+        // and re-register the UUID-generating creating callbacks.
         Model::clearBootedModels();
 
         // Clear resolved instances between tests

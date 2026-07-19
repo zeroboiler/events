@@ -18,6 +18,6 @@ use ZeroBoiler\Events\Tests\TestCase;
 */
 
 // Apply TestCase to tests that need Laravel bootstrap
-uses(TestCase::class)->in('ActionResolverTest.php', 'ConditionEngineTest.php', 'EventLogTest.php', 'EventManagerTest.php', 'TriggerModelTest.php', 'SubscriptionTest.php');
+uses(TestCase::class)->in('ActionResolverTest.php', 'ConditionEngineTest.php', 'EventLogTest.php', 'EventManagerTest.php', 'TriggerModelTest.php', 'SubscriptionTest.php', 'ConsoleCommandTest.php', 'BugFixTest.php');
 
 // WildcardMatcherTest runs without TestCase (plain PHP tests)

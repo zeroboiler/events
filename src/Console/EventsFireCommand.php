@@ -24,14 +24,14 @@ class EventsFireCommand extends Command
 
     public function handle(): int
     {
-        $event = $this->argument('event');
+        $event = (string) $this->argument('event');
 
         $payload = [];
 
         // Process --json option if provided (takes precedence over --payload)
         $jsonOption = $this->option('json');
         if ($jsonOption !== null && $jsonOption !== '') {
-            $jsonPayload = $this->parseJsonOption($jsonOption);
+            $jsonPayload = $this->parseJsonOption((string) $jsonOption);
 
             if ($jsonPayload === null) {
                 $this->error('Invalid JSON provided to --json');
@@ -44,13 +44,16 @@ class EventsFireCommand extends Command
 
         // Merge in --payload key=value pairs (json takes precedence for keys)
         $payloadOptions = $this->option('payload');
-        foreach ($payloadOptions as $item) {
-            if (! str_contains((string) $item, '=')) {
-                continue;
-            }
+        if (is_array($payloadOptions)) {
+            foreach ($payloadOptions as $item) {
+                $itemStr = (string) $item;
+                if (! str_contains($itemStr, '=')) {
+                    continue;
+                }
 
-            [$key, $value] = explode('=', (string) $item, 2);
-            $payload[$key] = $value;
+                [$key, $value] = explode('=', $itemStr, 2);
+                $payload[$key] = $value;
+            }
         }
 
         $this->info("Firing event: {$event}");
@@ -66,7 +69,13 @@ class EventsFireCommand extends Command
         }
 
         try {
-            app(EventManager::class)->fire($event, $payload);
+            $eventManager = app(EventManager::class);
+            if (! $eventManager instanceof EventManager) {
+                $this->error('EventManager not found in container.');
+
+                return Command::FAILURE;
+            }
+            $eventManager->fire($event, $payload);
 
             $this->info('Event fired successfully!');
 
@@ -101,11 +110,13 @@ class EventsFireCommand extends Command
                 return null;
             }
 
-            $jsonString = file_get_contents($path);
+            $contents = file_get_contents($path);
 
-            if ($jsonString === false) {
+            if ($contents === false) {
                 return null;
             }
+
+            $jsonString = $contents;
         }
 
         $decoded = json_decode($jsonString, true);
@@ -114,6 +125,9 @@ class EventsFireCommand extends Command
             return null;
         }
 
-        return $decoded;
+        /** @var array<string, mixed> $result */
+        $result = $decoded;
+
+        return $result;
     }
 }

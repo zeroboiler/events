@@ -13,7 +13,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Throwable;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Models\EventLog;
@@ -49,7 +48,7 @@ class DispatchTriggerJob implements ShouldQueue
     {
         $trigger = Trigger::find($this->triggerId);
 
-        if (! $trigger || ! $trigger->enabled) {
+        if ($trigger === null || ! $trigger->enabled) {
             Log::warning('Trigger not found or disabled', [
                 'trigger_id' => $this->triggerId,
             ]);
@@ -61,7 +60,6 @@ class DispatchTriggerJob implements ShouldQueue
         // never runs (queue down, Redis flushed), no orphaned log entry is
         // left behind. See bug #632.
         $log = new EventLog([
-            'id' => (string) Str::uuid(),
             'trigger_id' => $trigger->id,
             'event' => $this->event,
             'payload' => $this->payload,
@@ -72,6 +70,11 @@ class DispatchTriggerJob implements ShouldQueue
         $this->eventLogId = $log->id;
 
         $eventManager = app(EventManager::class);
+        if (! $eventManager instanceof EventManager) {
+            Log::error('EventManager not found in container for DispatchTriggerJob');
+
+            return;
+        }
         $eventManager->executeTrigger($trigger, $log);
     }
 
@@ -89,7 +92,7 @@ class DispatchTriggerJob implements ShouldQueue
         // nothing to update — and no orphaned entry left behind.
         if ($this->eventLogId !== null) {
             $log = EventLog::find($this->eventLogId);
-            if ($log) {
+            if ($log !== null) {
                 $log->status = EventLog::STATUS_FAILED;
                 $log->error = $exception->getMessage();
                 $log->save();

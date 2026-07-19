@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ZeroBoiler, licensed under the proprietary license.
  */
@@ -26,6 +27,12 @@ class ActionResolver
             throw new \InvalidArgumentException("Triggerable class {$class} does not exist");
         }
 
-        return $this->app->make($class);
+        $instance = $this->app->make($class);
+
+        if (! $instance instanceof Triggerable) {
+            throw new \InvalidArgumentException("Class {$class} does not implement Triggerable");
+        }
+
+        return $instance;
     }
 }

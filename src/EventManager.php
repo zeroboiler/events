@@ -191,6 +191,10 @@ class EventManager
 
     /**
      * Fire an event for a model action.
+     *
+     * The model is serialised to an array so the payload stays safe for
+     * async/queue dispatch (#9). The raw model object is never placed
+     * into the payload — only its attributes and class name.
      */
     public function fireModel(string $modelClass, string $action, object $model): void
     {
@@ -199,16 +203,20 @@ class EventManager
         // Flatten model attributes into the payload root so the condition
         // engine can access them directly (e.g. condition "status == 'active'"
         // instead of "model.status == 'active'").
+        /** @var array<string, mixed> $modelData */
         $modelData = [];
         if (method_exists($model, 'attributesToArray')) {
-            $modelData = $model->attributesToArray();
+            /** @var array<string, mixed> $data */
+            $data = $model->attributesToArray();
+            $modelData = $data;
         } elseif (method_exists($model, 'toArray')) {
-            $modelData = $model->toArray();
+            /** @var array<string, mixed> $data */
+            $data = $model->toArray();
+            $modelData = $data;
         }
 
         $this->fire($event, [
             ...$modelData,
-            'model' => $model,
             'model_class' => $modelClass,
             'action' => $action,
         ]);
@@ -273,7 +281,7 @@ class EventManager
 
         // Sort by priority DESC, then by created_at ASC as a tiebreaker for equal priorities.
         // Add trigger id as final tiebreaker for fully deterministic ordering.
-        return $triggers->sortBy(callback: fn (Trigger $t): array => [-$t->priority, $t->created_at?->timestamp ?? 0, $t->id], options: SORT_REGULAR)->values();
+        return $triggers->sortBy(callback: fn (Trigger $t): array => [-$t->priority, $t->created_at === null ? 0 : $t->created_at->timestamp, $t->id], options: SORT_REGULAR)->values();
     }
 
     /**

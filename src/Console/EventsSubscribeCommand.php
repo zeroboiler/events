@@ -34,8 +34,12 @@ class EventsSubscribeCommand extends Command
         $priority = (int) $this->option('priority');
         $async = (bool) $this->option('async');
 
-        /** @var EventManager $manager */
         $manager = app(EventManager::class);
+        if (! $manager instanceof EventManager) {
+            $this->error('EventManager not found in container.');
+
+            return Command::FAILURE;
+        }
 
         $builder = $manager->subscribe($event, $url)
             ->priority($priority);
@@ -44,18 +48,19 @@ class EventsSubscribeCommand extends Command
             $builder->async();
         }
 
-        if ($secret) {
-            $builder->withSecret((string) $secret);
+        if (is_string($secret) && $secret !== '') {
+            $builder->withSecret($secret);
         }
 
-        if ($filter) {
-            $conditions = json_decode((string) $filter, true);
+        if (is_string($filter) && $filter !== '') {
+            $conditions = json_decode($filter, true);
             if (json_last_error() !== \JSON_ERROR_NONE) {
                 $this->error('Invalid JSON in --filter option: '.json_last_error_msg());
 
                 return Command::FAILURE;
             }
             if (is_array($conditions)) {
+                /** @var array<string, mixed> $conditions */
                 $builder->withFilter($conditions);
             }
         }
