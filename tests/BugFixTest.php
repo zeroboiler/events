@@ -6,6 +6,8 @@
 
 declare(strict_types=1);
 
+use ZeroBoiler\Events\Models\Trigger;
+use ZeroBoiler\Events\TriggerBuilder;
 use ZeroBoiler\Events\WildcardMatcher;
 
 /**
@@ -34,7 +36,7 @@ describe('Bug Fix Tests', function (): void {
 
     describe('#12 — Trigger UUID generation (model boot is single source)', function (): void {
         it('Trigger model generates UUID on create via boot', function (): void {
-            $trigger = new \ZeroBoiler\Events\Models\Trigger([
+            $trigger = new Trigger([
                 'name' => 'Test Trigger',
                 'event' => 'test.event',
                 'action' => 'SomeAction',
@@ -44,11 +46,11 @@ describe('Bug Fix Tests', function (): void {
 
             // The creating event would set the UUID
             // We can't save without a DB, but we can verify the boot callback exists
-            expect(method_exists(\ZeroBoiler\Events\Models\Trigger::class, 'boot'))->toBeTrue();
+            expect(method_exists(Trigger::class, 'boot'))->toBeTrue();
         });
 
         it('TriggerBuilder no longer sets UUID explicitly', function (): void {
-            $reflection = new ReflectionClass(\ZeroBoiler\Events\TriggerBuilder::class);
+            $reflection = new ReflectionClass(TriggerBuilder::class);
             $source = file_get_contents($reflection->getFileName());
 
             // The save() method should not contain Str::uuid()
