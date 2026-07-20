@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Domain\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use ZeroBoiler\Events\Domain\DomainEventDispatcher;
+use ZeroBoiler\Events\Domain\DomainEventDispatcher as DomainEventDispatcherImpl;
 
 /**
  * @method static void dispatch(\ZeroBoiler\Events\Domain\DomainEvent $event)
@@ -26,13 +26,13 @@ use ZeroBoiler\Events\Domain\DomainEventDispatcher;
  * @method static int getListenerCount()
  * @method static void setEventForwarder(?\Closure $forwarder)
  *
- * @see \ZeroBoiler\Events\Domain\DomainEventDispatcher
+ * @see DomainEventDispatcherImpl
  */
 class DomainEventDispatcher extends Facade
 {
     #[\Override]
     protected static function getFacadeAccessor(): string
     {
-        return DomainEventDispatcher::class;
+        return DomainEventDispatcherImpl::class;
     }
 }
