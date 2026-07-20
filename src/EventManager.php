@@ -230,6 +230,14 @@ class EventManager
     {
         $event = $modelClass.'.'.$action;
 
+        // Store only model's class and primary key to avoid JSON serialization issues
+        // Model can be re-fetched from DB when the action executes
+        $payload = [
+            'model_class' => $modelClass,
+            'model_id' => method_exists($model, 'getKey') ? $model->getKey() : null,
+            'action' => $action,
+        ];
+
         // Flatten model attributes into the payload root so the condition
         // engine can access them directly (e.g. condition "status == 'active'"
         // instead of "model.status == 'active'").
@@ -240,12 +248,7 @@ class EventManager
             $modelData = $model->toArray();
         }
 
-        $this->fire($event, [
-            ...$modelData,
-            'model' => $model,
-            'model_class' => $modelClass,
-            'action' => $action,
-        ], $type);
+        $this->fire($event, [...$modelData, ...$payload], $type);
     }
 
     /**
