@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Domain\Concerns;
 
 use RuntimeException;
+use ZeroBoiler\Domain\AggregateRootId;
 use ZeroBoiler\Events\Domain\DomainEvent;
 
 /**
@@ -48,7 +49,7 @@ trait EventSourced
 
         // Construct the aggregate properly through its constructor
         $aggregateId = is_string($idValue)
-            ? \ZeroBoiler\Domain\AggregateRootId::fromString($idValue)
+            ? AggregateRootId::fromString($idValue)
             : $idValue;
 
         $instance = new static($aggregateId);
@@ -86,7 +87,7 @@ trait EventSourced
         // a method name (e.g., 'applyOrderPlaced').
         // Split on dots, underscores, and hyphens to support various naming conventions
         $parts = preg_split('/[._-]/', $event->eventType) ?: [];
-        $method = 'apply' . implode('', array_map(ucfirst(...), $parts));
+        $method = 'apply'.implode('', array_map(ucfirst(...), $parts));
 
         if (! method_exists($this, $method)) {
             if ($lenient) {

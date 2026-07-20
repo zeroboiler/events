@@ -19,7 +19,6 @@ use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Subscription;
 use ZeroBoiler\Events\Models\Trigger;
-use ZeroBoiler\Observability\Span;
 use ZeroBoiler\Observability\Trace;
 
 class EventManager
