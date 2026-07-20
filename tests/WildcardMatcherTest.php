@@ -53,18 +53,26 @@ test('matches leading wildcard', function (): void {
         ->toBeFalse();
 });
 
-test('matches trailing wildcard', function (): void {
+test('matches trailing wildcard multi-segment', function (): void {
+    // Issue #8: order.* now matches order.placed AND order.placed.extra
     expect(WildcardMatcher::matches('order.*', 'order.placed'))
         ->toBeTrue()
         ->and(WildcardMatcher::matches('order.*', 'order.shipped'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('order.*', 'order.placed.extra'))
         ->toBeTrue();
 });
 
-test('does not match partial segments', function (): void {
-    expect(WildcardMatcher::matches('order.*', 'order.placed.extra'))
-        ->toBeFalse()
+test('matches multi-segment with single wildcard (#8)', function (): void {
+    // Issue #8: * should match one or more segments per documentation
+    expect(WildcardMatcher::matches('order.*', 'order.placed'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('order.*', 'order.placed.extra'))
+        ->toBeTrue()
+        ->and(WildcardMatcher::matches('order.*', 'order.placed.shipped.via.email'))
+        ->toBeTrue()
         ->and(WildcardMatcher::matches('*.placed', 'order.placed.extra'))
-        ->toBeFalse();
+        ->toBeTrue();
 });
 
 test('finds matching patterns from array', function (): void {
@@ -144,14 +152,15 @@ test('handles dots in wildcard segments', function (): void {
     expect(WildcardMatcher::matches('order.*', 'order.placed'))
         ->toBeTrue()
         ->and(WildcardMatcher::matches('order.*', 'order.placed.shipped'))
-        ->toBeFalse();
+        ->toBeTrue();
 });
 
 test('multiple consecutive wildcards work as expected', function (): void {
+    // With multi-segment *, each * greedily matches its portion
     expect(WildcardMatcher::matches('a.*.*.b', 'a.x.y.b'))
         ->toBeTrue()
         ->and(WildcardMatcher::matches('a.*.*.b', 'a.x.b'))
-        ->toBeFalse();
+        ->toBeTrue();
 });
 
 test('double wildcard matches across segments', function (): void {

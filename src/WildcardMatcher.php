@@ -16,10 +16,11 @@ class WildcardMatcher
      * Supports:
      * - Wildcard-only pattern (*): matches ANY event name (catch-all),
      *   including multi-segment dotted events like order.placed.extra
-     * - Double wildcard (**): matches across segment boundaries
-     *   e.g. order.** matches order.placed, order.placed.extra, etc.
-     * - Single wildcard segment in pattern: matches one dot-delimited segment
-     *   e.g. order.* matches order.placed, order.shipped but NOT order.placed.extra
+     * - Double wildcard (**): same as single * — matches across segment boundaries.
+     *   Kept for backwards compatibility and explicit readability.
+     * - Single wildcard segment in pattern (*): matches one OR MORE dot-delimited
+     *   segments. e.g. order.* matches order.placed, order.shipped, AND
+     *   order.placed.extra (issue #8 — docs say * matches multi-segment).
      * - Multiple wildcards: user.*.created matches user.profile.created
      *
      * @param  string  $pattern  The pattern with * wildcards (e.g., "order.*")
@@ -28,10 +29,7 @@ class WildcardMatcher
     public static function matches(string $pattern, string $event): bool
     {
         // Handle catch-all patterns — match everything (except empty string)
-        if ($pattern === '*') {
-            return $event !== '';
-        }
-        if ($pattern === '**') {
+        if ($pattern === '*' || $pattern === '**') {
             return $event !== '';
         }
 
@@ -42,8 +40,10 @@ class WildcardMatcher
         // MUST be done before single * conversion to avoid double-processing.
         $regex = str_replace('\*\*', '.*', $regex);
 
-        // Convert remaining * (single-segment wildcard) to [^.]* (matches within a segment)
-        $regex = str_replace('\*', '[^.]*', $regex);
+        // Convert remaining * (single-segment wildcard) to .+ (matches one or
+        // more segments including dots — issue #8: * should match multi-segment
+        // per documentation).
+        $regex = str_replace('\*', '.*?', $regex);
 
         $regex = '/^'.$regex.'$/';
 
@@ -67,6 +67,9 @@ class WildcardMatcher
      * For example, with pattern "user.*.created" and event "user.profile.created",
      * returns ["profile"].
      *
+     * With pattern "order.*" and event "order.placed.extra", the * captures
+     * "placed.extra" (multi-segment, issue #8).
+     *
      * @return array<int, string>
      */
     public static function extractWildcards(string $pattern, string $event): array
@@ -76,25 +79,24 @@ class WildcardMatcher
             return $event !== '' ? [$event] : [];
         }
 
-        $parts = explode('.', $pattern);
-        $eventParts = explode('.', $event);
-
-        if (count($parts) !== count($eventParts)) {
-            return [];
-        }
-
         // First verify that the event actually matches the pattern
         if (! self::matches($pattern, $event)) {
             return [];
         }
 
-        $wildcards = [];
-        foreach ($parts as $i => $part) {
-            if ($part === '*') {
-                $wildcards[] = $eventParts[$i] ?? '';
-            }
+        // Build a regex that captures wildcard values, supporting multi-segment *
+        $regex = preg_quote($pattern, '/');
+        // ** matches across segment boundaries
+        $regex = str_replace('\*\*', '(.+)', $regex);
+        // Single * also matches one or more segments (issue #8)
+        $regex = str_replace('\*', '(.+)', $regex);
+        $regex = '/^'.$regex.'$/';
+
+        if (preg_match($regex, $event, $matches) === 1) {
+            // $matches[0] is the full match; captures start at index 1
+            return array_slice($matches, 1);
         }
 
-        return $wildcards;
+        return [];
     }
 }
