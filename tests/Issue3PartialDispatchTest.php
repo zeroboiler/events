@@ -30,7 +30,7 @@ class FailingAction implements Triggerable
 {
     public function handle(array $payload): void
     {
-        throw new \RuntimeException('Action failed intentionally');
+        throw new RuntimeException('Action failed intentionally');
     }
 }
 
@@ -77,7 +77,7 @@ it('continues dispatching remaining triggers when one fails', function (): void 
 
     try {
         EventManagerFacade::fire('order.placed', ['order_id' => 123]);
-    } catch (\RuntimeException $e) {
+    } catch (RuntimeException $e) {
         // Expected — the first exception is re-thrown
     }
 
@@ -106,7 +106,7 @@ it('logs failed trigger but still creates event logs for successful ones', funct
 
     try {
         EventManagerFacade::fire('order.placed', ['order_id' => 123]);
-    } catch (\RuntimeException) {
+    } catch (RuntimeException) {
         // Expected
     }
 
@@ -132,7 +132,7 @@ it('re-throws the first exception after all triggers attempted', function (): vo
     ]);
 
     EventManagerFacade::fire('order.placed', ['order_id' => 123]);
-})->throws(\RuntimeException::class, 'Action failed intentionally');
+})->throws(RuntimeException::class, 'Action failed intentionally');
 
 it('does not throw when all triggers succeed', function (): void {
     Trigger::factory()->create([

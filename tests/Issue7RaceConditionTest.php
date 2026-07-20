@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 use App\Actions\SendOrderNotification;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Str;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Facades\EventManager as EventManagerFacade;
 use ZeroBoiler\Events\Models\EventLog;
@@ -57,7 +58,7 @@ it('skips execution when EventLog is no longer pending', function (): void {
 
     // Create an EventLog that is already dispatched (simulating another worker)
     $log = EventLog::create([
-        'id' => \Illuminate\Support\Str::uuid()->toString(),
+        'id' => Str::uuid()->toString(),
         'trigger_id' => $trigger->id,
         'event' => 'order.placed',
         'payload' => ['order_id' => 123],

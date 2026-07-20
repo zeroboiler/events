@@ -22,7 +22,7 @@ class DomainEventCollection implements Countable, IteratorAggregate
         foreach ($events as $event) {
             if (! $event instanceof DomainEvent) {
                 throw new InvalidArgumentException(
-                    'All events must implement ' . DomainEvent::class
+                    'All events must implement '.DomainEvent::class
                 );
             }
         }
