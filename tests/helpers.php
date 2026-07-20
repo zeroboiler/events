@@ -17,6 +17,7 @@ use Faker\Provider\Miscellaneous;
 use Faker\Provider\PhoneNumber;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
+use Illuminate\Support\Carbon;
 
 // Load Composer autoloader
 require_once __DIR__.'/../vendor/autoload.php';
@@ -83,6 +84,13 @@ if (! function_exists('config_path')) {
     function config_path(string $path = ''): string
     {
         return '/config/'.$path;
+    }
+}
+
+if (! function_exists('now')) {
+    function now($tz = null): Carbon
+    {
+        return Carbon::now($tz);
     }
 }
 

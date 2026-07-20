@@ -8,7 +8,8 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events;
 
-use IlluminateSupport\ServiceProvider;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\ServiceProvider;
 use ZeroBoiler\Events\Console\EventsDisableCommand;
 use ZeroBoiler\Events\Console\EventsEnableCommand;
 use ZeroBoiler\Events\Console\EventsFireCommand;
@@ -37,8 +38,8 @@ class EventsServiceProvider extends ServiceProvider
 
         // Register DomainEventDispatcher — domain event support
         $this->app->singleton(DomainEventDispatcher::class, function (): DomainEventDispatcher {
-            $laravelDispatcher = $this->app->bound(\Illuminate\Contracts\Events\Dispatcher::class)
-                ? $this->app->make(\Illuminate\Contracts\Events\Dispatcher::class)
+            $laravelDispatcher = $this->app->bound(Dispatcher::class)
+                ? $this->app->make(Dispatcher::class)
                 : null;
 
             $dispatcher = new DomainEventDispatcher($laravelDispatcher);

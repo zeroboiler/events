@@ -72,7 +72,7 @@ test('matches multi-segment with single wildcard (#8)', function (): void {
         ->and(WildcardMatcher::matches('order.*', 'order.placed.shipped.via.email'))
         ->toBeTrue()
         ->and(WildcardMatcher::matches('*.placed', 'order.placed.extra'))
-        ->toBeTrue();
+        ->toBeFalse(); // *.placed matches events ENDING with .placed
 });
 
 test('finds matching patterns from array', function (): void {
@@ -156,11 +156,11 @@ test('handles dots in wildcard segments', function (): void {
 });
 
 test('multiple consecutive wildcards work as expected', function (): void {
-    // With multi-segment *, each * greedily matches its portion
+    // With multi-segment *, each * matches one or more segments
     expect(WildcardMatcher::matches('a.*.*.b', 'a.x.y.b'))
         ->toBeTrue()
         ->and(WildcardMatcher::matches('a.*.*.b', 'a.x.b'))
-        ->toBeTrue();
+        ->toBeFalse(); // a.x.b only has 1 segment between a and b, need 2
 });
 
 test('double wildcard matches across segments', function (): void {

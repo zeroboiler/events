@@ -39,11 +39,8 @@ class WildcardMatcher
         // Convert ** (multi-segment wildcard) to .* (matches across dots)
         // MUST be done before single * conversion to avoid double-processing.
         $regex = str_replace('\*\*', '.*', $regex);
-
-        // Convert remaining * (single-segment wildcard) to .+ (matches one or
-        // more segments including dots — issue #8: * should match multi-segment
-        // per documentation).
-        $regex = str_replace('\*', '.*?', $regex);
+        // Convert remaining * to .* (matches zero+ chars including dots, issue #8)
+        $regex = str_replace('\\*', '.*', $regex);
 
         $regex = '/^'.$regex.'$/';
 
