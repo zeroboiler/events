@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Queue;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
-use ZeroBoiler\Events\Models\Trigger;
 
 class EventsRetryCommand extends Command
 {
@@ -26,7 +25,7 @@ class EventsRetryCommand extends Command
 
     public function handle(): int
     {
-        $status = $this->option('status');
+        $status = (string) $this->option('status');
 
         if (! in_array($status, [EventLog::STATUS_FAILED, EventLog::STATUS_PENDING], true)) {
             $this->error('Invalid status. Must be "failed" or "pending".');
@@ -49,10 +48,17 @@ class EventsRetryCommand extends Command
             return Command::SUCCESS;
         }
 
+        $eventManager = app(EventManager::class);
+        if (! $eventManager instanceof EventManager) {
+            $this->error('EventManager not found in container.');
+
+            return Command::FAILURE;
+        }
+
         $count = 0;
         EventLog::withStatus($status)
             ->with('trigger')
-            ->chunk(200, function ($logs) use (&$count): void {
+            ->chunk(200, function ($logs) use ($eventManager, &$count): void {
                 foreach ($logs as $log) {
                     /** @var Trigger|null $trigger */
                     $trigger = $log->trigger;
@@ -74,7 +80,7 @@ class EventsRetryCommand extends Command
                         ));
                     } else {
                         try {
-                            app(EventManager::class)->executeTrigger($trigger, $log);
+                            $eventManager->executeTrigger($trigger, $log);
                         } catch (\Throwable $e) {
                             $this->error("Failed to execute trigger {$trigger->id}: {$e->getMessage()}");
 

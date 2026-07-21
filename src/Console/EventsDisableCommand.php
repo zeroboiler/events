@@ -22,11 +22,11 @@ class EventsDisableCommand extends Command
 
     public function handle(): int
     {
-        $id = $this->argument('id');
+        $id = (string) $this->argument('id');
 
         $trigger = Trigger::find($id);
 
-        if (! $trigger) {
+        if ($trigger === null) {
             $this->error("Trigger '{$id}' not found.");
 
             return Command::FAILURE;
@@ -38,7 +38,13 @@ class EventsDisableCommand extends Command
             return Command::SUCCESS;
         }
 
-        app(EventManager::class)->disable($id);
+        $eventManager = app(EventManager::class);
+        if (! $eventManager instanceof EventManager) {
+            $this->error('EventManager not found in container.');
+
+            return Command::FAILURE;
+        }
+        $eventManager->disable($id);
 
         $this->info("Trigger '{$trigger->name}' disabled successfully.");
 

@@ -55,7 +55,8 @@ class WebhookAction implements Triggerable
 
         // Extract internal keys from the payload so they don't leak into webhook data.
         $webhookData = $payload;
-        $subscriptionId = $payload['subscription_id'] ?? null;
+        $rawSubscriptionId = $payload['subscription_id'] ?? null;
+        $subscriptionId = is_string($rawSubscriptionId) ? $rawSubscriptionId : null;
         unset($webhookData['url'], $webhookData['event'], $webhookData['headers'], $webhookData['subscription_id']);
 
         // Build the webhook body
@@ -72,7 +73,7 @@ class WebhookAction implements Triggerable
         }
 
         // If a subscription exists, sign the payload with HMAC
-        if ($subscriptionId !== null && is_string($subscriptionId)) {
+        if ($subscriptionId !== null) {
             $subscription = Subscription::find($subscriptionId);
             if ($subscription !== null) {
                 $signedBody = json_encode($body, \JSON_THROW_ON_ERROR);
@@ -97,7 +98,7 @@ class WebhookAction implements Triggerable
                     'response' => $response->body(),
                 ]);
                 $this->recordSubscriptionFailure($subscriptionId);
-            } elseif ($subscriptionId !== null && is_string($subscriptionId)) {
+            } elseif ($subscriptionId !== null) {
                 // Record successful delivery
                 $subscription = Subscription::find($subscriptionId);
                 $subscription?->recordDelivery();
@@ -120,7 +121,7 @@ class WebhookAction implements Triggerable
      */
     private function recordSubscriptionFailure(?string $subscriptionId): void
     {
-        if ($subscriptionId === null || ! is_string($subscriptionId)) {
+        if ($subscriptionId === null) {
             return;
         }
 

@@ -16,8 +16,6 @@ class TriggerBuilder
 
     protected string $event = '';
 
-    protected string $action = '';
-
     /** @var array<int, string> */
     protected array $actions = [];
 
@@ -56,11 +54,17 @@ class TriggerBuilder
     }
 
     /**
-     * Set the action handler class.
+     * Add an action handler class.
+     *
+     * Multiple calls accumulate into a list of actions, so
+     * ```
+     * ->action(Foo::class)->action(Bar::class)
+     * ```
+     * results in both Foo and Bar being registered (#6).
      */
     public function action(string $class): self
     {
-        $this->action = $class;
+        $this->actions[] = $class;
 
         return $this;
     }
@@ -78,24 +82,17 @@ class TriggerBuilder
     }
 
     /**
-     * Resolve the final action classes list, merging single action() and actions() calls.
+     * Resolve the final action classes list.
      *
-     * If both were called, the single action is prepended to the list to avoid
-     * silently discarding it (BUG-2 fix).
+     * action() calls accumulate into $actions. actions() replaces the list.
+     * If both were used, merge them (actions() list first, then any action()
+     * calls that aren't already in the list).
      *
      * @return list<string>
      */
     private function resolveActions(): array
     {
-        $all = $this->actions;
-
-        // If both action() and actions() were called, merge them.
-        // Prepend the single action only if it's not already in the list.
-        if ($this->action !== '' && $this->action !== '0' && ! in_array($this->action, $all, true)) {
-            array_unshift($all, $this->action);
-        }
-
-        return $all;
+        return array_values(array_unique($this->actions, SORT_REGULAR));
     }
 
     /**
@@ -157,7 +154,7 @@ class TriggerBuilder
             throw new \InvalidArgumentException('Event name is required');
         }
 
-        if (($this->action === '' || $this->action === '0') && $this->actions === []) {
+        if ($this->actions === []) {
             throw new \InvalidArgumentException('At least one action is required');
         }
 

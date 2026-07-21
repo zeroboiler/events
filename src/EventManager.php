@@ -223,6 +223,10 @@ class EventManager
      * Fire an event for a model action.
      *
      * @param  string  $type  Event type filter. Default 'integration'.
+     *
+     * The model is serialised to an array so the payload stays safe for
+     * async/queue dispatch (#9). The raw model object is never placed
+     * into the payload — only its attributes and class name.
      */
     #[Trace(operation: 'events.fire_model')]
     public function fireModel(string $modelClass, string $action, object $model, string $type = 'integration'): void
@@ -240,11 +244,16 @@ class EventManager
         // Flatten model attributes into the payload root so the condition
         // engine can access them directly (e.g. condition "status == 'active'"
         // instead of "model.status == 'active'").
+        /** @var array<string, mixed> $modelData */
         $modelData = [];
         if (method_exists($model, 'attributesToArray')) {
-            $modelData = $model->attributesToArray();
+            /** @var array<string, mixed> $data */
+            $data = $model->attributesToArray();
+            $modelData = $data;
         } elseif (method_exists($model, 'toArray')) {
-            $modelData = $model->toArray();
+            /** @var array<string, mixed> $data */
+            $data = $model->toArray();
+            $modelData = $data;
         }
 
         $this->fire($event, [...$modelData, ...$payload], $type);
