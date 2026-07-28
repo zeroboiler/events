@@ -23,6 +23,12 @@ use ZeroBoiler\Observability\Trace;
 
 class EventManager
 {
+    /** Maximum recursion depth to prevent infinite event loops. */
+    protected const int MAX_DISPATCH_DEPTH = 10;
+
+    /** Current dispatch depth for loop detection. */
+    protected static int $dispatchDepth = 0;
+
     /**
      * Cache key for all enabled triggers collection.
      */
@@ -190,6 +196,30 @@ class EventManager
      */
     #[Trace(operation: 'events.fire')]
     public function fire(string $event, array $payload = [], string $type = 'integration'): void
+    {
+        // Prevent infinite event dispatch loops
+        if (self::$dispatchDepth >= self::MAX_DISPATCH_DEPTH) {
+            Log::warning('EventManager: max dispatch depth exceeded, possible infinite loop', [
+                'event' => $event,
+                'depth' => self::$dispatchDepth,
+            ]);
+
+            return;
+        }
+
+        self::$dispatchDepth++;
+
+        try {
+            $this->doFire($event, $payload, $type);
+        } finally {
+            self::$dispatchDepth--;
+        }
+    }
+
+    /**
+     * Internal fire implementation.
+     */
+    protected function doFire(string $event, array $payload, string $type): void
     {
         $triggers = $this->getMatchingTriggers($event, $type);
 

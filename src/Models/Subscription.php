@@ -154,10 +154,9 @@ class Subscription extends Model
      */
     public function recordDelivery(): void
     {
-        $this->update([
-            'last_fired_at' => Carbon::now(),
-            'delivery_count' => $this->delivery_count + 1,
-        ]);
+        // Use increment for atomic update to prevent race condition
+        $this->increment('delivery_count');
+        $this->update(['last_fired_at' => Carbon::now()]);
     }
 
     /**
