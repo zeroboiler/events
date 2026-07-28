@@ -43,6 +43,7 @@ class EventManager
      */
     public function on(string $event): TriggerBuilder
     {
+        /** @var TriggerBuilder $builder */
         $builder = App::make(TriggerBuilder::class);
         $builder->on($event);
 
@@ -61,6 +62,7 @@ class EventManager
      */
     public function subscribe(string $event, string $url): SubscriptionBuilder
     {
+        /** @var SubscriptionBuilder $builder */
         $builder = App::make(SubscriptionBuilder::class);
         $builder->on($event)->to($url);
 
@@ -112,7 +114,10 @@ class EventManager
             $query->active();
         }
 
-        return $query->orderByPriority()->get();
+        /** @var Collection<int, Subscription> $result */
+        $result = $query->orderByPriority()->get();
+
+        return $result;
     }
 
     /**
@@ -322,7 +327,7 @@ class EventManager
 
         // Sort by priority DESC, then by created_at ASC as a tiebreaker for equal priorities.
         // Add trigger id as final tiebreaker for fully deterministic ordering.
-        return $matched->sortBy(callback: fn (Trigger $t): array => [-$t->priority, $t->created_at?->timestamp ?? 0, $t->id], options: SORT_REGULAR)->values();
+        return $matched->sortBy(callback: fn (Trigger $t): array => [-$t->priority, $t->created_at?->getTimestamp() ?? 0, (string) $t->id], options: SORT_REGULAR)->values();
     }
 
     /**
@@ -336,9 +341,17 @@ class EventManager
      */
     protected function getEnabledTriggers(): Collection
     {
-        return Cache::remember(self::ENABLED_TRIGGERS_CACHE_KEY, self::TRIGGER_CACHE_TTL, fn (): Collection => Trigger::enabled()
-            ->orderByPriority()
-            ->get());
+        /** @var Collection<int, Trigger> $result */
+        $result = Cache::remember(self::ENABLED_TRIGGERS_CACHE_KEY, self::TRIGGER_CACHE_TTL, function (): Collection {
+            /** @var Collection<int, Trigger> $triggers */
+            $triggers = Trigger::enabled()
+                ->orderByPriority()
+                ->get();
+
+            return $triggers;
+        });
+
+        return $result;
     }
 
     /**

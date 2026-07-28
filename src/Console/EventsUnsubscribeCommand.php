@@ -22,7 +22,8 @@ class EventsUnsubscribeCommand extends Command
 
     public function handle(): int
     {
-        $id = (string) $this->argument('id');
+        $rawId = $this->argument('id');
+        $id = is_string($rawId) ? $rawId : '';
 
         $manager = app(EventManager::class);
         if (! $manager instanceof EventManager) {
@@ -32,12 +33,12 @@ class EventsUnsubscribeCommand extends Command
         }
 
         if ($manager->unsubscribe($id)) {
-            $this->info("✅ Subscription {$id} removed successfully.");
+            $this->info('✅ Subscription '.$id.' removed successfully.');
 
             return Command::SUCCESS;
         }
 
-        $this->error("Subscription {$id} not found.");
+        $this->error('Subscription '.$id.' not found.');
 
         return Command::FAILURE;
     }

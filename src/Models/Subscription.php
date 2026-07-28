@@ -38,11 +38,13 @@ use ZeroBoiler\Events\WildcardMatcher;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
- * @mixin Builder
+ * @mixin Builder<Subscription>
  */
 class Subscription extends Model
 {
+    /** @use HasFactory<SubscriptionFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     /** @var string */

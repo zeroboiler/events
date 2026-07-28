@@ -24,14 +24,15 @@ class EventsFireCommand extends Command
 
     public function handle(): int
     {
-        $event = (string) $this->argument('event');
-
+        $rawEvent = $this->argument('event');
+        $event = is_string($rawEvent) ? $rawEvent : '';
         $payload = [];
 
         // Process --json option if provided (takes precedence over --payload)
         $jsonOption = $this->option('json');
         if ($jsonOption !== null && $jsonOption !== '') {
-            $jsonPayload = $this->parseJsonOption((string) $jsonOption);
+            $jsonStr = is_string($jsonOption) ? $jsonOption : '';
+            $jsonPayload = $this->parseJsonOption($jsonStr);
 
             if ($jsonPayload === null) {
                 $this->error('Invalid JSON provided to --json');
@@ -46,7 +47,7 @@ class EventsFireCommand extends Command
         $payloadOptions = $this->option('payload');
         if (is_array($payloadOptions)) {
             foreach ($payloadOptions as $item) {
-                $itemStr = (string) $item;
+                $itemStr = is_string($item) ? $item : '';
                 if (! str_contains($itemStr, '=')) {
                     continue;
                 }
@@ -56,15 +57,15 @@ class EventsFireCommand extends Command
             }
         }
 
-        $this->info("Firing event: {$event}");
+        $this->info('Firing event: '.$event);
 
         if ($payload !== []) {
             $this->info('Payload:');
             foreach ($payload as $key => $value) {
                 $display = is_array($value) || is_object($value)
-                    ? json_encode($value)
+                    ? (string) json_encode($value)
                     : (string) $value;
-                $this->line("  {$key}: {$display}");
+                $this->line('  '.(string) $key.': '.$display);
             }
         }
 

@@ -22,7 +22,8 @@ class EventsEnableCommand extends Command
 
     public function handle(): int
     {
-        $id = (string) $this->argument('id');
+        $rawId = $this->argument('id');
+        $id = is_string($rawId) ? $rawId : '';
 
         $trigger = Trigger::find($id);
 
@@ -32,8 +33,10 @@ class EventsEnableCommand extends Command
             return Command::FAILURE;
         }
 
+        $triggerName = $trigger->name;
+
         if ($trigger->enabled) {
-            $this->info("Trigger '{$trigger->name}' is already enabled.");
+            $this->info("Trigger '".$triggerName."' is already enabled.");
 
             return Command::SUCCESS;
         }
@@ -46,7 +49,7 @@ class EventsEnableCommand extends Command
         }
         $eventManager->enable($id);
 
-        $this->info("Trigger '{$trigger->name}' enabled successfully.");
+        $this->info("Trigger '".$triggerName."' enabled successfully.");
 
         return Command::SUCCESS;
     }

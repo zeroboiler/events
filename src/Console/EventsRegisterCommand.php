@@ -26,11 +26,14 @@ class EventsRegisterCommand extends Command
 
     public function handle(): int
     {
-        $event = (string) $this->argument('event');
-        $action = (string) $this->argument('action');
+        $rawEvent = $this->argument('event');
+        $event = is_string($rawEvent) ? $rawEvent : '';
+        $rawAction = $this->argument('action');
+        $action = is_string($rawAction) ? $rawAction : '';
         $name = $this->option('name');
         $async = $this->option('async') === true;
-        $priority = (int) $this->option('priority');
+        $rawPriority = $this->option('priority');
+        $priority = is_numeric($rawPriority) ? (int) $rawPriority : 0;
 
         $eventManager = app(EventManager::class);
         if (! $eventManager instanceof EventManager) {
@@ -41,7 +44,7 @@ class EventsRegisterCommand extends Command
 
         $builder = $eventManager->on($event);
 
-        if ($name) {
+        if (is_string($name) && $name !== '') {
             $builder->name($name);
         }
 
@@ -50,14 +53,19 @@ class EventsRegisterCommand extends Command
         try {
             $trigger = $builder->save();
 
-            $this->info("Trigger '{$trigger->name}' created successfully!");
-            $this->line("ID: {$trigger->id}");
-            $this->line("Event: {$trigger->event}");
-            $this->line("Action: {$trigger->action}");
+            $triggerName = is_string($trigger->name) ? $trigger->name : '';
+            $triggerId = is_string($trigger->id) ? $trigger->id : '';
+            $triggerEvent = is_string($trigger->event) ? $trigger->event : '';
+            $triggerAction = is_string($trigger->action) ? $trigger->action : '';
+
+            $this->info("Trigger '".$triggerName."' created successfully!");
+            $this->line('ID: '.$triggerId);
+            $this->line('Event: '.$triggerEvent);
+            $this->line('Action: '.$triggerAction);
 
             return Command::SUCCESS;
         } catch (\Throwable $e) {
-            $this->error("Failed to create trigger: {$e->getMessage()}");
+            $this->error('Failed to create trigger: '.$e->getMessage());
 
             return Command::FAILURE;
         }

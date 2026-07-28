@@ -22,7 +22,8 @@ class EventsDisableCommand extends Command
 
     public function handle(): int
     {
-        $id = (string) $this->argument('id');
+        $rawId = $this->argument('id');
+        $id = is_string($rawId) ? $rawId : '';
 
         $trigger = Trigger::find($id);
 
@@ -32,8 +33,10 @@ class EventsDisableCommand extends Command
             return Command::FAILURE;
         }
 
+        $triggerName = $trigger->name;
+
         if (! $trigger->enabled) {
-            $this->info("Trigger '{$trigger->name}' is already disabled.");
+            $this->info("Trigger '".$triggerName."' is already disabled.");
 
             return Command::SUCCESS;
         }
@@ -46,7 +49,7 @@ class EventsDisableCommand extends Command
         }
         $eventManager->disable($id);
 
-        $this->info("Trigger '{$trigger->name}' disabled successfully.");
+        $this->info("Trigger '".$triggerName."' disabled successfully.");
 
         return Command::SUCCESS;
     }

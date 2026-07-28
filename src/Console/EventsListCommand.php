@@ -75,7 +75,7 @@ class EventsListCommand extends Command
         $this->table($headers, $rows);
 
         $totalPages = (int) ceil($total / $perPage);
-        $this->info("Page {$page} of {$totalPages} ({$total} trigger(s) total, showing ".$triggers->count().')');
+        $this->info('Page '.(string) $page.' of '.(string) $totalPages.' ('.(string) $total.' trigger(s) total, showing '.$triggers->count().')');
 
         return Command::SUCCESS;
     }

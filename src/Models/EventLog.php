@@ -30,11 +30,13 @@ use ZeroBoiler\Events\Database\Factories\EventLogFactory;
  * @property Carbon $updated_at
  * @property-read Trigger $trigger
  *
- * @mixin Builder
+ * @mixin Builder<EventLog>
  */
 class EventLog extends Model
 {
+    /** @use HasFactory<EventLogFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     /** @var string */

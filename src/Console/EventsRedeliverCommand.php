@@ -27,18 +27,20 @@ class EventsRedeliverCommand extends Command
 
     public function handle(): int
     {
-        $logId = (string) $this->argument('log_id');
+        $rawLogId = $this->argument('log_id');
+        $logId = is_string($rawLogId) ? $rawLogId : '';
 
         $log = EventLog::with('trigger')->find($logId);
 
         if ($log === null) {
-            $this->error("Event log {$logId} not found.");
+            $this->error('Event log '.$logId.' not found.');
 
             return Command::FAILURE;
         }
 
         if ($log->status !== EventLog::STATUS_FAILED && $log->status !== EventLog::STATUS_COMPLETED) {
-            $this->error("Event log {$logId} has status '{$log->status}'. Only failed or completed logs can be redelivered.");
+            $logStatus = is_string($log->status) ? $log->status : '';
+            $this->error('Event log '.$logId." has status '".$logStatus."'. Only failed or completed logs can be redelivered.");
 
             return Command::FAILURE;
         }
@@ -55,7 +57,8 @@ class EventsRedeliverCommand extends Command
         }
 
         if (! $this->option('force')) {
-            $this->warn("About to redeliver webhook for event '{$log->event}' to: {$url}");
+            $logEvent = is_string($log->event) ? $log->event : '';
+            $this->warn("About to redeliver webhook for event '".$logEvent."' to: ".(string) $url);
             if (! $this->confirm('Continue?')) {
                 $this->info('Redelivery cancelled.');
 
@@ -73,7 +76,6 @@ class EventsRedeliverCommand extends Command
         ];
 
         $headers = [];
-
         // Re-sign if subscription exists
         if ($subscriptionId !== null && is_string($subscriptionId)) {
             $subscription = Subscription::find($subscriptionId);
@@ -90,7 +92,7 @@ class EventsRedeliverCommand extends Command
         try {
             $response = Http::withHeaders($headers)
                 ->timeout(30)
-                ->post($url, $body);
+                ->post(is_string($url) ? $url : '', $body);
 
             if ($response->successful()) {
                 $log->markAsCompleted((int) ((microtime(true) - microtime(true)) * 1000));
@@ -99,20 +101,21 @@ class EventsRedeliverCommand extends Command
                     Subscription::find($subscriptionId)?->recordDelivery();
                 }
 
-                $this->info("✅ Webhook redelivered successfully to {$url} (HTTP {$response->status()}).");
+                $this->info('✅ Webhook redelivered successfully to '.(string) $url.' (HTTP '.(string) $response->status().').');
 
                 return Command::SUCCESS;
             }
 
-            $this->error("Webhook redelivery returned HTTP {$response->status()}: {$response->body()}");
+            $this->error('Webhook redelivery returned HTTP '.(string) $response->status().': '.(string) $response->body());
 
             return Command::FAILURE;
         } catch (\Throwable $e) {
-            $this->error("Redelivery failed: {$e->getMessage()}");
+            $this->error('Redelivery failed: '.$e->getMessage());
 
+            $urlStr = is_string($url) ? $url : '';
             Log::error('Webhook redelivery failed', [
                 'log_id' => $logId,
-                'url' => $url,
+                'url' => $urlStr,
                 'error' => $e->getMessage(),
             ]);
 

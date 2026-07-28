@@ -33,11 +33,13 @@ use ZeroBoiler\Events\Database\Factories\TriggerFactory;
  * @property Carbon $updated_at
  * @property-read Collection<int, EventLog> $eventLogs
  *
- * @mixin Builder
+ * @mixin Builder<Trigger>
  */
 class Trigger extends Model
 {
+    /** @use HasFactory<TriggerFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     /** @var string */

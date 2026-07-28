@@ -60,17 +60,21 @@ final readonly class DomainEvent
      */
     public static function fromArray(array $data): self
     {
-        $eventId = isset($data['eventId'])
-            ? Uuid::fromString((string) $data['eventId'])
+        $eventId = isset($data['eventId']) && is_string($data['eventId'])
+            ? Uuid::fromString($data['eventId'])
             : null;
 
-        $occurredAt = isset($data['occurredAt'])
+        $occurredAt = isset($data['occurredAt']) && is_string($data['occurredAt'])
             ? new DateTimeImmutable($data['occurredAt'])
             : null;
 
+        $eventType = isset($data['eventType']) && is_string($data['eventType']) ? $data['eventType'] : '';
+        /** @var array<string, mixed> $payload */
+        $payload = isset($data['payload']) && is_array($data['payload']) ? $data['payload'] : [];
+
         return new self(
-            $data['eventType'],
-            $data['payload'],
+            $eventType,
+            $payload,
             $eventId,
             $occurredAt,
         );

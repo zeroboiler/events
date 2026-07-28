@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Queue;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
+use ZeroBoiler\Events\Models\Trigger;
 
 class EventsRetryCommand extends Command
 {
@@ -25,7 +26,8 @@ class EventsRetryCommand extends Command
 
     public function handle(): int
     {
-        $status = (string) $this->option('status');
+        $rawStatus = $this->option('status');
+        $status = is_string($rawStatus) ? $rawStatus : 'failed';
 
         if (! in_array($status, [EventLog::STATUS_FAILED, EventLog::STATUS_PENDING], true)) {
             $this->error('Invalid status. Must be "failed" or "pending".');

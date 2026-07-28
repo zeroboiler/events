@@ -75,7 +75,7 @@ class WebhookAction implements Triggerable
         // If a subscription exists, sign the payload with HMAC
         if ($subscriptionId !== null) {
             $subscription = Subscription::find($subscriptionId);
-            if ($subscription !== null) {
+            if ($subscription instanceof Subscription) {
                 $signedBody = json_encode($body, \JSON_THROW_ON_ERROR);
                 $signature = $subscription->signPayload($signedBody);
 
@@ -101,7 +101,9 @@ class WebhookAction implements Triggerable
             } elseif ($subscriptionId !== null) {
                 // Record successful delivery
                 $subscription = Subscription::find($subscriptionId);
-                $subscription?->recordDelivery();
+                if ($subscription instanceof Subscription) {
+                    $subscription->recordDelivery();
+                }
             }
         } catch (Throwable $e) {
             Log::error('Webhook dispatch failed', [
@@ -126,7 +128,7 @@ class WebhookAction implements Triggerable
         }
 
         $subscription = Subscription::find($subscriptionId);
-        if ($subscription === null) {
+        if (! $subscription instanceof Subscription) {
             return;
         }
 

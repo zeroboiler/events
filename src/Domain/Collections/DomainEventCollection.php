@@ -15,7 +15,9 @@ use ZeroBoiler\Events\Domain\DomainEvent;
  */
 class DomainEventCollection implements Countable, IteratorAggregate
 {
-    /** @param DomainEvent[] $events */
+    /**
+     * @param  array<int, DomainEvent>  $events
+     */
     public function __construct(
         private array $events = [],
     ) {
@@ -29,9 +31,7 @@ class DomainEventCollection implements Countable, IteratorAggregate
     }
 
     /**
-     * Create a collection from an array of DomainEvent instances.
-     *
-     * @param  DomainEvent[]  $events
+     * @param  array<int, DomainEvent>  $events
      *
      * @throws InvalidArgumentException if any element is not a DomainEvent
      */
@@ -59,7 +59,7 @@ class DomainEventCollection implements Countable, IteratorAggregate
     }
 
     /**
-     * @return DomainEvent[]
+     * @return array<int, DomainEvent>
      */
     public function toArray(): array
     {
@@ -91,7 +91,10 @@ class DomainEventCollection implements Countable, IteratorAggregate
      */
     public function map(callable $callback): array
     {
-        return array_map($callback, $this->events);
+        /** @var array<int, mixed> $result */
+        $result = array_map($callback, $this->events);
+
+        return $result;
     }
 
     public function merge(self $other): self

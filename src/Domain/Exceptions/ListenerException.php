@@ -54,6 +54,9 @@ final class ListenerException extends RuntimeException
      */
     public function throwables(): array
     {
-        return array_map(fn (array $f): Throwable => $f['throwable'], $this->failures);
+        /** @var list<Throwable> $result */
+        $result = array_map(fn (array $f): Throwable => $f['throwable'], $this->failures);
+
+        return $result;
     }
 }

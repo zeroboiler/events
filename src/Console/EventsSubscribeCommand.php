@@ -27,11 +27,14 @@ class EventsSubscribeCommand extends Command
 
     public function handle(): int
     {
-        $event = (string) $this->argument('event');
-        $url = (string) $this->argument('url');
+        $rawEvent = $this->argument('event');
+        $event = is_string($rawEvent) ? $rawEvent : '';
+        $rawUrl = $this->argument('url');
+        $url = is_string($rawUrl) ? $rawUrl : '';
         $secret = $this->option('secret');
         $filter = $this->option('filter');
-        $priority = (int) $this->option('priority');
+        $rawPriority = $this->option('priority');
+        $priority = is_numeric($rawPriority) ? (int) $rawPriority : 0;
         $async = (bool) $this->option('async');
 
         $manager = app(EventManager::class);
@@ -87,7 +90,7 @@ class EventsSubscribeCommand extends Command
 
             return Command::SUCCESS;
         } catch (\Throwable $e) {
-            $this->error("Failed to create subscription: {$e->getMessage()}");
+            $this->error('Failed to create subscription: '.$e->getMessage());
 
             return Command::FAILURE;
         }

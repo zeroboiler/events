@@ -55,7 +55,10 @@ class WildcardMatcher
      */
     public static function findMatchingPatterns(array $patterns, string $event): array
     {
-        return array_filter($patterns, fn (string $pattern): bool => self::matches($pattern, $event));
+        /** @var array<int, string> $result */
+        $result = array_filter($patterns, fn (string $pattern): bool => self::matches($pattern, $event));
+
+        return $result;
     }
 
     /**
@@ -75,7 +78,6 @@ class WildcardMatcher
         if ($pattern === '*') {
             return $event !== '' ? [$event] : [];
         }
-
         // First verify that the event actually matches the pattern
         if (! self::matches($pattern, $event)) {
             return [];
@@ -91,7 +93,10 @@ class WildcardMatcher
 
         if (preg_match($regex, $event, $matches) === 1) {
             // $matches[0] is the full match; captures start at index 1
-            return array_slice($matches, 1);
+            /** @var array<int, string> $captures */
+            $captures = array_slice($matches, 1);
+
+            return $captures;
         }
 
         return [];
