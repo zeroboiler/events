@@ -10,6 +10,7 @@ namespace ZeroBoiler\Events;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
+use ZeroBoiler\Events\Console\EventsCleanupCommand;
 use ZeroBoiler\Events\Console\EventsDisableCommand;
 use ZeroBoiler\Events\Console\EventsEnableCommand;
 use ZeroBoiler\Events\Console\EventsFireCommand;
@@ -78,6 +79,7 @@ class EventsServiceProvider extends ServiceProvider
                 EventsRetryCommand::class,
                 EventsEnableCommand::class,
                 EventsDisableCommand::class,
+                EventsCleanupCommand::class,
                 // Subscription commands
                 EventsSubscribeCommand::class,
                 EventsUnsubscribeCommand::class,

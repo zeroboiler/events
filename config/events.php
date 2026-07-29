@@ -41,6 +41,27 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | Retention Policy
+    |--------------------------------------------------------------------------
+    |
+    | Number of days to retain event logs before they are soft-deleted
+    | by the events:cleanup command.
+    |
+    */
+
+    'retention_days' => env('EVENTS_RETENTION_DAYS', 30),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Webhook Subscriptions
+    |--------------------------------------------------------------------------
+    |
+    | Settings for external webhook subscriptions.
+    |
+    */
+
     'subscriptions' => [
         // Auto-generate HMAC signing secrets when none is provided
         'auto_generate_secret' => true,
