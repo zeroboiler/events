@@ -45,6 +45,22 @@ test('resolved handler can be called', function (): void {
     expect($handler->wasCalled)->toBeTrue();
 });
 
+test('action resolver throws exception for nonexistent class', function (): void {
+    $resolver = app(ActionResolver::class);
+
+    expect(fn () => $resolver->resolve('App\\Nonexistent\\FakeAction'))
+        ->toThrow(InvalidArgumentException::class, 'does not exist');
+});
+
+test('action resolver throws exception for class not implementing triggerable', function (): void {
+    $resolver = app(ActionResolver::class);
+
+    // A real class that doesn't implement Triggerable — resolve() returns it
+    // but the return type declaration causes a TypeError
+    expect(fn () => $resolver->resolve(stdClass::class))
+        ->toThrow(TypeError::class);
+});
+
 // Test helpers
 
 class TestAction implements Triggerable

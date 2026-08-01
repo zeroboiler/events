@@ -72,7 +72,7 @@ class WebhookAction implements Triggerable
         }
 
         // If a subscription exists, sign the payload with HMAC
-        if ($subscriptionId !== null && is_string($subscriptionId)) {
+        if ($subscriptionId !== null) {
             $subscription = Subscription::find($subscriptionId);
             if ($subscription !== null) {
                 $signedBody = json_encode($body, \JSON_THROW_ON_ERROR);
@@ -120,7 +120,7 @@ class WebhookAction implements Triggerable
      */
     private function recordSubscriptionFailure(?string $subscriptionId): void
     {
-        if ($subscriptionId === null || ! is_string($subscriptionId)) {
+        if ($subscriptionId === null) {
             return;
         }
 
