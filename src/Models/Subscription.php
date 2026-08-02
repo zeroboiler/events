@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use ZeroBoiler\Events\Database\Factories\SubscriptionFactory;
+use ZeroBoiler\Events\WildcardMatcher;
 
 /**
  * Represents an external webhook subscription to an event.
@@ -106,7 +107,10 @@ class Subscription extends Model
     public function scopeForEvent(Builder $query, string $event): Builder
     {
         if (str_contains($event, '*')) {
-            $likePattern = str_replace('*', '%', $event);
+            // Escape LIKE special characters before substituting wildcard,
+            // consistent with EventManager::listSubscriptions().
+            $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $event);
+            $likePattern = str_replace('*', '%', $escaped);
 
             return $query->where('event', 'like', $likePattern);
         }
@@ -137,9 +141,9 @@ class Subscription extends Model
             return $this->event === $event;
         }
 
-        $pattern = '/^'.str_replace('\*', '.*', preg_quote($this->event, '/')).'$/';
-
-        return (bool) preg_match($pattern, $event);
+        // Delegate to WildcardMatcher for consistent wildcard semantics,
+        // including ** (cross-segment) and * (single-segment) handling.
+        return WildcardMatcher::matches($this->event, $event);
     }
 
     /**

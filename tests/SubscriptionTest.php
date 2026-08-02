@@ -138,6 +138,49 @@ describe('Subscription Model', function (): void {
             ->and($subscription->matchesEvent('order.created'))->toBeFalse();
     });
 
+    test('matchesEvent handles double wildcard (cross-segment)', function (): void {
+        // ** should match across segment boundaries, e.g. order.** matches order.placed.extra
+        $subscription = Subscription::factory()->forEvent('order.**')->create();
+
+        expect($subscription->matchesEvent('order.placed'))->toBeTrue()
+            ->and($subscription->matchesEvent('order.placed.extra'))->toBeTrue()
+            ->and($subscription->matchesEvent('order.placed.extra.deep'))->toBeTrue()
+            ->and($subscription->matchesEvent('user.created'))->toBeFalse();
+    });
+
+    test('matchesEvent single wildcard does not cross segments', function (): void {
+        // * should match exactly one segment, not cross dots
+        $subscription = Subscription::factory()->forEvent('order.*')->create();
+
+        expect($subscription->matchesEvent('order.placed'))->toBeTrue()
+            ->and($subscription->matchesEvent('order.placed.extra'))->toBeFalse();
+    });
+
+    test('matchesEvent catch-all * matches everything', function (): void {
+        $subscription = Subscription::factory()->forEvent('*')->create();
+
+        expect($subscription->matchesEvent('order.placed'))->toBeTrue()
+            ->and($subscription->matchesEvent('user.created.profile'))->toBeTrue()
+            ->and($subscription->matchesEvent('any.event.at.all'))->toBeTrue()
+            ->and($subscription->matchesEvent(''))->toBeFalse();
+    });
+
+    test('scopeForEvent with wildcard escapes LIKE special characters', function (): void {
+        // Event names containing % or _ should be escaped in LIKE queries
+        // to avoid false positives (e.g. event "order_placed" should NOT match wildcard "order*placed")
+        Subscription::query()->delete();
+
+        Subscription::factory()->forEvent('order_placed')->create();
+        Subscription::factory()->forEvent('order.placed')->create();
+
+        // Wildcard search for order.* should NOT match order_placed (underscore is literal, not LIKE wildcard)
+        $results = Subscription::forEvent('order.*')->get();
+
+        $events = $results->pluck('event')->toArray();
+        expect($events)->not->toContain('order_placed')
+            ->and($events)->toContain('order.placed');
+    });
+
     test('signPayload produces correct HMAC', function (): void {
         $subscription = Subscription::factory()
             ->withSecret('whsec_secret_key')
