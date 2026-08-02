@@ -70,7 +70,7 @@ class DomainEvent
 
         return new self(
             $data['eventType'],
-            $data['payload'],
+            $data['payload'] ?? [],
             $eventId,
             $occurredAt,
         );
