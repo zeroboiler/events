@@ -9,8 +9,10 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
@@ -121,6 +123,151 @@ class EventManager
     public function getSubscription(string $subscriptionId): ?Subscription
     {
         return Subscription::find($subscriptionId);
+    }
+
+    /**
+     * Get event log history with optional filtering.
+     *
+     * @param  string|null  $event  Filter by event name (exact or wildcard)
+     * @param  string|null  $status  Filter by status (pending|dispatched|completed|failed)
+     * @param  string|null  $triggerId  Filter by trigger ID
+     * @param  int  $limit  Maximum number of results
+     * @return Collection<int, EventLog>
+     */
+    public function getEventHistory(
+        ?string $event = null,
+        ?string $status = null,
+        ?string $triggerId = null,
+        int $limit = 100,
+    ): Collection {
+        $query = EventLog::query()->with('trigger');
+
+        if ($event !== null && $event !== '') {
+            if (str_contains($event, '*')) {
+                $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $event);
+                $likePattern = str_replace('*', '%', $escaped);
+                $query->where('event', 'like', $likePattern);
+            } else {
+                $query->where('event', $event);
+            }
+        }
+
+        if ($status !== null && $status !== '') {
+            $query->where('status', $status);
+        }
+
+        if ($triggerId !== null && $triggerId !== '') {
+            $query->where('trigger_id', $triggerId);
+        }
+
+        return $query->latest()->limit($limit)->get();
+    }
+
+    /**
+     * Get aggregate statistics for events and triggers.
+     *
+     * Returns counts, success/failure rates, average duration, and
+     * most-fired events. Useful for dashboards and monitoring.
+     *
+     * @param  Carbon|null  $since  Only include logs after this datetime
+     * @return array{
+     *     total_logs: int,
+     *     total_triggers: int,
+     *     active_triggers: int,
+     *     completed: int,
+     *     failed: int,
+     *     pending: int,
+     *     dispatched: int,
+     *     success_rate: float|null,
+     *     failure_rate: float|null,
+     *     avg_duration_ms: float|null,
+     *     top_events: array<int, array{event: string, count: int}>,
+     *     top_failed_events: array<int, array{event: string, count: int}>
+     * }
+     */
+    public function getStats(?Carbon $since = null): array
+    {
+        $logQuery = EventLog::query();
+
+        if ($since !== null) {
+            $logQuery->where('created_at', '>=', $since);
+        }
+
+        $totalLogs = (clone $logQuery)->count();
+        $completed = (clone $logQuery)->where('status', EventLog::STATUS_COMPLETED)->count();
+        $failed = (clone $logQuery)->where('status', EventLog::STATUS_FAILED)->count();
+        $pending = (clone $logQuery)->where('status', EventLog::STATUS_PENDING)->count();
+        $dispatched = (clone $logQuery)->where('status', EventLog::STATUS_DISPATCHED)->count();
+
+        $settled = $completed + $failed;
+        $successRate = $settled > 0 ? round(($completed / $settled) * 100, 2) : null;
+        $failureRate = $settled > 0 ? round(($failed / $settled) * 100, 2) : null;
+
+        $avgDuration = (clone $logQuery)
+            ->whereNotNull('duration_ms')
+            ->avg('duration_ms');
+
+        // Top events by fire count
+        $topEvents = (clone $logQuery)
+            ->select('event', DB::raw('COUNT(*) as count'))
+            ->groupBy('event')
+            ->orderByDesc('count')
+            ->limit(10)
+            ->get()
+            ->map(fn ($row): array => ['event' => $row->event, 'count' => (int) $row->count])
+            ->toArray();
+
+        // Top failed events
+        $topFailedEvents = (clone $logQuery)
+            ->where('status', EventLog::STATUS_FAILED)
+            ->select('event', DB::raw('COUNT(*) as count'))
+            ->groupBy('event')
+            ->orderByDesc('count')
+            ->limit(10)
+            ->get()
+            ->map(fn ($row): array => ['event' => $row->event, 'count' => (int) $row->count])
+            ->toArray();
+
+        $totalTriggers = Trigger::count();
+        $activeTriggers = Trigger::enabled()->count();
+
+        return [
+            'total_logs' => $totalLogs,
+            'total_triggers' => $totalTriggers,
+            'active_triggers' => $activeTriggers,
+            'completed' => $completed,
+            'failed' => $failed,
+            'pending' => $pending,
+            'dispatched' => $dispatched,
+            'success_rate' => $successRate,
+            'failure_rate' => $failureRate,
+            'avg_duration_ms' => $avgDuration !== null ? round((float) $avgDuration, 2) : null,
+            'top_events' => $topEvents,
+            'top_failed_events' => $topFailedEvents,
+        ];
+    }
+
+    /**
+     * Purge old event logs.
+     *
+     * Deletes event logs older than the given threshold. By default,
+     * only completed or failed logs are purged (not pending/dispatched
+     * which may still be in progress). Use $includePending to also
+     * purge stuck logs.
+     *
+     * @param  Carbon  $before  Delete logs created before this datetime
+     * @param  bool  $includePending  Also purge pending/dispatched logs
+     * @return int Number of deleted logs
+     */
+    public function purgeLogs(Carbon $before, bool $includePending = false): int
+    {
+        $query = EventLog::query()->where('created_at', '<', $before);
+
+        if (! $includePending) {
+            $query->whereIn('status', [EventLog::STATUS_COMPLETED, EventLog::STATUS_FAILED]);
+        }
+
+        return $query->delete();
     }
 
     /**

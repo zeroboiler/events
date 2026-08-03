@@ -34,6 +34,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Log Retention
+    |--------------------------------------------------------------------------
+    |
+    | Event logs older than this many days are eligible for purge.
+    | Set to null to disable automatic retention.
+    |
+    */
+
+    'retention' => [
+        'days' => env('EVENTS_LOG_RETENTION_DAYS', 30),
+        // When purging, also delete pending/dispatched logs that are stuck
+        'include_pending' => env('EVENTS_LOG_PURGE_PENDING', false),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Webhook Subscriptions
     |--------------------------------------------------------------------------
     |
