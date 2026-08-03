@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\Database\Factories\SubscriptionFactory;
 use ZeroBoiler\Events\WildcardMatcher;
 
@@ -42,6 +43,7 @@ use ZeroBoiler\Events\WildcardMatcher;
  */
 class Subscription extends Model
 {
+    use EscapesWildcardLike;
     use HasFactory;
     use SoftDeletes;
 
@@ -106,12 +108,9 @@ class Subscription extends Model
      */
     public function scopeForEvent(Builder $query, string $event): Builder
     {
-        if (str_contains($event, '*')) {
-            // Escape LIKE special characters before substituting wildcard,
-            // consistent with EventManager::listSubscriptions().
-            $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $event);
-            $likePattern = str_replace('*', '%', $escaped);
+        $likePattern = $this->wildcardToLike($event);
 
+        if ($likePattern !== null) {
             return $query->where('event', 'like', $likePattern);
         }
 
