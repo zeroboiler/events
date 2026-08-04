@@ -9,11 +9,13 @@ DB-driven dynamic event manager for Laravel 13 / PHP 8.5. Manage triggers via ad
 
 - 🎯 **DB-driven triggers** — No code changes needed to add/remove triggers
 - 🔀 **Wildcard events** — Match `order.*` against `order.placed`, `order.shipped`, etc.
-- ⚡ **Condition engine** — JSON-based conditions with rich operators (`>`, `<`, `between`, `contains`, etc.)
+- ⚡ **Condition engine** — 18 operators including regex, between, contains, type-safe comparison
 - 🚀 **Async dispatch** — Queue-based async execution with retry/backoff support
-- 🔧 **CLI tools** — Full command-line interface for managing triggers
-- 📊 **Event logging** — Track all dispatched events with status and duration
-- 🧪 **Tested** — Comprehensive Pest test suite
+- 🔗 **Webhook subscriptions** — External HTTP POST notifications with HMAC-SHA256 signing, delivery tracking, and auto-deactivation
+- 📊 **Event history & statistics** — Aggregate success/failure rates, avg duration, top-fired events, log purge
+- 🛡️ **Safe by design** — Dispatch depth guard, ReDoS protection, atomic status transitions, LIKE injection prevention
+- 🔧 **CLI tools** — 12 commands for triggers, logs, subscriptions, and cleanup
+- 🧪 **Tested** — 201 tests, 452 assertions, PHPStan level 6 clean
 
 ## Installation
 
@@ -221,6 +223,153 @@ return [
 ];
 ```
 
+## Webhook Subscriptions
+
+External systems can subscribe to events via HTTP POST webhooks with automatic HMAC-SHA256 payload signing.
+
+### Create a Subscription
+
+```php
+use ZeroBoiler\Events\Facades\EventManager;
+
+// Fluent builder
+$subscription = EventManager::subscribe('order.placed', 'https://api.partner.com/webhooks/order')
+    ->withSecret('whsec_abc123')       // HMAC signing secret (auto-generated if omitted)
+    ->withFilter(['status' => 'paid'])  // Only fire when conditions match
+    ->priority(100)
+    ->async()                           // Queue-based delivery
+    ->save();
+
+// Quick one-liner (returns trigger ID)
+$triggerId = EventManager::subscribeWebhook(
+    'order.placed',
+    'https://api.partner.com/webhooks/order',
+    ['status' => 'paid'],
+    priority: 100,
+);
+```
+
+### Manage Subscriptions
+
+```php
+// List subscriptions (supports wildcard event filter)
+$subs = EventManager::listSubscriptions('order.*', activeOnly: true);
+
+// Get a single subscription
+$sub = EventManager::getSubscription($subscriptionId);
+
+// Remove a subscription
+EventManager::unsubscribe($subscriptionId);
+```
+
+### Webhook Payload Verification
+
+Each webhook delivery includes an `X-Webhook-Signature` header:
+
+```
+X-Webhook-Signature: sha256=<hex_hmac>
+X-Webhook-Subscription-Id: <uuid>
+```
+
+Verify on the receiving end:
+
+```php
+$signature = $_SERVER['HTTP_X_WEBHOOK_SIGNATURE'];
+$payload = file_get_contents('php://input');
+$expected = 'sha256=' . hash_hmac('sha256', $payload, $secret);
+
+if (! hash_equals($expected, $signature)) {
+    abort(401, 'Invalid signature');
+}
+```
+
+### CLI — Subscriptions
+
+```bash
+# Subscribe a webhook
+php artisan zeroboiler:events:subscribe {event} {url} [--secret=] [--filter=*]
+
+# Unsubscribe
+php artisan zeroboiler:events:unsubscribe {id}
+
+# List subscriptions
+php artisan zeroboiler:events:subscriptions [--event=] [--active]
+
+# Redeliver a failed webhook
+php artisan zeroboiler:events:redeliver {log_id}
+```
+
+### Auto-Deactivation
+
+Subscriptions are automatically deactivated after 10 consecutive failures (configurable via `EVENTS_SUB_MAX_FAILURES`). Use `events:enable` to reactivate.
+
+## Event History & Statistics
+
+### Query Event History
+
+```php
+use ZeroBoiler\Events\Facades\EventManager;
+
+// Recent logs with filtering (supports wildcards)
+$logs = EventManager::getEventHistory(
+    event: 'order.*',        // wildcard filter
+    status: 'failed',         // pending|dispatched|completed|failed
+    triggerId: $triggerId,   // optional trigger filter
+    limit: 50,
+);
+```
+
+### Aggregate Statistics
+
+```php
+$stats = EventManager::getStats();
+
+// Returns:
+// [
+//     'total_logs' => 1542,
+//     'total_triggers' => 23,
+//     'active_triggers' => 19,
+//     'completed' => 1480,
+//     'failed' => 42,
+//     'pending' => 15,
+//     'dispatched' => 5,
+//     'success_rate' => 97.24,       // %
+//     'failure_rate' => 2.76,        // %
+//     'avg_duration_ms' => 12.5,
+//     'top_events' => [...],          // top 10 by fire count
+//     'top_failed_events' => [...],   // top 10 failed
+// ]
+
+// Time-bounded stats
+$stats = EventManager::getStats(since: now()->subDays(7));
+```
+
+### Log Retention & Purge
+
+```php
+// Purge old completed/failed logs
+$deleted = EventManager::purgeLogs(before: now()->subDays(30));
+
+// Also purge stuck pending/dispatched logs
+$deleted = EventManager::purgeLogs(before: now()->subDays(30), includePending: true);
+```
+
+### CLI — Cleanup
+
+```bash
+# Purge logs older than retention period
+php artisan zeroboiler:events:cleanup [--days=30] [--pending]
+```
+
+Configure retention in `config/events.php`:
+
+```php
+'retention' => [
+    'days' => env('EVENTS_LOG_RETENTION_DAYS', 30),
+    'include_pending' => env('EVENTS_LOG_PURGE_PENDING', false),
+],
+```
+
 ## Managing Triggers Programmatically
 
 ### Enable/disable triggers
@@ -246,6 +395,33 @@ $logs = EventLog::where('trigger_id', $triggerId)->get();
 
 // Get failed logs
 $failed = EventLog::failed()->get();
+
+// Get completed logs
+$completed = EventLog::completed()->get();
+
+// Get pending logs
+$pending = EventLog::pending()->get();
+```
+
+## Domain Events
+
+For event sourcing integration with `zeroboiler/domain`:
+
+```php
+use ZeroBoiler\Events\Domain\DomainEvent;
+
+// Create a domain event
+$event = DomainEvent::occur('order.placed', [
+    'order_id' => 123,
+    'amount' => 99.99,
+]);
+
+// Serialize for persistence
+$data = $event->toArray();
+// ['eventId' => '...', 'eventType' => 'order.placed', 'payload' => [...], 'occurredAt' => '...']
+
+// Reconstruct from persisted data
+$event = DomainEvent::fromArray($data);
 ```
 
 ## Testing
@@ -277,7 +453,7 @@ php artisan vendor:publish --provider="ZeroBoiler\Events\EventsServiceProvider" 
 
 ## Database
 
-The package creates two tables:
+The package creates three tables:
 
 ### `triggers`
 
@@ -303,21 +479,52 @@ The package creates two tables:
 | `trigger_id` | uuid | Foreign key to triggers |
 | `event` | string | Event name |
 | `payload` | json | Event payload |
-| `status` | enum | pending|dispatched|completed|failed |
+| `status` | enum | pending\|dispatched\|completed\|failed |
 | `error` | text | Error message (nullable) |
 | `duration_ms` | integer | Execution duration in ms (nullable) |
 | `created_at` | timestamp | Created at |
 | `updated_at` | timestamp | Updated at |
 | `deleted_at` | timestamp | Soft delete |
 
+### `event_subscriptions`
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | uuid | Primary key |
+| `event` | string | Event name (supports wildcards) |
+| `url` | string | Webhook endpoint URL |
+| `conditions` | json | Optional filter conditions (nullable) |
+| `priority` | integer | Priority (higher first) |
+| `active` | boolean | Subscription active |
+| `secret` | string | HMAC signing secret (nullable) |
+| `last_fired_at` | timestamp | Last successful delivery (nullable) |
+| `failure_count` | integer | Consecutive failure count |
+| `delivery_count` | integer | Total successful deliveries |
+| `created_at` | timestamp | Created at |
+| `updated_at` | timestamp | Updated at |
+| `deleted_at` | timestamp | Soft delete |
+
 ## Architecture
 
-- **EventManager** — Main facade and service
+- **EventManager** — Main facade and service (uses `ManagesHistory` and `ManagesSubscriptions` traits)
 - **TriggerBuilder** — Fluent API for creating triggers
-- **ConditionEngine** — Evaluates JSON conditions
+- **SubscriptionBuilder** — Fluent API for webhook subscriptions
+- **ConditionEngine** — Evaluates JSON conditions (18 operators, ReDoS-safe regex)
 - **ActionResolver** — Resolves handler classes from container
-- **WildcardMatcher** — Matches wildcard patterns
-- **DispatchTriggerJob** — Queued job for async dispatch
+- **WildcardMatcher** — Matches wildcard patterns (`*` single-segment, `**` cross-segment)
+- **WebhookAction** — HTTP POST delivery with HMAC-SHA256 signing and delivery tracking
+- **DispatchTriggerJob** — Queued job for async dispatch with retry/backoff
+- **DomainEvent** — Event sourcing integration with `zeroboiler/domain`
+
+## Safety Features
+
+- **Dispatch depth guard** — Prevents infinite recursion when triggers fire other events
+- **ReDoS protection** — Regex `matches` operator limits pattern length (500 chars), backtrack limit (1000), and rejects nested-quantifier patterns
+- **Atomic status transitions** — `DispatchTriggerJob` uses atomic status update to prevent race conditions
+- **LIKE injection prevention** — Wildcard `*` → `%` conversion escapes SQL LIKE special characters (`%`, `_`, `\`)
+- **Orphan-free logging** — `EventLog` created inside the job, not before dispatch, so no orphaned rows if the queue is down
+- **Deterministic ordering** — Triggers sorted by priority DESC → `created_at` ASC → `id` for fully deterministic execution order
+- **Failure isolation** — `fire()` continues dispatching remaining triggers when one fails, re-throws after all attempted
 
 ## License
 
