@@ -59,7 +59,10 @@ class WildcardMatcher
      */
     public static function findMatchingPatterns(array $patterns, string $event): array
     {
-        return array_filter($patterns, fn (string $pattern): bool => self::matches($pattern, $event));
+        return array_values(array_filter(
+            $patterns,
+            fn (string $pattern): bool => self::matches($pattern, $event),
+        ));
     }
 
     /**
