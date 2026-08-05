@@ -39,11 +39,12 @@ use ZeroBoiler\Events\WildcardMatcher;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Eloquent\Builder<Subscription>
  */
 class Subscription extends Model
 {
     use EscapesWildcardLike;
+    /** @use HasFactory<SubscriptionFactory> */
     use HasFactory;
     use SoftDeletes;
 
@@ -195,9 +196,9 @@ class Subscription extends Model
     /**
      * Create a new factory instance for the model.
      *
-     * @return Factory<Subscription>
+     * @return SubscriptionFactory<Subscription>
      */
-    protected static function newFactory(): Factory
+    protected static function newFactory(): SubscriptionFactory
     {
         return SubscriptionFactory::new();
     }

@@ -30,10 +30,11 @@ use ZeroBoiler\Events\Database\Factories\EventLogFactory;
  * @property Carbon $updated_at
  * @property-read Trigger $trigger
  *
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Eloquent\Builder<EventLog>
  */
 class EventLog extends Model
 {
+    /** @use HasFactory<EventLogFactory> */
     use HasFactory;
     use SoftDeletes;
 
@@ -87,7 +88,9 @@ class EventLog extends Model
     ];
 
     /**
-     * @return BelongsTo<Trigger, EventLog>
+     * Get the trigger that owns this event log.
+     *
+     * @return BelongsTo<Trigger, $this>
      */
     public function trigger(): BelongsTo
     {
@@ -163,9 +166,9 @@ class EventLog extends Model
     /**
      * Create a new factory instance for the model.
      *
-     * @return Factory<EventLog>
+     * @return EventLogFactory<EventLog>
      */
-    protected static function newFactory(): Factory
+    protected static function newFactory(): EventLogFactory
     {
         return EventLogFactory::new();
     }

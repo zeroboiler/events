@@ -88,12 +88,14 @@ class EventsRedeliverCommand extends Command
         }
 
         try {
+            $redeliverStart = microtime(true);
             $response = Http::withHeaders($headers)
                 ->timeout(30)
                 ->post($url, $body);
 
             if ($response->successful()) {
-                $log->markAsCompleted((int) ((microtime(true) - microtime(true)) * 1000));
+                $redeliverDuration = (int) ((microtime(true) - $redeliverStart) * 1000);
+                $log->markAsCompleted($redeliverDuration);
 
                 if ($subscriptionId !== null && is_string($subscriptionId)) {
                     Subscription::find($subscriptionId)?->recordDelivery();

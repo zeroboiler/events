@@ -15,7 +15,7 @@ DB-driven dynamic event manager for Laravel 13 / PHP 8.5. Manage triggers via ad
 - 📊 **Event history & statistics** — Aggregate success/failure rates, avg duration, top-fired events, log purge
 - 🛡️ **Safe by design** — Dispatch depth guard, ReDoS protection, atomic status transitions, LIKE injection prevention
 - 🔧 **CLI tools** — 12 commands for triggers, logs, subscriptions, and cleanup
-- 🧪 **Tested** — 201 tests, 452 assertions, PHPStan level 6 clean
+- 🧪 **Tested** — 201 tests, 452 assertions, PHPStan level 9 (with baseline)
 
 ## Installation
 

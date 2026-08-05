@@ -32,10 +32,11 @@ use ZeroBoiler\Events\Database\Factories\TriggerFactory;
  * @property Carbon $updated_at
  * @property-read Collection<int, EventLog> $eventLogs
  *
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Eloquent\Builder<Trigger>
  */
 class Trigger extends Model
 {
+    /** @use HasFactory<TriggerFactory> */
     use HasFactory;
     use SoftDeletes;
 
@@ -74,7 +75,9 @@ class Trigger extends Model
     }
 
     /**
-     * @return HasMany<EventLog>
+     * Get the event logs for this trigger.
+     *
+     * @return HasMany<EventLog, $this>
      */
     public function eventLogs(): HasMany
     {
@@ -117,9 +120,9 @@ class Trigger extends Model
     /**
      * Create a new factory instance for the model.
      *
-     * @return Factory<Trigger>
+     * @return TriggerFactory<Trigger>
      */
-    protected static function newFactory(): Factory
+    protected static function newFactory(): TriggerFactory
     {
         return TriggerFactory::new();
     }

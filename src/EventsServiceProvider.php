@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events;
 
+use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 use ZeroBoiler\Events\Console\EventsDisableCommand;
 use ZeroBoiler\Events\Console\EventsEnableCommand;
@@ -33,19 +34,27 @@ class EventsServiceProvider extends ServiceProvider
 
         $this->app->singleton(ConditionEngine::class);
         $this->app->singleton(ActionResolver::class);
-        $this->app->singleton(EventManager::class);
+        $this->app->singleton(EventManager::class, function (Container $app): EventManager {
+            return new EventManager(
+                $app->make(ConditionEngine::class),
+                $app->make(ActionResolver::class),
+                $app,
+            );
+        });
 
         // Register SubscriptionBuilder as a transient (not shared) service
         $this->app->bind(SubscriptionBuilder::class);
     }
 
+    #[\Override]
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         if ($this->app->runningInConsole()) {
+            $configPath = $this->app->basePath().'/config/events.php';
             $this->publishes([
-                __DIR__.'/../config/events.php' => config_path('events.php'),
+                __DIR__.'/../config/events.php' => $configPath,
             ], 'events-config');
 
             $this->commands([

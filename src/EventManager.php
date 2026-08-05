@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events;
 
+use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
@@ -38,7 +38,8 @@ class EventManager
 
     public function __construct(
         protected ConditionEngine $conditionEngine,
-        protected ActionResolver $actionResolver
+        protected ActionResolver $actionResolver,
+        protected Container $app,
     ) {}
 
     /**
@@ -46,7 +47,7 @@ class EventManager
      */
     public function on(string $event): TriggerBuilder
     {
-        $builder = App::make(TriggerBuilder::class);
+        $builder = $this->app->make(TriggerBuilder::class);
         $builder->on($event);
 
         return $builder;
@@ -184,10 +185,21 @@ class EventManager
      */
     protected function getEnabledWildcardTriggers(): Collection
     {
-        return Cache::remember(self::WILDCARD_TRIGGER_CACHE_KEY, self::TRIGGER_CACHE_TTL, fn (): Collection => Trigger::enabled()
+        /** @var Collection<int, Trigger>|null $cached */
+        $cached = Cache::get(self::WILDCARD_TRIGGER_CACHE_KEY);
+
+        if ($cached instanceof Collection) {
+            return $cached;
+        }
+
+        $result = Trigger::enabled()
             ->where('event', 'like', '%*%')
             ->orderByPriority()
-            ->get());
+            ->get();
+
+        Cache::put(self::WILDCARD_TRIGGER_CACHE_KEY, $result, self::TRIGGER_CACHE_TTL);
+
+        return $result;
     }
 
     /**
@@ -251,8 +263,8 @@ class EventManager
                 // is either a class name string or an array with 'class'
                 // and optional 'params'.
                 if (is_array($entry)) {
-                    $actionClass = $entry['class'] ?? '';
-                    $actionParams = $entry['params'] ?? [];
+                    $actionClass = (string) ($entry['class'] ?? '');
+                    $actionParams = (array) ($entry['params'] ?? []);
                 } else {
                     $actionClass = (string) $entry;
                     $actionParams = [];
@@ -262,8 +274,8 @@ class EventManager
 
                 // Merge trigger-level params (e.g. webhook URL) into the
                 // event payload so the action has everything it needs.
-                $payload = $log->payload;
-                if (! empty($actionParams)) {
+                $payload = is_array($log->payload) ? $log->payload : [];
+                if ($actionParams !== []) {
                     $payload = array_merge($actionParams, $payload);
                 }
 

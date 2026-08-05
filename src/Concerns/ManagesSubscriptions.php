@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Concerns;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\App;
 use ZeroBoiler\Events\Actions\WebhookAction;
 use ZeroBoiler\Events\Models\Subscription;
 use ZeroBoiler\Events\SubscriptionBuilder;
@@ -36,7 +35,7 @@ trait ManagesSubscriptions
      */
     public function subscribe(string $event, string $url): SubscriptionBuilder
     {
-        $builder = App::make(SubscriptionBuilder::class);
+        $builder = $this->app->make(SubscriptionBuilder::class);
         $builder->on($event)->to($url);
 
         return $builder;

@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Facade;
 use ZeroBoiler\Events\Models\EventLog;
+use ZeroBoiler\Events\Models\Subscription;
+use ZeroBoiler\Events\SubscriptionBuilder;
 use ZeroBoiler\Events\TriggerBuilder;
 
 /**
@@ -21,6 +23,12 @@ use ZeroBoiler\Events\TriggerBuilder;
  * @method static void fireModel(string $modelClass, string $action, object $model)
  * @method static bool enable(string $triggerId)
  * @method static bool disable(string $triggerId)
+ * @method static void invalidateTriggerCache()
+ * @method static SubscriptionBuilder subscribe(string $event, string $url)
+ * @method static bool unsubscribe(string $subscriptionId)
+ * @method static Collection<int, Subscription> listSubscriptions(?string $event = null, bool $activeOnly = false)
+ * @method static Subscription|null getSubscription(string $subscriptionId)
+ * @method static string subscribeWebhook(string $event, string $url, array<string, mixed> $conditions = [], int $priority = 0)
  * @method static Collection<int, EventLog> getEventHistory(?string $event = null, ?string $status = null, ?string $triggerId = null, int $limit = 100)
  * @method static array{
  *     total_logs: int,
@@ -37,6 +45,7 @@ use ZeroBoiler\Events\TriggerBuilder;
  *     top_failed_events: array<int, array{event: string, count: int}>
  * } getStats(?Carbon $since = null)
  * @method static int purgeLogs(Carbon $before, bool $includePending = false)
+ * @method static void executeTrigger(Trigger $trigger, EventLog $log)
  *
  * @see \ZeroBoiler\Events\EventManager
  */
