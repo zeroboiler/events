@@ -9,8 +9,6 @@ declare(strict_types=1);
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
-use Rector\Strict\Rector\BooleanNot\BooleanNotIdenticalToNegatedInstanceofRector;
-use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
 use Rector\ValueObject\PhpVersion;
@@ -28,9 +26,6 @@ return RectorConfig::configure()
         // Code style
         NewlineBeforeNewAssignSetRector::class,
         NewlineAfterStatementRector::class,
-        // Strict
-        BooleanNotIdenticalToNegatedInstanceofRector::class,
-        DisallowedEmptyRuleFixerRector::class,
     ])
     ->withSkip([
         // Skip test fixtures and factories
