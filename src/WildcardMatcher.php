@@ -31,6 +31,7 @@ class WildcardMatcher
         if ($pattern === '*') {
             return $event !== '';
         }
+
         if ($pattern === '**') {
             return $event !== '';
         }

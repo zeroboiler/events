@@ -146,6 +146,7 @@ class ConditionEngine implements ConditionEngineContract
             if (! is_array($current) || ! array_key_exists($k, $current)) {
                 return null;
             }
+
             $current = $current[$k];
         }
 
