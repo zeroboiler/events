@@ -6,15 +6,15 @@
 
 declare(strict_types=1);
 
-use Rector\Config\RectorConfig;
-use Rector\Core\ValueObject\PhpVersion;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
-use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
+use Rector\Config\RectorConfig;
+use Rector\Core\ValueObject\PhpVersion;
 use Rector\Strict\Rector\BooleanNot\BooleanNotIdenticalToNegatedInstanceofRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -27,8 +27,12 @@ return RectorConfig::configure()
         AddReturnTypeDeclarationRector::class,
         AddPropertyTypeDeclarationRector::class,
         ParamTypeDeclarationRector::class,
-        // Code quality
+        // Code style
+        NewlineBeforeNewAssignSetRector::class,
+        NewlineAfterStatementRector::class,
+        // Strict
         BooleanNotIdenticalToNegatedInstanceofRector::class,
+        DisallowedEmptyRuleFixerRector::class,
     ])
     ->withSkip([
         // Skip test fixtures and factories
