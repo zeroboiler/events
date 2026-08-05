@@ -1,26 +1,13 @@
+includes:
+    - phpstan-baseline.neon
+
 parameters:
-    level: 6
+    level: 9
     paths:
         - src/
+    excludePaths:
+        - tests/*
+    treatPhpDocTypesAsCertain: false
     reportUnmatchedIgnoredErrors: false
-    ignoreErrors:
-        # Eloquent magic methods (find, where, enabled, etc.) — resolved at runtime
-        - "#Call to an undefined static method#"
-        # Eloquent scope methods — resolved at runtime via Builder
-        - "#Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder#"
-        # Laravel global helpers
-        - "#Function (app|config_path) not found#"
-        # Eloquent @mixin — needs Larastan but this is a standalone package
-        - "#PHPDoc tag @mixin contains unknown class Eloquent#"
-        # HasFactory generic — needs Laravel-specific stubs
-        - "#uses generic trait Illuminate\\\\Database\\\\Eloquent\\\\Factories\\\\HasFactory but does not specify#"
-        # BelongsTo/HasMany template covariance — known PHPStan+Eloquent limitation
-        - "#should return Illuminate\\\\Database\\\\Eloquent\\\\Relations#"
-        # HasMany missing template types
-        - "#does not specify all template types of class#"
-        # scopeOrderByPriority returns Query\Builder instead of Eloquent\Builder — Laravel quirk
-        - "#should return Illuminate\\\\Database\\\\Eloquent\\\\Builder.*but returns Illuminate\\\\Database\\\\Query\\\\Builder#"
-        # created_at is non-nullable in model props but soft-delete can make it null at runtime
-        - "#Expression on left side of \\?\\? is not nullable#"
-        # Collection::map() callback type mismatch — Eloquent Collection not resolved without Larastan
-        - "#Parameter .+callback of method Illuminate\\\\Support\\\\Collection.*map\\(\\)#"
+    bootstrapFiles:
+        - vendor/larastan/larastan/bootstrap.php

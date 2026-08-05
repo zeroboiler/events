@@ -2,51 +2,57 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
-    branches: [main, develop]
+    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  quality:
+    name: Code Quality
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        php: ['8.5']
-
-    name: PHP ${{ matrix.php }} Tests
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
-          extensions: dom, curl, mbstring, zip, pdo, sqlite, pdo_sqlite
-          coverage: xdebug
+          php-version: '8.5'
+          coverage: none
+          tools: composer:v2
 
       - name: Install dependencies
-        run: |
-          composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Run Pint
-        run: ./vendor/bin/pint --test
+      - name: Pint (Formatting)
+        run: vendor/bin/pint --test
 
-      - name: Run Rector
-        run: ./vendor/bin/rector process --dry-run
+      - name: PHPStan (Static Analysis)
+        run: vendor/bin/phpstan analyse --no-progress
 
-      - name: Run PHPStan
-        run: ./vendor/bin/phpstan analyse --no-progress
+      - name: Rector (Refactoring Check)
+        run: vendor/bin/rector --dry-run --no-progress-bar
 
-      - name: Run Pest
-        run: ./vendor/bin/pest --coverage
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mbstring, sqlite, pdo_sqlite
+          coverage: xdebug
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Pest (Tests)
+        run: vendor/bin/pest --coverage --min=80
         env:
           XDEBUG_MODE: coverage
-
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
-        with:
-          files: ./coverage.xml
-          fail_ci_if_error: false
