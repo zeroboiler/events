@@ -36,6 +36,7 @@ class EventsLogCommand extends Command
 
                 return Command::FAILURE;
             }
+
             $query->where('status', $status);
         }
 

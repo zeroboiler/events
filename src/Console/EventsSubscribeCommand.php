@@ -55,6 +55,7 @@ class EventsSubscribeCommand extends Command
 
                 return Command::FAILURE;
             }
+
             if (is_array($conditions)) {
                 $builder->withFilter($conditions);
             }
