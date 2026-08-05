@@ -12,7 +12,6 @@ use Rector\Config\RectorConfig;
 use Rector\Strict\Rector\BooleanNot\BooleanNotIdenticalToNegatedInstanceofRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
 use Rector\ValueObject\PhpVersion;
 
@@ -26,7 +25,6 @@ return RectorConfig::configure()
         // Type declarations
         AddReturnTypeDeclarationRector::class,
         AddPropertyTypeDeclarationRector::class,
-        ParamTypeDeclarationRector::class,
         // Code style
         NewlineBeforeNewAssignSetRector::class,
         NewlineAfterStatementRector::class,
