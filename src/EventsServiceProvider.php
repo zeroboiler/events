@@ -39,7 +39,6 @@ class EventsServiceProvider extends ServiceProvider
         $this->app->bind(SubscriptionBuilder::class);
     }
 
-    #[\Override]
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
