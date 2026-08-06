@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.18.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.19.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -315,7 +315,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (40 test files)
+composer test        # Run Pest test suite (45 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -359,6 +359,11 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Redeliver command (validation, status checks) | ✅ | `EventsRedeliverCommandTest.php` |
 | EventManager register alias, empty fire, disable/enable non-existent | ✅ | `EventManagerRegisterAliasTest.php` |
 | TriggerBuilder action merging, executeTrigger exception propagation, empty fire | ✅ | `EventManagerAdvancedTest.php` |
+| List command (pagination, event/enable/disable filters) | ✅ | `EventsListCommandTest.php` |
+| Log command (trigger/status filters, limit, validation) | ✅ | `EventsLogCommandTest.php` |
+| Subscribe command (secret, filter, async, priority) | ✅ | `EventsSubscribeCommandTest.php` |
+| Unsubscribe command (remove, non-existent) | ✅ | `EventsUnsubscribeCommandTest.php` |
+| Subscriptions command (event/active/inactive/wildcard filters, pagination) | ✅ | `EventsSubscriptionsCommandTest.php` |
 
 ## How It Works
 
@@ -450,6 +455,17 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Regex condition always false | Pattern exceeds 500 chars or has nested quantifiers | Simplify the regex or increase `ConditionEngine::MAX_REGEX_LENGTH` |
 
 ## Changelog
+
+### v1.19.0
+
+- **Added**: `EventsListCommandTest` — unit tests for list command (empty, pagination, event filter, enabled/disabled filter, per-page)
+- **Added**: `EventsLogCommandTest` — unit tests for log command (empty, display, trigger/status filters, invalid status rejection, limit)
+- **Added**: `EventsSubscribeCommandTest` — unit tests for subscribe command (auto-generated secret, explicit secret, conditions filter, invalid JSON rejection, async flag, priority)
+- **Added**: `EventsUnsubscribeCommandTest` — unit tests for unsubscribe command (existing removal, non-existent failure, EventManager integration)
+- **Added**: `EventsSubscriptionsCommandTest` — unit tests for subscriptions list command (empty, event filter, active/inactive, wildcard event, pagination)
+- **Fixed**: `helpers.php` removed conflicting `use Faker\Provider\DateTime` import — replaced with fully-qualified `\Faker\Provider\DateTime` to avoid shadowing PHP's native `DateTime` class (PHPStan 9 compatibility)
+- **Changed**: README test file count updated from 40 to 45
+- **Changed**: Version bumped to 1.19.0
 
 ### v1.18.0
 

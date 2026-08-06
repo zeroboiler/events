@@ -6,7 +6,6 @@
 
 declare(strict_types=1);
 use Faker\Generator;
-use Faker\Provider\DateTime;
 use Faker\Provider\en_US\Address;
 use Faker\Provider\en_US\Company;
 use Faker\Provider\en_US\Person;
@@ -97,7 +96,7 @@ if (! function_exists('fake')) {
             $faker->addProvider(new Lorem($faker));
             $faker->addProvider(new Internet($faker));
             $faker->addProvider(new PhoneNumber($faker));
-            $faker->addProvider(new DateTime($faker));
+            $faker->addProvider(new \Faker\Provider\DateTime($faker));
             $faker->addProvider(new Miscellaneous($faker));
         }
 
