@@ -14,8 +14,10 @@ use Ramsey\Uuid\UuidInterface;
 
 final class DomainEvent
 {
+    #[\Readonly]
     public UuidInterface $eventId;
 
+    #[\Readonly]
     public DateTimeImmutable $occurredAt;
 
     /**

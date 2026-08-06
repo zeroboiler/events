@@ -14,11 +14,9 @@ use ZeroBoiler\Events\Models\Trigger;
 
 final class EventsDisableCommand extends Command
 {
-    /** @var string */
-    protected $signature = 'zeroboiler:events:disable {id : Trigger ID}';
+    protected string $signature = 'zeroboiler:events:disable {id : Trigger ID}';
 
-    /** @var string */
-    protected $description = 'Disable an event trigger';
+    protected string $description = 'Disable an event trigger';
 
     public function handle(EventManager $eventManager): int
     {

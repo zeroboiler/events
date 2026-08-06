@@ -16,16 +16,14 @@ final class EventsSubscriptionsCommand extends Command
 {
     use EscapesWildcardLike;
 
-    /** @var string */
-    protected $signature = 'zeroboiler:events:subscriptions
+    protected string $signature = 'zeroboiler:events:subscriptions
                            {--event= : Filter by event name (supports wildcards)}
                            {--active : Show only active subscriptions}
                            {--inactive : Show only inactive subscriptions}
                            {--per-page=20 : Number of results per page}
                            {--page=1 : Page number}';
 
-    /** @var string */
-    protected $description = 'List external webhook subscriptions';
+    protected string $description = 'List external webhook subscriptions';
 
     public function handle(): int
     {

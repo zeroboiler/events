@@ -16,16 +16,14 @@ final class EventsListCommand extends Command
 {
     use EscapesWildcardLike;
 
-    /** @var string */
-    protected $signature = 'zeroboiler:events:list
+    protected string $signature = 'zeroboiler:events:list
                            {--event= : Filter by event name (supports wildcards)}
                            {--enabled : Show only enabled triggers}
                            {--disabled : Show only disabled triggers}
                            {--per-page=20 : Number of results per page}
                            {--page=1 : Page number}';
 
-    /** @var string */
-    protected $description = 'List event triggers with optional filtering';
+    protected string $description = 'List event triggers with optional filtering';
 
     public function handle(): int
     {

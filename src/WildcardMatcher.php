@@ -25,6 +25,7 @@ final class WildcardMatcher
      * @param  string  $pattern  The pattern with * wildcards (e.g., "order.*")
      * @param  string  $event  The event to match (e.g., "order.placed")
      */
+    #[\Pure]
     public static function matches(string $pattern, string $event): bool
     {
         // Handle catch-all patterns — match everything (except empty string)

@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.11.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.12.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -315,7 +315,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (32 test files)
+composer test        # Run Pest test suite (33 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -349,6 +349,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Integration (full fire flow) | ✅ | `EventManagerIntegrationTest.php` |
 | Facade proxy, cache invalidation, ActionResolver errors | ✅ | `EventsFacadeProxyTest.php` |
 | Production readiness | ✅ | `ProductionReadyTest.php` |
+| Typed properties (models, factories, commands, attributes) | ✅ | `TypedPropertiesTest.php` |
 | Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
 
 ## How It Works
@@ -407,6 +408,24 @@ composer ci          # All checks (lint → analyse → rector → test)
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
 ## Changelog
+
+### v1.12.0
+
+- **Changed**: All model properties (`$table`, `$keyType`, `$incrementing`, `$fillable`, `$hidden`, `$statuses`) now use native PHP typed declarations instead of `@var` docblocks — fully PHPStan 9 compliant with strict property types
+- **Changed**: All factory `$model` properties now use native `string` type declarations
+- **Changed**: All 11 console command `$signature` and `$description` properties now use native `string` type declarations
+- **Changed**: `DomainEvent` properties `$eventId` and `$occurredAt` now have `#[\Readonly]` attribute — prevents accidental mutation after construction
+- **Added**: `#[\Pure]` attribute on `WildcardMatcher::matches()`, `findMatchingPatterns()`, and `extractWildcards()` — documents side-effect-free pure functions
+- **Fixed**: `EventsRedeliverCommand` now reads HTTP timeout from `events.subscriptions.timeout` config instead of hardcoded `30` — consistent with `WebhookAction`
+- **Added**: `TypedPropertiesTest` — comprehensive test suite covering:
+  - Model typed property verification (Trigger, EventLog, Subscription)
+  - Factory typed `$model` property verification
+  - Console command typed `$signature` and `$description` verification
+  - DomainEvent `#[\Readonly]` attribute verification
+  - WildcardMatcher `#[\Pure]` attribute verification
+  - EventsRedeliverCommand config-driven timeout method verification
+  - Model CRUD regression tests after typed property migration
+- **Changed**: Version bumped to 1.12.0
 
 ### v1.11.0
 

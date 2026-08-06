@@ -13,16 +13,14 @@ use ZeroBoiler\Events\EventManager;
 
 final class EventsRegisterCommand extends Command
 {
-    /** @var string */
-    protected $signature = 'zeroboiler:events:register
+    protected string $signature = 'zeroboiler:events:register
                            {event : The event name}
                            {action : The action handler class FQN}
                            {--name= : Trigger name}
                            {--async : Dispatch asynchronously}
                            {--priority=0 : Trigger priority (higher first)}';
 
-    /** @var string */
-    protected $description = 'Register a new event trigger';
+    protected string $description = 'Register a new event trigger';
 
     public function handle(EventManager $eventManager): int
     {

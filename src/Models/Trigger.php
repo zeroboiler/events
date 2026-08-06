@@ -40,17 +40,14 @@ class Trigger extends Model
     use HasFactory;
     use SoftDeletes;
 
-    /** @var string */
-    protected $table = 'triggers';
+    protected string $table = 'triggers';
 
-    /** @var string */
-    protected $keyType = 'string';
+    protected string $keyType = 'string';
 
-    /** @var bool */
-    public $incrementing = false;
+    public bool $incrementing = false;
 
-    /** @var array<int, string> */
-    protected $fillable = [
+    /** @var list<string> */
+    protected array $fillable = [
         'id',
         'name',
         'event',
@@ -61,8 +58,7 @@ class Trigger extends Model
         'enabled',
     ];
 
-    /** @var array<int, string> */
-    protected $hidden = [
+    protected array $hidden = [
         'deleted_at',
     ];
 

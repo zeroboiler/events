@@ -10,6 +10,7 @@ namespace ZeroBoiler\Events\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use ZeroBoiler\Events\Models\EventLog;
@@ -17,13 +18,21 @@ use ZeroBoiler\Events\Models\Subscription;
 
 final class EventsRedeliverCommand extends Command
 {
-    /** @var string */
-    protected $signature = 'zeroboiler:events:redeliver
+    /**
+     * Get the webhook timeout from config.
+     */
+    private function getTimeout(): int
+    {
+        $timeout = Config::get('events.subscriptions.timeout', 30);
+
+        return is_int($timeout) && $timeout > 0 ? $timeout : 30;
+    }
+
+    protected string $signature = 'zeroboiler:events:redeliver
                            {log_id : The EventLog ID of the failed delivery to redeliver}
                            {--force : Skip confirmation prompt}';
 
-    /** @var string */
-    protected $description = 'Redeliver a failed webhook delivery';
+    protected string $description = 'Redeliver a failed webhook delivery';
 
     public function handle(): int
     {
@@ -92,7 +101,7 @@ final class EventsRedeliverCommand extends Command
         try {
             $redeliverStart = microtime(true);
             $response = Http::withHeaders($headers)
-                ->timeout(30)
+                ->timeout($this->getTimeout())
                 ->post($url, $body);
 
             if ($response->successful()) {

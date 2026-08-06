@@ -14,11 +14,9 @@ use ZeroBoiler\Events\Models\Trigger;
 
 final class EventsEnableCommand extends Command
 {
-    /** @var string */
-    protected $signature = 'zeroboiler:events:enable {id : Trigger ID}';
+    protected string $signature = 'zeroboiler:events:enable {id : Trigger ID}';
 
-    /** @var string */
-    protected $description = 'Enable an event trigger';
+    protected string $description = 'Enable an event trigger';
 
     public function handle(EventManager $eventManager): int
     {

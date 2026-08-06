@@ -13,14 +13,12 @@ use ZeroBoiler\Events\Models\EventLog;
 
 final class EventsLogCommand extends Command
 {
-    /** @var string */
-    protected $signature = 'zeroboiler:events:log
+    protected string $signature = 'zeroboiler:events:log
                            {--trigger= : Filter by trigger ID}
                            {--status= : Filter by status (pending|dispatched|completed|failed)}
                            {--limit=50 : Number of logs to show}';
 
-    /** @var string */
-    protected $description = 'View event logs';
+    protected string $description = 'View event logs';
 
     public function handle(): int
     {

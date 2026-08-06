@@ -49,17 +49,14 @@ class Subscription extends Model
     use HasFactory;
     use SoftDeletes;
 
-    /** @var string */
-    protected $table = 'event_subscriptions';
+    protected string $table = 'event_subscriptions';
 
-    /** @var string */
-    protected $keyType = 'string';
+    protected string $keyType = 'string';
 
-    /** @var bool */
-    public $incrementing = false;
+    public bool $incrementing = false;
 
-    /** @var array<int, string> */
-    protected $fillable = [
+    /** @var list<string> */
+    protected array $fillable = [
         'id',
         'event',
         'url',
