@@ -6,84 +6,213 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [1.2.0] — 2026-08-06
+## [1.16.0] — 2026-08-06
 
-### Fixed
-- **PHPStan 9 type safety** — Resolved 20+ baseline errors with proper type guards:
-  - `DomainEvent::fromArray()` now catches invalid UUID/datetime exceptions instead of letting them bubble
-  - `ConditionEngine::contains()`, `starts_with`, `ends_with`, `matches` operators now guard string types before calling string functions
-  - `WebhookAction::handle()` validates URL is non-empty string before processing
-  - `WebhookAction` subscription ID properly typed as `string|null` throughout
-  - Console commands properly cast `$this->argument()` return values to `string` before use
-  - `EventManager::on()` and `subscribe()` return types narrowed with PHPDoc
-  - `TriggerBuilder::resolveActions()` return type corrected to `list<string>`
-- **Model scope return types** — `Trigger::scopeOrderByPriority()` and `Subscription::scopeOrderByPriority()` now use PHPDoc var annotations to satisfy PHPStan's generic Builder return types
+### Added
+- `EventsFireCommandTest` — unit tests for fire command JSON parsing, option validation, and edge cases (invalid JSON, scalar JSON, empty object, missing @file)
+- `EventManagerRegisterAliasTest` — tests for `register()` alias, empty event fire, disable/enable non-existent triggers, multiple cache invalidation
+- Updated README test coverage table with 2 new test files (37 total)
 
 ### Changed
-- **README enriched** — Added Quick Start section, PHPStan Level 9 badge, improved structure
-- **Version bump** to 1.2.0
+- README test file count updated from 35 to 37
+- Pest.php `uses()` updated to include new test files
 
 ---
 
-## [1.1.0] — 2026-08-01
-
-### Added
-- **Webhook subscription system** — external HTTP POST notifications with HMAC-SHA256 payload signing, delivery tracking, retry with backoff, and auto-deactivation after configurable failure threshold.
-  - `Subscription` model (`event_subscriptions` table) with `SubscriptionBuilder` fluent API
-  - `subscribe()`, `unsubscribe()`, `listSubscriptions()`, `getSubscription()`, `subscribeWebhook()` on `EventManager`
-  - `WebhookAction` — HTTP POST delivery with HMAC signing, timeout, and failure tracking
-  - CLI commands: `events:subscribe`, `events:unsubscribe`, `events:subscriptions`, `events:redeliver`
-- **Event history & statistics** — `getEventHistory()`, `getStats()`, and `purgeLogs()` on `EventManager`
-  - Aggregate counts, success/failure rates, average duration, top-fired and top-failed events
-  - Wildcard-aware event filtering for history queries
-- **Log retention** — `events:cleanup` console command with configurable retention days and pending-purge option
-- **Dispatch depth guard** — prevents infinite recursion when triggers fire other events
-- **Domain event support** — `DomainEvent` class for integration with the `zeroboiler/domain` package, including `occur()`, `fromArray()`, and `toArray()` for event sourcing workflows
-- **Condition engine operators** — `starts_with`, `ends_with`, `matches` (regex), `null`, `not_null`, `empty`, `not_empty`
-- **ReDoS protection** — `matches` operator limits regex length (500 chars), PCRE backtrack limit (1000), and rejects nested-quantifier patterns
-- **`#[Trace]` attributes** on `EventManager` public methods for observability auto-instrumentation
-- PHPStan level 6 configuration
-- CI workflow (GitHub Actions) with Pint, Rector, PHPStan, and Pest coverage
+## [1.15.0]
 
 ### Fixed
-- **DomainEvent::fromArray() null payload** — `TypeError` when `payload` key missing from persisted data; now defaults to `[]`
-- **Subscription wildcard handling** — wildcard matching delegated to `WildcardMatcher` for consistent semantics; LIKE special characters (`%`, `_`, `\`) properly escaped in SQL queries
-- **TriggerBuilder actions merge** — `action()` + `actions()` no longer silently discards the single action; merged with deduplication
-- **Trigger matching cache** — consolidated into single cached query; exact matches queried directly, wildcards cached with 5-minute TTL
-- **EventManager::fire() failure isolation** — dispatch loop continues on individual trigger failure, re-throws after all triggers attempted
-- **Atomic status transition** — `DispatchTriggerJob` prevents race condition in `executeTrigger` with atomic status update
-- **Duplicate UUID generation** — removed in favor of model boot callbacks as single source of truth
-- **WebhookAction internal key leakage** — `url`, `event`, `headers`, `subscription_id` stripped from webhook body before delivery
-- **ConditionEngine between() inverted ranges** — auto-normalizes `[100, 50]` → `[50, 100]`
-- **ConditionEngine in/not_in null handling** — null value parameter no longer causes type error
-- **WildcardMatcher event "0"** — catch-all pattern `*` no longer rejects the string `"0"` as empty
-- **fireModel() JSON serialization** — model attributes flattened into payload root for condition engine access
-- **Deterministic trigger ordering** — priority DESC, then `created_at` ASC, then `id` as final tiebreaker
-- **Orphaned EventLog on queue failure** — `EventLog` now created inside `DispatchTriggerJob::handle()` instead of `dispatchTrigger()`, so no DB row if the job never runs
-- **RecordDelivery race condition** — `last_fired_at` and `delivery_count` updated atomically
-
-### Changed
-- **EventManager refactored** — extracted `ManagesHistory`, `ManagesSubscriptions`, and `EscapesWildcardLike` traits to reduce class size (572 → 280 lines)
-- **ConditionEngine type-safe comparison** — `strictEquals()` uses `===` for same-type, falls back to string comparison for mixed scalars
-- **SubscriptionBuilder URL validation** — `filter_var(FILTER_VALIDATE_URL)` before persisting
-- **TriggerBuilder save() validation** — throws `InvalidArgumentException` for missing event name or action
-- PHP `^8.5`, Laravel `^13.0` minimum requirements
+- `Subscription::hasExceededFailures()` now reads default threshold from `events.subscriptions.max_failures` config instead of hardcoded `10`
+- All test action classes are now `final`
+- Misleading comment in `EventManager::parseActions()`
 
 ---
 
-## [1.0.0] — 2026-07-15
+## [1.14.0]
 
 ### Added
-- **DB-driven trigger management** — create, update, enable, disable, and delete triggers without code changes
-- **Wildcard event matching** — `order.*` matches `order.placed`, `order.shipped`; `**` matches across segment boundaries
-- **JSON condition engine** — 14 operators: `>`, `>=`, `<`, `<=`, `=`, `===`, `!=`, `!==`, `in`, `not_in`, `contains`, `not_contains`, `between`, `null`
-- **Async dispatch** — queue-based execution via `DispatchTriggerJob` with configurable tries and exponential backoff
-- **Trigger priority** — higher priority triggers execute first; deterministic tiebreaker via `created_at` and `id`
-- **Event logging** — all dispatches logged with status (`pending`, `dispatched`, `completed`, `failed`), error message, and duration
-- **Fluent TriggerBuilder** — `on()`, `action()`, `actions()`, `when()`, `async()`, `priority()`, `actionParams()`, `save()`
-- **CLI suite** — 8 commands: `events:list`, `events:register`, `events:fire`, `events:log`, `events:retry`, `events:enable`, `events:disable`, `events:cleanup`
-- **Eloquent models** — `Trigger` and `EventLog` with scopes (`enabled`, `failed`, `completed`, `pending`), factories, and soft deletes
-- **Configurable table names** — override via `config/events.php`
-- **Cache invalidation** — `invalidateTriggerCache()` called automatically on register/enable/disable
-- Configuration publishable via `vendor:publish --tag="events-config"`
-- Migration auto-discovery via `loadMigrationsFrom`
+- `EventsRedeliverCommandTest` — unit tests for redeliver command validation
+- Security Considerations section and Troubleshooting table in README
+
+### Fixed
+- `DispatchTriggerJob::$tries` moved to constructor property promotion
+- `ConditionEngine::evaluateCondition()` now type-guards `$expected[0]` as string
+
+---
+
+## [1.13.0]
+
+### Fixed
+- Factory and model typed properties migration completed
+- Relation docblocks use covariant generics
+- Stale PHPStan baseline entries removed
+
+### Added
+- `WildcardIntegrationTest` — cross-segment, catch-all, multiple wildcards
+- `TypedPropertiesTest` now verifies `EventLog::$hidden`
+
+---
+
+## [1.12.0]
+
+### Changed
+- All model properties use native PHP typed declarations
+- `DomainEvent` properties use `#[\Readonly]` attribute
+- `#[\Pure]` attribute on `WildcardMatcher` methods
+- `EventsRedeliverCommand` config-driven timeout
+
+### Added
+- `TypedPropertiesTest` — comprehensive property type verification
+
+---
+
+## [1.11.0]
+
+### Changed
+- All core classes and console commands are now `final`
+- Factory state closures have explicit `: array` return type annotations
+- `EventsRetryCommand` uses strict null comparison
+- Traits declare `@mixin` for PHPStan trait property resolution
+
+---
+
+## [1.10.0]
+
+### Fixed
+- `EventLog` model explicitly declares `$table`
+- Factory state closures have explicit return type annotations
+
+### Added
+- `EventsFacadeProxyTest` — facade proxy, cache, action resolver, condition engine, wildcard matcher tests
+- `ServiceProviderBindingTest` — singleton/transient verification, config merge completeness
+
+---
+
+## [1.9.0]
+
+### Fixed
+- `EventsLogCommand` null-safe operator for `$log->created_at`
+- Factory state closures have explicit return type annotations
+
+### Added
+- `EventsComprehensiveTest` — 60+ new tests covering all components
+
+---
+
+## [1.8.0]
+
+### Fixed
+- `EventManager::getTriggerCacheTtl()` uses `assert()` type guard
+- Console commands use null-safe operator for `created_at`
+- Explicit `$table` on `Trigger` model
+- `#[\Override]` on model `boot()` methods
+
+### Added
+- `ServiceProviderBindingTest` — comprehensive binding verification
+
+---
+
+## [1.7.0]
+
+### Fixed
+- `EventManager::parseActions()` type-checks classes array entries
+- `WildcardMatcher::extractWildcards()` returns empty for `**` patterns
+- `SubscriptionBuilder::save()` respects `auto_generate_secret` config
+
+### Added
+- `EventsEdgeCaseTest` — comprehensive edge case suite
+
+---
+
+## [1.6.0]
+
+### Fixed
+- `DomainEvent::__construct()` explicit null checks
+- `DispatchTriggerJob::$tries` default value
+- `EventManager::getMatchingTriggers()` null-safe operator
+- Console command map closures refactored
+- `EventsSubscribeCommand` is_string guards
+- 7 stale PHPStan baseline entries removed
+
+### Added
+- `ProductionReadyTest` — comprehensive production readiness verification
+
+---
+
+## [1.5.0]
+
+### Changed
+- `Subscription::signPayload()` reads algorithm from config
+- `DispatchTriggerJob` reads retry/backoff from config
+- `WebhookAction` reads timeout/max_failures from config
+
+### Added
+- `SubscriptionSignConfigTest`
+- `ConfigCompletenessTest`
+
+### Fixed
+- `EventManagerCacheTtlTest.php` was missing from Pest.php `uses()` list
+- `CreatesApplication` test config was missing keys
+
+---
+
+## [1.4.0]
+
+### Changed
+- `DispatchTriggerJob` config-driven tries/backoff
+- `WebhookAction` config-driven timeout/max_failures
+
+---
+
+## [1.3.0]
+
+### Fixed
+- PHPStan 9 compliance — `assert()` for container resolution
+- Null-safe type checks in console commands
+- `DispatchTriggerJob::failed()` instanceof check
+
+### Added
+- `EventManagerParseActionsTest`
+- `EdgeCasesPhase2Test`
+
+---
+
+## [1.2.0]
+
+### Fixed
+- PHPStan 9 type safety — 20+ baseline errors resolved
+- Model scope return types
+
+### Changed
+- README enriched
+
+---
+
+## [1.1.1]
+
+### Fixed
+- `ActionResolver` explicit Triggerable check
+- `ConditionEngine` empty array condition handling
+- `DispatchTriggerJob::failed()` uses `update()`
+- SQL LIKE injection in console commands
+
+### Added
+- `{classes: [...], params: {...}}` action format support
+
+---
+
+## [1.1.0]
+
+### Added
+- Initial production-ready release
+- Dynamic event triggers with wildcard matching
+- Condition engine with 15+ operators
+- Webhook subscriptions with HMAC-SHA256 signing
+- Domain event value object
+- Event history, statistics, and log retention
+- Full CLI command set
+- PHPStan level 9, Laravel Pint, Rector
+
+## License
+
+Proprietary. All rights reserved. © [ZeroBoiler](https://github.com/zeroboiler).
