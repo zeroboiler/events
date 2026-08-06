@@ -26,9 +26,9 @@ class DomainEvent
         public array $payload = [],
         ?UuidInterface $eventId = null,
         ?DateTimeImmutable $occurredAt = null,
-    ) {
-        $this->eventId = $eventId ?? Uuid::uuid4();
-        $this->occurredAt = $occurredAt ?? new DateTimeImmutable;
+    ): void {
+        $this->eventId = $eventId !== null ? $eventId : Uuid::uuid4();
+        $this->occurredAt = $occurredAt !== null ? $occurredAt : new DateTimeImmutable;
     }
 
     /**

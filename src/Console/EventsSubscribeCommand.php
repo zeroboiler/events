@@ -27,14 +27,14 @@ class EventsSubscribeCommand extends Command
 
     public function handle(EventManager $eventManager): int
     {
-        $event = (string) $this->argument('event');
-        $url = (string) $this->argument('url');
+        $event = $this->argument('event');
+        $url = $this->argument('url');
         $secret = $this->option('secret');
         $filter = $this->option('filter');
         $priority = (int) $this->option('priority');
-        $async = (bool) $this->option('async');
+        $async = $this->option('async') === true;
 
-        $builder = $eventManager->subscribe($event, $url)
+        $builder = $eventManager->subscribe((string) $event, (string) $url)
             ->priority($priority);
 
         if ($async) {
@@ -42,11 +42,12 @@ class EventsSubscribeCommand extends Command
         }
 
         if ($secret !== null && $secret !== '') {
-            $builder->withSecret((string) $secret);
+            $builder->withSecret(is_string($secret) ? $secret : '');
         }
 
         if ($filter !== null && $filter !== '') {
-            $conditions = json_decode((string) $filter, true);
+            $filterString = is_string($filter) ? $filter : '';
+            $conditions = json_decode($filterString, true);
             if (json_last_error() !== \JSON_ERROR_NONE) {
                 $this->error('Invalid JSON in --filter option: '.json_last_error_msg());
 

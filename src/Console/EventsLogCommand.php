@@ -52,14 +52,18 @@ class EventsLogCommand extends Command
         }
 
         $headers = ['ID', 'Event', 'Trigger', 'Status', 'Duration', 'Created At'];
-        $rows = $logs->map(fn (EventLog $log): array => [
-            $log->id,
-            $log->event,
-            $log->trigger->name ?? 'N/A',
-            $this->formatStatus($log->status),
-            $log->duration_ms ? "{$log->duration_ms}ms" : 'N/A',
-            $log->created_at->format('Y-m-d H:i:s'),
-        ])->toArray();
+        $rows = $logs->map(function (EventLog $log): array {
+            $triggerName = $log->trigger !== null ? $log->trigger->name : 'N/A';
+
+            return [
+                $log->id,
+                $log->event,
+                $triggerName,
+                $this->formatStatus($log->status),
+                $log->duration_ms !== null ? "{$log->duration_ms}ms" : 'N/A',
+                $log->created_at->format('Y-m-d H:i:s'),
+            ];
+        })->toArray();
 
         $this->table($headers, $rows);
 

@@ -26,10 +26,10 @@ class DispatchTriggerJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    public int $tries = 3;
+
     /** @var array<int, int> */
     public array $backoff = [60, 300, 900];
-
-    public int $tries;
 
     /**
      * @param  array<string, mixed>  $payload
@@ -39,7 +39,8 @@ class DispatchTriggerJob implements ShouldQueue
         public string $event,
         public array $payload,
     ) {
-        $this->tries = (int) Config::get('events.retry.tries', 3);
+        $triesConfig = Config::get('events.retry.tries', 3);
+        $this->tries = is_int($triesConfig) && $triesConfig > 0 ? $triesConfig : 3;
 
         $backoffConfig = Config::get('events.retry.backoff', '60,300,900');
         if (is_string($backoffConfig)) {

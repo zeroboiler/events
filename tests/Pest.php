@@ -18,6 +18,6 @@ use ZeroBoiler\Events\Tests\TestCase;
 */
 
 // Apply TestCase to tests that need Laravel bootstrap
-uses(TestCase::class)->in('ActionResolverTest.php', 'ConditionEngineTest.php', 'ConfigCompletenessTest.php', 'DispatchTriggerJobTest.php', 'DomainEventTest.php', 'EdgeCasesTest.php', 'EdgeCasesPhase2Test.php', 'EventHistoryStatsTest.php', 'EventLogTest.php', 'EventManagerCacheTtlTest.php', 'EventManagerIntegrationTest.php', 'EventManagerParseActionsTest.php', 'EventManagerTest.php', 'EventsServiceProviderTest.php', 'SubscriptionBuilderTest.php', 'SubscriptionSignConfigTest.php', 'SubscriptionTest.php', 'TraitConsistencyTest.php', 'TriggerBuilderExtendedTest.php', 'TriggerModelTest.php');
+uses(TestCase::class)->in('ActionResolverTest.php', 'ConditionEngineTest.php', 'ConfigCompletenessTest.php', 'DispatchTriggerJobTest.php', 'DomainEventTest.php', 'EdgeCasesTest.php', 'EdgeCasesPhase2Test.php', 'EventHistoryStatsTest.php', 'EventLogTest.php', 'EventManagerCacheTtlTest.php', 'EventManagerIntegrationTest.php', 'EventManagerParseActionsTest.php', 'EventManagerTest.php', 'EventsServiceProviderTest.php', 'ProductionReadyTest.php', 'SubscriptionBuilderTest.php', 'SubscriptionSignConfigTest.php', 'SubscriptionTest.php', 'TraitConsistencyTest.php', 'TriggerBuilderExtendedTest.php', 'TriggerModelTest.php');
 
 // WildcardMatcherTest and EscapesWildcardLikeTest run without TestCase (plain PHP tests)

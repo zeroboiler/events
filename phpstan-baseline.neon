@@ -94,38 +94,3 @@ parameters:
 			identifier: return.type
 			count: 1
 			path: src/Models/Trigger.php
-
-		# Console command Collection::map closure type mismatch (Illuminate\Collection vs Eloquent\Collection)
-		-
-			message: '#^Parameter #\$1 \$callback of method Illuminate\\\\Support\\\\Collection<int, stdClass>::map\(\) expects callable\(stdClass, int\): array\{string, string, string, string, \'N/A\'|\(lowercase-string&non-falsy-string\), non-falsy-string\}, Closure\(ZeroBoiler\\\\Events\\\\Models\\\\EventLog\): array\{string, string, string, string, \'N/A\'|\(lowercase-string&non-falsy-string\), non-falsy-string\} given$#'
-			identifier: argument.type
-			count: 1
-			path: src/Console/EventsLogCommand.php
-		-
-			message: '#^Parameter #\$1 \$callback of method Illuminate\\\\Support\\\\Collection<int, stdClass>::map\(\) expects callable\(stdClass, int\): array\{string, string, string, int, \'No\'|\'Yes\', int, non-falsy-string, non-falsy-string\}, Closure\(ZeroBoiler\\\\Events\\\\Models\\\\Subscription\): array\{string, string, string, int, \'No\'|\'Yes\', int, non-falsy-string, non-falsy-string\} given$#'
-			identifier: argument.type
-			count: 1
-			path: src/Console/EventsSubscriptionsCommand.php
-
-		# Console command option cast issues — Artisan option() returns mixed types
-		-
-			message: '#^Cannot cast array\|bool\|float\|int\|string\|null to string$#'
-			identifier: cast.string
-			count: 1
-			path: src/Console/EventsSubscribeCommand.php
-		-
-			message: '#^Cannot cast non-empty-array\|float\|int<min, -1>\|int<1, max>\|non-falsy-string\|true to string$#'
-			identifier: cast.string
-			count: 2
-			path: src/Console/EventsSubscribeCommand.php
-		-
-			message: '#^Cannot cast array\|bool\|float\|int\|non-empty-string to string$#'
-			identifier: cast.string
-			count: 3
-			path: src/Console/EventsSubscriptionsCommand.php
-		-
-			message: '#^Cannot cast array\|bool\|float\|int\|string\|null to string$#'
-			identifier: cast.string
-			count: 1
-			path: src/Console/EventsUnsubscribeCommand.php
-

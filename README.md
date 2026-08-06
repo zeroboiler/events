@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.5.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.6.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -354,6 +354,30 @@ composer ci          # All checks
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
 ## Changelog
+
+### v1.6.0
+
+- **Fixed**: `DomainEvent::__construct()` now uses explicit `!== null` checks instead of `??` to satisfy PHPStan level 9 property assignment rules
+- **Fixed**: `DispatchTriggerJob::$tries` now has a default value (`= 3`) to avoid uninitialized property; config read uses `is_int()` guard instead of direct cast
+- **Fixed**: `EventManager::getMatchingTriggers()` uses null-safe operator (`?->`) for `$t->created_at->timestamp` to handle nullable timestamps
+- **Fixed**: `EventsLogCommand` and `EventsSubscriptionsCommand` map closures refactored from arrow functions to named closures with proper variable extraction, resolving PHPStan `Collection::map` type mismatch
+- **Fixed**: `EventsLogCommand` uses `$log->duration_ms !== null` instead of truthy check to correctly handle zero-duration logs
+- **Fixed**: `EventsSubscribeCommand` uses `is_string()` guards for option values instead of direct `(string)` casts, resolving PHPStan cast errors
+- **Fixed**: `EventsSubscriptionsCommand` uses `is_string()` guard for event filter option instead of direct cast
+- **Fixed**: `EventsUnsubscribeCommand` defers cast to point of use, avoiding mixed-type cast error
+- **Removed**: 7 stale PHPStan baseline entries for console command casts and Collection map closures
+- **Added**: `ProductionReadyTest` — comprehensive test suite covering:
+  - SubscriptionBuilder validation (empty event, invalid URL, secret generation, conditions)
+  - TriggerBuilder action merging (BUG-2 fix: action() + actions() deduplication, single/multi/params formats)
+  - EventManager::subscribeWebhook() integration
+  - ManagesHistory::purgeLogs() with/without includePending
+  - WildcardMatcher::findMatchingPatterns() (exact, wildcard, multiple, empty, catch-all)
+  - DomainEvent::occur/fromArray edge cases (missing fields, invalid UUID, invalid datetime)
+  - Subscription model (signPayload, hasExceededFailures, recordFailure, resetFailures, matchesEvent)
+  - EventLog model (markAsCompleted, markAsFailed)
+  - Trigger model scopes (enabled, async, orderByPriority, eventLogs relation)
+  - ConditionEngine additional operators (not_contains, not_empty, inverted between, nested access, long regex)
+- **Changed**: Version bumped to 1.6.0
 
 ### v1.5.0
 

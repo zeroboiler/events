@@ -22,9 +22,9 @@ class EventsUnsubscribeCommand extends Command
 
     public function handle(EventManager $eventManager): int
     {
-        $id = (string) $this->argument('id');
+        $id = $this->argument('id');
 
-        if ($eventManager->unsubscribe($id)) {
+        if ($eventManager->unsubscribe((string) $id)) {
             $this->info("Subscription {$id} removed successfully.");
 
             return Command::SUCCESS;

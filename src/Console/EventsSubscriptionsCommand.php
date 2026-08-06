@@ -33,11 +33,12 @@ class EventsSubscriptionsCommand extends Command
 
         $eventFilter = $this->option('event');
         if ($eventFilter !== null && $eventFilter !== '') {
-            $likePattern = $this->wildcardToLike((string) $eventFilter);
+            $eventString = is_string($eventFilter) ? $eventFilter : '';
+            $likePattern = $this->wildcardToLike($eventString);
             if ($likePattern !== null) {
                 $query->where('event', 'like', $likePattern);
             } else {
-                $query->where('event', (string) $eventFilter);
+                $query->where('event', $eventString);
             }
         }
 
@@ -65,16 +66,20 @@ class EventsSubscriptionsCommand extends Command
             ->get();
 
         $headers = ['ID', 'Event', 'URL', 'Priority', 'Active', 'Failures', 'Last Fired', 'Created'];
-        $rows = $subscriptions->map(fn (Subscription $s): array => [
-            $s->id,
-            $s->event,
-            $s->url,
-            $s->priority,
-            $s->active ? 'Yes' : 'No',
-            $s->failure_count,
-            $s->last_fired_at?->format('Y-m-d H:i') ?? '—',
-            $s->created_at->format('Y-m-d H:i'),
-        ])->toArray();
+        $rows = $subscriptions->map(function (Subscription $s): array {
+            $lastFired = $s->last_fired_at !== null ? $s->last_fired_at->format('Y-m-d H:i') : '—';
+
+            return [
+                $s->id,
+                $s->event,
+                $s->url,
+                $s->priority,
+                $s->active ? 'Yes' : 'No',
+                $s->failure_count,
+                $lastFired,
+                $s->created_at->format('Y-m-d H:i'),
+            ];
+        })->toArray();
 
         $this->table($headers, $rows);
 
