@@ -96,7 +96,7 @@ class WebhookAction implements Triggerable
                     'status' => $response->status(),
                     'response' => $response->body(),
                 ]);
-                $this->recordSubscriptionFailure(is_string($subscriptionId) ? $subscriptionId : null);
+                $this->recordSubscriptionFailure($subscriptionId);
             } elseif (is_string($subscriptionId) && $subscriptionId !== '') {
                 // Record successful delivery
                 $subscription = Subscription::find($subscriptionId);
@@ -108,7 +108,7 @@ class WebhookAction implements Triggerable
                 'error' => $e->getMessage(),
             ]);
 
-            $this->recordSubscriptionFailure(is_string($subscriptionId) ? $subscriptionId : null);
+            $this->recordSubscriptionFailure($subscriptionId);
 
             throw $e;
         }

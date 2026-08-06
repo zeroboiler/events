@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.2.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.3.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -296,7 +296,73 @@ composer lint        # Laravel Pint
 composer ci          # All checks
 ```
 
+## How It Works
+
+```
+┌─────────────┐    fire()     ┌──────────────────┐
+│   Client     │────────────▶│   EventManager    │
+│ (Facade/CLI) │              │   (Orchestrator)  │
+└─────────────┘              └───────┬──────────┘
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    ▼                 ▼                   ▼
+           ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+           │   Exact DB    │  │  Wildcard     │  │  Wildcard     │
+           │   Lookup     │  │  Cache (TTL) │  │  Matcher      │
+           └──────┬───────┘  └──────┬───────┘  └──────┬───────┘
+                  │                 │                   │
+                  └────────┬────────┘                   │
+                           ▼                            │
+                  ┌──────────────┐                      │
+                  │  Condition   │                      │
+                  │  Engine      │                      │
+                  └──────┬───────┘                      │
+                         ▼                              │
+                  ┌──────────────┐◀─────────────────────┘
+                  │  Action      │
+                  │  Resolver    │
+                  └──────┬───────┘
+                         │
+                    ┌────┴────┐
+                    ▼         ▼
+              ┌──────────┐ ┌──────────────┐
+              │   Sync   │ │   Async      │
+              │ Execute  │ │ Queue::push  │
+              └────┬─────┘ └──────┬───────┘
+                   ▼              ▼
+             ┌──────────┐  ┌──────────────┐
+             │ EventLog │  │ DispatchJob  │
+             │  (DB)    │  │ + EventLog   │
+             └──────────┘  └──────────────┘
+```
+
+### Event Flow
+
+1. **Client calls `EventManager::fire($event, $payload)`** — via Facade, direct injection, or CLI command.
+2. **Trigger resolution** — Exact-match triggers are queried from the DB; wildcard triggers are loaded from a 5-minute cache.
+3. **Condition evaluation** — Each matching trigger's conditions are evaluated against the payload using the `ConditionEngine` (15+ operators, dot-notation nesting, ReDoS protection).
+4. **Dispatch** — Synchronous triggers execute immediately and log results; async triggers push a `DispatchTriggerJob` to the queue, creating the `EventLog` inside the job to prevent orphaned entries.
+5. **Webhook delivery** — For subscription triggers, the `WebhookAction` sends an HMAC-SHA256-signed HTTP POST, tracking delivery count and failure count on the subscription model.
+
+### Performance Optimizations
+
+- **Wildcard cache** — Enabled wildcard triggers are cached for 5 minutes, avoiding a DB query on every `fire()` call.
+- **Exact-match fast path** — Non-wildcard events skip the cache entirely and query directly (indexed, fast).
+- **No orphaned logs** — Async jobs create their `EventLog` inside the job handler, so queue failures don't leave orphaned entries.
+- **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
+
 ## Changelog
+
+### v1.3.0
+
+- **Fixed**: PHPStan 9 compliance — replaced `@var` PHPDoc workarounds with `assert()` for container resolution type safety in `EventManager::on()` and `ManagesSubscriptions::subscribe()`
+- **Fixed**: Eliminated assignment-in-condition anti-patterns in `EventsLogCommand` for PHPStan strictness
+- **Fixed**: Null-safe type checks in `EventsRegisterCommand` and `EventsSubscribeCommand` — replaced truthy checks with explicit `!== null && !== ''` guards
+- **Fixed**: `DispatchTriggerJob::failed()` uses `instanceof` check instead of truthy for PHPStan null-safety
+- **Fixed**: `WebhookAction::handle()` simplified nullable `$subscriptionId` pass-through to `recordSubscriptionFailure()`
+- **Added**: `EventManagerParseActionsTest` — comprehensive test coverage for all 5 action string formats (simple, JSON array, JSON object, classes+params, array of objects)
+- **Added**: `EdgeCasesPhase2Test` — nested value access edge cases, strict equality edge cases, WildcardMatcher::extractWildcards edge cases, EscapesWildcardLike percent/complex escape tests
+- **Changed**: Version bumped to 1.3.0
 
 ### v1.2.0
 

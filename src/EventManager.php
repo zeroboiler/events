@@ -47,8 +47,8 @@ class EventManager
      */
     public function on(string $event): TriggerBuilder
     {
-        /** @var TriggerBuilder */
         $builder = $this->app->make(TriggerBuilder::class);
+        assert($builder instanceof TriggerBuilder);
         $builder->on($event);
 
         return $builder;
@@ -174,7 +174,11 @@ class EventManager
 
         // Sort by priority DESC, then by created_at ASC as a tiebreaker for equal priorities.
         // Add trigger id as final tiebreaker for fully deterministic ordering.
-        return $triggers->sortBy(callback: fn (Trigger $t): array => [-$t->priority, $t->created_at?->timestamp ?? 0, $t->id], options: SORT_REGULAR)->values();
+        return $triggers->sortBy(callback: fn (Trigger $t): array => [
+            -$t->priority,
+            $t->created_at?->timestamp ?? 0,
+            $t->id,
+        ], options: SORT_REGULAR)->values();
     }
 
     /**

@@ -26,11 +26,13 @@ class EventsLogCommand extends Command
     {
         $query = EventLog::query();
 
-        if ($triggerId = $this->option('trigger')) {
+        $triggerId = $this->option('trigger');
+        if ($triggerId !== null && $triggerId !== '') {
             $query->where('trigger_id', $triggerId);
         }
 
-        if ($status = $this->option('status')) {
+        $status = $this->option('status');
+        if ($status !== null && $status !== '') {
             if (! in_array($status, EventLog::$statuses, true)) {
                 $this->error('Invalid status. Must be one of: '.implode(', ', EventLog::$statuses));
 

@@ -34,7 +34,8 @@ class EventsRegisterCommand extends Command
 
         $builder = app(EventManager::class)->on($event);
 
-        if ($name) {
+        $name = $this->option('name');
+        if ($name !== null && $name !== '') {
             $builder->name($name);
         }
 

@@ -89,7 +89,7 @@ class DispatchTriggerJob implements ShouldQueue
         // nothing to update — and no orphaned entry left behind.
         if ($this->eventLogId !== null) {
             $log = EventLog::find($this->eventLogId);
-            if ($log) {
+            if ($log instanceof EventLog) {
                 $log->update([
                     'status' => EventLog::STATUS_FAILED,
                     'error' => $exception->getMessage(),

@@ -44,11 +44,11 @@ class EventsSubscribeCommand extends Command
             $builder->async();
         }
 
-        if ($secret) {
+        if ($secret !== null && $secret !== '') {
             $builder->withSecret((string) $secret);
         }
 
-        if ($filter) {
+        if ($filter !== null && $filter !== '') {
             $conditions = json_decode((string) $filter, true);
             if (json_last_error() !== \JSON_ERROR_NONE) {
                 $this->error('Invalid JSON in --filter option: '.json_last_error_msg());
