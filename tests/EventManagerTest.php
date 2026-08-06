@@ -164,7 +164,7 @@ test('fire event respects priority', function (): void {
 
 test('fire model event generates correct event name', function (): void {
     Trigger::factory()->create([
-        'event' => 'App\\Models\\Order.created',
+        'event' => 'App\\\\Models\\\\Order.created',
         'action' => LogOrderCreated::class,
         'conditions' => null,
         'enabled' => true,
@@ -174,12 +174,75 @@ test('fire model event generates correct event name', function (): void {
     $order = new class
     {
         public $id = 123;
+        public $status = 'active';
+
+        public function attributesToArray(): array
+        {
+            return ['id' => $this->id, 'status' => $this->status];
+        }
     };
 
-    EventManagerFacade::fireModel('App\\Models\\Order', 'created', $order);
+    EventManagerFacade::fireModel('App\\\\Models\\\\Order', 'created', $order);
 
     expect(EventLog::count())->toBe(1)
-        ->and(EventLog::first()->event)->toBe('App\\Models\\Order.created');
+        ->and(EventLog::first()->event)->toBe('App\\\\Models\\\\Order.created');
+
+    // Verify model attributes are flattened into the payload root
+    $payload = EventLog::first()->payload;
+    expect($payload)->toBeArray()
+        ->and($payload['id'])->toBe(123)
+        ->and($payload['status'])->toBe('active')
+        ->and($payload['model_class'])->toBe('App\\\\Models\\\\Order')
+        ->and($payload['action'])->toBe('created');
+});
+
+test('fire model event falls back to toArray when attributesToArray is missing', function (): void {
+    Trigger::factory()->create([
+        'event' => 'App\\\\Models\\\\Product.deleted',
+        'action' => LogOrderEvent::class,
+        'conditions' => ['status' => 'active'],
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    $product = new class
+    {
+        public $name = 'Widget';
+        public $status = 'active';
+
+        public function toArray(): array
+        {
+            return ['name' => $this->name, 'status' => $this->status];
+        }
+    };
+
+    EventManagerFacade::fireModel('App\\\\Models\\\\Product', 'deleted', $product);
+
+    expect(EventLog::count())->toBe(1);
+
+    $payload = EventLog::first()->payload;
+    expect($payload['name'])->toBe('Widget')
+        ->and($payload['status'])->toBe('active');
+});
+
+test('fire model event with plain object has empty model data', function (): void {
+    Trigger::factory()->create([
+        'event' => 'StdClass.updated',
+        'action' => SendOrderNotification::class,
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    $obj = new \stdClass();
+
+    EventManagerFacade::fireModel('StdClass', 'updated', $obj);
+
+    expect(EventLog::count())->toBe(1);
+    $payload = EventLog::first()->payload;
+    expect($payload['model_class'])->toBe('StdClass')
+        ->and($payload['action'])->toBe('updated')
+        ->and($payload['model'])->toBe($obj);
 });
 
 test('enable trigger', function (): void {

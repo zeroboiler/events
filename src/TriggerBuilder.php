@@ -82,9 +82,10 @@ final class TriggerBuilder
      * Resolve the final action classes list, merging single action() and actions() calls.
      *
      * If both were called, the single action is prepended to the list to avoid
-     * silently discarding it (BUG-2 fix).
+     * silently discarding it (BUG-2 fix). Deduplication ensures the same class
+     * doesn't appear twice.
      *
-     * @return list<string>
+     * @return list<string> Resolved action class FQNs
      */
     private function resolveActions(): array
     {

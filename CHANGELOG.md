@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.17.0] — 2026-08-06
+
+### Added
+- `EventManagerAdvancedTest` — tests for TriggerBuilder action() + actions() merge/dedup (BUG-2), actionParams encoding variants, executeTrigger exception propagation (log status update + re-throw), fire with no triggers / empty event
+- `fireModel()` tests now verify payload flattening (attributesToArray, toArray fallback, plain object)
+- `#[\Pure]` attribute added to `WildcardMatcher::findMatchingPatterns()`
+- Enhanced docblocks: `fireModel()`, `resolveActions()`, `findMatchingPatterns()`, `extractWildcards()`
+
+### Changed
+- Test file count updated from 37 to 38
+- Pest.php `uses()` updated to include `EventManagerAdvancedTest.php`
+- README test coverage table and test count updated
+
+---
+
 ## [1.16.0] — 2026-08-06
 
 ### Added

@@ -56,8 +56,9 @@ final class WildcardMatcher
      * Find all patterns that match an event.
      *
      * @param  array<int, string>  $patterns
-     * @return array<int, string>
+     * @return list<string> Patterns from the input that match the event
      */
+    #[\Pure]
     public static function findMatchingPatterns(array $patterns, string $event): array
     {
         return array_values(array_filter(
@@ -77,7 +78,7 @@ final class WildcardMatcher
      * extracted. If the pattern contains ** and segments don't align,
      * an empty array is returned.
      *
-     * @return array<int, string>
+     * @return list<string> Extracted wildcard values from the event
      */
     public static function extractWildcards(string $pattern, string $event): array
     {

@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.16.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.17.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -315,7 +315,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (37 test files)
+composer test        # Run Pest test suite (38 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -356,6 +356,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Fire command (JSON parsing, options, edge cases) | ✅ | `EventsFireCommandTest.php` |
 | Redeliver command (validation, status checks) | ✅ | `EventsRedeliverCommandTest.php` |
 | EventManager register alias, empty fire, disable/enable non-existent | ✅ | `EventManagerRegisterAliasTest.php` |
+| TriggerBuilder action merging, executeTrigger exception propagation, empty fire | ✅ | `EventManagerAdvancedTest.php` |
 
 ## How It Works
 
@@ -447,6 +448,15 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Regex condition always false | Pattern exceeds 500 chars or has nested quantifiers | Simplify the regex or increase `ConditionEngine::MAX_REGEX_LENGTH` |
 
 ## Changelog
+
+### v1.17.0
+
+- **Added**: `EventManagerAdvancedTest` — TriggerBuilder action() + actions() merge/dedup (BUG-2), actionParams encoding variants, executeTrigger exception propagation (failed log + re-throw), fire with no triggers / empty event
+- **Added**: Enhanced `fireModel()` tests with attributesToArray verification, toArray fallback, and plain object edge case
+- **Added**: `#[\Pure]` attribute on `WildcardMatcher::findMatchingPatterns()`
+- **Changed**: Enhanced docblocks for `fireModel()`, `resolveActions()`, `findMatchingPatterns()`, `extractWildcards()`
+- **Changed**: Test file count updated from 37 to 38
+- **Changed**: Version bumped to 1.17.0
 
 ### v1.16.0
 

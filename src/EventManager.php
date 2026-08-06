@@ -133,6 +133,11 @@ final class EventManager
 
     /**
      * Fire an event for a model action.
+     *
+     * Constructs the event name as `{modelClass}.{action}` (e.g. `App\Models\Order.created`).
+     * The model's attributes are automatically flattened into the payload root so conditions
+     * can reference them directly (e.g. `status == 'active'` instead of `model.status == 'active'`).
+     * The original model object and metadata are also included in the payload.
      */
     public function fireModel(string $modelClass, string $action, object $model): void
     {
