@@ -32,15 +32,25 @@ class EventManager
     protected const WILDCARD_TRIGGER_CACHE_KEY = 'zeroboiler:events:enabled_wildcard_triggers';
 
     /**
-     * Cache TTL in seconds (5 minutes).
+     * Default cache TTL in seconds (5 minutes).
      */
-    protected const TRIGGER_CACHE_TTL = 300;
+    protected const DEFAULT_TRIGGER_CACHE_TTL = 300;
 
     public function __construct(
         protected ConditionEngine $conditionEngine,
         protected ActionResolver $actionResolver,
         protected Container $app,
     ) {}
+
+    /**
+     * Get the wildcard trigger cache TTL from config or use default.
+     */
+    protected function getTriggerCacheTtl(): int
+    {
+        $ttl = $this->app->make('config')->get('events.wildcard_cache_ttl', self::DEFAULT_TRIGGER_CACHE_TTL);
+
+        return is_int($ttl) && $ttl > 0 ? $ttl : self::DEFAULT_TRIGGER_CACHE_TTL;
+    }
 
     /**
      * Start building a new trigger.
@@ -203,7 +213,7 @@ class EventManager
 
         assert($result instanceof Collection);
 
-        Cache::put(self::WILDCARD_TRIGGER_CACHE_KEY, $result, self::TRIGGER_CACHE_TTL);
+        Cache::put(self::WILDCARD_TRIGGER_CACHE_KEY, $result, $this->getTriggerCacheTtl());
 
         return $result;
     }
