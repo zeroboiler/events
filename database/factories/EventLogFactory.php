@@ -42,14 +42,14 @@ class EventLogFactory extends Factory
 
     public function pending(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => EventLog::STATUS_PENDING,
         ]);
     }
 
     public function dispatched(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => EventLog::STATUS_DISPATCHED,
         ]);
     }

@@ -61,7 +61,7 @@ class EventsLogCommand extends Command
                 $triggerName,
                 $this->formatStatus($log->status),
                 $log->duration_ms !== null ? "{$log->duration_ms}ms" : 'N/A',
-                $log->created_at->format('Y-m-d H:i:s'),
+                $log->created_at?->format('Y-m-d H:i:s') ?? '—',
             ];
         })->toArray();
 

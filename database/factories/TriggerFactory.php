@@ -42,28 +42,28 @@ class TriggerFactory extends Factory
 
     public function async(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'async' => true,
         ]);
     }
 
     public function sync(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'async' => false,
         ]);
     }
 
     public function enabled(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'enabled' => true,
         ]);
     }
 
     public function disabled(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'enabled' => false,
         ]);
     }

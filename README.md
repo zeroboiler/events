@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.8.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.9.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -364,6 +364,24 @@ composer ci          # All checks
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
 ## Changelog
+
+### v1.9.0
+
+- **Fixed**: `EventsLogCommand` now uses null-safe operator (`?->`) for `$log->created_at` — prevents crash if `created_at` is null for in-memory log entries
+- **Fixed**: Factory state closures in `TriggerFactory` and `EventLogFactory` now have explicit `: array` return type annotations for PHPStan 9 compliance
+- **Added**: `EventsComprehensiveTest` — comprehensive test suite with 60+ new tests covering:
+  - DomainEvent serialization roundtrip, invalid UUID/datetime handling, explicit constructor args
+  - WildcardMatcher edge cases: empty pattern, double-star in middle, regex special chars, findMatchingPatterns
+  - ConditionEngine full operator coverage: `>`, `>=`, `<`, `<=`, `=`, `===`, `!=`, `!==`, `in`, `not_in`, `contains`, `not_contains`, `between`, `null`, `not_null`, `empty`, `not_empty`, `starts_with`, `ends_with`, `matches` (with ReDoS protection), nested dot-notation, null guards, AND logic
+  - Subscription model: `matchesEvent` (exact + wildcard + cross-segment), `hasExceededFailures` (default + custom), `recordDelivery`, `recordFailure`, `resetFailures`, `signPayload` (null/empty/valid/config algorithm), `scopeActive`
+  - DispatchTriggerJob config-driven `tries`/`backoff` constructor tests
+  - WebhookAction missing/empty URL validation
+  - TriggerBuilder: action params encoding (single + multiple actions), name generation, event "0" rejection
+  - EventManager cache TTL config (normal + fallback)
+  - Event statistics: empty state, aggregate values, `since` parameter
+  - Log purge: completed-only, pending skip, include-pending
+  - EscapesWildcardLike: asterisk, percent, underscore, backslash escaping, multiple wildcards
+- **Changed**: Version bumped to 1.9.0
 
 ### v1.8.0
 
