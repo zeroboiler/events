@@ -8,3 +8,5 @@ node_modules/
 composer.lock
 .DS_Store
 *.log
+phpstan.neon
+phpstan-baseline.neon

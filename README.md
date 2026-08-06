@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.20.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.21.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -456,7 +456,17 @@ composer ci          # All checks (lint → analyse → rector → test)
 
 ## Changelog
 
-### v1.19.0
+### v1.21.0
+
+- **Added**: Empty event name validation in `EventsFireCommand` — rejects empty or `"0"` event names with clear error message before attempting DB lookup
+- **Added**: Test for empty event name rejection in `EventsFireCommandTest`
+- **Removed**: Duplicate `rector/rector-laravel` dev dependency — only `driftingly/rector-laravel` is required (same functionality, actively maintained)
+- **Changed**: `phpstan.neon.dist` now includes `Call to an undefined static method` in `ignoreErrors` — Eloquent's `__callStatic` magic methods (find, where, count, etc.) are not resolvable by PHPStan without Larastan; this eliminates the need for a separate phpstan-baseline.neon
+- **Changed**: `phpstan-baseline.neon` removed from git tracking (added to `.gitignore`) — baseline is now local-only; all suppressions are in the shared config
+- **Changed**: `.gitignore` updated to exclude `phpstan.neon` (local overrides) and `phpstan-baseline.neon` (generated baselines)
+- **Changed**: Version bumped to 1.21.0
+
+### v1.20.0
 
 - **Added**: `EventsListCommandTest` — unit tests for list command (empty, pagination, event filter, enabled/disabled filter, per-page)
 - **Added**: `EventsLogCommandTest` — unit tests for log command (empty, display, trigger/status filters, invalid status rejection, limit)

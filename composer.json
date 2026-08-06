@@ -3,7 +3,7 @@
     "description": "DB-driven dynamic event manager for Laravel — manage triggers via admin panel, API, or CLI without code changes",
     "type": "library",
     "license": "proprietary",
-    "version": "1.20.0",
+    "version": "1.21.0",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
@@ -26,7 +26,6 @@
         "laravel/pint": "^1.29",
         "rector/rector": "^2.5",
         "fakerphp/faker": "^1.24",
-        "rector/rector-laravel": "^2.5",
         "driftingly/rector-laravel": "^2.5"
     },
     "autoload": {

@@ -5,8 +5,6 @@ parameters:
     level: 9
     paths:
         - src/
-    excludePaths:
-        - tests/*
     bootstrapFiles:
         - vendor/autoload.php
     checkMissingIterableValueType: false
@@ -15,3 +13,5 @@ parameters:
     ignoreErrors:
         # Eloquent model magic properties are handled via @property annotations
         - '#Access to an undefined property#'
+        # Eloquent model static methods (__callStatic) are not resolvable without Larastan
+        - '#Call to an undefined static method#'

@@ -9,3 +9,5 @@ parameters:
     ignoreErrors:
         # Eloquent model magic properties are handled via @property annotations
         - '#Access to an undefined property#'
+        # Eloquent model static methods (__callStatic) are not resolvable without Larastan
+        - '#Call to an undefined static method#'

@@ -30,6 +30,16 @@ describe('EventsFireCommand', function (): void {
         expect($command->getDescription())->toBe('Manually fire an event');
     });
 
+    it('rejects empty event name', function (): void {
+        $command = new EventsFireCommand;
+        $command->setLaravel($this->app);
+        $command->setApplication($this->app->make('Illuminate\Contracts\Console\Kernel'));
+
+        // Simulate calling with empty event argument via artisan runner
+        $tester = $this->artisan('zeroboiler:events:fire', ['event' => '']);
+        $tester->assertFailed();
+    });
+
     it('accepts event argument and payload options', function (): void {
         $command = new EventsFireCommand;
         $definition = $command->getDefinition();

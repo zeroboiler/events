@@ -24,6 +24,12 @@ final class EventsFireCommand extends Command
     {
         $event = (string) $this->argument('event');
 
+        if ($event === '' || $event === '0') {
+            $this->error('Event name is required.');
+
+            return Command::FAILURE;
+        }
+
         $payload = [];
 
         // Process --json option if provided (takes precedence over --payload)
