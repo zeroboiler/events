@@ -9,10 +9,13 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Console;
 
 use Illuminate\Console\Command;
+use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\Models\Subscription;
 
 class EventsSubscriptionsCommand extends Command
 {
+    use EscapesWildcardLike;
+
     /** @var string */
     protected $signature = 'zeroboiler:events:subscriptions
                            {--event= : Filter by event name (supports wildcards)}
@@ -30,14 +33,11 @@ class EventsSubscriptionsCommand extends Command
 
         $eventFilter = $this->option('event');
         if ($eventFilter !== null && $eventFilter !== '') {
-            $eventFilterStr = (string) $eventFilter;
-            if (str_contains($eventFilterStr, '*')) {
-                // Escape SQL LIKE special characters before converting wildcards
-                $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $eventFilterStr);
-                $likePattern = str_replace('*', '%', $escaped);
+            $likePattern = $this->wildcardToLike((string) $eventFilter);
+            if ($likePattern !== null) {
                 $query->where('event', 'like', $likePattern);
             } else {
-                $query->where('event', $eventFilterStr);
+                $query->where('event', (string) $eventFilter);
             }
         }
 
