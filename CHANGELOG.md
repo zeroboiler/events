@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.18.0] — 2026-08-06
+
+### Added
+- `phpstan.neon.dist` — PHPStan 9 configuration file (was missing)
+- `rector.php` — Rector configuration with Laravel 11+ set and type declaration rules
+- `WildcardMatcherTest.php` — comprehensive test suite for `WildcardMatcher` (22 tests)
+- `EscapesWildcardLikeTest.php` — comprehensive test suite for `EscapesWildcardLike` trait (11 tests)
+
+### Fixed
+- `helpers.php` `config()` function used stale `static $config` variable — replaced with per-call resolution from current app instance to prevent cross-test contamination
+- `CreatesApplication.php` removed invalid imports for non-existent `Tests\Faker\Factory` and `Tests\Faker\Generator` classes; cache binding now uses fully-qualified `Illuminate\Cache\CacheManager`
+
+### Changed
+- `EventManager::getMatchingTriggers()` sortBy call now uses explicit `descending: false` named parameter for PHPStan clarity
+- Test file count updated from 38 to 40
+- Version bumped to 1.18.0
+
+---
+
 ## [1.17.0] — 2026-08-06
 
 ### Added

@@ -57,21 +57,19 @@ if (! function_exists('app')) {
 if (! function_exists('config')) {
     function config(?string $key = null, mixed $default = null): mixed
     {
-        static $config = null;
-
-        if ($config === null && function_exists('app')) {
+        // Always resolve from the current app instance to avoid stale
+        // static caching between test runs (each test creates a fresh app).
+        if (function_exists('app')) {
             $app = app();
             if ($app && isset($app['config'])) {
-                $config = $app['config'];
+                $repo = $app['config'];
+                if ($key === null) {
+                    return $repo;
+                }
+                if ($repo instanceof Repository) {
+                    return $repo->get($key, $default);
+                }
             }
-        }
-
-        if ($key === null) {
-            return $config;
-        }
-
-        if ($config instanceof Repository) {
-            return $config->get($key, $default);
         }
 
         return $default;

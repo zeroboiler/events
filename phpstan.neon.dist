@@ -1,0 +1,11 @@
+parameters:
+    level: 9
+    paths:
+        - src
+    bootstrapFiles:
+        - vendor/autoload.php
+    checkMissingIterableValueType: false
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        # Eloquent model magic properties are handled via @property annotations
+        - '#Access to an undefined property#'

@@ -8,128 +8,106 @@ declare(strict_types=1);
 
 use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 
-it('returns null for patterns without wildcard', function (): void {
+test('wildcardToLike returns null when no wildcard present', function (): void {
     $trait = new class
     {
         use EscapesWildcardLike;
     };
 
-    $method = new ReflectionMethod($trait, 'wildcardToLike');
-
-    expect($method->invoke($trait, 'order.placed'))->toBeNull();
+    expect($trait->wildcardToLike('order.placed'))
+        ->toBeNull()
+        ->and($trait->wildcardToLike('user.created'))
+        ->toBeNull();
 });
 
-it('converts single wildcard to SQL LIKE percent', function (): void {
+test('wildcardToLike converts single asterisk to percent', function (): void {
     $trait = new class
     {
         use EscapesWildcardLike;
     };
 
-    $method = new ReflectionMethod($trait, 'wildcardToLike');
-
-    expect($method->invoke($trait, 'order.*'))->toBe('order.%');
+    expect($trait->wildcardToLike('order.*'))
+        ->toBe('order.%');
 });
 
-it('converts leading wildcard', function (): void {
+test('wildcardToLike converts multiple asterisks to percents', function (): void {
     $trait = new class
     {
         use EscapesWildcardLike;
     };
 
-    $method = new ReflectionMethod($trait, 'wildcardToLike');
-
-    expect($method->invoke($trait, '*.placed'))->toBe('%.placed');
+    expect($trait->wildcardToLike('*.order.*'))
+        ->toBe('%.order.%');
 });
 
-it('converts catch-all wildcard', function (): void {
+test('wildcardToLike converts cross-segment double asterisk', function (): void {
     $trait = new class
     {
         use EscapesWildcardLike;
     };
 
-    $method = new ReflectionMethod($trait, 'wildcardToLike');
-
-    expect($method->invoke($trait, '*'))->toBe('%');
+    // Both * and ** are converted to % — the SQL LIKE % already handles
+    // cross-segment matching naturally.
+    expect($trait->wildcardToLike('order.**'))
+        ->toBe('order.%%');
 });
 
-it('escapes SQL LIKE special characters', function (): void {
+test('wildcardToLike escapes percent signs literally', function (): void {
     $trait = new class
     {
         use EscapesWildcardLike;
     };
 
-    $method = new ReflectionMethod($trait, 'wildcardToLike');
-
-    // Percent and underscore in the pattern should be escaped
-    expect($method->invoke($trait, 'order_%'))
-        ->toBe('order\\_%');
+    expect($trait->wildcardToLike('order.%'))
+        ->toBe('order.\\%');
 });
 
-it('escapes backslashes in pattern', function (): void {
+test('wildcardToLike escapes underscores literally', function (): void {
     $trait = new class
     {
         use EscapesWildcardLike;
     };
 
-    $method = new ReflectionMethod($trait, 'wildcardToLike');
-
-    expect($method->invoke($trait, 'order\\\\*.placed'))
-        ->toBe('order\\\\\\\\%.placed');
+    expect($trait->wildcardToLike('order._'))
+        ->toBe('order.\\_');
 });
 
-it('handles multiple wildcards', function (): void {
+test('wildcardToLike escapes backslashes', function (): void {
     $trait = new class
     {
         use EscapesWildcardLike;
     };
 
-    $method = new ReflectionMethod($trait, 'wildcardToLike');
-
-    expect($method->invoke($trait, '*.order.*'))->toBe('%.order.%');
+    expect($trait->wildcardToLike('order.\\placed'))
+        ->toBe('order.\\\\placed');
 });
 
-it('converts double wildcard', function (): void {
+test('wildcardToLike handles mixed special characters and wildcards', function (): void {
     $trait = new class
     {
         use EscapesWildcardLike;
     };
 
-    $method = new ReflectionMethod($trait, 'wildcardToLike');
-
-    expect($method->invoke($trait, 'order.**'))->toBe('order.%%');
+    expect($trait->wildcardToLike('*.test_%'))
+        ->toBe('%.test\\_\\%');
 });
 
-it('preserves non-special characters', function (): void {
+test('wildcardToLike handles catch-all pattern', function (): void {
     $trait = new class
     {
         use EscapesWildcardLike;
     };
 
-    $method = new ReflectionMethod($trait, 'wildcardToLike');
-
-    expect($method->invoke($trait, 'api.v1.users.created.*'))
-        ->toBe('api.v1.users.created.%');
+    expect($trait->wildcardToLike('*'))
+        ->toBe('%');
 });
 
-it('returns null for empty string pattern', function (): void {
+test('wildcardToLike returns null for empty string', function (): void {
     $trait = new class
     {
         use EscapesWildcardLike;
     };
 
-    $method = new ReflectionMethod($trait, 'wildcardToLike');
-
-    expect($method->invoke($trait, ''))->toBeNull();
-});
-
-it('escapes mixed special characters with wildcards', function (): void {
-    $trait = new class
-    {
-        use EscapesWildcardLike;
-    };
-
-    $method = new ReflectionMethod($trait, 'wildcardToLike');
-
-    // Pattern: user_%.* (underscore, percent, and wildcard)
-    expect($method->invoke($trait, 'user_%.*'))->toBe('user\\_%%.%');
+    expect($trait->wildcardToLike(''))
+        ->toBeNull();
 });

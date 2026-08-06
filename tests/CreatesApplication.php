@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events\Tests;
 
-use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
@@ -22,8 +21,6 @@ use Illuminate\Log\LogManager;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Support\Facades\Facade;
 use ZeroBoiler\Events\EventsServiceProvider;
-use ZeroBoiler\Events\Tests\Faker\Factory;
-use ZeroBoiler\Events\Tests\Faker\Generator;
 
 trait CreatesApplication
 {
@@ -145,18 +142,14 @@ trait CreatesApplication
         $app->instance(HttpClientFactory::class, $httpClientFactory);
 
         // Bind cache service so Cache facade works in tests
-        $cacheManager = new CacheManager($app);
-        $app->singleton('cache', fn (): CacheManager => $cacheManager);
+        $cacheManager = new \Illuminate\Cache\CacheManager($app);
+        $app->singleton('cache', fn (): \Illuminate\Cache\CacheManager => $cacheManager);
         $app->alias('cache', \Illuminate\Contracts\Cache\Factory::class);
         $app->instance(\Illuminate\Contracts\Cache\Repository::class, $cacheManager->store());
 
         // Bind Schema facade - get grammar from the connection
         $app->instance('db.schema', $db->connection()->getSchemaBuilder());
         $app->alias('db.schema', Builder::class);
-
-        // Bind Faker for factories
-        $app->singleton(Generator::class, fn () => Factory::create('en_US'));
-        $app->alias(Generator::class, 'faker');
 
         // Boot facades
         Facade::setFacadeApplication($app);

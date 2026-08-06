@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.17.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.18.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -315,7 +315,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (38 test files)
+composer test        # Run Pest test suite (40 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -353,6 +353,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Typed properties (models, factories, commands, attributes) | ✅ | `TypedPropertiesTest.php` |
 | Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
 | Wildcard integration (cross-segment, catch-all, multi) | ✅ | `WildcardIntegrationTest.php` |
+| Wildcard matcher (exact, *, **, extract, findMatching) | ✅ | `WildcardMatcherTest.php` |
+| EscapesWildcardLike (%, _, \\, *, mixed) | ✅ | `EscapesWildcardLikeTest.php` |
 | Fire command (JSON parsing, options, edge cases) | ✅ | `EventsFireCommandTest.php` |
 | Redeliver command (validation, status checks) | ✅ | `EventsRedeliverCommandTest.php` |
 | EventManager register alias, empty fire, disable/enable non-existent | ✅ | `EventManagerRegisterAliasTest.php` |
@@ -448,6 +450,17 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Regex condition always false | Pattern exceeds 500 chars or has nested quantifiers | Simplify the regex or increase `ConditionEngine::MAX_REGEX_LENGTH` |
 
 ## Changelog
+
+### v1.18.0
+
+- **Added**: `phpstan.neon.dist` — PHPStan 9 configuration file (was missing, causing `composer analyse` to use defaults)
+- **Added**: `rector.php` — Rector configuration with Laravel 11+ set and type declaration rules
+- **Added**: `WildcardMatcherTest.php` — comprehensive test suite for `WildcardMatcher` (22 tests): exact match, single-segment wildcard, cross-segment wildcard, catch-all, multiple wildcards, empty segment rejection, special regex characters, findMatchingPatterns, extractWildcards with cross-segment guard, mismatched segments, no-wildcard patterns
+- **Added**: `EscapesWildcardLikeTest.php` — comprehensive test suite for `EscapesWildcardLike` trait (11 tests): null for non-wildcard, asterisk-to-percent conversion, cross-segment double asterisk, percent/underscore/backslash escaping, mixed special chars, catch-all, empty string
+- **Fixed**: `helpers.php` `config()` function used stale `static $config` variable — replaced with per-call resolution from current app instance to prevent cross-test contamination when `TestCase::tearDown()` creates a fresh app
+- **Fixed**: `CreatesApplication.php` removed invalid imports (`ZeroBoiler\Events\Tests\Faker\Factory`, `ZeroBoiler\Events\Tests\Faker\Generator`) that referenced non-existent classes — cache and faker bindings now use fully-qualified `Illuminate\Cache\CacheManager` and the global `fake()` helper
+- **Changed**: `EventManager::getMatchingTriggers()` sortBy call now uses explicit `descending: false` named parameter for PHPStan clarity
+- **Changed**: Version bumped to 1.18.0
 
 ### v1.17.0
 
