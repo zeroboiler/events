@@ -47,7 +47,10 @@ class EventManager
      */
     protected function getTriggerCacheTtl(): int
     {
-        $ttl = $this->app->make('config')->get('events.wildcard_cache_ttl', self::DEFAULT_TRIGGER_CACHE_TTL);
+        $config = $this->app->get('config');
+        assert($config instanceof \Illuminate\Contracts\Config\Repository);
+
+        $ttl = $config->get('events.wildcard_cache_ttl', self::DEFAULT_TRIGGER_CACHE_TTL);
 
         return is_int($ttl) && $ttl > 0 ? $ttl : self::DEFAULT_TRIGGER_CACHE_TTL;
     }

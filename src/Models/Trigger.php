@@ -41,6 +41,9 @@ class Trigger extends Model
     use SoftDeletes;
 
     /** @var string */
+    protected $table = 'triggers';
+
+    /** @var string */
     protected $keyType = 'string';
 
     /** @var bool */
@@ -63,6 +66,7 @@ class Trigger extends Model
         'deleted_at',
     ];
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

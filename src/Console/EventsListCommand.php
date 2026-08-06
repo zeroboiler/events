@@ -75,7 +75,7 @@ class EventsListCommand extends Command
             $t->async ? 'Yes' : 'No',
             $t->priority,
             $t->enabled ? 'Yes' : 'No',
-            $t->created_at->format('Y-m-d H:i'),
+            $t->created_at?->format('Y-m-d H:i') ?? '—',
         ])->toArray();
 
         $this->table($headers, $rows);

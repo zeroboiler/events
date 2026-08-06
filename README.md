@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.7.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.8.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -264,6 +264,16 @@ EventManager::invalidateTriggerCache();
 
 ## Architecture
 
+### Service Container Bindings
+
+| Service | Binding | Lifetime |
+|---|---|---|
+| `EventManager` | Singleton | Shared across app |
+| `ConditionEngine` | Singleton | Shared across app |
+| `ActionResolver` | Singleton | Shared across app |
+| `SubscriptionBuilder` | Transient | Fresh instance per resolution |
+| `EventManager` (Facade) | `getFacadeAccessor()` → `EventManager::class` | Resolved from container |
+
 ### Core Classes
 
 - **`EventManager`** — Central orchestrator. Fires events, matches triggers, dispatches actions.
@@ -354,6 +364,22 @@ composer ci          # All checks
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
 ## Changelog
+
+### v1.8.0
+
+- **Fixed**: `EventManager::getTriggerCacheTtl()` now uses `$this->app->get('config')` with `assert()` type guard instead of `$this->app->make('config')->get()` — fixes PHPStan level 9 `mixed` return type from container
+- **Fixed**: `EventsListCommand` and `EventsSubscriptionsCommand` now use null-safe operator for `$model->created_at?->format()` instead of direct property access — prevents null pointer when `created_at` is null
+- **Added**: Explicit `$table = 'triggers'` property on `Trigger` model for consistency with `Subscription` model
+- **Added**: `#[\Override]` attribute on all model `boot()` methods (`Trigger`, `EventLog`, `Subscription`) for PHPStan override verification
+- **Added**: `ServiceProviderBindingTest` — comprehensive test suite covering:
+  - Singleton binding verification (EventManager, ConditionEngine, ActionResolver)
+  - Transient binding verification (SubscriptionBuilder)
+  - ConditionEngineContract implementation check
+  - Facade accessor and root resolution
+  - Config merge completeness (all keys, types, and values)
+  - Model metadata (table names, key types, incrementing, soft deletes)
+  - Interface method existence checks
+- **Changed**: Version bumped to 1.8.0
 
 ### v1.7.0
 

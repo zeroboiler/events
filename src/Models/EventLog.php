@@ -60,6 +60,7 @@ class EventLog extends Model
         'deleted_at',
     ];
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

@@ -77,7 +77,7 @@ class EventsSubscriptionsCommand extends Command
                 $s->active ? 'Yes' : 'No',
                 $s->failure_count,
                 $lastFired,
-                $s->created_at->format('Y-m-d H:i'),
+                $s->created_at?->format('Y-m-d H:i') ?? '—',
             ];
         })->toArray();
 
