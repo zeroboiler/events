@@ -23,7 +23,7 @@ return [
     ],
 
     'queue' => [
-        'connection' => env('EVENTS_QUEUE_CONNECTION', config('queue.default')),
+        'connection' => env('EVENTS_QUEUE_CONNECTION', 'default'),
         'queue' => env('EVENTS_QUEUE', 'default'),
     ],
 

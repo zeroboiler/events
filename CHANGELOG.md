@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.20.0] — 2026-08-06
+
+### Added
+- `WebhookActionTest.php` — comprehensive test suite for `WebhookAction` (14 tests): URL validation, payload signing, HMAC headers, failure recording, auto-deactivation, edge cases
+
+### Fixed
+- `config/events.php` — `queue.connection` default used `config('queue.default')` inside `env()` which is invalid; changed to `'default'` string fallback
+- `WebhookAction::handle()` — eliminated duplicate `Subscription::find()` query on success path by reusing the already-loaded subscription reference
+- `phpstan.neon` — added missing `bootstrapFiles`, `checkMissingIterableValueType: false`, and `Access to an undefined property` ignore rules from `.neon.dist`
+
+### Changed
+- `Pest.php` — registered `WebhookActionTest.php` in test suite
+- Version bumped to 1.20.0
+
+---
+
 ## [1.18.0] — 2026-08-06
 
 ### Added

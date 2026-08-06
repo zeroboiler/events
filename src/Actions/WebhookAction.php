@@ -82,7 +82,9 @@ final class WebhookAction implements Triggerable
             $headers = [];
         }
 
-        // If a subscription exists, sign the payload with HMAC
+        // If a subscription exists, sign the payload with HMAC and keep
+        // the reference so we can record delivery without a second query.
+        $subscription = null;
         if (is_string($subscriptionId) && $subscriptionId !== '') {
             $subscription = Subscription::find($subscriptionId);
             if ($subscription !== null) {
@@ -108,10 +110,9 @@ final class WebhookAction implements Triggerable
                     'response' => $response->body(),
                 ]);
                 $this->recordSubscriptionFailure($subscriptionId);
-            } elseif (is_string($subscriptionId) && $subscriptionId !== '') {
-                // Record successful delivery
-                $subscription = Subscription::find($subscriptionId);
-                $subscription?->recordDelivery();
+            } elseif ($subscription !== null) {
+                // Record successful delivery using the already-loaded subscription
+                $subscription->recordDelivery();
             }
         } catch (Throwable $e) {
             Log::error('Webhook dispatch failed', [
