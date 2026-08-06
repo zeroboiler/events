@@ -22,7 +22,7 @@ use ZeroBoiler\Events\Console\EventsSubscribeCommand;
 use ZeroBoiler\Events\Console\EventsSubscriptionsCommand;
 use ZeroBoiler\Events\Console\EventsUnsubscribeCommand;
 
-class EventsServiceProvider extends ServiceProvider
+final class EventsServiceProvider extends ServiceProvider
 {
     #[\Override]
     public function register(): void
