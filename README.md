@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.21.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.22.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -315,7 +315,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (45 test files)
+composer test        # Run Pest test suite (46 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -350,6 +350,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Integration (full fire flow) | ✅ | `EventManagerIntegrationTest.php` |
 | Facade proxy, cache invalidation, ActionResolver errors | ✅ | `EventsFacadeProxyTest.php` |
 | Production readiness | ✅ | `ProductionReadyTest.php` |
+| Contract binding (singleton, interface resolution) | ✅ | `ContractBindingTest.php` |
 | Typed properties (models, factories, commands, attributes) | ✅ | `TypedPropertiesTest.php` |
 | Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
 | Wildcard integration (cross-segment, catch-all, multi) | ✅ | `WildcardIntegrationTest.php` |
@@ -455,6 +456,16 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Regex condition always false | Pattern exceeds 500 chars or has nested quantifiers | Simplify the regex or increase `ConditionEngine::MAX_REGEX_LENGTH` |
 
 ## Changelog
+
+### v1.22.0
+
+- **Added**: `ContractBindingTest` — tests for `ConditionEngineContract` binding via container, contract/concrete singleton identity, constructor parameter type verification for `EventManager`/`DispatchTriggerJob`/`DomainEvent`, `WebhookAction` config-driven methods, config default value verification, and strict-types enforcement across all `src/` files
+- **Added**: `#[\Pure]` attribute on `WildcardMatcher::extractWildcards()` — consistent with `matches()` and `findMatchingPatterns()`
+- **Added**: `#[\Override]` attribute on `casts()` methods in all 3 models (`Trigger`, `EventLog`, `Subscription`)
+- **Fixed**: `TypedPropertiesTest.php` had double-escaped `use` import statements (`ZeroBoiler\\\\Events\\\\...`) — corrected to single backslashes (`ZeroBoiler\\Events\\...`)
+- **Fixed**: `phpstan.neon` included `phpstan-baseline.neon` which is gitignored — replaced with `includes: phpstan.neon.dist` for local IDE integration
+- **Fixed**: `phpstan.neon.dist` was missing `treatPhpDocTypesAsCertain: false` — added for consistency with `phpstan.neon`
+- **Changed**: Version bumped to 1.22.0
 
 ### v1.21.0
 

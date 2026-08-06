@@ -80,6 +80,7 @@ final class WildcardMatcher
      *
      * @return list<string> Extracted wildcard values from the event
      */
+    #[\Pure]
     public static function extractWildcards(string $pattern, string $event): array
     {
         // Cross-segment wildcards don't have a fixed number of parts — can't extract reliably

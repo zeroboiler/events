@@ -130,6 +130,7 @@ class Trigger extends Model
 
     /**
      * @return array<string, string> */
+    #[\Override]
     protected function casts(): array
     {
         return [

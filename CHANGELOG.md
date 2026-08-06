@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.22.0] — 2026-08-06
+
+### Added
+- `ContractBindingTest.php` — contract binding, constructor types, config defaults, strict-types enforcement
+- `#[\Pure]` attribute on `WildcardMatcher::extractWildcards()`
+- `#[\Override]` attribute on `casts()` methods in `Trigger`, `EventLog`, `Subscription`
+
+### Fixed
+- `TypedPropertiesTest.php` double-escaped `use` imports corrected
+- `phpstan.neon` now includes `phpstan.neon.dist` instead of gitignored baseline
+- `phpstan.neon.dist` added missing `treatPhpDocTypesAsCertain: false`
+
+---
+
 ## [1.20.0] — 2026-08-06
 
 ### Added

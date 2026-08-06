@@ -5,6 +5,7 @@ parameters:
     bootstrapFiles:
         - vendor/autoload.php
     checkMissingIterableValueType: false
+    treatPhpDocTypesAsCertain: false
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         # Eloquent model magic properties are handled via @property annotations

@@ -1,17 +1,6 @@
 includes:
-    - phpstan-baseline.neon
+    - phpstan.neon.dist
 
 parameters:
-    level: 9
-    paths:
-        - src/
-    bootstrapFiles:
-        - vendor/autoload.php
-    checkMissingIterableValueType: false
-    treatPhpDocTypesAsCertain: false
-    reportUnmatchedIgnoredErrors: false
-    ignoreErrors:
-        # Eloquent model magic properties are handled via @property annotations
-        - '#Access to an undefined property#'
-        # Eloquent model static methods (__callStatic) are not resolvable without Larastan
-        - '#Call to an undefined static method#'
+    # Local overrides only — keep this file for IDE integration.
+    # All shared config lives in phpstan.neon.dist.
