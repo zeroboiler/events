@@ -3,7 +3,7 @@
     "description": "DB-driven dynamic event manager for Laravel — manage triggers via admin panel, API, or CLI without code changes",
     "type": "library",
     "license": "proprietary",
-    "version": "1.6.0",
+    "version": "1.7.0",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {

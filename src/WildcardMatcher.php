@@ -71,10 +71,20 @@ class WildcardMatcher
      * For example, with pattern "user.*.created" and event "user.profile.created",
      * returns ["profile"].
      *
+     * Note: ** (cross-segment) wildcards are NOT extracted as they match
+     * variable-length segments. Only single-segment (*) wildcards are
+     * extracted. If the pattern contains ** and segments don't align,
+     * an empty array is returned.
+     *
      * @return array<int, string>
      */
     public static function extractWildcards(string $pattern, string $event): array
     {
+        // Cross-segment wildcards don't have a fixed number of parts — can't extract reliably
+        if (str_contains($pattern, '**')) {
+            return [];
+        }
+
         $parts = explode('.', $pattern);
         $eventParts = explode('.', $event);
 

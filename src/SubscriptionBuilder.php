@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use ZeroBoiler\Events\Actions\WebhookAction;
 use ZeroBoiler\Events\Models\Subscription;
@@ -127,8 +128,9 @@ class SubscriptionBuilder
             throw new \InvalidArgumentException('Webhook URL must be a valid URL');
         }
 
-        // Generate a secret if none was provided
-        if ($this->secret === null) {
+        // Generate a secret if none was provided and auto_generate_secret is enabled
+        $autoGenerate = Config::get('events.subscriptions.auto_generate_secret', true);
+        if ($this->secret === null && $autoGenerate !== false) {
             $this->secret = 'whsec_'.Str::random(32);
         }
 

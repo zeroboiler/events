@@ -337,10 +337,13 @@ class EventManager
         if (is_array($decoded)) {
             // Handle {"classes": [...], "params": {...}} — multiple actions with shared params
             if (isset($decoded['classes']) && is_array($decoded['classes'])) {
-                $params = $decoded['params'] ?? [];
+                $params = is_array($decoded['params'] ?? null) ? $decoded['params'] : [];
 
                 return array_map(
-                    fn (string $cls): array => ['class' => $cls, 'params' => $params],
+                    fn (mixed $cls): array => [
+                        'class' => is_string($cls) ? $cls : '',
+                        'params' => $params,
+                    ],
                     $decoded['classes'],
                 );
             }

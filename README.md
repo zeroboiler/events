@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.6.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.7.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -354,6 +354,23 @@ composer ci          # All checks
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
 ## Changelog
+
+### v1.7.0
+
+- **Fixed**: `EventManager::parseActions()` now type-checks `classes` array entries as `mixed` instead of assuming `string`, and guards `params` with `is_array()` check — fixes PHPStan level 9 potential type mismatch when JSON contains non-string values
+- **Fixed**: `WildcardMatcher::extractWildcards()` now returns empty array for patterns containing `**` (cross-segment wildcards) since they match variable-length segments and can't reliably extract values
+- **Fixed**: `SubscriptionBuilder::save()` now respects the `events.subscriptions.auto_generate_secret` config flag — setting it to `false` prevents secret auto-generation when none is explicitly provided
+- **Added**: `EventsEdgeCaseTest` — comprehensive test suite covering:
+  - `EventManager::fireModel()` with `attributesToArray()`, `toArray()` fallback, and condition filtering
+  - `EventManager::executeTrigger()` failure re-throw behavior with log status update
+  - `EventManager::executeTrigger()` with multiple actions (JSON array format)
+  - `WildcardMatcher::extractWildcards()` with `**` patterns, mismatched segments, and non-matching patterns
+  - `SubscriptionBuilder` auto_generate_secret config (default true, false, and provided secret override)
+  - `Trigger` and `Subscription` soft delete behavior (exclude from queries, restore)
+  - `EventManager::listSubscriptions()` with exact event, wildcard event, and active-only filtering
+  - `EventManager::getEventHistory()` with event, status, trigger ID, and limit filtering
+  - `ConditionEngine` edge cases (`===`, `!==`, cross-type string comparison, empty array condition, missing fields)
+- **Changed**: Version bumped to 1.7.0
 
 ### v1.6.0
 
