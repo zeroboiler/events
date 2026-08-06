@@ -70,4 +70,17 @@ return [
         // Signature algorithm for HMAC payload signing
         'signature_algorithm' => 'sha256',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Wildcard Cache
+    |--------------------------------------------------------------------------
+    |
+    | Enabled wildcard triggers are cached to avoid a DB query on every fire()
+    | call. The cache is automatically invalidated on trigger create, enable,
+    | and disable operations. Set to null to disable caching entirely.
+    |
+    */
+
+    'wildcard_cache_ttl' => env('EVENTS_WILDCARD_CACHE_TTL', 300),
 ];

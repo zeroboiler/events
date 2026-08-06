@@ -37,6 +37,8 @@ class EventsRedeliverCommand extends Command
             return Command::FAILURE;
         }
 
+        assert($log instanceof EventLog);
+
         if ($log->status !== EventLog::STATUS_FAILED && $log->status !== EventLog::STATUS_COMPLETED) {
             $this->error("Event log {$logId} has status '{$log->status}'. Only failed or completed logs can be redelivered.");
 
@@ -44,7 +46,7 @@ class EventsRedeliverCommand extends Command
         }
 
         // Find the subscription associated with this trigger (if any)
-        $payload = $log->payload;
+        $payload = is_array($log->payload) ? $log->payload : [];
         $subscriptionId = $payload['subscription_id'] ?? null;
         $url = $payload['url'] ?? null;
 
@@ -101,7 +103,7 @@ class EventsRedeliverCommand extends Command
                     Subscription::find($subscriptionId)?->recordDelivery();
                 }
 
-                $this->info("✅ Webhook redelivered successfully to {$url} (HTTP {$response->status()}).");
+                $this->info("Webhook redelivered successfully to {$url} (HTTP {$response->status()}).");
 
                 return Command::SUCCESS;
             }

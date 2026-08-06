@@ -24,7 +24,7 @@ class EventsRegisterCommand extends Command
     /** @var string */
     protected $description = 'Register a new event trigger';
 
-    public function handle(): int
+    public function handle(EventManager $eventManager): int
     {
         $event = $this->argument('event');
         $action = $this->argument('action');
@@ -32,14 +32,13 @@ class EventsRegisterCommand extends Command
         $async = $this->option('async') === true;
         $priority = (int) $this->option('priority');
 
-        $builder = app(EventManager::class)->on($event);
+        $builder = $eventManager->on((string) $event);
 
-        $name = $this->option('name');
         if ($name !== null && $name !== '') {
-            $builder->name($name);
+            $builder->name((string) $name);
         }
 
-        $builder->action($action)->async($async)->priority($priority);
+        $builder->action((string) $action)->async($async)->priority($priority);
 
         try {
             $trigger = $builder->save();

@@ -33,7 +33,8 @@ class EventsListCommand extends Command
         if ($eventFilter !== null && $eventFilter !== '') {
             // Convert wildcard * to SQL % for LIKE matching
             // Escape SQL LIKE special characters first
-            $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], (string) $eventFilter);
+            $eventFilterStr = (string) $eventFilter;
+            $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $eventFilterStr);
             $likePattern = str_replace('*', '%', $escaped);
             $query->where('event', 'like', $likePattern);
         }
@@ -57,7 +58,7 @@ class EventsListCommand extends Command
         }
 
         $triggers = $query
-            ->orderByPriority()
+            ->orderByDesc('priority')
             ->offset(($page - 1) * $perPage)
             ->limit($perPage)
             ->get();

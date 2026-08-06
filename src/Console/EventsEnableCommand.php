@@ -20,13 +20,13 @@ class EventsEnableCommand extends Command
     /** @var string */
     protected $description = 'Enable an event trigger';
 
-    public function handle(): int
+    public function handle(EventManager $eventManager): int
     {
         $id = (string) $this->argument('id');
 
         $trigger = Trigger::find($id);
 
-        if (! $trigger) {
+        if ($trigger === null) {
             $this->error("Trigger '{$id}' not found.");
 
             return Command::FAILURE;
@@ -38,7 +38,7 @@ class EventsEnableCommand extends Command
             return Command::SUCCESS;
         }
 
-        app(EventManager::class)->enable($id);
+        $eventManager->enable($id);
 
         $this->info("Trigger '{$trigger->name}' enabled successfully.");
 

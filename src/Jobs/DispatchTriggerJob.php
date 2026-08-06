@@ -45,11 +45,11 @@ class DispatchTriggerJob implements ShouldQueue
      */
     protected ?string $eventLogId = null;
 
-    public function handle(): void
+    public function handle(EventManager $eventManager): void
     {
         $trigger = Trigger::find($this->triggerId);
 
-        if (! $trigger || ! $trigger->enabled) {
+        if ($trigger === null || ! $trigger->enabled) {
             Log::warning('Trigger not found or disabled', [
                 'trigger_id' => $this->triggerId,
             ]);
@@ -71,7 +71,6 @@ class DispatchTriggerJob implements ShouldQueue
 
         $this->eventLogId = $log->id;
 
-        $eventManager = app(EventManager::class);
         $eventManager->executeTrigger($trigger, $log);
     }
 

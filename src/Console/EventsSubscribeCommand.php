@@ -25,7 +25,7 @@ class EventsSubscribeCommand extends Command
     /** @var string */
     protected $description = 'Register an external webhook subscription for an event';
 
-    public function handle(): int
+    public function handle(EventManager $eventManager): int
     {
         $event = (string) $this->argument('event');
         $url = (string) $this->argument('url');
@@ -34,10 +34,7 @@ class EventsSubscribeCommand extends Command
         $priority = (int) $this->option('priority');
         $async = (bool) $this->option('async');
 
-        /** @var EventManager $manager */
-        $manager = app(EventManager::class);
-
-        $builder = $manager->subscribe($event, $url)
+        $builder = $eventManager->subscribe($event, $url)
             ->priority($priority);
 
         if ($async) {
@@ -65,7 +62,7 @@ class EventsSubscribeCommand extends Command
         try {
             $subscription = $builder->save();
 
-            $this->info('✅ Webhook subscription created successfully!');
+            $this->info('Webhook subscription created successfully!');
             $this->line('');
             $this->table(
                 ['Field', 'Value'],

@@ -176,7 +176,7 @@ class EventManager
         // Add trigger id as final tiebreaker for fully deterministic ordering.
         return $triggers->sortBy(callback: fn (Trigger $t): array => [
             -$t->priority,
-            $t->created_at?->timestamp ?? 0,
+            $t->created_at->timestamp ?? 0,
             $t->id,
         ], options: SORT_REGULAR)->values();
     }
@@ -200,6 +200,8 @@ class EventManager
             ->where('event', 'like', '%*%')
             ->orderByPriority()
             ->get();
+
+        assert($result instanceof Collection);
 
         Cache::put(self::WILDCARD_TRIGGER_CACHE_KEY, $result, self::TRIGGER_CACHE_TTL);
 
@@ -267,8 +269,8 @@ class EventManager
                 // is either a class name string or an array with 'class'
                 // and optional 'params'.
                 if (is_array($entry)) {
-                    $actionClass = (string) ($entry['class'] ?? '');
-                    $actionParams = (array) ($entry['params'] ?? []);
+                    $actionClass = is_string($entry['class'] ?? null) ? $entry['class'] : '';
+                    $actionParams = is_array($entry['params'] ?? null) ? $entry['params'] : [];
                 } else {
                     $actionClass = (string) $entry;
                     $actionParams = [];

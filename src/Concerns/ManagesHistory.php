@@ -91,11 +91,11 @@ trait ManagesHistory
             $logQuery->where('created_at', '>=', $since);
         }
 
-        $totalLogs = (clone $logQuery)->count();
-        $completed = (clone $logQuery)->where('status', EventLog::STATUS_COMPLETED)->count();
-        $failed = (clone $logQuery)->where('status', EventLog::STATUS_FAILED)->count();
-        $pending = (clone $logQuery)->where('status', EventLog::STATUS_PENDING)->count();
-        $dispatched = (clone $logQuery)->where('status', EventLog::STATUS_DISPATCHED)->count();
+        $totalLogs = (int) (clone $logQuery)->count();
+        $completed = (int) (clone $logQuery)->where('status', EventLog::STATUS_COMPLETED)->count();
+        $failed = (int) (clone $logQuery)->where('status', EventLog::STATUS_FAILED)->count();
+        $pending = (int) (clone $logQuery)->where('status', EventLog::STATUS_PENDING)->count();
+        $dispatched = (int) (clone $logQuery)->where('status', EventLog::STATUS_DISPATCHED)->count();
 
         $settled = $completed + $failed;
         $successRate = $settled > 0 ? round(($completed / $settled) * 100, 2) : null;
@@ -126,8 +126,8 @@ trait ManagesHistory
             ->map(fn ($row): array => ['event' => $row->event, 'count' => (int) $row->count])
             ->toArray();
 
-        $totalTriggers = Trigger::count();
-        $activeTriggers = Trigger::enabled()->count();
+        $totalTriggers = (int) Trigger::count();
+        $activeTriggers = (int) Trigger::enabled()->count();
 
         return [
             'total_logs' => $totalLogs,
@@ -165,6 +165,6 @@ trait ManagesHistory
             $query->whereIn('status', [EventLog::STATUS_COMPLETED, EventLog::STATUS_FAILED]);
         }
 
-        return $query->delete();
+        return (int) $query->delete();
     }
 }

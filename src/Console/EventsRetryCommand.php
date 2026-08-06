@@ -24,9 +24,9 @@ class EventsRetryCommand extends Command
     /** @var string */
     protected $description = 'Retry failed or pending event dispatches';
 
-    public function handle(): int
+    public function handle(EventManager $eventManager): int
     {
-        $status = $this->option('status');
+        $status = (string) $this->option('status');
 
         if (! in_array($status, [EventLog::STATUS_FAILED, EventLog::STATUS_PENDING], true)) {
             $this->error('Invalid status. Must be "failed" or "pending".');
@@ -70,7 +70,7 @@ class EventsRetryCommand extends Command
                 ));
             } else {
                 try {
-                    app(EventManager::class)->executeTrigger($trigger, $log);
+                    $eventManager->executeTrigger($trigger, $log);
                 } catch (\Throwable $e) {
                     $this->error("Failed to execute trigger {$trigger->id}: {$e->getMessage()}");
 

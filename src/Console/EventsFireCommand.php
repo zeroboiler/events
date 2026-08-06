@@ -22,7 +22,7 @@ class EventsFireCommand extends Command
     /** @var string */
     protected $description = 'Manually fire an event';
 
-    public function handle(): int
+    public function handle(EventManager $eventManager): int
     {
         $event = (string) $this->argument('event');
 
@@ -44,13 +44,15 @@ class EventsFireCommand extends Command
 
         // Merge in --payload key=value pairs (json takes precedence for keys)
         $payloadOptions = $this->option('payload');
-        foreach ($payloadOptions as $item) {
-            if (! str_contains((string) $item, '=')) {
-                continue;
-            }
+        if (is_array($payloadOptions)) {
+            foreach ($payloadOptions as $item) {
+                if (! str_contains((string) $item, '=')) {
+                    continue;
+                }
 
-            [$key, $value] = explode('=', (string) $item, 2);
-            $payload[$key] = $value;
+                [$key, $value] = explode('=', (string) $item, 2);
+                $payload[$key] = $value;
+            }
         }
 
         $this->info("Firing event: {$event}");
@@ -66,7 +68,7 @@ class EventsFireCommand extends Command
         }
 
         try {
-            app(EventManager::class)->fire($event, $payload);
+            $eventManager->fire($event, $payload);
 
             $this->info('Event fired successfully!');
 

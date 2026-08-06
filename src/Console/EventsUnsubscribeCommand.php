@@ -20,15 +20,12 @@ class EventsUnsubscribeCommand extends Command
     /** @var string */
     protected $description = 'Remove an external webhook subscription';
 
-    public function handle(): int
+    public function handle(EventManager $eventManager): int
     {
         $id = (string) $this->argument('id');
 
-        /** @var EventManager $manager */
-        $manager = app(EventManager::class);
-
-        if ($manager->unsubscribe($id)) {
-            $this->info("✅ Subscription {$id} removed successfully.");
+        if ($eventManager->unsubscribe($id)) {
+            $this->info("Subscription {$id} removed successfully.");
 
             return Command::SUCCESS;
         }

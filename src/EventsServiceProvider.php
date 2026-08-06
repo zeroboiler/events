@@ -52,7 +52,7 @@ class EventsServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         if ($this->app->runningInConsole()) {
-            $configPath = $this->app->basePath().'/config/events.php';
+            $configPath = $this->app->configPath('events.php');
             $this->publishes([
                 __DIR__.'/../config/events.php' => $configPath,
             ], 'events-config');

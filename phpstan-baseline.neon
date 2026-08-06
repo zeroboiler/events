@@ -1,325 +1,137 @@
 parameters:
 	ignoreErrors:
+		# Laravel magic static methods — these are Eloquent facade methods that PHPStan can't resolve
+		# without larastan or stubs
 		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Subscription\\\\:\\:find\\\\(\\\\)\\\\.$#'
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Subscription::find\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 3
 			path: src/Actions/WebhookAction.php
-
 		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger\\:\\:find\\(\\)\\.$#'
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger::find\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
 			path: src/Console/EventsDisableCommand.php
-
 		-
-			message: '#^Function app not found\\.$#'
-			identifier: function.notFound
-			count: 1
-			path: src/Console/EventsDisableCommand.php
-
-		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger\\:\\:find\\(\\)\\.$#'
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger::find\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
 			path: src/Console/EventsEnableCommand.php
-
 		-
-			message: '#^Function app not found\\.$#'
-			identifier: function.notFound
-			count: 1
-			path: src/Console/EventsEnableCommand.php
-
-		-
-			message: '#^Argument of an invalid type array\\|bool\\|float\\|int\\|string\\|null supplied for foreach, only iterables are supported\\.$#'
-			identifier: foreach.nonIterable
-			count: 1
-			path: src/Console/EventsFireCommand.php
-
-		-
-			message: '#^Function app not found\\.$#'
-			identifier: function.notFound
-			count: 1
-			path: src/Console/EventsFireCommand.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<ZeroBoiler\\\\Events\\\\Models\\\\Trigger\\>\\:\\:orderByPriority\\(\\)\\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/Console/EventsListCommand.php
-
-		-
-			message: '#^Parameter \\#3 \\$subject of function str_replace expects array\\<string\\>\\|string, array\\|bool\\|float\\|int\\|string given\\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Console/EventsListCommand.php
-
-		-
-			message: '#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<int,stdClass\\>\\:\\:map\\(\\) expects callable\\(stdClass, int\\)\\: array\\{string, string, string, string, ''N/A''\\|\\(lowercase\\-string\\&non\\-falsy\\-string\\), non\\-falsy\\-string\\}, Closure\\(ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\)\\: array\\{string, string, string, string, ''N/A''\\|\\(lowercase\\-string\\&non\\-falsy\\-string\\), non\\-falsy\\-string\\} given\\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Console/EventsLogCommand.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\>\\|ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\:\\:\\$event\\.$#'
-			identifier: property.notFound
-			count: 2
-			path: src/Console/EventsRedeliverCommand.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\>\\|ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\:\\:\\$id\\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Console/EventsRedeliverCommand.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\>\\|ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\:\\:\\$payload\\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Console/EventsRedeliverCommand.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\>\\|ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\:\\:\\$status\\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Console/EventsRedeliverCommand.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\>\\|ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\:\\:markAsCompleted\\(\\)\\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/Console/EventsRedeliverCommand.php
-
-		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Subscription\\:\\:find\\(\\)\\.$#'
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Subscription::find\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 2
 			path: src/Console/EventsRedeliverCommand.php
-
 		-
-			message: '#^Function app not found\\.$#'
-			identifier: function.notFound
-			count: 1
-			path: src/Console/EventsRegisterCommand.php
-
-		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\:\\:withStatus\\(\\)\\.$#'
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\EventLog::find\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
-			path: src/Console/EventsRetryCommand.php
-
+			path: src/Jobs/DispatchTriggerJob.php
 		-
-			message: '#^Function app not found\\.$#'
-			identifier: function.notFound
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger::find\(\)\.$#'
+			identifier: staticMethod.notFound
 			count: 1
-			path: src/Console/EventsRetryCommand.php
-
+			path: src/Jobs/DispatchTriggerJob.php
 		-
-			message: '#^Cannot cast array\\|bool\\|float\\|int\\|string\\|null to string\\.$#'
-			identifier: cast.string
-			count: 1
-			path: src/Console/EventsSubscribeCommand.php
-
-		-
-			message: '#^Cannot cast non\\-empty\\-array\\|float\\|int\\<min, \\-1\\>\\|int\\<1, max\\>\\|non\\-falsy\\-string\\|true to string\\.$#'
-			identifier: cast.string
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Subscription::find\(\)\.$#'
+			identifier: staticMethod.notFound
 			count: 2
-			path: src/Console/EventsSubscribeCommand.php
-
+			path: src/EventManager.php
 		-
-			message: '#^Function app not found\\.$#'
-			identifier: function.notFound
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger::count\(\)\.$#'
+			identifier: staticMethod.notFound
 			count: 1
-			path: src/Console/EventsSubscribeCommand.php
-
+			path: src/EventManager.php
 		-
-			message: '#^Cannot cast array\\|bool\\|float\\|int\\|non\\-empty\\-string to string\\.$#'
-			identifier: cast.string
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger::enabled\(\)\.$#'
+			identifier: staticMethod.notFound
 			count: 3
-			path: src/Console/EventsSubscriptionsCommand.php
-
+			path: src/EventManager.php
 		-
-			message: '#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<int,stdClass\\>\\:\\:map\\(\\) expects callable\\(stdClass, int\\)\\: array\\{string, string, string, int, ''No''\\|''Yes'', int, non\\-falsy\\-string, non\\-falsy\\-string\\}, Closure\\(ZeroBoiler\\\\Events\\\\Models\\\\Subscription\\)\\: array\\{string, string, string, int, ''No''\\|''Yes'', int, non\\-falsy\\-string, non\\-falsy\\-string\\} given\\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Console/EventsSubscriptionsCommand.php
-
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger::where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: src/EventManager.php
 		-
-			message: '#^Cannot cast array\\|bool\\|float\\|int\\|string\\|null to string\\.$#'
-			identifier: cast.string
-			count: 1
-			path: src/Console/EventsUnsubscribeCommand.php
-
-		-
-			message: '#^Function app not found\\.$#'
-			identifier: function.notFound
-			count: 1
-			path: src/Console/EventsUnsubscribeCommand.php
-
-		-
-			message: '#^Function config_path not found\\.$#'
-			identifier: function.notFound
-			count: 1
-			path: src/EventsServiceProvider.php
-
-		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\:\\:find\\(\\)\\.$#'
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger::find\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
-			path: src/Jobs/DispatchTriggerJob.php
-
+			path: src/EventManager.php
 		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger\\:\\:find\\(\\)\\.$#'
+			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\EventLog::withStatus\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
-			path: src/Jobs/DispatchTriggerJob.php
+			path: src/Console/EventsRetryCommand.php
 
+		# Eloquent generic types — PHPStan strict generic expectations for HasFactory/HasMany/BelongsTo
 		-
-			message: '#^Function app not found\\.$#'
-			identifier: function.notFound
-			count: 1
-			path: src/Jobs/DispatchTriggerJob.php
-
-		-
-			message: '#^Class ZeroBoiler\\\\Events\\\\Models\\\\EventLog uses generic trait Illuminate\\\\Database\\\\Eloquent\\\\Factories\\\\HasFactory but does not specify its types\\: TFactory$#'
+			message: '#^Class ZeroBoiler\\\\Events\\\\Models\\\\EventLog uses generic trait Illuminate\\\\Database\\\\Eloquent\\\\Factories\\\\HasFactory but does not specify its types: TFactory$#'
 			identifier: missingType.generics
 			count: 1
 			path: src/Models/EventLog.php
-
 		-
-			message: '#^Method ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\:\\:trigger\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<ZeroBoiler\\\\Events\\\\Models\\\\Trigger, ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<ZeroBoiler\\\\Events\\\\Models\\\\Trigger, \\$this\\(ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\)\\>\\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Models/EventLog.php
-
-		-
-			message: '#^PHPDoc tag @mixin contains unknown class Eloquent\\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Models/EventLog.php
-
-		-
-			message: '#^Class ZeroBoiler\\\\Events\\\\Models\\\\Subscription uses generic trait Illuminate\\\\Database\\\\Eloquent\\\\Factories\\\\HasFactory but does not specify its types\\: TFactory$#'
+			message: '#^Class ZeroBoiler\\\\Events\\\\Models\\\\Subscription uses generic trait Illuminate\\\\Database\\\\Eloquent\\\\Factories\\\\HasFactory but does not specify its types: TFactory$#'
 			identifier: missingType.generics
 			count: 1
 			path: src/Models/Subscription.php
-
 		-
-			message: '#^PHPDoc tag @mixin contains unknown class Eloquent\\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Models/Subscription.php
-
-		-
-			message: '#^Class ZeroBoiler\\\\Events\\\\Models\\\\Trigger uses generic trait Illuminate\\\\Database\\\\Eloquent\\\\Factories\\\\HasFactory but does not specify its types\\: TFactory$#'
+			message: '#^Class ZeroBoiler\\\\Events\\\\Models\\\\Trigger uses generic trait Illuminate\\\\Database\\\\Eloquent\\\\Factories\\\\HasFactory but does not specify its types: TFactory$#'
 			identifier: missingType.generics
 			count: 1
 			path: src/Models/Trigger.php
-
 		-
-			message: '#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\: TRelatedModel, TDeclaringModel$#'
+			message: '#^Method ZeroBoiler\\\\Events\\\\Models\\\\EventLog::trigger\(\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo<ZeroBoiler\\\\Events\\\\Models\\\\Trigger, ZeroBoiler\\\\Events\\\\Models\\\\EventLog> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo<ZeroBoiler\\\\Events\\\\Models\\\\Trigger, \$this\(ZeroBoiler\\\\Events\\\\Models\\\\EventLog\)>$#'
+			identifier: return.type
+			count: 1
+			path: src/Models/EventLog.php
+		-
+			message: '#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany<ZeroBoiler\\\\Events\\\\Models\\\\EventLog> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany: TRelatedModel, TDeclaringModel$#'
 			identifier: generics.lessTypes
 			count: 1
 			path: src/Models/Trigger.php
-
 		-
-			message: '#^Method ZeroBoiler\\\\Events\\\\Models\\\\Trigger\\:\\:eventLogs\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<ZeroBoiler\\\\Events\\\\Models\\\\EventLog, \\$this\\(ZeroBoiler\\\\Events\\\\Models\\\\Trigger\\)\\>\\.$#'
+			message: '#^Method ZeroBoiler\\\\Events\\\\Models\\\\Trigger::eventLogs\(\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany<ZeroBoiler\\\\Events\\\\Models\\\\EventLog> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany<ZeroBoiler\\\\Events\\\\Models\\\\EventLog, \$this\(ZeroBoiler\\\\Events\\\\Models\\\\Trigger\)>$#'
 			identifier: return.type
 			count: 1
 			path: src/Models/Trigger.php
 
+		# Console command Collection::map closure type mismatch (Illuminate\Collection vs Eloquent\Collection)
 		-
-			message: '#^PHPDoc tag @mixin contains unknown class Eloquent\\.$#'
-			identifier: class.notFound
+			message: '#^Parameter #\$1 \$callback of method Illuminate\\\\Support\\\\Collection<int, stdClass>::map\(\) expects callable\(stdClass, int\): array\{string, string, string, string, \'N/A\'|\(lowercase-string&non-falsy-string\), non-falsy-string\}, Closure\(ZeroBoiler\\\\Events\\\\Models\\\\EventLog\): array\{string, string, string, string, \'N/A\'|\(lowercase-string&non-falsy-string\), non-falsy-string\} given$#'
+			identifier: argument.type
 			count: 1
-			path: src/Models/Trigger.php
-
+			path: src/Console/EventsLogCommand.php
 		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Subscription\\:\\:find\\(\\)\\.$#'
-			identifier: staticMethod.notFound
-			count: 2
-			path: src/EventManager.php
-
-		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger\\:\\:count\\(\\)\\.$#'
-			identifier: staticMethod.notFound
+			message: '#^Parameter #\$1 \$callback of method Illuminate\\\\Support\\\\Collection<int, stdClass>::map\(\) expects callable\(stdClass, int\): array\{string, string, string, int, \'No\'|\'Yes\', int, non-falsy-string, non-falsy-string\}, Closure\(ZeroBoiler\\\\Events\\\\Models\\\\Subscription\): array\{string, string, string, int, \'No\'|\'Yes\', int, non-falsy-string, non-falsy-string\} given$#'
+			identifier: argument.type
 			count: 1
-			path: src/EventManager.php
+			path: src/Console/EventsSubscriptionsCommand.php
 
+		# Console command option cast issues — Artisan option() returns mixed types
 		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger\\:\\:enabled\\(\\)\\.$#'
-			identifier: staticMethod.notFound
-			count: 3
-			path: src/EventManager.php
-
-		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger\\:\\:where\\(\\)\\.$#'
-			identifier: staticMethod.notFound
-			count: 2
-			path: src/EventManager.php
-
-		-
-			message: '#^Cannot call method on\\(\\) on mixed\\.$#'
-			identifier: method.nonObject
-			count: 2
-			path: src/EventManager.php
-
-		-
-			message: '#^Cannot cast mixed to float\\.$#'
-			identifier: cast.double
+			message: '#^Cannot cast array\|bool\|float\|int\|string\|null to string$#'
+			identifier: cast.string
 			count: 1
-			path: src/EventManager.php
-
+			path: src/Console/EventsSubscribeCommand.php
 		-
-			message: '#^Cannot cast mixed to string\\.$#'
+			message: '#^Cannot cast non-empty-array\|float\|int<min, -1>\|int<1, max>\|non-falsy-string\|true to string$#'
 			identifier: cast.string
 			count: 2
-			path: src/EventManager.php
-
+			path: src/Console/EventsSubscribeCommand.php
 		-
-			message: '#^Method ZeroBoiler\\\\Events\\\\EventManager\\:\\:getEnabledWildcardTriggers\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, ZeroBoiler\\\\Events\\\\Models\\\\Trigger\\> but returns mixed\\.$#'
+			message: '#^Cannot cast array\|bool\|float\|int\|non-empty-string to string$#'
+			identifier: cast.string
+			count: 3
+			path: src/Console/EventsSubscriptionsCommand.php
+		-
+			message: '#^Cannot cast array\|bool\|float\|int\|string\|null to string$#'
+			identifier: cast.string
+			count: 1
+			path: src/Console/EventsUnsubscribeCommand.php
+
+		# EventManager getEventHistory return type mismatch (Illuminate\Support\Collection vs Eloquent\Collection)
+		-
+			message: '#^Method ZeroBoiler\\\\Events\\\\EventManager::getEventHistory\(\) should return Illuminate\\\\Database\\\\Eloquent\\\\Collection<int, ZeroBoiler\\\\Events\\\\Models\\\\EventLog> but returns Illuminate\\\\Support\\\\Collection<int, stdClass>$#'
 			identifier: return.type
-			count: 1
-			path: src/EventManager.php
-
-		-
-			message: '#^Method ZeroBoiler\\\\Events\\\\EventManager\\:\\:getEventHistory\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, ZeroBoiler\\\\Events\\\\Models\\\\EventLog\\> but returns Illuminate\\\\Support\\\\Collection\\<int, stdClass\\>\\.$#'
-			identifier: return.type
-			count: 1
-			path: src/EventManager.php
-
-		-
-			message: '#^Method ZeroBoiler\\\\Events\\\\EventManager\\:\\:getStats\\(\\) should return array\\{total_logs\\: int, total_triggers\\: int, active_triggers\\: int, completed\\: int, failed\\: int, pending\\: int, dispatched\\: int, success_rate\\: float\\|null, \\.\\.\\.\\} but returns array\\{total_logs\\: int\\<0, max\\>, total_triggers\\: mixed, active_triggers\\: mixed, completed\\: int\\<0, max\\>, failed\\: int\\<0, max\\>, pending\\: int\\<0, max\\>, dispatched\\: int\\<0, max\\>, success_rate\\: float\\|null, \\.\\.\\.\\}\\.$#'
-			identifier: return.type
-			count: 1
-			path: src/EventManager.php
-
-		-
-			message: '#^Method ZeroBoiler\\\\Events\\\\EventManager\\:\\:purgeLogs\\(\\) should return int but returns mixed\\.$#'
-			identifier: return.type
-			count: 1
-			path: src/EventManager.php
-
-		-
-			message: '#^Parameter \\#1 \\$class of method ZeroBoiler\\\\Events\\\\ActionResolver\\:\\:resolve\\(\\) expects string, mixed given\\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/EventManager.php
-
-		-
-			message: '#^Parameter \\#1 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/EventManager.php
-
-		-
-			message: '#^Using nullsafe property access \"\\?\\-\\>timestamp\" on left side of \\?\\? is unnecessary\\. Use \\-\\> instead\\.$#'
-			identifier: nullsafe.neverNull
-			count: 1
-			path: src/EventManager.php
-
-		-
-			message: '#^Call to an undefined static method ZeroBoiler\\\\Events\\\\Models\\\\Trigger\\:\\:find\\(\\)\\.$#'
-			identifier: staticMethod.notFound
 			count: 1
 			path: src/EventManager.php

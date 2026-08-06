@@ -88,6 +88,8 @@ return [
         'timeout' => env('EVENTS_SUB_TIMEOUT', 30),
         'signature_algorithm' => 'sha256',
     ],
+
+    'wildcard_cache_ttl' => env('EVENTS_WILDCARD_CACHE_TTL', 300),
 ];
 ```
 
