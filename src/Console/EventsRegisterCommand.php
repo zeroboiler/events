@@ -11,7 +11,7 @@ namespace ZeroBoiler\Events\Console;
 use Illuminate\Console\Command;
 use ZeroBoiler\Events\EventManager;
 
-class EventsRegisterCommand extends Command
+final class EventsRegisterCommand extends Command
 {
     /** @var string */
     protected $signature = 'zeroboiler:events:register

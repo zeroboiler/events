@@ -24,7 +24,7 @@ use ZeroBoiler\Events\Models\Subscription;
  * is signed with HMAC-SHA256 using the subscription's secret.
  * The signature is sent in the `X-Webhook-Signature` header.
  */
-class WebhookAction implements Triggerable
+final class WebhookAction implements Triggerable
 {
     /**
      * Get the webhook timeout from config.

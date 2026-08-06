@@ -56,7 +56,7 @@ class EventLogFactory extends Factory
 
     public function completed(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => EventLog::STATUS_COMPLETED,
             'duration_ms' => fake()->numberBetween(10, 5000),
             'error' => null,
@@ -65,7 +65,7 @@ class EventLogFactory extends Factory
 
     public function failed(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => EventLog::STATUS_FAILED,
             'error' => fake()->sentence(),
         ]);

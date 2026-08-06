@@ -11,7 +11,7 @@ namespace ZeroBoiler\Events\Console;
 use Illuminate\Console\Command;
 use ZeroBoiler\Events\EventManager;
 
-class EventsFireCommand extends Command
+final class EventsFireCommand extends Command
 {
     /** @var string */
     protected $signature = 'zeroboiler:events:fire

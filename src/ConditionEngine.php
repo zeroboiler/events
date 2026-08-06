@@ -10,7 +10,7 @@ namespace ZeroBoiler\Events;
 
 use ZeroBoiler\Events\Contracts\ConditionEngineContract;
 
-class ConditionEngine implements ConditionEngineContract
+final class ConditionEngine implements ConditionEngineContract
 {
     /**
      * Maximum regex length for 'matches' operator to prevent ReDoS.

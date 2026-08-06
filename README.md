@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.10.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.11.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -407,6 +407,15 @@ composer ci          # All checks (lint → analyse → rector → test)
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
 ## Changelog
+
+### v1.11.0
+
+- **Changed**: All core classes (`EventManager`, `ConditionEngine`, `ActionResolver`, `WildcardMatcher`, `TriggerBuilder`, `SubscriptionBuilder`, `DomainEvent`, `WebhookAction`, `DispatchTriggerJob`) and all console commands are now `final` — prevents unsafe inheritance and improves PHPStan 9 strictness
+- **Fixed**: `EventLogFactory::completed()` and `failed()` state closures now have explicit `: array` return type annotations for PHPStan 9 compliance
+- **Fixed**: `EventsRetryCommand` uses strict `$trigger === null` comparison instead of loose truthy check for PHPStan null-safety
+- **Fixed**: `EventsRetryCommand` adds `is_array()` guard when passing `$log->payload` to `DispatchTriggerJob` constructor
+- **Fixed**: `ManagesHistory` and `ManagesSubscriptions` traits now declare `@mixin \ZeroBoiler\Events\EventManager` for proper PHPStan trait property resolution (`$this->app`)
+- **Changed**: Version bumped to 1.11.0
 
 ### v1.10.0
 

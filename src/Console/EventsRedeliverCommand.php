@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Subscription;
 
-class EventsRedeliverCommand extends Command
+final class EventsRedeliverCommand extends Command
 {
     /** @var string */
     protected $signature = 'zeroboiler:events:redeliver

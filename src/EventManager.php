@@ -21,7 +21,7 @@ use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
-class EventManager
+final class EventManager
 {
     use ManagesHistory;
     use ManagesSubscriptions;

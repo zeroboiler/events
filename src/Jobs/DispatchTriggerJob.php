@@ -20,7 +20,7 @@ use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
-class DispatchTriggerJob implements ShouldQueue
+final class DispatchTriggerJob implements ShouldQueue
 {
     use InteractsWithQueue;
     use Queueable;

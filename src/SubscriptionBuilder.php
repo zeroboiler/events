@@ -25,7 +25,7 @@ use ZeroBoiler\Events\Models\Subscription;
  *     ->save();
  * ```
  */
-class SubscriptionBuilder
+final class SubscriptionBuilder
 {
     protected string $event = '';
 

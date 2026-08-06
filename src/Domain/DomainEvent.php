@@ -12,7 +12,7 @@ use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class DomainEvent
+final class DomainEvent
 {
     public UuidInterface $eventId;
 

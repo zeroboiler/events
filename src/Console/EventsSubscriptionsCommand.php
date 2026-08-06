@@ -12,7 +12,7 @@ use Illuminate\Console\Command;
 use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\Models\Subscription;
 
-class EventsSubscriptionsCommand extends Command
+final class EventsSubscriptionsCommand extends Command
 {
     use EscapesWildcardLike;
 

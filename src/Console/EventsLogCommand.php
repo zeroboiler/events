@@ -11,7 +11,7 @@ namespace ZeroBoiler\Events\Console;
 use Illuminate\Console\Command;
 use ZeroBoiler\Events\Models\EventLog;
 
-class EventsLogCommand extends Command
+final class EventsLogCommand extends Command
 {
     /** @var string */
     protected $signature = 'zeroboiler:events:log

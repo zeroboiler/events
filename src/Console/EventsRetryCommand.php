@@ -15,7 +15,7 @@ use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
-class EventsRetryCommand extends Command
+final class EventsRetryCommand extends Command
 {
     /** @var string */
     protected $signature = 'zeroboiler:events:retry
@@ -53,7 +53,7 @@ class EventsRetryCommand extends Command
             /** @var Trigger|null $trigger */
             $trigger = $log->trigger;
 
-            if (! $trigger || ! $trigger->enabled) {
+            if ($trigger === null || ! $trigger->enabled) {
                 $this->warn("Skipping log {$log->id}: trigger not found or disabled");
 
                 continue;
@@ -63,10 +63,12 @@ class EventsRetryCommand extends Command
                 // Re-dispatch with the new job signature — a fresh EventLog
                 // will be created inside the job. The old log remains as a
                 // historical record of the previous attempt.
+                $payload = is_array($log->payload) ? $log->payload : [];
+
                 Queue::push(new DispatchTriggerJob(
                     $trigger->id,
                     $log->event,
-                    $log->payload,
+                    $payload,
                 ));
             } else {
                 try {

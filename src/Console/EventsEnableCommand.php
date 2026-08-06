@@ -12,7 +12,7 @@ use Illuminate\Console\Command;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Models\Trigger;
 
-class EventsEnableCommand extends Command
+final class EventsEnableCommand extends Command
 {
     /** @var string */
     protected $signature = 'zeroboiler:events:enable {id : Trigger ID}';

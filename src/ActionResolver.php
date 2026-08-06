@@ -11,7 +11,7 @@ namespace ZeroBoiler\Events;
 use Illuminate\Container\Container;
 use ZeroBoiler\Events\Contracts\Triggerable;
 
-class ActionResolver
+final class ActionResolver
 {
     public function __construct(
         protected Container $app

@@ -11,7 +11,7 @@ namespace ZeroBoiler\Events;
 use Illuminate\Support\Str;
 use ZeroBoiler\Events\Models\Trigger;
 
-class TriggerBuilder
+final class TriggerBuilder
 {
     protected string $name = '';
 
