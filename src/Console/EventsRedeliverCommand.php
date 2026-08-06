@@ -48,7 +48,7 @@ class EventsRedeliverCommand extends Command
         $subscriptionId = $payload['subscription_id'] ?? null;
         $url = $payload['url'] ?? null;
 
-        if ($url === null) {
+        if (! is_string($url) || $url === '') {
             $this->error('No webhook URL found in the event log payload.');
 
             return Command::FAILURE;

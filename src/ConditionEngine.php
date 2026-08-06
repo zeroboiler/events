@@ -71,9 +71,9 @@ class ConditionEngine implements ConditionEngineContract
                 'not_null' => $actual !== null,
                 'empty' => empty($actual),
                 'not_empty' => ! empty($actual),
-                'starts_with' => is_string($actual) && str_starts_with($actual, (string) $value),
-                'ends_with' => is_string($actual) && str_ends_with($actual, (string) $value),
-                'matches' => is_string($actual) && $this->safeRegexMatch((string) $value, $actual),
+                'starts_with' => is_string($actual) && is_string($value) && str_starts_with($actual, $value),
+                'ends_with' => is_string($actual) && is_string($value) && str_ends_with($actual, $value),
+                'matches' => is_string($actual) && is_string($value) && $this->safeRegexMatch($value, $actual),
                 default => $this->strictEquals($actual, $expected),
             };
         }
@@ -166,7 +166,11 @@ class ConditionEngine implements ConditionEngineContract
             return in_array($value, $actual, true);
         }
 
-        return str_contains((string) $actual, (string) $value);
+        if (! is_string($actual) || ! is_string($value)) {
+            return false;
+        }
+
+        return str_contains($actual, $value);
     }
 
     /**

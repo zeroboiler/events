@@ -47,7 +47,7 @@ class WebhookAction implements Triggerable
     {
         $url = $payload['url'] ?? null;
 
-        if (empty($url) || ! is_string($url)) {
+        if (! is_string($url) || $url === '') {
             Log::warning('WebhookAction invoked without a URL', ['payload_keys' => array_keys($payload)]);
 
             throw new \InvalidArgumentException('WebhookAction requires a non-empty "url" in the payload.');
@@ -72,7 +72,7 @@ class WebhookAction implements Triggerable
         }
 
         // If a subscription exists, sign the payload with HMAC
-        if ($subscriptionId !== null) {
+        if (is_string($subscriptionId) && $subscriptionId !== '') {
             $subscription = Subscription::find($subscriptionId);
             if ($subscription !== null) {
                 $signedBody = json_encode($body, \JSON_THROW_ON_ERROR);
@@ -96,8 +96,8 @@ class WebhookAction implements Triggerable
                     'status' => $response->status(),
                     'response' => $response->body(),
                 ]);
-                $this->recordSubscriptionFailure($subscriptionId);
-            } elseif ($subscriptionId !== null && is_string($subscriptionId)) {
+                $this->recordSubscriptionFailure(is_string($subscriptionId) ? $subscriptionId : null);
+            } elseif (is_string($subscriptionId) && $subscriptionId !== '') {
                 // Record successful delivery
                 $subscription = Subscription::find($subscriptionId);
                 $subscription?->recordDelivery();
@@ -108,7 +108,7 @@ class WebhookAction implements Triggerable
                 'error' => $e->getMessage(),
             ]);
 
-            $this->recordSubscriptionFailure($subscriptionId);
+            $this->recordSubscriptionFailure(is_string($subscriptionId) ? $subscriptionId : null);
 
             throw $e;
         }

@@ -114,6 +114,7 @@ class Trigger extends Model
      */
     public function scopeOrderByPriority(Builder $query): Builder
     {
+        /** @var Builder<Trigger> */
         return $query->orderByDesc('priority');
     }
 

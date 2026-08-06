@@ -47,6 +47,7 @@ class EventManager
      */
     public function on(string $event): TriggerBuilder
     {
+        /** @var TriggerBuilder */
         $builder = $this->app->make(TriggerBuilder::class);
         $builder->on($event);
 
@@ -185,7 +186,6 @@ class EventManager
      */
     protected function getEnabledWildcardTriggers(): Collection
     {
-        /** @var Collection<int, Trigger>|null $cached */
         $cached = Cache::get(self::WILDCARD_TRIGGER_CACHE_KEY);
 
         if ($cached instanceof Collection) {

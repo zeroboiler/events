@@ -57,6 +57,7 @@ class EventsSubscribeCommand extends Command
             }
 
             if (is_array($conditions)) {
+                /** @var array<string, mixed> $conditions */
                 $builder->withFilter($conditions);
             }
         }

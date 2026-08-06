@@ -129,6 +129,7 @@ class Subscription extends Model
      */
     public function scopeOrderByPriority(Builder $query): Builder
     {
+        /** @var Builder<Subscription> */
         return $query->orderByDesc('priority');
     }
 

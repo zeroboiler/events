@@ -24,14 +24,14 @@ class EventsFireCommand extends Command
 
     public function handle(): int
     {
-        $event = $this->argument('event');
+        $event = (string) $this->argument('event');
 
         $payload = [];
 
         // Process --json option if provided (takes precedence over --payload)
         $jsonOption = $this->option('json');
         if ($jsonOption !== null && $jsonOption !== '') {
-            $jsonPayload = $this->parseJsonOption($jsonOption);
+            $jsonPayload = $this->parseJsonOption((string) $jsonOption);
 
             if ($jsonPayload === null) {
                 $this->error('Invalid JSON provided to --json');
@@ -114,6 +114,7 @@ class EventsFireCommand extends Command
             return null;
         }
 
+        /** @var array<string, mixed> */
         return $decoded;
     }
 }

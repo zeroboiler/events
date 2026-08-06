@@ -1,10 +1,35 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.1.1-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.2.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
+[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
+
+## Quick Start
+
+```bash
+composer require zeroboiler/events
+php artisan vendor:publish --tag=events-config
+php artisan migrate
+```
+
+Register your first trigger:
+
+```php
+use ZeroBoiler\Events\Facades\EventManager;
+
+EventManager::on('order.placed')
+    ->name('Send Notification')
+    ->action(SendOrderNotification::class)
+    ->when(['amount' => ['>', 100]])
+    ->async()
+    ->priority(10)
+    ->save();
+
+EventManager::fire('order.placed', ['order_id' => 123, 'total' => 150]);
+```
 
 ## Features
 
@@ -272,6 +297,12 @@ composer ci          # All checks
 ```
 
 ## Changelog
+
+### v1.2.0
+
+- **Fixed**: PHPStan 9 type safety — resolved 20+ baseline errors with proper type guards across DomainEvent, ConditionEngine, WebhookAction, EventManager, console commands, and models
+- **Fixed**: Model scope return types (Trigger, Subscription) now satisfy PHPStan's generic Builder expectations
+- **Changed**: README enriched with Quick Start section and PHPStan Level 9 badge
 
 ### v1.1.1
 

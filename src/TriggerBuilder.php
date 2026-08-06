@@ -84,7 +84,7 @@ class TriggerBuilder
      * If both were called, the single action is prepended to the list to avoid
      * silently discarding it (BUG-2 fix).
      *
-     * @return array<int, string>
+     * @return list<string>
      */
     private function resolveActions(): array
     {

@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.2.0] — 2026-08-06
+
+### Fixed
+- **PHPStan 9 type safety** — Resolved 20+ baseline errors with proper type guards:
+  - `DomainEvent::fromArray()` now catches invalid UUID/datetime exceptions instead of letting them bubble
+  - `ConditionEngine::contains()`, `starts_with`, `ends_with`, `matches` operators now guard string types before calling string functions
+  - `WebhookAction::handle()` validates URL is non-empty string before processing
+  - `WebhookAction` subscription ID properly typed as `string|null` throughout
+  - Console commands properly cast `$this->argument()` return values to `string` before use
+  - `EventManager::on()` and `subscribe()` return types narrowed with PHPDoc
+  - `TriggerBuilder::resolveActions()` return type corrected to `list<string>`
+- **Model scope return types** — `Trigger::scopeOrderByPriority()` and `Subscription::scopeOrderByPriority()` now use PHPDoc var annotations to satisfy PHPStan's generic Builder return types
+
+### Changed
+- **README enriched** — Added Quick Start section, PHPStan Level 9 badge, improved structure
+- **Version bump** to 1.2.0
+
+---
+
 ## [1.1.0] — 2026-08-01
 
 ### Added

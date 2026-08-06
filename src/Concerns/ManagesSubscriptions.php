@@ -35,6 +35,7 @@ trait ManagesSubscriptions
      */
     public function subscribe(string $event, string $url): SubscriptionBuilder
     {
+        /** @var SubscriptionBuilder */
         $builder = $this->app->make(SubscriptionBuilder::class);
         $builder->on($event)->to($url);
 

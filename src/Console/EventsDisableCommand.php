@@ -22,7 +22,7 @@ class EventsDisableCommand extends Command
 
     public function handle(): int
     {
-        $id = $this->argument('id');
+        $id = (string) $this->argument('id');
 
         $trigger = Trigger::find($id);
 
