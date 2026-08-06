@@ -75,10 +75,23 @@ test('dispatch trigger job skips when trigger is disabled', function (): void {
 });
 
 test('dispatch trigger job has retry configuration', function (): void {
+    config()->set('events.retry.tries', 3);
+    config()->set('events.retry.backoff', '60,300,900');
+
     $job = new DispatchTriggerJob('test', 'test.event', []);
 
     expect($job->tries)->toBe(3)
         ->and($job->backoff)->toBe([60, 300, 900]);
+});
+
+test('dispatch trigger job reads retry configuration from config', function (): void {
+    config()->set('events.retry.tries', 5);
+    config()->set('events.retry.backoff', '30,60,120,300');
+
+    $job = new DispatchTriggerJob('test', 'test.event', []);
+
+    expect($job->tries)->toBe(5)
+        ->and($job->backoff)->toBe([30, 60, 120, 300]);
 });
 
 test('dispatch trigger job failed method marks log as failed', function (): void {

@@ -303,4 +303,50 @@ describe('WebhookAction edge cases', function (): void {
                 && isset($data['public_key']);
         });
     });
+
+    test('webhook timeout reads from config', function (): void {
+        config()->set('events.subscriptions.timeout', 10);
+
+        $action = new WebhookAction;
+
+        // Access getTimeout via reflection
+        $reflection = new ReflectionMethod(WebhookAction::class, 'getTimeout');
+        $reflection->setAccessible(true);
+
+        expect($reflection->invoke($action))->toBe(10);
+    });
+
+    test('webhook max failures reads from config', function (): void {
+        config()->set('events.subscriptions.max_failures', 5);
+
+        $action = new WebhookAction;
+
+        // Access getMaxFailures via reflection
+        $reflection = new ReflectionMethod(WebhookAction::class, 'getMaxFailures');
+        $reflection->setAccessible(true);
+
+        expect($reflection->invoke($action))->toBe(5);
+    });
+
+    test('webhook timeout falls back to default for invalid config', function (): void {
+        config()->set('events.subscriptions.timeout', 'invalid');
+
+        $action = new WebhookAction;
+
+        $reflection = new ReflectionMethod(WebhookAction::class, 'getTimeout');
+        $reflection->setAccessible(true);
+
+        expect($reflection->invoke($action))->toBe(30);
+    });
+
+    test('webhook max failures falls back to default for invalid config', function (): void {
+        config()->set('events.subscriptions.max_failures', -5);
+
+        $action = new WebhookAction;
+
+        $reflection = new ReflectionMethod(WebhookAction::class, 'getMaxFailures');
+        $reflection->setAccessible(true);
+
+        expect($reflection->invoke($action))->toBe(10);
+    });
 });

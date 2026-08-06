@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Actions;
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -26,14 +27,24 @@ use ZeroBoiler\Events\Models\Subscription;
 class WebhookAction implements Triggerable
 {
     /**
-     * Default timeout in seconds for the HTTP request.
+     * Get the webhook timeout from config.
      */
-    private const DEFAULT_TIMEOUT = 30;
+    private function getTimeout(): int
+    {
+        $timeout = Config::get('events.subscriptions.timeout', 30);
+
+        return is_int($timeout) && $timeout > 0 ? $timeout : 30;
+    }
 
     /**
-     * Maximum delivery attempts before marking subscription as failed.
+     * Get the max failures from config.
      */
-    private const MAX_FAILURES = 10;
+    private function getMaxFailures(): int
+    {
+        $max = Config::get('events.subscriptions.max_failures', 10);
+
+        return is_int($max) && $max > 0 ? $max : 10;
+    }
 
     /**
      * Handle the event payload by dispatching an HTTP POST webhook.
@@ -87,7 +98,7 @@ class WebhookAction implements Triggerable
 
         try {
             $response = Http::withHeaders($headers)
-                ->timeout(self::DEFAULT_TIMEOUT)
+                ->timeout($this->getTimeout())
                 ->post($url, $body);
 
             if (! $response->successful()) {
@@ -131,7 +142,7 @@ class WebhookAction implements Triggerable
 
         $subscription->recordFailure();
 
-        if ($subscription->hasExceededFailures(self::MAX_FAILURES)) {
+        if ($subscription->hasExceededFailures($this->getMaxFailures())) {
             $subscription->update(['active' => false]);
 
             Log::warning('Webhook subscription auto-deactivated after exceeding failure threshold', [

@@ -12,6 +12,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Throwable;
@@ -25,10 +26,10 @@ class DispatchTriggerJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public int $tries = 3;
-
     /** @var array<int, int> */
     public array $backoff = [60, 300, 900];
+
+    public int $tries;
 
     /**
      * @param  array<string, mixed>  $payload
@@ -37,7 +38,18 @@ class DispatchTriggerJob implements ShouldQueue
         public string $triggerId,
         public string $event,
         public array $payload,
-    ) {}
+    ) {
+        $this->tries = (int) Config::get('events.retry.tries', 3);
+
+        $backoffConfig = Config::get('events.retry.backoff', '60,300,900');
+        if (is_string($backoffConfig)) {
+            $parts = explode(',', $backoffConfig);
+            $this->backoff = array_map(
+                fn (string $v): int => (int) trim($v),
+                $parts,
+            );
+        }
+    }
 
     /**
      * The EventLog ID once created, stored on the instance so failed()

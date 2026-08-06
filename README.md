@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.3.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.4.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -354,6 +354,14 @@ composer ci          # All checks
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
 ## Changelog
+
+### v1.4.0
+
+- **Changed**: `DispatchTriggerJob` now reads `tries` and `backoff` from `events.retry` config instead of hardcoded constants
+- **Changed**: `WebhookAction` now reads `timeout` and `max_failures` from `events.subscriptions` config instead of hardcoded constants
+- **Added**: Config-driven retry/backoff tests for `DispatchTriggerJob`
+- **Added**: Config-driven timeout/max_failures tests for `WebhookAction`
+- **Changed**: Version bumped to 1.4.0
 
 ### v1.3.0
 
