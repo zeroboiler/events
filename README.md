@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.23.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.24.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -315,7 +315,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (44 test files)
+composer test        # Run Pest test suite (46 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -344,6 +344,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | EscapesWildcardLike | ✅ | `EscapesWildcardLikeTest.php` |
 | Service provider bindings | ✅ | `ServiceProviderBindingTest.php` |
 | Config completeness | ✅ | `ConfigCompletenessTest.php` |
+| Config table names (config-driven models) | ✅ | `ConfigTableNamesTest.php` |
 | Subscription HMAC config | ✅ | `SubscriptionSignConfigTest.php` |
 | Cache TTL config | ✅ | `EventManagerCacheTtlTest.php` |
 | Trait consistency | ✅ | `TraitConsistencyTest.php` |
@@ -354,6 +355,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Typed properties (models, factories, commands, attributes) | ✅ | `TypedPropertiesTest.php` |
 | Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
 | Edge cases (phase 3 — empty conditions, between inverted, in single, fire no-match, sign null secret) | ✅ | `EdgeCasesPhase3Test.php` |
+| Migration structure (columns, types, foreign keys) | ✅ | `MigrationStructureTest.php` |
 | Wildcard integration (cross-segment, catch-all, multi) | ✅ | `WildcardIntegrationTest.php` |
 | Wildcard matcher (exact, *, **, extract, findMatching) | ✅ | `WildcardMatcherTest.php` |
 | EscapesWildcardLike (%, _, \\, *, mixed) | ✅ | `EscapesWildcardLikeTest.php` |
@@ -457,6 +459,14 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Regex condition always false | Pattern exceeds 500 chars or has nested quantifiers | Simplify the regex or increase `ConditionEngine::MAX_REGEX_LENGTH` |
 
 ## Changelog
+
+### v1.24.0
+
+- **Added**: `ConfigTableNamesTest` — tests verifying models read table names from `events.table_names` config, custom table name override, and fallback to defaults
+- **Added**: `MigrationStructureTest` — tests verifying all 3 migration tables have required columns, triggers table id is string type, and foreign key relationships work end-to-end
+- **Fixed**: **CRITICAL** `tests/helpers.php` — `fake()` helper used `new Generator` without import; changed to `new \Faker\Generator` with fully-qualified class name (tests would fail at runtime without Faker's autoloader magic)
+- **Fixed**: Dead config — `events.table_names` config existed but models ignored it entirely; all 3 models (`Trigger`, `EventLog`, `Subscription`) now override `getTable()` to read from config with fallback to defaults
+- **Changed**: README test file count updated from 44 to 46; version bumped to 1.24.0
 
 ### v1.23.0
 

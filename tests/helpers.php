@@ -88,7 +88,7 @@ if (! function_exists('fake')) {
         static $faker = null;
 
         if ($faker === null) {
-            $faker = new Generator;
+            $faker = new \Faker\Generator;
             // Add concrete providers manually, excluding the abstract Text provider
             $faker->addProvider(new Address($faker));
             $faker->addProvider(new Company($faker));

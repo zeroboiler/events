@@ -38,7 +38,16 @@ class EventLog extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected string $table = 'event_logs';
+    /** @var string */
+    protected $table = 'event_logs';
+
+    #[\Override]
+    public function getTable(): string
+    {
+        $table = config('events.table_names.event_logs', 'event_logs');
+
+        return is_string($table) ? $table : 'event_logs';
+    }
 
     protected string $keyType = 'string';
 

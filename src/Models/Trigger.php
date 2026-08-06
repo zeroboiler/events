@@ -40,7 +40,16 @@ class Trigger extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected string $table = 'triggers';
+    /** @var string */
+    protected $table = 'triggers';
+
+    #[\Override]
+    public function getTable(): string
+    {
+        $table = config('events.table_names.triggers', 'triggers');
+
+        return is_string($table) ? $table : 'triggers';
+    }
 
     protected string $keyType = 'string';
 
