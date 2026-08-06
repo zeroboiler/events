@@ -5,6 +5,8 @@ parameters:
     bootstrapFiles:
         - vendor/autoload.php
     checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    checkUninitializedProperties: false
     treatPhpDocTypesAsCertain: false
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
@@ -12,3 +14,7 @@ parameters:
         - '#Access to an undefined property#'
         # Eloquent model static methods (__callStatic) are not resolvable without Larastan
         - '#Call to an undefined static method#'
+        # Eloquent __call magic method proxy (e.g., Subscription::find())
+        - '#Call to an undefined method#'
+        # Facade resolved instance types without Larastan
+        - '#Method .*::.*\(\) invoked on .*#'

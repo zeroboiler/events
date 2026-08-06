@@ -40,13 +40,11 @@ final class EventsRedeliverCommand extends Command
 
         $log = EventLog::with('trigger')->find($logId);
 
-        if ($log === null) {
+        if (! ($log instanceof EventLog)) {
             $this->error("Event log {$logId} not found.");
 
             return Command::FAILURE;
         }
-
-        assert($log instanceof EventLog);
 
         if ($log->status !== EventLog::STATUS_FAILED && $log->status !== EventLog::STATUS_COMPLETED) {
             $this->error("Event log {$logId} has status '{$log->status}'. Only failed or completed logs can be redelivered.");

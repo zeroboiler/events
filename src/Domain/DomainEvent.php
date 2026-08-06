@@ -29,8 +29,8 @@ final class DomainEvent
         ?UuidInterface $eventId = null,
         ?DateTimeImmutable $occurredAt = null,
     ): void {
-        $this->eventId = $eventId !== null ? $eventId : Uuid::uuid4();
-        $this->occurredAt = $occurredAt !== null ? $occurredAt : new DateTimeImmutable;
+        $this->eventId = $eventId ?? Uuid::uuid4();
+        $this->occurredAt = $occurredAt ?? new DateTimeImmutable();
     }
 
     /**

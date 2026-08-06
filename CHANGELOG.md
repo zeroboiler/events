@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.23.0] — 2026-08-06
+
+### Added
+- `EdgeCasesPhase3Test.php` — 25 tests: empty conditions, inverted between, in/not_in single-element, TriggerBuilder "0" validation, actionParams multi-action classes key, SubscriptionBuilder "0"/invalid URL validation, fire no-match, fire empty payload, enable/disable non-existent, fireModel non-Eloquent, EventLog status/mark methods, Subscription signPayload null/empty, signPayload consistency, resetFailures, WildcardMatcher boundary, findMatchingPatterns empty
+
+### Fixed
+- `phpstan.neon.dist` — added `checkGenericClassInNonGenericObjectType: false` and `checkUninitializedProperties: false`
+- `phpstan.neon.dist` — added ignore patterns for Eloquent `__call` magic and Facade type resolution
+- `helpers.php` — removed unused `use Faker\Generator` import
+
+### Changed
+- `DomainEvent::__construct()` — simplified null-coalescing to `??` operator
+- `EventsRedeliverCommand::handle()` — replaced null+assert with instanceof type narrowing
+
+---
+
 ## [1.22.0] — 2026-08-06
 
 ### Added

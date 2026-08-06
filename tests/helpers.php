@@ -5,7 +5,7 @@
  */
 
 declare(strict_types=1);
-use Faker\Generator;
+
 use Faker\Provider\en_US\Address;
 use Faker\Provider\en_US\Company;
 use Faker\Provider\en_US\Person;
