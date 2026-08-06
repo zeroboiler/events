@@ -7,6 +7,19 @@
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
 
+## Table of Contents
+
+- [Quick Start](#quick-start)
+- [Features](#features)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [CLI Commands](#cli-commands)
+- [Architecture](#architecture)
+- [Testing](#testing)
+- [Changelog](#changelog)
+- [License](#license)
+
 ## Quick Start
 
 ```bash
@@ -302,11 +315,40 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite
+composer test        # Run Pest test suite (31 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
-composer ci          # All checks
+composer ci          # All checks (lint → analyse → rector → test)
 ```
+
+### Test Coverage
+
+| Area | Tests | File |
+|------|-------|------|
+| EventManager core | ✅ | `EventManagerTest.php` |
+| Condition engine (15+ operators) | ✅ | `ConditionEngineTest.php` |
+| Wildcard matcher ( *, **, extract ) | ✅ | `WildcardMatcherTest.php` |
+| Trigger builder (single/multi/params) | ✅ | `TriggerBuilderExtendedTest.php` |
+| Subscription builder | ✅ | `SubscriptionBuilderTest.php` |
+| Action resolver | ✅ | `ActionResolverTest.php` |
+| Action string parsing (5 formats) | ✅ | `EventManagerParseActionsTest.php` |
+| Domain event (serialization, reconstruction) | ✅ | `DomainEventTest.php` |
+| Event log model | ✅ | `EventLogTest.php` |
+| Trigger model | ✅ | `TriggerModelTest.php` |
+| Subscription model (signing, failures) | ✅ | `SubscriptionTest.php` |
+| DispatchTriggerJob (config retry/backoff) | ✅ | `DispatchTriggerJobTest.php` |
+| WebhookAction (HMAC, timeout, failures) | ✅ | `EventsComprehensiveTest.php` |
+| Event history & stats | ✅ | `EventHistoryStatsTest.php` |
+| ManagesHistory (purge, aggregate) | ✅ | `EventsEdgeCaseTest.php` |
+| EscapesWildcardLike | ✅ | `EscapesWildcardLikeTest.php` |
+| Service provider bindings | ✅ | `ServiceProviderBindingTest.php` |
+| Config completeness | ✅ | `ConfigCompletenessTest.php` |
+| Subscription HMAC config | ✅ | `SubscriptionSignConfigTest.php` |
+| Cache TTL config | ✅ | `EventManagerCacheTtlTest.php` |
+| Trait consistency | ✅ | `TraitConsistencyTest.php` |
+| Integration (full fire flow) | ✅ | `EventManagerIntegrationTest.php` |
+| Production readiness | ✅ | `ProductionReadyTest.php` |
+| Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
 
 ## How It Works
 
@@ -501,4 +543,4 @@ composer ci          # All checks
 
 ## License
 
-Proprietary. All rights reserved.
+Proprietary. All rights reserved. © [ZeroBoiler](https://github.com/zeroboiler).
