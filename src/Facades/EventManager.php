@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Facade;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Subscription;
+use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\SubscriptionBuilder;
 use ZeroBoiler\Events\TriggerBuilder;
 

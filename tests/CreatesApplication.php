@@ -105,6 +105,7 @@ trait CreatesApplication
                 'table_names' => [
                     'triggers' => 'triggers',
                     'event_logs' => 'event_logs',
+                    'subscriptions' => 'event_subscriptions',
                 ],
                 'queue' => [
                     'connection' => 'sync',
@@ -114,6 +115,17 @@ trait CreatesApplication
                     'tries' => 3,
                     'backoff' => '60,300,900',
                 ],
+                'retention' => [
+                    'days' => 30,
+                    'include_pending' => false,
+                ],
+                'subscriptions' => [
+                    'auto_generate_secret' => true,
+                    'max_failures' => 10,
+                    'timeout' => 30,
+                    'signature_algorithm' => 'sha256',
+                ],
+                'wildcard_cache_ttl' => 300,
             ],
         ]);
         $app->instance('config', $config);

@@ -129,9 +129,3 @@ parameters:
 			count: 1
 			path: src/Console/EventsUnsubscribeCommand.php
 
-		# EventManager getEventHistory return type mismatch (Illuminate\Support\Collection vs Eloquent\Collection)
-		-
-			message: '#^Method ZeroBoiler\\\\Events\\\\EventManager::getEventHistory\(\) should return Illuminate\\\\Database\\\\Eloquent\\\\Collection<int, ZeroBoiler\\\\Events\\\\Models\\\\EventLog> but returns Illuminate\\\\Support\\\\Collection<int, stdClass>$#'
-			identifier: return.type
-			count: 1
-			path: src/EventManager.php

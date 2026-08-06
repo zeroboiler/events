@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\Database\Factories\SubscriptionFactory;
@@ -184,6 +185,8 @@ class Subscription extends Model
 
     /**
      * Generate an HMAC signature for a payload using this subscription's secret.
+     *
+     * The hash algorithm is configurable via `events.subscriptions.signature_algorithm`.
      */
     public function signPayload(string $payload): string
     {
@@ -191,7 +194,9 @@ class Subscription extends Model
             return '';
         }
 
-        return hash_hmac('sha256', $payload, $this->secret);
+        $algorithm = Config::get('events.subscriptions.signature_algorithm', 'sha256');
+
+        return hash_hmac(is_string($algorithm) ? $algorithm : 'sha256', $payload, $this->secret);
     }
 
     /**

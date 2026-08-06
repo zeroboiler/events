@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.4.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.5.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -354,6 +354,18 @@ composer ci          # All checks
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
 ## Changelog
+
+### v1.5.0
+
+- **Changed**: `Subscription::signPayload()` now reads the hash algorithm from `events.subscriptions.signature_algorithm` config instead of hardcoded `sha256`
+- **Added**: `SubscriptionSignConfigTest` — tests for config-driven HMAC algorithm (sha256, sha384, sha512, invalid fallback, null fallback)
+- **Added**: `ConfigCompletenessTest` — validates all config keys exist with correct types at bootstrap
+- **Fixed**: `EventManagerCacheTtlTest.php` was missing from Pest.php `uses()` list — cache TTL tests were not getting Laravel bootstrap
+- **Fixed**: `CreatesApplication` test config was missing `retention`, `subscriptions`, and `wildcard_cache_ttl` keys — tests relying on these values would get incorrect defaults
+- **Fixed**: Stale PHPStan baseline entry for `getEventHistory()` return type (method correctly returns Eloquent Collection)
+- **Fixed**: Added missing `use ZeroBoiler\Events\Models\Trigger` import in `EventManager` facade
+- **Removed**: 1 stale PHPStan baseline entry
+- **Changed**: Version bumped to 1.5.0
 
 ### v1.4.0
 
