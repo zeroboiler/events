@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.13.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.14.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -315,7 +315,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (33 test files)
+composer test        # Run Pest test suite (34 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -352,6 +352,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Typed properties (models, factories, commands, attributes) | ✅ | `TypedPropertiesTest.php` |
 | Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
 | Wildcard integration (cross-segment, catch-all, multi) | ✅ | `WildcardIntegrationTest.php` |
+| Redeliver command (validation, status checks) | ✅ | `EventsRedeliverCommandTest.php` |
 
 ## How It Works
 
@@ -408,7 +409,50 @@ composer ci          # All checks (lint → analyse → rector → test)
 - **No orphaned logs** — Async jobs create their `EventLog` inside the job handler, so queue failures don't leave orphaned entries.
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
+## Security Considerations
+
+### HMAC Webhook Signing
+- All webhook payloads are signed with HMAC using the subscription's secret. The algorithm defaults to `sha256` but can be changed via `events.subscriptions.signature_algorithm`.
+- Secrets are auto-generated as `whsec_` + 32 random characters when not explicitly provided. Set `events.subscriptions.auto_generate_secret` to `false` to disable auto-generation.
+- Secrets are hidden from serialization (`$hidden = ['secret', 'deleted_at']`).
+
+### ReDoS Protection
+- The `matches` (regex) operator rejects patterns longer than 500 characters and patterns with nested quantifiers (e.g., `(a+)+`).
+- PCRE backtrack limit is temporarily reduced to 1000 during regex evaluation.
+
+### SQL Injection Prevention
+- Event wildcard patterns are properly escaped before being used in SQL LIKE queries (`%`, `_`, `\` characters).
+- All database queries use Eloquent's parameterized query builder.
+
+### Action Resolution
+- Only classes that implement `Triggerable` can be dispatched. Non-existent classes or non-implementing classes are rejected with an `InvalidArgumentException`.
+
+### Rate Limiting & Abuse
+- The package does **not** include built-in rate limiting. Use the [zeroboiler/security](../security) package or Laravel's built-in rate limiting middleware to protect webhook endpoints.
+
+## Troubleshooting
+
+| Issue | Cause | Solution |
+|---|---|---|
+| Triggers not firing | Trigger is disabled | Check `enabled` column; use `zeroboiler:events:list --enabled` |
+| Wildcard triggers not matching | Cache stale after manual DB edit | Run `EventManager::invalidateTriggerCache()` or re-save via API |
+| Webhook returns 401 | Missing signature header | Verify subscription has a secret and it hasn't been rotated |
+| Subscription auto-deactivated | Failure threshold exceeded | Check `failure_count` vs `events.subscriptions.max_failures`; reset with `resetFailures()` |
+| Queue jobs stuck | Queue worker not running | Ensure `php artisan queue:work` is running; check `events.queue.connection` config |
+| `ActionResolver` throws | Action class not found or not Triggerable | Verify the class exists, is autoloaded, and implements `Triggerable` |
+| EventLog entries with no trigger | Trigger deleted after fire | EventLog references trigger via FK — use soft deletes to preserve referential integrity |
+| Regex condition always false | Pattern exceeds 500 chars or has nested quantifiers | Simplify the regex or increase `ConditionEngine::MAX_REGEX_LENGTH` |
+
 ## Changelog
+
+### v1.14.0
+
+- **Added**: `EventsRedeliverCommandTest` — unit tests for redeliver command validation (non-existent log, pending/dispatched log rejection, missing URL detection, failed/completed log redelivery)
+- **Added**: Security Considerations section in README — HMAC signing, ReDoS protection, SQL injection prevention, action resolution safety, rate limiting guidance
+- **Added**: Troubleshooting table in README — common issues with causes and solutions
+- **Fixed**: `DispatchTriggerJob::$tries` moved to constructor property promotion — eliminates PHPStan 9 uninitialized property warning for class-level default override
+- **Fixed**: `ConditionEngine::evaluateCondition()` now type-guards `$expected[0]` as string — PHPStan 9 mixed-to-string safety
+- **Changed**: Version bumped to 1.14.0
 
 ### v1.13.0
 

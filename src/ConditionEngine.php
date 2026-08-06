@@ -43,13 +43,13 @@ final class ConditionEngine implements ConditionEngineContract
     {
         $actual = $this->getNestedValue($payload, $field);
 
-        // Array operator syntax: ["field" => [">", 100]] or ["field" => ["null"]]
+        // Array operator syntax: [">", 100] or ["null"]
         if (is_array($expected)) {
             if ($expected === []) {
                 return false;
             }
 
-            $operator = $expected[0];
+            $operator = is_string($expected[0]) ? $expected[0] : '';
             $value = $expected[1] ?? null;
 
             // Guard against null actual values for comparison operators
