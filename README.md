@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.9.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.10.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -315,7 +315,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (31 test files)
+composer test        # Run Pest test suite (32 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -347,6 +347,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Cache TTL config | ✅ | `EventManagerCacheTtlTest.php` |
 | Trait consistency | ✅ | `TraitConsistencyTest.php` |
 | Integration (full fire flow) | ✅ | `EventManagerIntegrationTest.php` |
+| Facade proxy, cache invalidation, ActionResolver errors | ✅ | `EventsFacadeProxyTest.php` |
 | Production readiness | ✅ | `ProductionReadyTest.php` |
 | Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
 
@@ -406,6 +407,20 @@ composer ci          # All checks (lint → analyse → rector → test)
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
 ## Changelog
+
+### v1.10.0
+
+- **Fixed**: `EventLog` model now explicitly declares `$table = 'event_logs'` for consistency with `Trigger` and `Subscription` models
+- **Fixed**: `TriggerFactory::withConditions()` and `TriggerFactory::priority()` state closures now have explicit `: array` return type annotations for PHPStan 9 compliance
+- **Added**: `EventsFacadeProxyTest` — comprehensive test suite covering:
+  - Facade static method proxy (on, register, fire, fireModel, invalidateTriggerCache)
+  - Cache invalidation behavior (enable/disable with found/not-found triggers)
+  - ActionResolver error handling (non-existent class, non-Triggerable class)
+  - ConditionEngine edge cases (empty conditions, single-element operator, between edge cases, null/non-string guards)
+  - WildcardMatcher edge cases (empty pattern, empty event, multiple wildcards, regex special chars)
+  - DomainEvent roundtrip and defaults
+  - ServiceProvider binding verification (singleton/transient, contract implementation, config merge)
+- **Changed**: Version bumped to 1.10.0
 
 ### v1.9.0
 

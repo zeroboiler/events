@@ -39,6 +39,9 @@ class EventLog extends Model
     use SoftDeletes;
 
     /** @var string */
+    protected $table = 'event_logs';
+
+    /** @var string */
     protected $keyType = 'string';
 
     /** @var bool */

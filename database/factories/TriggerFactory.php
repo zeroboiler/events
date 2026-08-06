@@ -70,14 +70,14 @@ class TriggerFactory extends Factory
 
     public function withConditions(array $conditions): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'conditions' => $conditions,
         ]);
     }
 
     public function priority(int $priority): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'priority' => $priority,
         ]);
     }
