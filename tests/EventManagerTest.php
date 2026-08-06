@@ -164,7 +164,7 @@ test('fire event respects priority', function (): void {
 
 test('fire model event generates correct event name', function (): void {
     Trigger::factory()->create([
-        'event' => 'App\\\\Models\\\\Order.created',
+        'event' => 'App\\Models\\Order.created',
         'action' => LogOrderCreated::class,
         'conditions' => null,
         'enabled' => true,
@@ -182,23 +182,23 @@ test('fire model event generates correct event name', function (): void {
         }
     };
 
-    EventManagerFacade::fireModel('App\\\\Models\\\\Order', 'created', $order);
+    EventManagerFacade::fireModel('App\\Models\\Order', 'created', $order);
 
     expect(EventLog::count())->toBe(1)
-        ->and(EventLog::first()->event)->toBe('App\\\\Models\\\\Order.created');
+        ->and(EventLog::first()->event)->toBe('App\\Models\\Order.created');
 
     // Verify model attributes are flattened into the payload root
     $payload = EventLog::first()->payload;
     expect($payload)->toBeArray()
         ->and($payload['id'])->toBe(123)
         ->and($payload['status'])->toBe('active')
-        ->and($payload['model_class'])->toBe('App\\\\Models\\\\Order')
+        ->and($payload['model_class'])->toBe('App\\Models\\Order')
         ->and($payload['action'])->toBe('created');
 });
 
 test('fire model event falls back to toArray when attributesToArray is missing', function (): void {
     Trigger::factory()->create([
-        'event' => 'App\\\\Models\\\\Product.deleted',
+        'event' => 'App\\Models\\Product.deleted',
         'action' => LogOrderEvent::class,
         'conditions' => ['status' => 'active'],
         'enabled' => true,
@@ -216,7 +216,7 @@ test('fire model event falls back to toArray when attributesToArray is missing',
         }
     };
 
-    EventManagerFacade::fireModel('App\\\\Models\\\\Product', 'deleted', $product);
+    EventManagerFacade::fireModel('App\\Models\\Product', 'deleted', $product);
 
     expect(EventLog::count())->toBe(1);
 
