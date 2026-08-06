@@ -56,7 +56,7 @@ class EventLog extends Model
     ];
 
     /** @var array<int, string> */
-    protected $hidden = [
+    protected array $hidden = [
         'deleted_at',
     ];
 
@@ -91,7 +91,7 @@ class EventLog extends Model
     /**
      * Get the trigger that owns this event log.
      *
-     * @return BelongsTo<Trigger, $this>
+     * @return BelongsTo<Trigger, covariant $this>
      */
     public function trigger(): BelongsTo
     {

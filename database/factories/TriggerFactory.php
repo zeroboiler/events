@@ -17,7 +17,7 @@ use ZeroBoiler\Events\Models\Trigger;
  */
 class TriggerFactory extends Factory
 {
-    protected $model = Trigger::class;
+    protected string $model = Trigger::class;
 
     /**
      * @return array<string, mixed>

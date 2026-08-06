@@ -77,7 +77,7 @@ class Trigger extends Model
     /**
      * Get the event logs for this trigger.
      *
-     * @return HasMany<EventLog, $this>
+     * @return HasMany<EventLog, covariant $this>
      */
     public function eventLogs(): HasMany
     {

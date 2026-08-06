@@ -58,6 +58,10 @@ test('EventLog model has typed properties', function (): void {
     expect($fillable->hasType())->toBeTrue()
         ->and($fillable->getType()?->getName())->toBe('array');
 
+    $hidden = $reflection->getProperty('hidden');
+    expect($hidden->hasType())->toBeTrue()
+        ->and($hidden->getType()?->getName())->toBe('array');
+
     $statuses = $reflection->getProperty('statuses');
     expect($statuses->hasType())->toBeTrue()
         ->and($statuses->getType()?->getName())->toBe('array');

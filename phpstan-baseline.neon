@@ -62,35 +62,3 @@ parameters:
 			identifier: staticMethod.notFound
 			count: 1
 			path: src/Console/EventsRetryCommand.php
-
-		# Eloquent generic types — PHPStan strict generic expectations for HasFactory/HasMany/BelongsTo
-		-
-			message: '#^Class ZeroBoiler\\\\Events\\\\Models\\\\EventLog uses generic trait Illuminate\\\\Database\\\\Eloquent\\\\Factories\\\\HasFactory but does not specify its types: TFactory$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Models/EventLog.php
-		-
-			message: '#^Class ZeroBoiler\\\\Events\\\\Models\\\\Subscription uses generic trait Illuminate\\\\Database\\\\Eloquent\\\\Factories\\\\HasFactory but does not specify its types: TFactory$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Models/Subscription.php
-		-
-			message: '#^Class ZeroBoiler\\\\Events\\\\Models\\\\Trigger uses generic trait Illuminate\\\\Database\\\\Eloquent\\\\Factories\\\\HasFactory but does not specify its types: TFactory$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Models/Trigger.php
-		-
-			message: '#^Method ZeroBoiler\\\\Events\\\\Models\\\\EventLog::trigger\(\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo<ZeroBoiler\\\\Events\\\\Models\\\\Trigger, ZeroBoiler\\\\Events\\\\Models\\\\EventLog> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo<ZeroBoiler\\\\Events\\\\Models\\\\Trigger, \$this\(ZeroBoiler\\\\Events\\\\Models\\\\EventLog\)>$#'
-			identifier: return.type
-			count: 1
-			path: src/Models/EventLog.php
-		-
-			message: '#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany<ZeroBoiler\\\\Events\\\\Models\\\\EventLog> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany: TRelatedModel, TDeclaringModel$#'
-			identifier: generics.lessTypes
-			count: 1
-			path: src/Models/Trigger.php
-		-
-			message: '#^Method ZeroBoiler\\\\Events\\\\Models\\\\Trigger::eventLogs\(\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany<ZeroBoiler\\\\Events\\\\Models\\\\EventLog> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany<ZeroBoiler\\\\Events\\\\Models\\\\EventLog, \$this\(ZeroBoiler\\\\Events\\\\Models\\\\Trigger\)>$#'
-			identifier: return.type
-			count: 1
-			path: src/Models/Trigger.php

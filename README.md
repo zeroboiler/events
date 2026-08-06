@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.12.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.13.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -351,6 +351,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Production readiness | ✅ | `ProductionReadyTest.php` |
 | Typed properties (models, factories, commands, attributes) | ✅ | `TypedPropertiesTest.php` |
 | Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
+| Wildcard integration (cross-segment, catch-all, multi) | ✅ | `WildcardIntegrationTest.php` |
 
 ## How It Works
 
@@ -408,6 +409,21 @@ composer ci          # All checks (lint → analyse → rector → test)
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
 ## Changelog
+
+### v1.13.0
+
+- **Fixed**: `TriggerFactory` and `SubscriptionFactory` `$model` property now uses native `string` type declaration — fully consistent across all 3 factories
+- **Fixed**: `EventLog::$hidden` and `Subscription::$hidden` now use native `array` type declaration — all model properties consistently typed
+- **Fixed**: `Trigger::eventLogs()` and `EventLog::trigger()` relation docblocks use `covariant $this` for PHPStan 9 generic return type compliance
+- **Removed**: 4 stale PHPStan baseline entries for `HasFactory` generics and relation return type mismatches
+- **Added**: `WildcardIntegrationTest` — comprehensive integration tests covering:
+  - Cross-segment wildcard (`**`) matching (single and multi-segment events)
+  - Catch-all wildcard (`*`) with multi-segment events and empty event rejection
+  - Multiple wildcards per pattern (`user.*.order.*`)
+  - Async fire with wildcard triggers
+  - Fire event with no matching triggers / only disabled triggers
+- **Added**: `TypedPropertiesTest` now verifies `EventLog::$hidden` property type (was only checking Trigger and Subscription)
+- **Changed**: Version bumped to 1.13.0
 
 ### v1.12.0
 
