@@ -351,7 +351,7 @@ final class EventManager
                 );
             }
 
-            // Associative array → single action with class + params
+            // Sequential list → normalise each entry
             if (array_is_list($decoded)) {
                 // List of entries — normalise each one
                 return array_map(

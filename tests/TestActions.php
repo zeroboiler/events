@@ -10,7 +10,7 @@ namespace App\Actions;
 
 use ZeroBoiler\Events\Contracts\Triggerable;
 
-class SendOrderNotification implements Triggerable
+final class SendOrderNotification implements Triggerable
 {
     public function handle(array $payload): void
     {
@@ -18,7 +18,7 @@ class SendOrderNotification implements Triggerable
     }
 }
 
-class LogOrderEvent implements Triggerable
+final class LogOrderEvent implements Triggerable
 {
     public function handle(array $payload): void
     {
@@ -26,7 +26,7 @@ class LogOrderEvent implements Triggerable
     }
 }
 
-class HighPriority implements Triggerable
+final class HighPriority implements Triggerable
 {
     public function handle(array $payload): void
     {
@@ -34,7 +34,7 @@ class HighPriority implements Triggerable
     }
 }
 
-class LowPriority implements Triggerable
+final class LowPriority implements Triggerable
 {
     public function handle(array $payload): void
     {
@@ -42,7 +42,7 @@ class LowPriority implements Triggerable
     }
 }
 
-class LogOrderCreated implements Triggerable
+final class LogOrderCreated implements Triggerable
 {
     public function handle(array $payload): void
     {

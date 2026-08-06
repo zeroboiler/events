@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.14.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.15.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -315,7 +315,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (34 test files)
+composer test        # Run Pest test suite (35 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -336,6 +336,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Event log model | ✅ | `EventLogTest.php` |
 | Trigger model | ✅ | `TriggerModelTest.php` |
 | Subscription model (signing, failures) | ✅ | `SubscriptionTest.php` |
+| Subscription max failures config-driven | ✅ | `SubscriptionMaxFailuresConfigTest.php` |
 | DispatchTriggerJob (config retry/backoff) | ✅ | `DispatchTriggerJobTest.php` |
 | WebhookAction (HMAC, timeout, failures) | ✅ | `EventsComprehensiveTest.php` |
 | Event history & stats | ✅ | `EventHistoryStatsTest.php` |
@@ -444,6 +445,15 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Regex condition always false | Pattern exceeds 500 chars or has nested quantifiers | Simplify the regex or increase `ConditionEngine::MAX_REGEX_LENGTH` |
 
 ## Changelog
+
+### v1.15.0
+
+- **Fixed**: `Subscription::hasExceededFailures()` now reads default threshold from `events.subscriptions.max_failures` config instead of hardcoded `10` — consistent with `WebhookAction` and `EventsRedeliverCommand`
+- **Changed**: `Subscription::hasExceededFailures()` signature changed from `int $max = 10` to `?int $max = null` — nullable parameter with config fallback
+- **Added**: `SubscriptionMaxFailuresConfigTest` — tests for config-driven default, explicit override, null config fallback, and zero-failure edge case
+- **Changed**: All test action classes (`SendOrderNotification`, `LogOrderEvent`, `HighPriority`, `LowPriority`, `LogOrderCreated`) are now `final` — consistent with src/ classes
+- **Fixed**: Misleading comment in `EventManager::parseActions()` — corrected "Associative array" to "Sequential list" for `array_is_list` branch
+- **Changed**: Version bumped to 1.15.0
 
 ### v1.14.0
 

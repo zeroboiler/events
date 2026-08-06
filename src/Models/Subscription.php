@@ -175,10 +175,14 @@ class Subscription extends Model
 
     /**
      * Check if the subscription has exceeded the maximum failure threshold.
+     *
+     * Reads the default threshold from config when no explicit max is provided.
      */
-    public function hasExceededFailures(int $max = 10): bool
+    public function hasExceededFailures(?int $max = null): bool
     {
-        return $this->failure_count >= $max;
+        $threshold = $max ?? Config::get('events.subscriptions.max_failures', 10);
+
+        return $this->failure_count >= (is_int($threshold) ? $threshold : 10);
     }
 
     /**
