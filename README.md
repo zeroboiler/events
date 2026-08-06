@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.1.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-1.1.1-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 
@@ -270,6 +270,30 @@ composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks
 ```
+
+## Changelog
+
+### v1.1.1
+
+- **Fixed**: `ActionResolver` now explicitly checks that resolved class implements `Triggerable` instead of relying on PHP type coercion
+- **Fixed**: `ConditionEngine` handles empty array condition values gracefully (returns `false` instead of accessing undefined index)
+- **Fixed**: `DispatchTriggerJob::failed()` uses `update()` instead of direct property assignment for consistent cast handling
+- **Fixed**: SQL LIKE injection in `EventsListCommand` and `EventsSubscriptionsCommand` — event filter wildcards now properly escape `%`, `_`, and `\` characters
+- **Added**: `EventManager::parseActions()` now handles `{"classes": [...], "params": {...}}` format for multi-action triggers with shared params
+- **Added**: Test for `classes` key action format
+- **Added**: Test for empty array condition edge case
+- **Added**: Test for ActionResolver error message content
+
+### v1.1.0
+
+- Initial production-ready release
+- Dynamic event triggers with wildcard matching
+- Condition engine with 15+ operators and ReDoS protection
+- Webhook subscriptions with HMAC-SHA256 signing
+- Domain event value object for event sourcing
+- Event history, statistics, and log retention
+- Full CLI command set
+- PHPStan level 9, Laravel Pint, Rector
 
 ## License
 

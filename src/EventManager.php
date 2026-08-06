@@ -308,6 +308,7 @@ class EventManager
      * - Single class name string:  "App\\Actions\\Foo"
      * - JSON array of class names:  ["App\\Actions\\Foo", "App\\Actions\\Bar"]
      * - JSON object with class + params:  {"class": "...", "params": {...}}
+     * - JSON object with classes + params:  {"classes": [...], "params": {...}}
      * - JSON array of objects:  [{"class": "...", "params": {...}}, ...]
      *
      * @return array<int, mixed>
@@ -318,6 +319,16 @@ class EventManager
         $decoded = json_decode($action, true);
 
         if (is_array($decoded)) {
+            // Handle {"classes": [...], "params": {...}} — multiple actions with shared params
+            if (isset($decoded['classes']) && is_array($decoded['classes'])) {
+                $params = $decoded['params'] ?? [];
+
+                return array_map(
+                    fn (string $cls): array => ['class' => $cls, 'params' => $params],
+                    $decoded['classes'],
+                );
+            }
+
             // Associative array → single action with class + params
             if (array_is_list($decoded)) {
                 // List of entries — normalise each one

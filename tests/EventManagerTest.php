@@ -343,3 +343,21 @@ test('getMatchingTriggers deduplicates exact and wildcard matches', function ():
 
     DB::disableQueryLog();
 });
+
+test('fire event with multiple actions and params uses classes key format', function (): void {
+    Trigger::factory()->create([
+        'event' => 'multi.params.fired',
+        'action' => json_encode([
+            'classes' => [SendOrderNotification::class, LogOrderEvent::class],
+            'params' => ['topic' => 'orders'],
+        ]),
+        'conditions' => null,
+        'enabled' => true,
+        'async' => false,
+    ]);
+
+    EventManagerFacade::fire('multi.params.fired', ['order_id' => 123]);
+
+    expect(EventLog::count())->toBe(1)
+        ->and(EventLog::first()->status)->toBe(EventLog::STATUS_COMPLETED);
+});

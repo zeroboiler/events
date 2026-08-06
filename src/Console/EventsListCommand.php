@@ -32,7 +32,9 @@ class EventsListCommand extends Command
         $eventFilter = $this->option('event');
         if ($eventFilter !== null && $eventFilter !== '') {
             // Convert wildcard * to SQL % for LIKE matching
-            $likePattern = str_replace('*', '%', $eventFilter);
+            // Escape SQL LIKE special characters first
+            $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], (string) $eventFilter);
+            $likePattern = str_replace('*', '%', $escaped);
             $query->where('event', 'like', $likePattern);
         }
 

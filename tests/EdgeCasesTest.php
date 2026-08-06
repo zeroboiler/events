@@ -122,11 +122,19 @@ describe('ConditionEngine edge cases', function (): void {
             ->toBeTrue();
     });
 
-    test('non-scalar comparison returns false', function (): void {
+    test('handles non-scalar comparison returns false', function (): void {
         $engine = app(ConditionEngine::class);
 
         // Array vs string — not both scalar
         expect($engine->matches(['tags' => 'urgent'], ['tags' => ['urgent']]))
+            ->toBeFalse();
+    });
+
+    test('empty array condition returns false', function (): void {
+        $engine = app(ConditionEngine::class);
+
+        // An empty array as condition value should not match
+        expect($engine->matches(['status' => []], ['status' => 'active']))
             ->toBeFalse();
     });
 });

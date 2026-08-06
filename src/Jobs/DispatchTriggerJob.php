@@ -90,9 +90,10 @@ class DispatchTriggerJob implements ShouldQueue
         if ($this->eventLogId !== null) {
             $log = EventLog::find($this->eventLogId);
             if ($log) {
-                $log->status = EventLog::STATUS_FAILED;
-                $log->error = $exception->getMessage();
-                $log->save();
+                $log->update([
+                    'status' => EventLog::STATUS_FAILED,
+                    'error' => $exception->getMessage(),
+                ]);
             }
         }
     }

@@ -45,6 +45,10 @@ class ConditionEngine implements ConditionEngineContract
 
         // Array operator syntax: ["field" => [">", 100]] or ["field" => ["null"]]
         if (is_array($expected)) {
+            if ($expected === []) {
+                return false;
+            }
+
             $operator = $expected[0];
             $value = $expected[1] ?? null;
 

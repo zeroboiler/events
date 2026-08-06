@@ -31,7 +31,9 @@ class EventsSubscriptionsCommand extends Command
         $eventFilter = $this->option('event');
         if ($eventFilter !== null && $eventFilter !== '') {
             if (str_contains((string) $eventFilter, '*')) {
-                $likePattern = str_replace('*', '%', (string) $eventFilter);
+                // Escape SQL LIKE special characters before converting wildcards
+                $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], (string) $eventFilter);
+                $likePattern = str_replace('*', '%', $escaped);
                 $query->where('event', 'like', $likePattern);
             } else {
                 $query->where('event', (string) $eventFilter);

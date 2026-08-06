@@ -19,6 +19,8 @@ class ActionResolver
 
     /**
      * Resolve a class FQN to a Triggerable instance.
+     *
+     * @throws \InvalidArgumentException if the class does not exist or does not implement Triggerable
      */
     public function resolve(string $class): Triggerable
     {
@@ -27,6 +29,12 @@ class ActionResolver
             throw new \InvalidArgumentException("Triggerable class {$class} does not exist");
         }
 
-        return $this->app->make($class);
+        $instance = $this->app->make($class);
+
+        if (! $instance instanceof Triggerable) {
+            throw new \InvalidArgumentException("Class {$class} must implement ".Triggerable::class);
+        }
+
+        return $instance;
     }
 }

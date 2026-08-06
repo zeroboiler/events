@@ -55,10 +55,15 @@ test('action resolver throws exception for nonexistent class', function (): void
 test('action resolver throws exception for class not implementing triggerable', function (): void {
     $resolver = app(ActionResolver::class);
 
-    // A real class that doesn't implement Triggerable — resolve() returns it
-    // but the return type declaration causes a TypeError
     expect(fn () => $resolver->resolve(stdClass::class))
-        ->toThrow(TypeError::class);
+        ->toThrow(InvalidArgumentException::class, 'must implement');
+});
+
+test('action resolver error message includes class name', function (): void {
+    $resolver = app(ActionResolver::class);
+
+    expect(fn () => $resolver->resolve(stdClass::class))
+        ->toThrow(InvalidArgumentException::class, 'stdClass');
 });
 
 // Test helpers
