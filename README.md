@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.44.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.45.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 71 test files (Pest)
+└── tests/                      # 72 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -390,7 +390,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (71 test files)
+composer test        # Run Pest test suite (72 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -469,6 +469,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 11 production (SubscriptionBuilder transaction atomicity, validation-before-transaction, action params verification, WebhookAction subscription failure tracking optimization, hasExceededFailures config/custom, delivery tracking, signPayload determinism) | ✅ | `EventsPhase11ProductionTest.php` |
 | Phase 12 production (ServiceProvider bindings, Facade accessor, WildcardMatcher edge cases, ConditionEngine operator coverage, DomainEvent roundtrip/edge cases, Trigger model scopes, EventLog mark methods, Subscription signing/failures/matching, EventManager fire/fireModel, Config completeness, Strict types enforcement, Final class verification, EscapesWildcardLike) | ✅ | `EventsPhase12ProductionTest.php` |
 | Phase 13 production (TriggerBuilder deduplication order-preservation, ConditionEngine full operator coverage, O(1) trigger dedup set, DomainEvent immutability, Config type validation, parseActions all 5 formats, WildcardMatcher comprehensive, EscapesWildcardLike, Singleton/transient binding verification, strict types enforcement, Final class verification) | ✅ | `EventsPhase13ProductionTest.php` |
+| Phase 14 production (fireModel edge cases, TriggerBuilder action merging integration, ConditionEngine strictEquals edge cases (0 vs false vs empty string, array vs string, in empty array), WildcardMatcher regex special chars/empty pattern/pure attribute, EventManager cache TTL edge cases (negative/zero/non-integer/custom), EventManager enable/disable non-existent, DomainEvent UUID freshness/timestamp freshness/toArray keys/fromArray edge cases, DispatchTriggerJob constructor edge cases (empty backoff/single backoff/property types), Subscription signPayload empty secret/hasExceededFailures config edge cases/matchesEvent patterns, Factory default state validation, ActionResolver error cases, TriggerBuilder/SubscriptionBuilder validation and fluent interface, WebhookAction missing URL variants, ConditionEngine empty conditions/numeric string/matches null) | ✅ | `EventsPhase14ProductionTest.php` |
 
 ## How It Works
 
@@ -665,6 +666,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.45.0
+
+- **Fixed**: `TriggerFactory::action` field now generates realistic action class names (`App\Actions\{word}Action`) instead of random sentences — produces valid-looking class FQNs for factory-created triggers, improving test realism.
+- **Added**: `EventsPhase14ProductionTest.php` — 62 new tests covering: TriggerBuilder action merging integration (overlapping action()/actions() deduplication, prepend behavior), ConditionEngine strictEquals edge cases (0 vs false vs empty string vs null, array vs string, same-type strict comparison, in/not_in with empty array, numeric string vs int comparison, matches operator with null subject/value), WildcardMatcher edge cases (regex special chars in event name, empty pattern, empty patterns array, no wildcards extractWildcards, segment count mismatch, #[\Pure] attribute verification), EventManager cache TTL edge cases (non-integer config, negative value, zero value, valid custom value), EventManager enable/disable with non-existent triggers, DomainEvent freshness (UUID uniqueness per occur(), timestamp advancement, toArray required keys), DomainEvent fromArray edge cases (empty array, numeric eventType, string payload), DispatchTriggerJob constructor edge cases (empty backoff string, single-value backoff, comprehensive property type verification via reflection), Subscription signPayload with empty secret, hasExceededFailures with non-integer config and zero config, matchesEvent patterns (exact, single-segment wildcard, cross-segment wildcard), Factory default state validation for all 3 models (Trigger, EventLog, Subscription), TriggerFactory realistic action format verification, ActionResolver error cases (non-existent class, non-Triggerable class), EventManager fire/fireModel empty validation, TriggerBuilder/SubscriptionBuilder validation (empty event, no action, empty URL, invalid URL) and fluent interface (all methods return self), WebhookAction missing URL variants (missing, empty, null, non-string), ConditionEngine empty conditions, WildcardMatcher findMatchingPatterns with empty patterns and no matches.
+- **Changed**: Version bumped to 1.45.0, test file count updated to 72
 
 ### v1.44.0
 

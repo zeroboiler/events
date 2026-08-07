@@ -30,7 +30,7 @@ class TriggerFactory extends Factory
             'id' => (string) Str::uuid(),
             'name' => ucfirst(str_replace('.', ' ', $event)).' Trigger',
             'event' => $event,
-            'action' => fake()->sentence(),
+            'action' => 'App\\Actions\\'.fake()->word().'Action',
             'conditions' => fake()->boolean(50) ? [
                 'status' => fake()->randomElement(['active', 'pending']),
             ] : null,

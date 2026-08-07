@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.45.0] — 2026-08-07
+
+### Fixed
+- `TriggerFactory::action` field now generates realistic action class names (`App\Actions\{word}Action`) instead of random sentences — produces valid-looking class FQNs for factory-created triggers, improving test realism and preventing parseActions from encountering unexpected string formats.
+
+### Added
+- `EventsPhase14ProductionTest.php` — 62 new tests covering: TriggerBuilder action merging integration, ConditionEngine strictEquals edge cases (0 vs false vs empty string vs null, array vs string, in/not_in with empty array, numeric string vs int comparison, matches operator with null subject/value), WildcardMatcher edge cases (regex special chars, empty pattern, #[\Pure] attribute verification), EventManager cache TTL edge cases (non-integer, negative, zero, custom), EventManager enable/disable non-existent triggers, DomainEvent freshness (UUID/timestamp), DomainEvent fromArray edge cases, DispatchTriggerJob constructor edge cases (empty backoff, single backoff, property types), Subscription edge cases (empty secret, non-integer config, zero config, matchesEvent patterns), Factory default state validation for all 3 models, TriggerFactory realistic action format, ActionResolver error cases, EventManager fire/fireModel validation, TriggerBuilder/SubscriptionBuilder validation and fluent interface, WebhookAction missing URL variants, ConditionEngine empty conditions.
+
+### Changed
+- Version bumped to 1.45.0, test file count updated to 72.
+
+---
+
 ## [1.44.0] — 2026-08-07
 
 ### Improved
