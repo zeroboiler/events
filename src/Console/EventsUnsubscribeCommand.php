@@ -21,6 +21,7 @@ final class EventsUnsubscribeCommand extends Command
     /**
      * Execute the command.
      */
+    #[\Override]
     public function handle(EventManager $eventManager): int
     {
         $id = $this->argument('id');

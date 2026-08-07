@@ -23,6 +23,7 @@ final class EventsSubscribeCommand extends Command
 
     protected string $description = 'Register an external webhook subscription for an event';
 
+    #[\Override]
     public function handle(EventManager $eventManager): int
     {
         $event = $this->argument('event');

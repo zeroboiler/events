@@ -22,6 +22,7 @@ final class EventsRegisterCommand extends Command
 
     protected string $description = 'Register a new event trigger';
 
+    #[\Override]
     public function handle(EventManager $eventManager): int
     {
         $event = $this->argument('event');

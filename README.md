@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.49.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.50.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 76 test files (Pest)
+└── tests/                      # 77 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (75 test files)
+composer test        # Run Pest test suite (77 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -475,6 +475,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 15 production (executeTrigger basePayload extraction/null payload/action params merge, TriggerBuilder null/empty conditions save, SubscriptionBuilder URL validation (reject invalid, accept HTTPS), ConditionEngine empty conditions with various payloads, WildcardMatcher findMatchingPatterns type/extractWildcards edge cases, ServiceProvider binding lifecycle (singleton/transient/contract identity), Config type validation (all 6 sections), Facade accessor, Model config-driven table names, TriggerBuilder/SubscriptionBuilder fluent interface, DispatchTriggerJob config-driven properties (tries/queue/connection/backoff formats), EventLog status constants, DomainEvent roundtrip/fresh UUID, Cache invalidation (save/disable/enable), Strict types enforcement, Final class verification) | ✅ | `EventsPhase15ProductionTest.php` |
 | Phase 16 production (EventLog scopes, markAsCompleted/markAsFailed, Trigger scopes and relations, Subscription scopes and matchesEvent patterns, #[\Override] attribute verification, DomainEvent readonly keyword verification) | ✅ | `EventsPhase16ProductionTest.php` |
 | Phase 18 production (fire/fireModel validation, TriggerBuilder save validation/encoding, SubscriptionBuilder save validation/HMAC, DomainEvent fromArray edge cases, trigger management CRUD, cache invalidation, alias behavior, WildcardMatcher special patterns, ConditionEngine operator coverage) | ✅ | `EventsPhase18ProductionTest.php` |
+| Phase 19 production (console #[\Override] attributes, final classes, typed properties, strict types, config completeness, ServiceProvider bindings, handle() return types) | ✅ | `EventsPhase19ProductionTest.php` |
 
 ## How It Works
 
@@ -674,6 +675,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.50.0
+
+- **Added**: `#[\Override]` attribute on all 11 console command `handle()` methods for PHPStan override verification — consistent with models, ServiceProvider, ConditionEngine, and WebhookAction which already had this attribute.
+- **Added**: `EventsPhase19ProductionTest.php` — 17 new tests covering: console command `#[\Override]` attribute verification (all 11 commands), console command `final` class verification, typed `$signature`/`$description` property verification, `Illuminate\Console\Command` inheritance verification, `handle()` return type verification, strict types enforcement across all src/ and test files, config completeness validation (all 6 top-level keys, all sub-keys), ServiceProvider binding verification (singleton/transient/contract identity), final class verification (11 core classes).
+- **Changed**: Version bumped to 1.50.0, test file count updated to 77.
 
 ### v1.49.0
 

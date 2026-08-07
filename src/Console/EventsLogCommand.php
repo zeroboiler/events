@@ -20,6 +20,7 @@ final class EventsLogCommand extends Command
 
     protected string $description = 'View event logs';
 
+    #[\Override]
     public function handle(): int
     {
         $query = EventLog::query();

@@ -20,6 +20,7 @@ final class EventsFireCommand extends Command
 
     protected string $description = 'Manually fire an event';
 
+    #[\Override]
     public function handle(EventManager $eventManager): int
     {
         $event = (string) $this->argument('event');

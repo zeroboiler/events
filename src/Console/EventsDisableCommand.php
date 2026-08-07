@@ -18,6 +18,7 @@ final class EventsDisableCommand extends Command
 
     protected string $description = 'Disable an event trigger';
 
+    #[\Override]
     public function handle(EventManager $eventManager): int
     {
         $id = (string) $this->argument('id');

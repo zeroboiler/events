@@ -25,6 +25,7 @@ final class EventsListCommand extends Command
 
     protected string $description = 'List event triggers with optional filtering';
 
+    #[\Override]
     public function handle(): int
     {
         $query = Trigger::query();
