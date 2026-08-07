@@ -12,14 +12,11 @@ use ZeroBoiler\Events\TriggerBuilder;
 
 test('TriggerBuilder resolveActions deduplicates preserving order', function (): void {
     $builder = app(TriggerBuilder::class);
-    $reflection = new ReflectionMethod($builder, 'resolveActions');
-    $reflection->setAccessible(true);
 
     // Set both single action and actions array with overlap
+    // action() = 'App\Models\User'
+    // actions() = ['App\Models\User', 'LogAction', 'LogAction', 'NotifyAction']
     $builder->action(App\Models\User::class);
-    $reflection = new ReflectionMethod($builder, 'resolveActions');
-
-    // Use actions() setter to inject duplicates
     $builder->actions([
         App\Models\User::class,
         'App\\Actions\\LogAction',
@@ -27,24 +24,13 @@ test('TriggerBuilder resolveActions deduplicates preserving order', function ():
         'App\\Actions\\NotifyAction',
     ]);
 
-    // Re-access resolveActions via reflection
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
     $resolveReflection->setAccessible(true);
     $result = $resolveReflection->invoke($builder);
 
-    // Single action (User) should be prepended, duplicates removed
-    expect($result)->toBe([
-        'App\\Actions\\LogAction',     // From actions() — prepended
-        'App\\Models\\User',           // From action()
-        'App\\Actions\\LogAction',     // Wait — no, action() is User, it's already in list from actions()
-    ]);
-
-    // Actually let's think about this more carefully:
-    // action() = 'App\Models\User'
-    // actions() = ['App\Models\User', 'App\Actions\LogAction', 'App\Actions\LogAction', 'App\Actions\NotifyAction']
-    // resolveActions: all = actions() first = ['App\Models\User', 'LogAction', 'LogAction', 'NotifyAction']
-    // Then prepend action() if not in list: 'App\Models\User' IS already in list, so skip
-    // Deduplicate: ['App\Models\User', 'LogAction', 'NotifyAction']
+    // resolveActions: all = actions() first, then prepend action() if not in list.
+    // 'App\Models\User' IS already in list, so skip prepend.
+    // Deduplicate preserving order: [User, LogAction, NotifyAction]
     expect($result)->toBe([
         'App\\Models\\User',
         'App\\Actions\\LogAction',
