@@ -31,15 +31,23 @@ final class DispatchTriggerJob implements ShouldQueue
 
     public string $queue = 'default';
 
+    /** @var int Number of times the job may be attempted (read from events.retry.tries config) */
+    public int $tries = 3;
+
     /**
+     * Create a new dispatch trigger job.
+     *
+     * Reads retry, backoff, queue name, and connection from config at
+     * construction time so each queued job carries its own settings.
+     *
      * @param  array<string, mixed>  $payload
      */
     public function __construct(
         #[\Readonly] public string $triggerId,
         #[\Readonly] public string $event,
         #[\Readonly] public array $payload,
-        #[\Readonly] public int $tries = 3,
     ) {
+        // Retry configuration
         $triesConfig = Config::get('events.retry.tries', 3);
         $this->tries = is_int($triesConfig) && $triesConfig > 0 ? $triesConfig : 3;
 
@@ -52,6 +60,7 @@ final class DispatchTriggerJob implements ShouldQueue
             );
         }
 
+        // Queue configuration
         $queueConfig = Config::get('events.queue.queue', 'default');
         $this->queue = is_string($queueConfig) && $queueConfig !== '' ? $queueConfig : 'default';
 

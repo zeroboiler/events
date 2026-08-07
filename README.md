@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.28.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.29.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -513,6 +513,15 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.29.0
+
+- **Fixed**: **CRITICAL** `DispatchTriggerJob::$tries` was promoted as `#[\Readonly]` constructor property but reassigned in the constructor body — this would cause a fatal error on PHP 8.5 at runtime. Changed `$tries` to a declared class property (`public int $tries = 3`) that can be safely overridden from config.
+- **Fixed**: `ReadonlyPropertiesTest` updated to no longer assert `$tries` as `#[\Readonly]` promoted
+- **Added**: `DispatchTriggerJob` constructor docblock explaining config-driven retry/backoff/queue behavior
+- **Added**: `DispatchTriggerJobTest` — 2 new tests: tries property typed int default, tries config override
+- **Added**: `ReadonlyPropertiesTest` — 1 new test: verifies `$tries` is typed `int`, NOT `#[\Readonly]`, NOT promoted, has default value
+- **Changed**: Version bumped to 1.29.0
 
 ### v1.28.0
 

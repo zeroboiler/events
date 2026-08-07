@@ -67,8 +67,19 @@ describe('Readonly promoted properties', function (): void {
         $names = array_map(fn (\ReflectionProperty $p): string => $p->getName(), $readonlyProps);
         expect($names)->toContain('triggerId')
             ->and($names)->toContain('event')
-            ->and($names)->toContain('payload')
-            ->and($names)->toContain('tries');
+            ->and($names)->toContain('payload');
+        // Note: $tries is NOT #[Readonly] — it's a declared class property
+        // that gets overridden from config in the constructor body.
+    });
+
+    test('DispatchTriggerJob tries property is typed int and NOT readonly', function (): void {
+        $reflection = new ReflectionClass(DispatchTriggerJob::class);
+        $triesProp = $reflection->getProperty('tries');
+
+        expect($triesProp->getType()->getName())->toBe('int')
+            ->and($triesProp->isReadOnly())->toBeFalse()
+            ->and($triesProp->isPromoted())->toBeFalse()
+            ->and($triesProp->hasDefaultValue())->toBeTrue();
     });
 
     test('DomainEvent has #[Readonly] eventId and occurredAt', function (): void {

@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.29.0] — 2026-08-07
+
+### Fixed
+- **CRITICAL**: `DispatchTriggerJob::$tries` was promoted as `#[\Readonly]` constructor property but reassigned in the constructor body — this would cause a fatal error on PHP 8.5. Changed `$tries` to a declared class property (`public int $tries = 3`) that can be safely overridden from config.
+- `ReadonlyPropertiesTest` — updated test to no longer assert `$tries` as `#[\Readonly]` promoted (was incorrect after fix)
+
+### Added
+- `DispatchTriggerJob` constructor docblock explaining config-driven retry/backoff/queue behavior
+- `DispatchTriggerJobTest` — 2 new tests: tries property typed int default, tries config override
+- `ReadonlyPropertiesTest` — 1 new test: verifies `$tries` is typed `int`, NOT `#[\Readonly]`, NOT promoted, has default value
+
+### Changed
+- Version bumped to 1.29.0
+
+---
+
 ## [1.23.0] — 2026-08-06
 
 ### Added

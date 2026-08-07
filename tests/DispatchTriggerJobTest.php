@@ -151,6 +151,23 @@ test('dispatch trigger job defaults queue connection to null when config is empt
     expect($job->connection)->toBeNull();
 });
 
+test('dispatch trigger job tries property is typed int with default', function (): void {
+    // Without explicit config, uses default of 3
+    config()->set('events.retry.tries', null);
+
+    $job = new DispatchTriggerJob('test', 'test.event', []);
+
+    expect($job->tries)->toBeInt()->toBe(3);
+});
+
+test('dispatch trigger job tries property overrides from config', function (): void {
+    config()->set('events.retry.tries', 7);
+
+    $job = new DispatchTriggerJob('test', 'test.event', []);
+
+    expect($job->tries)->toBeInt()->toBe(7);
+});
+
 test('dispatch trigger job failed method handles missing event log gracefully', function (): void {
     $job = new DispatchTriggerJob('test-id', 'test.event', []);
 
