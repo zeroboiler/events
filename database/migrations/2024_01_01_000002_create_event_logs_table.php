@@ -12,9 +12,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Get the event_logs table name from config.
+     */
+    private function getTableName(): string
+    {
+        return config('events.table_names.event_logs', 'event_logs');
+    }
+
+    /**
+     * Get the triggers table name from config (for foreign key reference).
+     */
+    private function getTriggersTableName(): string
+    {
+        return config('events.table_names.triggers', 'triggers');
+    }
+
     public function up(): void
     {
-        Schema::create('event_logs', function (Blueprint $table) {
+        Schema::create($this->getTableName(), function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('trigger_id');
             $table->string('event');
@@ -25,7 +41,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('trigger_id')->references('id')->on('triggers')->onDelete('cascade');
+            $table->foreign('trigger_id')->references('id')->on($this->getTriggersTableName())->onDelete('cascade');
             $table->index(['trigger_id', 'status']);
             $table->index('event');
             $table->index('created_at');
@@ -34,6 +50,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('event_logs');
+        Schema::dropIfExists($this->getTableName());
     }
 };

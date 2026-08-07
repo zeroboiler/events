@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.33.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.34.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -293,6 +293,63 @@ EventManager::invalidateTriggerCache();
 
 ## Architecture
 
+### Package Structure
+
+```
+events/
+├── config/
+│   └── events.php              # Package configuration
+├── database/
+│   ├── factories/
+│   │   ├── EventLogFactory.php
+│   │   ├── SubscriptionFactory.php
+│   │   └── TriggerFactory.php
+│   └── migrations/
+│       ├── 2024_01_01_000001_create_triggers_table.php
+│       ├── 2024_01_01_000002_create_event_logs_table.php
+│       └── 2025_06_28_000001_create_event_subscriptions_table.php
+├── src/
+│   ├── Actions/
+│   │   └── WebhookAction.php   # Triggerable: HTTP POST webhook dispatch
+│   ├── Console/
+│   │   ├── EventsDisableCommand.php
+│   │   ├── EventsEnableCommand.php
+│   │   ├── EventsFireCommand.php
+│   │   ├── EventsListCommand.php
+│   │   ├── EventsLogCommand.php
+│   │   ├── EventsRedeliverCommand.php
+│   │   ├── EventsRegisterCommand.php
+│   │   ├── EventsRetryCommand.php
+│   │   ├── EventsSubscribeCommand.php
+│   │   ├── EventsSubscriptionsCommand.php
+│   │   └── EventsUnsubscribeCommand.php
+│   ├── Contracts/
+│   │   ├── ConditionEngineContract.php
+│   │   └── Triggerable.php
+│   ├── Concerns/
+│   │   ├── EscapesWildcardLike.php
+│   │   ├── ManagesHistory.php
+│   │   └── ManagesSubscriptions.php
+│   ├── Domain/
+│   │   └── DomainEvent.php      # Event sourcing value object
+│   ├── Facades/
+│   │   └── EventManager.php    # Laravel facade
+│   ├── Jobs/
+│   │   └── DispatchTriggerJob.php
+│   ├── Models/
+│   │   ├── EventLog.php
+│   │   ├── Subscription.php
+│   │   └── Trigger.php
+│   ├── ActionResolver.php
+│   ├── ConditionEngine.php
+│   ├── EventManager.php        # Central orchestrator
+│   ├── EventsServiceProvider.php
+│   ├── SubscriptionBuilder.php
+│   ├── TriggerBuilder.php
+│   └── WildcardMatcher.php
+└── tests/                      # 57 test files (Pest)
+```
+
 ### Service Container Bindings
 
 | Service | Binding | Lifetime |
@@ -333,7 +390,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (58 test files)
+composer test        # Run Pest test suite (60 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -398,6 +455,9 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 5 quality (connection property type, null config, numeric config, ConditionEngine null-safe operators, WildcardMatcher comprehensive, cache invalidation, status constants, factory defaults, scope instances) | ✅ | `EventsPhase5QualityTest.php` |
 | Phase 6 production (transient/singleton bindings, contract identity, status constants, null-safe operators, TriggerBuilder encoding variants, DomainEvent identity, WildcardMatcher edges, fire no-match, cache invalidation, model config, DispatchTriggerJob config, Subscription sign/match, getStats structure) | ✅ | `EventsPhase6ProductionTest.php` |
 | Phase 7 final (fireModel attribute flattening, toArray fallback, plain object; WildcardMatcher regex escape/backslash/extractWildcards/findMatchingPatterns order; DomainEvent occur/fresh UUID/explicit args/toArray/empty fromArray/non-string eventType; DispatchTriggerJob backoff array/zero tries/non-int config; priority deterministic ordering with created_at tiebreaker; ConditionEngine not_contains/not_empty/triple-nested/between inverted) | ✅ | `EventsPhase7FinalTest.php` |
+| Migration config-driven (config reads in migrations, FK reference) | ✅ | `MigrationConfigDrivenTest.php` |
+| DomainEvent sourcing (occur, toArray, fromArray, identity, readonly) | ✅ | `EventSourcingTest.php` |
+| WildcardMatcher edge cases (multi-wildcard, extract, backslash, boundary) | ✅ | `WildcardMatcherEdgeCasesTest.php` |
 
 ## How It Works
 
@@ -595,12 +655,23 @@ Before deploying to production, verify:
 
 ## Changelog
 
+### v1.34.0
+
+- **Added**: `MigrationConfigDrivenTest.php` — tests verifying all 3 migrations read table names from `events.table_names` config instead of hardcoded strings, and event_logs foreign key references triggers table from config.
+- **Added**: `EventSourcingTest.php` — comprehensive DomainEvent tests: factory fresh UUID/timestamp, unique IDs, toArray key completeness, fromArray preservation of eventId/occurredAt, invalid UUID/date handling, missing eventType/payload, empty data, readonly property verification.
+- **Added**: `WildcardMatcherEdgeCasesTest.php` — comprehensive edge case tests: empty pattern, exact match, single/double asterisk, single-segment boundary enforcement, cross-segment matching, multiple wildcards, regex special chars, findMatchingPatterns order preservation, extractWildcards multi-wildcard/cross-segment/segment count mismatch.
+- **Added**: Package Structure section to README — full directory tree with file descriptions.
+- **Fixed**: **CRITICAL** All 3 database migrations now read table names from `events.table_names` config instead of hardcoded strings — previously models read from config but migrations did not, causing inconsistency when custom table names were configured.
+- **Fixed**: README test file count corrected from 58 to 57.
+- **Changed**: `Subscription::scopeForEvent()` docblock updated to mention `**` wildcard support.
+- **Changed**: Version bumped to 1.34.0, test file count updated to 60
+
 ### v1.33.0
 
 - **Added**: `EventsPhase7FinalTest.php` — 30+ new tests covering: `fireModel()` attribute flattening, `toArray` fallback, plain object edge cases; `WildcardMatcher` regex special char escaping, backslash patterns, `extractWildcards` multi-wildcard, `findMatchingPatterns` order preservation; `DomainEvent` `occur()` fresh UUID/timestamp, explicit constructor args, `toArray` key completeness, `fromArray` empty/non-string eventType; `DispatchTriggerJob` config edge cases (backoff array, zero tries, non-int tries); `EventManager` deterministic priority ordering with `created_at`/`id` tiebreakers; `ConditionEngine` `not_contains`, `not_empty`, triple-nested dot notation, inverted `between`.
 - **Changed**: `EventManager::parseActions()` docblock — return type annotation improved from `array<int, mixed>` to `list<string|array{class: string, params?: array<string, mixed>}>`.
 - **Changed**: Enhanced `@param` docblocks on `EventManager::on()`, `register()`, `fireModel()`, `enable()`, `disable()`.
-- **Changed**: Version bumped to 1.33.0, test file count updated to 58
+- **Changed**: Version bumped to 1.33.0, test file count updated to 57
 
 ### v1.32.0
 

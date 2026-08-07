@@ -19,9 +19,17 @@ use Illuminate\Support\Facades\Schema;
  */
 return new class extends Migration
 {
+    /**
+     * Get the subscriptions table name from config.
+     */
+    private function getTableName(): string
+    {
+        return config('events.table_names.subscriptions', 'event_subscriptions');
+    }
+
     public function up(): void
     {
-        Schema::create('event_subscriptions', function (Blueprint $table) {
+        Schema::create($this->getTableName(), function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('event');
             $table->string('url');
@@ -42,6 +50,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('event_subscriptions');
+        Schema::dropIfExists($this->getTableName());
     }
 };

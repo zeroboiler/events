@@ -107,7 +107,7 @@ class Subscription extends Model
     /**
      * Scope a query to only include subscriptions for a specific event.
      *
-     * Supports wildcard matching (e.g., "order.*").
+     * Supports wildcard matching (e.g., "order.*", "order.**").
      *
      * @param  Builder<Subscription>  $query
      * @return Builder<Subscription>

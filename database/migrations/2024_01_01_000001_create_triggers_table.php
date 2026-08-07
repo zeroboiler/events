@@ -12,9 +12,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Get the triggers table name from config.
+     */
+    private function getTableName(): string
+    {
+        return config('events.table_names.triggers', 'triggers');
+    }
+
     public function up(): void
     {
-        Schema::create('triggers', function (Blueprint $table) {
+        Schema::create($this->getTableName(), function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('event');
@@ -33,6 +41,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('triggers');
+        Schema::dropIfExists($this->getTableName());
     }
 };

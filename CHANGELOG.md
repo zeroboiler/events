@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.34.0] — 2026-08-07
+
+### Added
+- `MigrationConfigDrivenTest.php` — tests verifying all 3 migrations read table names from config.
+- `EventSourcingTest.php` — comprehensive DomainEvent tests: factory, serialization, reconstruction, immutability.
+- `WildcardMatcherEdgeCasesTest.php` — comprehensive edge case tests for wildcard pattern matching.
+- Package Structure section to README with full directory tree.
+
+### Fixed
+- **CRITICAL** All 3 database migrations now read table names from `events.table_names` config instead of hardcoded strings. Previously only models read from config, causing inconsistency when custom table names were configured.
+- README test file count corrected from 58 to 57.
+
+### Changed
+- `Subscription::scopeForEvent()` docblock updated to mention `**` wildcard support.
+- Version bumped to 1.34.0, test file count updated to 60.
+
+---
+
 ## [1.33.0] — 2026-08-07
 
 ### Added
