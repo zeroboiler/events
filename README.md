@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.43.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.44.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 70 test files (Pest)
+└── tests/                      # 71 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -390,7 +390,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (69 test files)
+composer test        # Run Pest test suite (71 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -468,6 +468,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 10 production (fire/fireModel empty validation, DispatchTriggerJob array backoff config, ConditionEngine operators, WildcardMatcher edge cases, DomainEvent roundtrip, config completeness, ServiceProvider bindings, final classes, readonly properties, strict types enforcement, facade accessor) | ✅ | `EventsPhase10ProductionTest.php` |
 | Phase 11 production (SubscriptionBuilder transaction atomicity, validation-before-transaction, action params verification, WebhookAction subscription failure tracking optimization, hasExceededFailures config/custom, delivery tracking, signPayload determinism) | ✅ | `EventsPhase11ProductionTest.php` |
 | Phase 12 production (ServiceProvider bindings, Facade accessor, WildcardMatcher edge cases, ConditionEngine operator coverage, DomainEvent roundtrip/edge cases, Trigger model scopes, EventLog mark methods, Subscription signing/failures/matching, EventManager fire/fireModel, Config completeness, Strict types enforcement, Final class verification, EscapesWildcardLike) | ✅ | `EventsPhase12ProductionTest.php` |
+| Phase 13 production (TriggerBuilder deduplication order-preservation, ConditionEngine full operator coverage, O(1) trigger dedup set, DomainEvent immutability, Config type validation, parseActions all 5 formats, WildcardMatcher comprehensive, EscapesWildcardLike, Singleton/transient binding verification, strict types enforcement, Final class verification) | ✅ | `EventsPhase13ProductionTest.php` |
 
 ## How It Works
 
@@ -664,6 +665,13 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.44.0
+
+- **Improved**: `TriggerBuilder::resolveActions()` now deduplicates action classes preserving insertion order (first-occurrence wins) — previously duplicates could be dispatched when `action()` and `actions()` both contained the same class, or when `actions()` itself contained duplicate entries.
+- **Improved**: `EventManager::getMatchingTriggers()` now uses an O(1) hash set for trigger ID deduplication instead of O(n) `Collection::firstWhere()` — significant performance improvement when many wildcard triggers are registered.
+- **Added**: `EventsPhase13ProductionTest.php` — 40 new tests covering: TriggerBuilder resolveActions deduplication (order preservation, single-only, empty action, all-same entries, merge scenarios), ConditionEngine full operator coverage (all 19 operators + dot notation + AND logic + ReDoS protection), WildcardMatcher comprehensive (catch-all, cross-segment, single-segment, findMatchingPatterns order, extractWildcards), EscapesWildcardLike trait behavior, DomainEvent immutability via reflection, DomainEvent fromArray preservation/invalid graceful handling, parseActions all 5 JSON formats, Config type validation for all keys, Singleton/transient binding verification (EventManager, ConditionEngine, ActionResolver, TriggerBuilder, SubscriptionBuilder, ConditionEngineContract), Facade accessor verification, strict types enforcement across all source files, Final class verification, EventLog status constants consistency, Subscription signPayload determinism, Subscription signPayload null secret, WebhookAction getTimeout/getMaxFailures config reads.
+- **Changed**: Version bumped to 1.44.0, test file count updated to 71
 
 ### v1.43.0
 

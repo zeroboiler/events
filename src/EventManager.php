@@ -197,6 +197,9 @@ final class EventManager
      * loading all triggers on every fire() call. Exact (non-wildcard) matches
      * are queried directly from the DB for freshness.
      *
+     * Duplicate triggers (exact + wildcard matching same DB row) are
+     * deduplicated using an O(1) id set instead of O(n) firstWhere.
+     *
      * @return Collection<int, Trigger>
      */
     protected function getMatchingTriggers(string $event): Collection
@@ -207,15 +210,20 @@ final class EventManager
             ->orderByPriority()
             ->get();
 
+        // Build an O(1) lookup set of already-collected trigger IDs
+        // to avoid O(n) firstWhere on each wildcard iteration.
+        $collectedIds = [];
+        foreach ($triggers as $t) {
+            $collectedIds[$t->id] = true;
+        }
+
         // Wildcard matches — use cached collection of enabled wildcard triggers
         $wildcardTriggers = $this->getEnabledWildcardTriggers();
 
         foreach ($wildcardTriggers as $trigger) {
-            if (WildcardMatcher::matches($trigger->event, $event)) {
-                $exists = $triggers->firstWhere('id', $trigger->id);
-                if (! $exists) {
-                    $triggers->push($trigger);
-                }
+            if (! isset($collectedIds[$trigger->id]) && WildcardMatcher::matches($trigger->event, $event)) {
+                $triggers->push($trigger);
+                $collectedIds[$trigger->id] = true;
             }
         }
 

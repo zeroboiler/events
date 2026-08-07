@@ -83,7 +83,7 @@ final class TriggerBuilder
      *
      * If both were called, the single action is prepended to the list to avoid
      * silently discarding it (BUG-2 fix). Deduplication ensures the same class
-     * doesn't appear twice.
+     * doesn't appear twice (preserves first-occurrence order).
      *
      * @return list<string> Resolved action class FQNs (plain strings only; no array entries)
      *
@@ -99,7 +99,19 @@ final class TriggerBuilder
             array_unshift($all, $this->action);
         }
 
-        return $all;
+        // Deduplicate while preserving insertion order (first occurrence wins).
+        // This prevents duplicate dispatch when action() and actions() both
+        // contain the same class, or when actions() contains duplicates.
+        $seen = [];
+        $unique = [];
+        foreach ($all as $cls) {
+            if (! isset($seen[$cls])) {
+                $seen[$cls] = true;
+                $unique[] = $cls;
+            }
+        }
+
+        return $unique;
     }
 
     /**

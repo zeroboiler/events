@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.44.0] — 2026-08-07
+
+### Improved
+- `TriggerBuilder::resolveActions()` now deduplicates action classes preserving insertion order (first-occurrence wins). Previously, duplicate dispatch could occur when `action()` and `actions()` both contained the same class, or when `actions()` itself contained duplicates.
+- `EventManager::getMatchingTriggers()` now uses an O(1) hash set for trigger ID deduplication instead of O(n) `Collection::firstWhere()` — significant performance improvement when many wildcard triggers are registered.
+
+### Added
+- `EventsPhase13ProductionTest.php` — 40 new tests covering: TriggerBuilder deduplication, ConditionEngine full operator coverage, WildcardMatcher comprehensive matching, EscapesWildcardLike trait, DomainEvent immutability, parseActions formats, Config type validation, Singleton/transient bindings, Facade accessor, strict types, Final classes, status constants, Subscription signing.
+
+### Changed
+- Version bumped to 1.44.0, test file count updated to 71.
+
+---
+
 ## [1.40.0] — 2026-08-07
 
 ### Fixed
