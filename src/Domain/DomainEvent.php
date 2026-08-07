@@ -24,8 +24,8 @@ final class DomainEvent
      * @param  array<string, mixed>  $payload
      */
     public function __construct(
-        public string $eventType,
-        public array $payload = [],
+        #[\Readonly] public string $eventType,
+        #[\Readonly] public array $payload = [],
         ?UuidInterface $eventId = null,
         ?DateTimeImmutable $occurredAt = null,
     ): void {

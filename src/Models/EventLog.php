@@ -38,8 +38,7 @@ class EventLog extends Model
     use HasFactory;
     use SoftDeletes;
 
-    /** @var string */
-    protected $table = 'event_logs';
+    protected string $table = 'event_logs';
 
     #[\Override]
     public function getTable(): string
@@ -174,10 +173,9 @@ class EventLog extends Model
     }
 
     /**
-     * Create a new factory instance for the model.
-     *
      * @return EventLogFactory<EventLog>
      */
+    #[\Override]
     protected static function newFactory(): EventLogFactory
     {
         return EventLogFactory::new();

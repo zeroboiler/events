@@ -1,7 +1,7 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.25.0-blue)]()
-[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.26.0-blue)]()
+|[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
 
@@ -9,6 +9,7 @@ Database-driven dynamic event manager for Laravel — register, manage, and fire
 
 ## Table of Contents
 
+- [Requirements](#requirements)
 - [Quick Start](#quick-start)
 - [Features](#features)
 - [Installation](#installation)
@@ -18,7 +19,22 @@ Database-driven dynamic event manager for Laravel — register, manage, and fire
 - [Architecture](#architecture)
 - [Testing](#testing)
 - [Changelog](#changelog)
+- [Contributing](#contributing)
 - [License](#license)
+
+## Requirements
+
+| Requirement | Version |
+|---|---|
+| PHP | >= 8.5 |
+| Laravel | >= 13.0 |
+| ext-pdo | Required (for database) |
+| ext-json | Required (for condition/action parsing) |
+| ext-ctype | Required (for Laravel framework) |
+
+Optional peer packages for enhanced functionality:
+- **zeroboiler/security** — Rate limiting for webhook endpoints
+- **zeroboiler/observability** — Structured logging and metrics integration
 
 ## Quick Start
 
@@ -283,7 +299,9 @@ EventManager::invalidateTriggerCache();
 |---|---|---|
 | `EventManager` | Singleton | Shared across app |
 | `ConditionEngine` | Singleton | Shared across app |
+| `ConditionEngineContract` | Singleton → `ConditionEngine` | Interface binding |
 | `ActionResolver` | Singleton | Shared across app |
+| `TriggerBuilder` | Transient | Fresh instance per resolution |
 | `SubscriptionBuilder` | Transient | Fresh instance per resolution |
 | `EventManager` (Facade) | `getFacadeAccessor()` → `EventManager::class` | Resolved from container |
 
@@ -315,7 +333,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (47 test files)
+composer test        # Run Pest test suite (49 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -356,6 +374,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
 | Edge cases (phase 3 — empty conditions, between inverted, in single, fire no-match, sign null secret) | ✅ | `EdgeCasesPhase3Test.php` |
 | Migration structure (columns, types, foreign keys) | ✅ | `MigrationStructureTest.php` |
+| DomainEvent immutability (#[\Readonly] all props, identity, roundtrip, fromArray edge cases) | ✅ | `DomainEventImmutabilityTest.php` |
+| ServiceProvider config (TriggerBuilder transient, contract binding, all config keys, all services resolvable) | ✅ | `EventsServiceProviderConfigTest.php` |
 | Readonly properties (#[Readonly] promoted, PHP 8.5) | ✅ | `ReadonlyPropertiesTest.php` |
 | Wildcard integration (cross-segment, catch-all, multi) | ✅ | `WildcardIntegrationTest.php` |
 | Wildcard matcher (exact, *, **, extract, findMatching) | ✅ | `WildcardMatcherTest.php` |
@@ -460,6 +480,18 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Regex condition always false | Pattern exceeds 500 chars or has nested quantifiers | Simplify the regex or increase `ConditionEngine::MAX_REGEX_LENGTH` |
 
 ## Changelog
+
+### v1.26.0
+
+- **Added**: `DomainEventImmutabilityTest` — 12 tests covering: all promoted properties have `#[\Readonly]`, identity semantics, `occur()` factory with fresh UUID/timestamp, `toArray()` serialization, `fromArray()` reconstruction (preserves eventId + occurredAt), invalid UUID/datetime graceful handling, missing eventType/payload handling, empty data handling, lossless roundtrip, explicit constructor args override
+- **Added**: `EventsServiceProviderConfigTest` — 12 tests covering: TriggerBuilder transient binding, ConditionEngineContract binding, contract/concrete singleton identity, config publish group, all 6 services resolvable, config key completeness (table_names, subscriptions, retry, retention, wildcard_cache_ttl, queue)
+- **Added**: `TriggerBuilder` explicit transient binding in `EventsServiceProvider::register()` — previously resolved through auto-wiring without explicit binding registration
+- **Added**: `DispatchTriggerJob::$queue` property — reads queue name from `events.queue.queue` config (default: `'default'`), enabling configurable queue routing for async triggers
+- **Refactored**: `DomainEvent::$eventType` and `$payload` promoted constructor properties now have `#[\Readonly]` attribute — all 4 properties (eventType, payload, eventId, occurredAt) are consistently readonly for PHP 8.5
+- **Refactored**: All 3 model `$table` properties (`EventLog`, `Trigger`, `Subscription`) use native `string` type declaration instead of `@var` docblock — fully consistent typed property declarations
+- **Refactored**: All 3 model `newFactory()` methods now have `#[\Override]` attribute for PHPStan override verification
+- **Changed**: README enriched with Requirements section (PHP 8.5+, Laravel 13+, extension list), Contributing link, architecture table updated with `ConditionEngineContract` and `TriggerBuilder` bindings
+- **Changed**: Version bumped to 1.26.0
 
 ### v1.25.0
 
@@ -754,6 +786,18 @@ composer ci          # All checks (lint → analyse → rector → test)
 - Event history, statistics, and log retention
 - Full CLI command set
 - PHPStan level 9, Laravel Pint, Rector
+
+## Contributing
+
+This is a private package. Contribution guidelines:
+
+1. **Code style**: Follow PSR-12. Run `composer lint` (Laravel Pint) before committing.
+2. **Static analysis**: Run `composer analyse` (PHPStan level 9). Zero errors allowed.
+3. **Tests**: Run `composer test` (Pest). All tests must pass. Add tests for new features.
+4. **Rector**: Run `composer rector` to apply automated code improvements.
+5. **Full CI**: Run `composer ci` to execute all checks in order.
+6. **Commit format**: `feat/fix/refactor: description` (conventional commit prefix).
+7. **PHP version**: Target PHP 8.5+. Use strict types (`declare(strict_types=1)`), typed properties, and return type declarations on all methods.
 
 ## License
 

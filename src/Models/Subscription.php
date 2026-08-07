@@ -49,8 +49,7 @@ class Subscription extends Model
     use HasFactory;
     use SoftDeletes;
 
-    /** @var string */
-    protected $table = 'event_subscriptions';
+    protected string $table = 'event_subscriptions';
 
     #[\Override]
     public function getTable(): string
@@ -211,10 +210,9 @@ class Subscription extends Model
     }
 
     /**
-     * Create a new factory instance for the model.
-     *
      * @return SubscriptionFactory<Subscription>
      */
+    #[\Override]
     protected static function newFactory(): SubscriptionFactory
     {
         return SubscriptionFactory::new();

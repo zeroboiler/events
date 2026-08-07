@@ -40,8 +40,7 @@ class Trigger extends Model
     use HasFactory;
     use SoftDeletes;
 
-    /** @var string */
-    protected $table = 'triggers';
+    protected string $table = 'triggers';
 
     #[\Override]
     public function getTable(): string
@@ -128,10 +127,9 @@ class Trigger extends Model
     }
 
     /**
-     * Create a new factory instance for the model.
-     *
      * @return TriggerFactory<Trigger>
      */
+    #[\Override]
     protected static function newFactory(): TriggerFactory
     {
         return TriggerFactory::new();

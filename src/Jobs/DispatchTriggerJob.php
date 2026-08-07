@@ -29,6 +29,8 @@ final class DispatchTriggerJob implements ShouldQueue
     /** @var array<int, int> */
     public array $backoff = [60, 300, 900];
 
+    public string $queue = 'default';
+
     /**
      * @param  array<string, mixed>  $payload
      */
@@ -49,6 +51,9 @@ final class DispatchTriggerJob implements ShouldQueue
                 $parts,
             );
         }
+
+        $queueConfig = Config::get('events.queue.queue', 'default');
+        $this->queue = is_string($queueConfig) && $queueConfig !== '' ? $queueConfig : 'default';
     }
 
     /**

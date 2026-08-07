@@ -46,6 +46,9 @@ final class EventsServiceProvider extends ServiceProvider
 
         // Register SubscriptionBuilder as a transient (not shared) service
         $this->app->bind(SubscriptionBuilder::class);
+
+        // Register TriggerBuilder as a transient (each on()/register() gets a fresh instance)
+        $this->app->bind(TriggerBuilder::class);
     }
 
     #[\Override]
