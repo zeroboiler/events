@@ -61,6 +61,11 @@ final class EventsRedeliverCommand extends Command
 
     /**
      * Execute the redelivery command.
+     *
+     * Re-signs and re-sends a failed or completed webhook delivery.
+     * Strips internal payload keys before redelivery to prevent leaks.
+     *
+     * @return int Command exit code (SUCCESS or FAILURE)
      */
     public function handle(): int
     {

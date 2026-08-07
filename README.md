@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.42.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.43.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 69 test files (Pest)
+└── tests/                      # 70 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -467,6 +467,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 9 production (redeliver payload stripping, timeout config, ConditionEngine null operators, model boot UUID, TriggerBuilder/SubscriptionBuilder validation, WebhookAction error cases, DispatchTriggerJob edge config, EventLog mark methods, Subscription signing determinism, config type validation, contract singleton, ActionResolver errors) | ✅ | `EventsPhase9ProductionTest.php` |
 | Phase 10 production (fire/fireModel empty validation, DispatchTriggerJob array backoff config, ConditionEngine operators, WildcardMatcher edge cases, DomainEvent roundtrip, config completeness, ServiceProvider bindings, final classes, readonly properties, strict types enforcement, facade accessor) | ✅ | `EventsPhase10ProductionTest.php` |
 | Phase 11 production (SubscriptionBuilder transaction atomicity, validation-before-transaction, action params verification, WebhookAction subscription failure tracking optimization, hasExceededFailures config/custom, delivery tracking, signPayload determinism) | ✅ | `EventsPhase11ProductionTest.php` |
+| Phase 12 production (ServiceProvider bindings, Facade accessor, WildcardMatcher edge cases, ConditionEngine operator coverage, DomainEvent roundtrip/edge cases, Trigger model scopes, EventLog mark methods, Subscription signing/failures/matching, EventManager fire/fireModel, Config completeness, Strict types enforcement, Final class verification, EscapesWildcardLike) | ✅ | `EventsPhase12ProductionTest.php` |
 
 ## How It Works
 
@@ -663,6 +664,15 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.43.0
+
+- **Fixed**: `EventManager::parseActions()` now returns empty array for empty or `"0"` action strings — previously returned `[""]` which would cause `ActionResolver::resolve()` to fail with an unhelpful "class does not exist" error when a trigger had an empty action field.
+- **Improved**: `TriggerBuilder::resolveActions()` now has explicit `@phpstan-return list<string>` annotation for PHPStan 9 strict type inference.
+- **Improved**: `ConditionEngine::strictEquals()` docblock now explicitly documents behavior for non-scalar mixed types.
+- **Improved**: `EventsRedeliverCommand::handle()` docblock now documents redelivery behavior and return type.
+- **Added**: `EventsPhase12ProductionTest.php` — 40 new tests covering: ServiceProvider singleton/transient binding verification (EventManager, ConditionEngine, ActionResolver as singletons; TriggerBuilder, SubscriptionBuilder as transients; ConditionEngineContract binding identity), Facade accessor verification, WildcardMatcher edge cases (exact non-dotted, empty event rejection, regex special char patterns, findMatchingPatterns order preservation, extractWildcards multi-wildcard), ConditionEngine operator coverage (empty conditions, AND logic, between auto-normalize, contains with array, starts_with/ends_with), DomainEvent roundtrip preservation (eventId, occurredAt), DomainEvent edge cases (missing eventType, invalid UUID), Trigger model scopes (enabled, async), EventLog markAsCompleted/markAsFailed, Subscription signing (null/empty/deterministic), Subscription hasExceededFailures config-driven, Subscription matchesEvent (exact, wildcard, cross-segment), EventManager fire with no triggers, EventManager fireModel event name construction, Config completeness verification (all keys with correct types), Strict types enforcement across all source files, Final class verification (10 core classes), EscapesWildcardLike trait behavior (null for non-wildcard, asterisk-to-percent, special char escaping).
+- **Changed**: Version bumped to 1.43.0, test file count updated to 70
 
 ### v1.42.0
 

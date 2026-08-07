@@ -374,6 +374,11 @@ final class EventManager
      */
     protected function parseActions(string $action): array
     {
+        // Empty action string — return empty list
+        if ($action === '' || $action === '0') {
+            return [];
+        }
+
         // Try to decode as JSON first
         $decoded = json_decode($action, true);
 

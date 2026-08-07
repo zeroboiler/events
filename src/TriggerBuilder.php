@@ -86,6 +86,8 @@ final class TriggerBuilder
      * doesn't appear twice.
      *
      * @return list<string> Resolved action class FQNs (plain strings only; no array entries)
+     *
+     * @phpstan-return list<string>
      */
     private function resolveActions(): array
     {

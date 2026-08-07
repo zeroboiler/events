@@ -87,6 +87,7 @@ final class ConditionEngine implements ConditionEngineContract
      *
      * Uses strict comparison when types are compatible, falls back to
      * string comparison for scalar values of different types.
+     * Returns false for non-scalar mixed types (e.g., array vs string).
      */
     private function strictEquals(mixed $actual, mixed $expected): bool
     {
