@@ -57,6 +57,8 @@ final class EventManager
 
     /**
      * Start building a new trigger.
+     *
+     * @param  string  $event  The event name (supports wildcards)
      */
     public function on(string $event): TriggerBuilder
     {
@@ -69,6 +71,8 @@ final class EventManager
 
     /**
      * Alias for on().
+     *
+     * @param  string  $event  The event name (supports wildcards)
      */
     public function register(string $event): TriggerBuilder
     {
@@ -87,6 +91,8 @@ final class EventManager
 
     /**
      * Enable a trigger by ID.
+     *
+     * @param  string  $triggerId  The UUID of the trigger to enable
      */
     public function enable(string $triggerId): bool
     {
@@ -101,6 +107,8 @@ final class EventManager
 
     /**
      * Disable a trigger by ID.
+     *
+     * @param  string  $triggerId  The UUID of the trigger to disable
      */
     public function disable(string $triggerId): bool
     {
@@ -140,6 +148,10 @@ final class EventManager
      * The model's attributes are automatically flattened into the payload root so conditions
      * can reference them directly (e.g. `status == 'active'` instead of `model.status == 'active'`).
      * The original model object and metadata are also included in the payload.
+     *
+     * @param  string  $modelClass  The fully-qualified model class name
+     * @param  string  $action  The model action (e.g., 'created', 'updated', 'deleted')
+     * @param  object  $model  The model instance (must have attributesToArray or toArray method)
      */
     public function fireModel(string $modelClass, string $action, object $model): void
     {
@@ -343,7 +355,7 @@ final class EventManager
      * - JSON object with classes + params:  {"classes": [...], "params": {...}}
      * - JSON array of objects:  [{"class": "...", "params": {...}}, ...]
      *
-     * @return array<int, mixed>
+     * @return list<string|array{class: string, params?: array<string, mixed>}>
      */
     protected function parseActions(string $action): array
     {

@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.32.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.33.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -333,7 +333,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (57 test files)
+composer test        # Run Pest test suite (58 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -397,6 +397,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 4 (ReDoS, not_contains, not_empty, WildcardMatcher edges, fromArray edges, cache invalidation on save/disable/enable, signPayload edges, model markAs*, contract singleton) | ✅ | `EventsPhase4Test.php` |
 | Phase 5 quality (connection property type, null config, numeric config, ConditionEngine null-safe operators, WildcardMatcher comprehensive, cache invalidation, status constants, factory defaults, scope instances) | ✅ | `EventsPhase5QualityTest.php` |
 | Phase 6 production (transient/singleton bindings, contract identity, status constants, null-safe operators, TriggerBuilder encoding variants, DomainEvent identity, WildcardMatcher edges, fire no-match, cache invalidation, model config, DispatchTriggerJob config, Subscription sign/match, getStats structure) | ✅ | `EventsPhase6ProductionTest.php` |
+| Phase 7 final (fireModel attribute flattening, toArray fallback, plain object; WildcardMatcher regex escape/backslash/extractWildcards/findMatchingPatterns order; DomainEvent occur/fresh UUID/explicit args/toArray/empty fromArray/non-string eventType; DispatchTriggerJob backoff array/zero tries/non-int config; priority deterministic ordering with created_at tiebreaker; ConditionEngine not_contains/not_empty/triple-nested/between inverted) | ✅ | `EventsPhase7FinalTest.php` |
 
 ## How It Works
 
@@ -593,6 +594,13 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.33.0
+
+- **Added**: `EventsPhase7FinalTest.php` — 30+ new tests covering: `fireModel()` attribute flattening, `toArray` fallback, plain object edge cases; `WildcardMatcher` regex special char escaping, backslash patterns, `extractWildcards` multi-wildcard, `findMatchingPatterns` order preservation; `DomainEvent` `occur()` fresh UUID/timestamp, explicit constructor args, `toArray` key completeness, `fromArray` empty/non-string eventType; `DispatchTriggerJob` config edge cases (backoff array, zero tries, non-int tries); `EventManager` deterministic priority ordering with `created_at`/`id` tiebreakers; `ConditionEngine` `not_contains`, `not_empty`, triple-nested dot notation, inverted `between`.
+- **Changed**: `EventManager::parseActions()` docblock — return type annotation improved from `array<int, mixed>` to `list<string|array{class: string, params?: array<string, mixed>}>`.
+- **Changed**: Enhanced `@param` docblocks on `EventManager::on()`, `register()`, `fireModel()`, `enable()`, `disable()`.
+- **Changed**: Version bumped to 1.33.0, test file count updated to 58
 
 ### v1.32.0
 
