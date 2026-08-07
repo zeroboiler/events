@@ -105,10 +105,7 @@ trait ManagesSubscriptions
      * URL whenever the event fires. Optional conditions can be provided
      * to filter when the webhook is actually called.
      *
-     * @param  string  $event  Event name (supports wildcards)
-     * @param  string  $url  Webhook endpoint URL
      * @param  array<string, mixed>  $conditions  Optional condition filters
-     * @param  int  $priority  Trigger priority (higher = first)
      * @return string The created trigger ID
      */
     public function subscribeWebhook(

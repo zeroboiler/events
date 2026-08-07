@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.30.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.31.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -333,7 +333,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (54 test files)
+composer test        # Run Pest test suite (56 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -395,6 +395,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Unsubscribe command (remove, non-existent) | ✅ | `EventsUnsubscribeCommandTest.php` |
 | Subscriptions command (event/active/inactive/wildcard filters, pagination) | ✅ | `EventsSubscriptionsCommandTest.php` |
 | Phase 4 (ReDoS, not_contains, not_empty, WildcardMatcher edges, fromArray edges, cache invalidation on save/disable/enable, signPayload edges, model markAs*, contract singleton) | ✅ | `EventsPhase4Test.php` |
+| Phase 5 quality (connection property type, null config, numeric config, ConditionEngine null-safe operators, WildcardMatcher comprehensive, cache invalidation, status constants, factory defaults, scope instances) | ✅ | `EventsPhase5QualityTest.php` |
 
 ## How It Works
 
@@ -514,6 +515,14 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.31.0
+
+- **Added**: `DispatchTriggerJob::$connection` property — explicitly declared as `?string` with `null` default, replacing the previously undeclared dynamic property set in the constructor. This ensures PHPStan 9 type safety for the queue connection configuration.
+- **Added**: `ReadonlyPropertiesTest` — new test verifying `DispatchTriggerJob::$connection` is typed `string` (nullable), not readonly, not promoted, has null default.
+- **Added**: `EventsPhase5QualityTest.php` — 25 new tests covering: `DispatchTriggerJob::$connection` property behavior (null config, string config, empty string config, numeric config), all declared properties have native types, `ConditionEngine` null-safe operator handling (>, >=, <, <=, between, in, not_in with null actual values, null/not_null operators), `WildcardMatcher` comprehensive matching (exact, single-segment, cross-segment, findMatchingPatterns, extractWildcards), `EventManager` cache invalidation (multiple calls), `EventManager` enable/disable with non-existent IDs, `EventLog` status constants, `EventLog::$statuses` array completeness, `Trigger` scope builder instances, factory default state validation for all 3 models.
+- **Fixed**: `ManagesSubscriptions::subscribeWebhook()` docblock — removed redundant `@param` annotations for parameters already documented by type declarations.
+- **Changed**: Version bumped to 1.31.0, test file count updated to 56
 
 ### v1.30.0
 

@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.31.0] — 2026-08-07
+
+### Added
+- `DispatchTriggerJob::$connection` — explicitly declared as `public ?string $connection = null`, replacing the previously undeclared dynamic property. Ensures PHPStan 9 type safety.
+- `ReadonlyPropertiesTest` — new test verifying `$connection` is typed nullable string, not readonly, not promoted, has null default.
+- `EventsPhase5QualityTest.php` — 25 new tests covering: connection property behavior (null/string/empty/numeric config), all declared properties have native types, ConditionEngine null-safe operators, WildcardMatcher comprehensive matching, EventManager cache invalidation, enable/disable non-existent, EventLog status constants, Trigger scopes, factory defaults.
+
+### Fixed
+- `ManagesSubscriptions::subscribeWebhook()` docblock — removed redundant `@param` annotations for parameters already documented by type declarations.
+
+### Changed
+- Version bumped to 1.31.0, test file count updated to 56
+
+---
+
 ## [1.30.0] — 2026-08-07
 
 ### Added

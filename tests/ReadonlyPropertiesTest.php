@@ -82,6 +82,18 @@ describe('Readonly promoted properties', function (): void {
             ->and($triesProp->hasDefaultValue())->toBeTrue();
     });
 
+    test('DispatchTriggerJob connection property is typed nullable string with null default', function (): void {
+        $reflection = new ReflectionClass(DispatchTriggerJob::class);
+        $connectionProp = $reflection->getProperty('connection');
+
+        expect($connectionProp->getType()->getName())->toBe('string')
+            ->and($connectionProp->getType()->allowsNull())->toBeTrue()
+            ->and($connectionProp->isReadOnly())->toBeFalse()
+            ->and($connectionProp->isPromoted())->toBeFalse()
+            ->and($connectionProp->hasDefaultValue())->toBeTrue()
+            ->and($connectionProp->getDefaultValue())->toBeNull();
+    });
+
     test('DomainEvent has #[Readonly] eventId and occurredAt', function (): void {
         $reflection = new ReflectionClass(\ZeroBoiler\Events\Domain\DomainEvent::class);
         $readonlyProps = array_filter(
