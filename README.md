@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.41.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.42.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 68 test files (Pest)
+└── tests/                      # 69 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -390,7 +390,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (68 test files)
+composer test        # Run Pest test suite (69 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -466,6 +466,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 8 production (dot notation, cache invalidation, trigger builder params, subscription scopes, domain event extras, contract singleton, config validation) | ✅ | `EventsPhase8ProductionTest.php` |
 | Phase 9 production (redeliver payload stripping, timeout config, ConditionEngine null operators, model boot UUID, TriggerBuilder/SubscriptionBuilder validation, WebhookAction error cases, DispatchTriggerJob edge config, EventLog mark methods, Subscription signing determinism, config type validation, contract singleton, ActionResolver errors) | ✅ | `EventsPhase9ProductionTest.php` |
 | Phase 10 production (fire/fireModel empty validation, DispatchTriggerJob array backoff config, ConditionEngine operators, WildcardMatcher edge cases, DomainEvent roundtrip, config completeness, ServiceProvider bindings, final classes, readonly properties, strict types enforcement, facade accessor) | ✅ | `EventsPhase10ProductionTest.php` |
+| Phase 11 production (SubscriptionBuilder transaction atomicity, validation-before-transaction, action params verification, WebhookAction subscription failure tracking optimization, hasExceededFailures config/custom, delivery tracking, signPayload determinism) | ✅ | `EventsPhase11ProductionTest.php` |
 
 ## How It Works
 
@@ -662,6 +663,14 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.42.0
+
+- **Fixed**: **CRITICAL** `SubscriptionBuilder::save()` now wraps subscription + trigger creation in a database transaction — previously, if the trigger save failed (e.g., DB error), an orphaned subscription record was left behind with no corresponding trigger. Both records are now created atomically or rolled back together.
+- **Improved**: `WebhookAction::recordSubscriptionFailure()` now accepts an already-loaded `Subscription` instance parameter — avoids a redundant `Subscription::find()` query when the subscription was already loaded in `handle()`, reducing database round-trips during webhook failure scenarios.
+- **Fixed**: `EventLog::casts()` docblock closing tag was on the same line as the type annotation — corrected to proper multi-line PHPDoc format.
+- **Added**: `EventsPhase11ProductionTest.php` — 13 new tests covering: SubscriptionBuilder transaction atomicity (subscription + trigger creation, validation-before-transaction, action params verification, conditions propagation, null conditions, explicit secret, multiple independent subscriptions), WebhookAction subscription failure tracking optimization (recordFailure increment, resetFailures, hasExceededFailures with config/custom max, delivery tracking with last_fired_at, signPayload determinism).
+- **Changed**: Version bumped to 1.42.0, test file count updated to 69
 
 ### v1.41.0
 

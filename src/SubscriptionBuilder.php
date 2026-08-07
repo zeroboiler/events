@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use ZeroBoiler\Events\Actions\WebhookAction;
 use ZeroBoiler\Events\Models\Subscription;
@@ -109,6 +110,11 @@ final class SubscriptionBuilder
     /**
      * Save the subscription to the database.
      *
+     * Uses a database transaction to ensure atomicity — both the subscription
+     * record and the internal trigger are created together, or neither.
+     * If the trigger save fails, the subscription is rolled back, preventing
+     * orphaned subscription records.
+     *
      * Also registers an internal trigger that dispatches the WebhookAction
      * when the event fires. The trigger's action_params contain the
      * subscription ID and URL so the WebhookAction can look up the signing
@@ -134,34 +140,36 @@ final class SubscriptionBuilder
             $this->secret = 'whsec_'.Str::random(32);
         }
 
-        $subscription = new Subscription([
-            'id' => (string) Str::uuid(),
-            'event' => $this->event,
-            'url' => $this->url,
-            'conditions' => $this->conditions !== [] ? $this->conditions : null,
-            'priority' => $this->priority,
-            'active' => true,
-            'secret' => $this->secret,
-            'failure_count' => 0,
-        ]);
-        $subscription->save();
-
-        // Register an internal trigger that will dispatch the webhook
-        // when the event fires. The trigger references the subscription
-        // so the WebhookAction can look up the signing secret.
-        $this->eventManager
-            ->on($this->event)
-            ->action(WebhookAction::class)
-            ->actionParams([
+        return DB::transaction(function (): Subscription {
+            $subscription = new Subscription([
+                'id' => (string) Str::uuid(),
+                'event' => $this->event,
                 'url' => $this->url,
-                'subscription_id' => $subscription->id,
-            ])
-            ->when($this->conditions)
-            ->priority($this->priority)
-            ->async($this->async)
-            ->name("Subscription: {$this->event} → {$this->url}")
-            ->save();
+                'conditions' => $this->conditions !== [] ? $this->conditions : null,
+                'priority' => $this->priority,
+                'active' => true,
+                'secret' => $this->secret,
+                'failure_count' => 0,
+            ]);
+            $subscription->save();
 
-        return $subscription;
+            // Register an internal trigger that will dispatch the webhook
+            // when the event fires. The trigger references the subscription
+            // so the WebhookAction can look up the signing secret.
+            $this->eventManager
+                ->on($this->event)
+                ->action(WebhookAction::class)
+                ->actionParams([
+                    'url' => $this->url,
+                    'subscription_id' => $subscription->id,
+                ])
+                ->when($this->conditions)
+                ->priority($this->priority)
+                ->async($this->async)
+                ->name("Subscription: {$this->event} → {$this->url}")
+                ->save();
+
+            return $subscription;
+        });
     }
 }

@@ -109,7 +109,7 @@ final class WebhookAction implements Triggerable
                     'status' => $response->status(),
                     'response' => $response->body(),
                 ]);
-                $this->recordSubscriptionFailure($subscriptionId);
+                $this->recordSubscriptionFailure($subscriptionId, $subscription);
             } elseif ($subscription !== null) {
                 // Record successful delivery using the already-loaded subscription
                 $subscription->recordDelivery();
@@ -120,7 +120,7 @@ final class WebhookAction implements Triggerable
                 'error' => $e->getMessage(),
             ]);
 
-            $this->recordSubscriptionFailure($subscriptionId);
+            $this->recordSubscriptionFailure($subscriptionId, $subscription);
 
             throw $e;
         }
@@ -129,14 +129,23 @@ final class WebhookAction implements Triggerable
     /**
      * Record a delivery failure on the subscription and auto-deactivate
      * if the failure threshold has been exceeded.
+     *
+     * Accepts an already-loaded Subscription instance when available
+     * (from the handle() method) to avoid a redundant DB query.
+     *
+     * @param  Subscription|null  $subscription  Already-loaded subscription instance, or null to query by ID
      */
-    private function recordSubscriptionFailure(?string $subscriptionId): void
+    private function recordSubscriptionFailure(?string $subscriptionId, ?Subscription $subscription = null): void
     {
         if ($subscriptionId === null) {
             return;
         }
 
-        $subscription = Subscription::find($subscriptionId);
+        // Use the already-loaded instance if available, otherwise query
+        if ($subscription === null || $subscription->id !== $subscriptionId) {
+            $subscription = Subscription::find($subscriptionId);
+        }
+
         if ($subscription === null) {
             return;
         }
