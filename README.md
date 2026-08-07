@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.29.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.30.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -333,7 +333,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (53 test files)
+composer test        # Run Pest test suite (54 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -394,6 +394,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Subscribe command (secret, filter, async, priority) | ✅ | `EventsSubscribeCommandTest.php` |
 | Unsubscribe command (remove, non-existent) | ✅ | `EventsUnsubscribeCommandTest.php` |
 | Subscriptions command (event/active/inactive/wildcard filters, pagination) | ✅ | `EventsSubscriptionsCommandTest.php` |
+| Phase 4 (ReDoS, not_contains, not_empty, WildcardMatcher edges, fromArray edges, cache invalidation on save/disable/enable, signPayload edges, model markAs*, contract singleton) | ✅ | `EventsPhase4Test.php` |
 
 ## How It Works
 
@@ -513,6 +514,14 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.30.0
+
+- **Added**: `EventsPhase4Test.php` — 30+ new tests covering: ReDoS protection (long regex, nested quantifiers, safe patterns, non-matching, non-string actual), not_contains operator (string absent/present, array absent/present), not_empty operator (string, array, empty string, empty array), WildcardMatcher edge cases (empty pattern, empty event, exact match, single/double segment, findMatchingPatterns, extractWildcards with cross-segment/segment mismatch), DomainEvent::fromArray edge cases (missing eventType, invalid UUID, invalid occurredAt, valid preservation, roundtrip), wildcard cache invalidation on save/disable/enable, Subscription signPayload (null secret, empty secret, deterministic, different payloads), EventLog markAsCompleted/markAsFailed, ConditionEngineContract singleton binding
+- **Fixed**: `Trigger` model `$hidden` property now has `@var array<int, string>` typed docblock annotation — consistent with EventLog and Subscription models
+- **Fixed**: `Trigger::casts()` docblock closing tag was on same line as type annotation — corrected to proper multi-line format
+- **Added**: Missing `handle()` method docblocks on `EventsUnsubscribeCommand` and `EventsRedeliverCommand`
+- **Changed**: README test file count updated from 53 to 54; version bumped to 1.30.0
 
 ### v1.29.0
 

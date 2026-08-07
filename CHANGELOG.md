@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.30.0] — 2026-08-07
+
+### Added
+- `EventsPhase4Test.php` — 30+ new tests covering: ReDoS protection, not_contains/not_empty operators, WildcardMatcher edge cases, DomainEvent::fromArray edge cases, wildcard cache invalidation on save/disable/enable, Subscription signPayload, EventLog markAs*, ConditionEngineContract singleton binding
+
+### Fixed
+- `Trigger` model `$hidden` property now has `@var array<int, string>` typed docblock
+- `Trigger::casts()` docblock closing tag corrected to proper multi-line format
+- Missing `handle()` method docblocks on `EventsUnsubscribeCommand` and `EventsRedeliverCommand`
+
+### Changed
+- Version bumped to 1.30.0
+- README test file count updated from 53 to 54
+
+---
+
 ## [1.29.0] — 2026-08-07
 
 ### Fixed

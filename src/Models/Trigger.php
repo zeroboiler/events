@@ -64,6 +64,7 @@ class Trigger extends Model
         'enabled',
     ];
 
+    /** @var array<int, string> */
     protected array $hidden = [
         'deleted_at',
     ];
@@ -134,7 +135,8 @@ class Trigger extends Model
     }
 
     /**
-     * @return array<string, string> */
+     * @return array<string, string>
+     */
     #[\Override]
     protected function casts(): array
     {

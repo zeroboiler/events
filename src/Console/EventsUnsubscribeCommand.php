@@ -18,6 +18,9 @@ final class EventsUnsubscribeCommand extends Command
 
     protected string $description = 'Remove an external webhook subscription';
 
+    /**
+     * Execute the command.
+     */
     public function handle(EventManager $eventManager): int
     {
         $id = $this->argument('id');

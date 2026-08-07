@@ -34,6 +34,9 @@ final class EventsRedeliverCommand extends Command
 
     protected string $description = 'Redeliver a failed webhook delivery';
 
+    /**
+     * Execute the redelivery command.
+     */
     public function handle(): int
     {
         $logId = (string) $this->argument('log_id');
