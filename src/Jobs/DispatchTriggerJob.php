@@ -46,9 +46,9 @@ final class DispatchTriggerJob implements ShouldQueue
      * @param  array<string, mixed>  $payload
      */
     public function __construct(
-        #[\Readonly] public string $triggerId,
-        #[\Readonly] public string $event,
-        #[\Readonly] public array $payload,
+        public readonly string $triggerId,
+        public readonly string $event,
+        public readonly array $payload,
     ) {
         // Retry configuration
         $triesConfig = Config::get('events.retry.tries', 3);

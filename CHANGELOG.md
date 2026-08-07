@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.36.0] — 2026-08-07
+
+### Fixed
+- **CRITICAL**: ACTUALLY replaced `#[\Readonly]` attribute with `readonly` keyword modifier in constructor property promotions across 5 source files (`EventManager`, `ActionResolver`, `TriggerBuilder`, `SubscriptionBuilder`, `DispatchTriggerJob`). The v1.35.0 changelog claimed this fix but the code still contained `#[\Readonly]` — PHP 8.5 would throw fatal parse errors.
+- `Pest.php` was missing 3 test files in `uses()` call (`EventSourcingTest.php`, `MigrationConfigDrivenTest.php`, `WildcardMatcherEdgeCasesTest.php`) — these tests were not getting Laravel bootstrap.
+
+### Added
+- `ProductionHardeningTest.php` — 13 new tests: readonly keyword verification via reflection, `#[\Readonly]` attribute absence scan across all source files, ServiceProvider binding verification, config merge completeness, Pest.php test inclusion completeness.
+
+### Changed
+- Cleaned up `phpstan-baseline.neon` — removed 13 redundant individual Eloquent static method suppressions (already covered by blanket ignore in `phpstan.neon.dist`).
+- Version bumped to 1.36.0, test file count updated to 62.
+
+---
+
 ## [1.35.0] — 2026-08-07
 
 ### Fixed

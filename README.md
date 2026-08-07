@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.35.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.36.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 57 test files (Pest)
+└── tests/                      # 62 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -390,7 +390,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (60 test files)
+composer test        # Run Pest test suite (62 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -458,6 +458,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Migration config-driven (config reads in migrations, FK reference) | ✅ | `MigrationConfigDrivenTest.php` |
 | DomainEvent sourcing (occur, toArray, fromArray, identity, readonly) | ✅ | `EventSourcingTest.php` |
 | WildcardMatcher edge cases (multi-wildcard, extract, backslash, boundary) | ✅ | `WildcardMatcherEdgeCasesTest.php` |
+| Production hardening (readonly keyword, attribute scan, bindings, config, Pest completeness) | ✅ | `ProductionHardeningTest.php` |
 
 ## How It Works
 
@@ -654,6 +655,14 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.36.0
+
+- **Fixed**: **CRITICAL** ACTUALLY replaced `#[\Readonly]` attribute with `readonly` keyword modifier in constructor property promotions across 5 source files — `EventManager`, `ActionResolver`, `TriggerBuilder`, `SubscriptionBuilder`, `DispatchTriggerJob`. The v1.35.0 changelog claimed this fix but it was not applied to the actual code; PHP 8.5 would throw fatal parse errors with `#[\Readonly]`.
+- **Added**: `ProductionHardeningTest.php` — 13 new tests covering: readonly keyword verification (reflection checks on all 5 classes), `#[\Readonly]` attribute absence scan across all source files, ServiceProvider binding verification (Transient/Singleton/Contract), config merge completeness, and Pest.php test inclusion completeness.
+- **Fixed**: `Pest.php` was missing 3 test files in `uses()` call — `EventSourcingTest.php`, `MigrationConfigDrivenTest.php`, and `WildcardMatcherEdgeCasesTest.php`. These tests were not getting Laravel bootstrap and would fail at runtime.
+- **Changed**: Cleaned up `phpstan-baseline.neon` — removed 13 redundant individual Eloquent static method suppressions that are already covered by the blanket `#Call to an undefined static method#` ignore in `phpstan.neon.dist`.
+- **Changed**: Version bumped to 1.36.0, test file count updated to 62
 
 ### v1.35.0
 

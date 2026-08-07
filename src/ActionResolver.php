@@ -14,7 +14,7 @@ use ZeroBoiler\Events\Contracts\Triggerable;
 final class ActionResolver
 {
     public function __construct(
-        #[\Readonly] protected Container $app
+        protected readonly Container $app,
     ) {}
 
     /**
