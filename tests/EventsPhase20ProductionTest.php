@@ -206,7 +206,7 @@ test('retry config has all required keys', function (): void {
     expect($retry)->toHaveKey('backoff');
 });
 
-// ─── Model Table Name Config-Driven ──────────────────────────────────────────
+// ─── Model Table Name Config-Driven ─────────────────────────────────────────
 
 test('Trigger model reads table name from config', function (): void {
     $trigger = new Trigger;
@@ -285,31 +285,33 @@ test('DomainEvent roundtrip preserves identity', function (): void {
 
 // ─── WildcardMatcher Pure Methods ────────────────────────────────────────────
 
-test('WildcardMatcher::matches is #[Pure]', function (): void {
+test('WildcardMatcher::matches is Pure', function (): void {
     $ref = new ReflectionMethod(WildcardMatcher::class, 'matches');
     $attrs = $ref->getAttributes();
     $isPure = false;
     foreach ($attrs as $attr) {
-        if ($attr->getName() === 'Pure' || str_contains($attr->getName(), 'Pure')) {
+        $name = $attr->getName();
+        if (str_contains($name, 'Pure')) {
             $isPure = true;
             break;
         }
     }
-    expect($isPure)->toBeTrue('WildcardMatcher::matches should have #[Pure] attribute');
+    expect($isPure)->toBeTrue('WildcardMatcher::matches should have Pure attribute');
 });
 
-test('WildcardMatcher findMatchingPatterns and extractWildcards are #[Pure]', function (): void {
+test('WildcardMatcher findMatchingPatterns and extractWildcards are Pure', function (): void {
     foreach (['findMatchingPatterns', 'extractWildcards'] as $method) {
         $ref = new ReflectionMethod(WildcardMatcher::class, $method);
         $attrs = $ref->getAttributes();
         $isPure = false;
         foreach ($attrs as $attr) {
-            if ($attr->getName() === 'Pure' || str_contains($attr->getName(), 'Pure')) {
+            $name = $attr->getName();
+            if (str_contains($name, 'Pure')) {
                 $isPure = true;
                 break;
             }
         }
-        expect($isPure)->toBeTrue("WildcardMatcher::{$method} should have #[Pure] attribute");
+        expect($isPure)->toBeTrue("WildcardMatcher::{$method} should have Pure attribute");
     }
 });
 
@@ -343,24 +345,25 @@ test('SubscriptionBuilder methods return self', function (): void {
     expect($builder->async())->toBe($builder);
 });
 
-// ─── ConditionEngine Override Verification ────────────────────────────────────
+// ─── ConditionEngine Override Verification ───────────────────────────────────
 
-test('ConditionEngine::matches has #[Override] attribute', function (): void {
+test('ConditionEngine::matches has Override attribute', function (): void {
     $ref = new ReflectionMethod(ConditionEngine::class, 'matches');
     $attrs = $ref->getAttributes();
     $hasOverride = false;
     foreach ($attrs as $attr) {
-        if ($attr->getName() === 'Override' || str_contains($attr->getName(), 'Override')) {
+        $name = $attr->getName();
+        if (str_contains($name, 'Override')) {
             $hasOverride = true;
             break;
         }
     }
-    expect($hasOverride)->toBeTrue('ConditionEngine::matches should have #[Override] attribute');
+    expect($hasOverride)->toBeTrue('ConditionEngine::matches should have Override attribute');
 });
 
 // ─── WebhookAction Override Verification ─────────────────────────────────────
 
-test('WebhookAction::handle has #[Override] attribute', function (): void {
+test('WebhookAction::handle has Override attribute', function (): void {
     $ref = new ReflectionMethod(
         \ZeroBoiler\Events\Actions\WebhookAction::class,
         'handle',
@@ -368,12 +371,13 @@ test('WebhookAction::handle has #[Override] attribute', function (): void {
     $attrs = $ref->getAttributes();
     $hasOverride = false;
     foreach ($attrs as $attr) {
-        if ($attr->getName() === 'Override' || str_contains($attr->getName(), 'Override')) {
+        $name = $attr->getName();
+        if (str_contains($name, 'Override')) {
             $hasOverride = true;
             break;
         }
     }
-    expect($hasOverride)->toBeTrue('WebhookAction::handle should have #[Override] attribute');
+    expect($hasOverride)->toBeTrue('WebhookAction::handle should have Override attribute');
 });
 
 // ─── Subscription Model MatchesEvent ─────────────────────────────────────────
