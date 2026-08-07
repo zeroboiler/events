@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.48.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.49.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -81,7 +81,9 @@ composer require zeroboiler/events
 ### Publish Configuration & Migrations
 
 ```bash
-php artisan vendor:publish --tag=events-config
+php artisan vendor:publish --tag=events-config     # Publish config only
+php artisan vendor:publish --tag=events-migrations # Publish migrations only
+php artisan vendor:publish --tag=events-config --tag=events-migrations # Both
 php artisan migrate
 ```
 
@@ -347,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 75 test files (Pest)
+└── tests/                      # 76 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -672,6 +674,15 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.49.0
+
+- **Added**: `events-migrations` publish tag — migrations can now be published independently with `php artisan vendor:publish --tag=events-migrations`, useful when you want to customize migration files before running them.
+- **Added**: `EventManagerCrudTest.php` — 11 new tests covering `getTrigger()` (found, not found, empty string, soft-deleted) and `deleteTrigger()` (success, non-existent, empty string, single target deletion, soft-delete preservation, post-delete fire no-dispatch, combined get+delete workflow).
+- **Fixed**: `phpstan.neon.dist` trailing comma on `reportUnmatchedIgnoredErrors` — invalid NEON syntax that could cause PHPStan configuration parsing errors.
+- **Fixed**: `phpstan.neon.dist` now includes ignore patterns for Laravel global helper functions (`database_path`, `config_path`) used in ServiceProvider — resolves PHPStan "Undefined function" errors without Larastan.
+- **Changed**: Version bumped to 1.49.0, test file count updated to 76.
+- **Changed**: `Pest.php` updated with `EventManagerCrudTest.php` in `uses()` call.
 
 ### v1.48.0
 

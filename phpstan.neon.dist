@@ -8,7 +8,7 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
     checkUninitializedProperties: false
     treatPhpDocTypesAsCertain: false
-    reportUnmatchedIgnoredErrors: false,
+    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         # Eloquent model magic properties are handled via @property annotations
         - '#Access to an undefined property#'
@@ -18,3 +18,6 @@ parameters:
         - '#Call to an undefined method#'
         # Facade resolved instance types without Larastan
         - '#Method .*::.*\(\) invoked on .*#'
+        # Laravel global helpers used in ServiceProvider (database_path, config_path, etc.)
+        - '#Undefined function.*database_path#'
+        - '#Undefined function.*config_path#'

@@ -62,6 +62,10 @@ final class EventsServiceProvider extends ServiceProvider
                 __DIR__.'/../config/events.php' => $configPath,
             ], 'events-config');
 
+            $this->publishes([
+                __DIR__.'/../database/migrations/' => database_path('migrations'),
+            ], 'events-migrations');
+
             $this->commands([
                 EventsListCommand::class,
                 EventsRegisterCommand::class,
