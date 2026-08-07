@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.27.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.28.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -509,9 +509,19 @@ Before deploying to production, verify:
 | `EVENTS_LOG_PURGE_PENDING` | `false` | Include pending logs in purge |
 | `EVENTS_SUB_MAX_FAILURES` | `10` | Webhook failure threshold for auto-deactivation |
 | `EVENTS_SUB_TIMEOUT` | `30` | Webhook HTTP timeout (seconds) |
+| `EVENTS_SUB_SIGNATURE_ALGORITHM` | `sha256` | HMAC signature algorithm for webhook payloads |
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.28.0
+
+- **Added**: `DispatchTriggerJob` now reads `events.queue.connection` config to set the queue connection for async triggers — previously only queue name was configurable
+- **Added**: 3 new tests for queue connection config (reads from config, defaults to null when empty)
+- **Added**: `EVENTS_SUB_SIGNATURE_ALGORITHM` environment variable documented in README Environment Variables table
+- **Added**: `@throws \Throwable` docblocks to `EventManager::fire()` and `EventManager::executeTrigger()` documenting exception re-throw behavior
+- **Fixed**: `events.subscriptions.signature_algorithm` config was hard-coded — now reads from `EVENTS_SUB_SIGNATURE_ALGORITHM` env variable with `sha256` default
+- **Changed**: Version bumped to 1.28.0
 
 ### v1.27.0
 

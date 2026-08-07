@@ -68,7 +68,7 @@ return [
         'timeout' => env('EVENTS_SUB_TIMEOUT', 30),
 
         // Signature algorithm for HMAC payload signing
-        'signature_algorithm' => 'sha256',
+        'signature_algorithm' => env('EVENTS_SUB_SIGNATURE_ALGORITHM', 'sha256'),
     ],
 
     /*

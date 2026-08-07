@@ -117,6 +117,8 @@ final class EventManager
      * Fire an event and dispatch all matching triggers.
      *
      * @param  array<string, mixed>  $payload
+     *
+     * @throws \Throwable If a synchronous trigger action fails (re-thrown after logging)
      */
     public function fire(string $event, array $payload = []): void
     {
@@ -276,6 +278,8 @@ final class EventManager
 
     /**
      * Execute a trigger synchronously.
+     *
+     * @throws \Throwable If the action handler fails (re-thrown after logging and updating log status)
      */
     public function executeTrigger(Trigger $trigger, EventLog $log): void
     {

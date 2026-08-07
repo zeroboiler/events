@@ -127,6 +127,30 @@ test('dispatch trigger job failed method marks log as failed', function (): void
         ->and($log->error)->toBe('Test failure');
 });
 
+test('dispatch trigger job reads queue name from config', function (): void {
+    config()->set('events.queue.queue', 'high-priority');
+
+    $job = new DispatchTriggerJob('test', 'test.event', []);
+
+    expect($job->queue)->toBe('high-priority');
+});
+
+test('dispatch trigger job reads queue connection from config', function (): void {
+    config()->set('events.queue.connection', 'redis');
+
+    $job = new DispatchTriggerJob('test', 'test.event', []);
+
+    expect($job->connection)->toBe('redis');
+});
+
+test('dispatch trigger job defaults queue connection to null when config is empty', function (): void {
+    config()->set('events.queue.connection', '');
+
+    $job = new DispatchTriggerJob('test', 'test.event', []);
+
+    expect($job->connection)->toBeNull();
+});
+
 test('dispatch trigger job failed method handles missing event log gracefully', function (): void {
     $job = new DispatchTriggerJob('test-id', 'test.event', []);
 

@@ -54,6 +54,11 @@ final class DispatchTriggerJob implements ShouldQueue
 
         $queueConfig = Config::get('events.queue.queue', 'default');
         $this->queue = is_string($queueConfig) && $queueConfig !== '' ? $queueConfig : 'default';
+
+        $connectionConfig = Config::get('events.queue.connection', null);
+        if (is_string($connectionConfig) && $connectionConfig !== '') {
+            $this->connection = $connectionConfig;
+        }
     }
 
     /**
