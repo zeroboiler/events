@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.31.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.32.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -333,7 +333,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (56 test files)
+composer test        # Run Pest test suite (57 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -396,6 +396,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Subscriptions command (event/active/inactive/wildcard filters, pagination) | ✅ | `EventsSubscriptionsCommandTest.php` |
 | Phase 4 (ReDoS, not_contains, not_empty, WildcardMatcher edges, fromArray edges, cache invalidation on save/disable/enable, signPayload edges, model markAs*, contract singleton) | ✅ | `EventsPhase4Test.php` |
 | Phase 5 quality (connection property type, null config, numeric config, ConditionEngine null-safe operators, WildcardMatcher comprehensive, cache invalidation, status constants, factory defaults, scope instances) | ✅ | `EventsPhase5QualityTest.php` |
+| Phase 6 production (transient/singleton bindings, contract identity, status constants, null-safe operators, TriggerBuilder encoding variants, DomainEvent identity, WildcardMatcher edges, fire no-match, cache invalidation, model config, DispatchTriggerJob config, Subscription sign/match, getStats structure) | ✅ | `EventsPhase6ProductionTest.php` |
 
 ## How It Works
 
@@ -499,6 +500,83 @@ Before deploying to production, verify:
 - [ ] **Log retention configured**: Set `EVENTS_LOG_RETENTION_DAYS` to match your compliance requirements
 - [ ] **Rate limiting**: Protect webhook endpoints with the `zeroboiler/security` package or Laravel middleware
 
+## API Reference
+
+### EventManager (Facade)
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `on(string $event)` | `TriggerBuilder` | Start building a new trigger |
+| `register(string $event)` | `TriggerBuilder` | Alias for `on()` |
+| `fire(string $event, array $payload)` | `void` | Fire an event and dispatch matching triggers |
+| `fireModel(string $class, string $action, object $model)` | `void` | Fire a model event with flattened attributes |
+| `enable(string $triggerId)` | `bool` | Enable a trigger by ID |
+| `disable(string $triggerId)` | `bool` | Disable a trigger by ID |
+| `invalidateTriggerCache()` | `void` | Clear the wildcard trigger cache |
+| `subscribe(string $event, string $url)` | `SubscriptionBuilder` | Start building a webhook subscription |
+| `unsubscribe(string $subscriptionId)` | `bool` | Remove a subscription by ID |
+| `listSubscriptions(?string $event, bool $activeOnly)` | `Collection` | List subscriptions with optional filtering |
+| `getSubscription(string $id)` | `Subscription\|null` | Get a subscription by ID |
+| `subscribeWebhook(string $event, string $url, array $conditions, int $priority)` | `string` | Quick-create a webhook subscription |
+| `getEventHistory(?string $event, ?string $status, ?string $triggerId, int $limit)` | `Collection` | Query event log history |
+| `getStats(?Carbon $since)` | `array` | Get aggregate statistics |
+| `purgeLogs(Carbon $before, bool $includePending)` | `int` | Purge old event logs |
+| `executeTrigger(Trigger $trigger, EventLog $log)` | `void` | Execute a trigger synchronously (throws on failure) |
+
+### TriggerBuilder
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `name(string $name)` | `self` | Set trigger display name |
+| `on(string $event)` | `self` | Set event name (called internally by `EventManager::on()`) |
+| `action(string $class)` | `self` | Set single action handler class |
+| `actions(array $classes)` | `self` | Set multiple action handler classes |
+| `when(array $conditions)` | `self` | Set condition filters |
+| `async(bool $async)` | `self` | Set async dispatch mode |
+| `priority(int $priority)` | `self` | Set priority (higher = first) |
+| `actionParams(array $params)` | `self` | Set action parameters (e.g., webhook URL) |
+| `save()` | `Trigger` | Persist trigger to database |
+
+### SubscriptionBuilder
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `on(string $event)` | `self` | Set event name (called internally by `subscribe()`) |
+| `to(string $url)` | `self` | Set webhook endpoint URL |
+| `withSecret(string $secret)` | `self` | Set HMAC signing secret |
+| `withFilter(array $conditions)` | `self` | Set condition filters |
+| `priority(int $priority)` | `self` | Set subscription priority |
+| `async(bool $async)` | `self` | Set async delivery mode |
+| `save()` | `Subscription` | Persist subscription and register internal trigger |
+
+### DomainEvent
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `occur(string $type, array $payload)` | `self` | Factory: create a new domain event |
+| `toArray()` | `array` | Serialize to array |
+| `fromArray(array $data)` | `self` | Reconstruct from array (preserves UUID/timestamp) |
+
+### ConditionEngine Operators
+
+| Operator | Syntax | Description |
+|----------|--------|-------------|
+| `>`, `>=`, `<`, `<=` | `['amount', ['>', 100]]` | Numeric comparison (null-safe) |
+| `=`, `===` | `['status', 'paid']` / `['flag', ['===', true]]` | Equality / strict equality |
+| `!=`, `!==` | `['status', ['!=', 'draft']]` | Inequality / strict inequality |
+| `in` | `['role', ['in', ['admin', 'mod']]]` | Value in array |
+| `not_in` | `['role', ['not_in', ['guest']]]` | Value not in array |
+| `contains` | `['tags', ['contains', 'urgent']]` | String contains / array membership |
+| `not_contains` | `['tags', ['not_contains', 'spam']]` | Negated contains |
+| `between` | `['age', ['between', [18, 65]]]` | Inclusive range (auto-normalizes inverted) |
+| `null` | `['deleted_at', ['null']]` | Value is null |
+| `not_null` | `['email', ['not_null']]` | Value is not null |
+| `empty` | `['notes', ['empty']]` | Value is empty |
+| `not_empty` | `['notes', ['not_empty']]` | Value is not empty |
+| `starts_with` | `['email', ['starts_with', 'admin@']]` | String prefix |
+| `ends_with` | `['domain', ['ends_with', '.com']]` | String suffix |
+| `matches` | `['code', ['matches', '/^[A-Z]{3}$/']]` | Regex match (ReDoS-protected) |
+
 ### Environment Variables
 
 | Variable | Default | Description |
@@ -515,6 +593,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.32.0
+
+- **Added**: Comprehensive API Reference section in README — tables for all EventManager, TriggerBuilder, SubscriptionBuilder, DomainEvent methods and all 19 ConditionEngine operators with syntax examples.
+- **Added**: `EventsPhase6ProductionTest.php` — 46 new tests covering: transient binding verification (TriggerBuilder, SubscriptionBuilder), singleton binding verification (ConditionEngine, ActionResolver, EventManager), ConditionEngineContract resolution identity, EventLog status constants consistency, ConditionEngine null-safe operator handling (>, >=, <, <=), numeric string strict equality, TriggerBuilder save() action encoding variants (single+params→JSON object, multi+params→classes key, single plain string, multi JSON array), DomainEvent identity semantics (same/different events), WildcardMatcher empty pattern/event/catch-all edge cases, findMatchingPatterns, EventManager fire with no triggers, cache invalidation, model table name config verification, model key type/incrementing verification, DispatchTriggerJob config-driven properties (tries, backoff, queue name, connection with empty-string fallback), Subscription signPayload (null/empty/deterministic), Subscription matchesEvent (exact/wildcard/cross-segment), getEventHistory empty collection, getStats zero-state structure.
+- **Changed**: Version bumped to 1.32.0, test file count updated to 57
 
 ### v1.31.0
 

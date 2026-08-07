@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.32.0] — 2026-08-07
+
+### Added
+- Comprehensive API Reference section in README with tables for EventManager, TriggerBuilder, SubscriptionBuilder, DomainEvent methods and all 19 ConditionEngine operators.
+- `EventsPhase6ProductionTest.php` — 46 new production readiness tests.
+
+### Changed
+- Version bumped to 1.32.0.
+
+---
+
 ## [1.31.0] — 2026-08-07
 
 ### Added
