@@ -380,7 +380,7 @@ final class EventManager
             if (array_is_list($decoded)) {
                 // List of entries — normalise each one
                 return array_map(
-                    fn (mixed $entry): mixed => is_array($entry) ? $entry : (string) $entry,
+                    fn (mixed $entry): string|array => is_array($entry) ? $entry : (string) $entry,
                     $decoded,
                 );
             }

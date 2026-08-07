@@ -29,7 +29,7 @@ return new class extends Migration
             $table->text('action');
             $table->json('conditions')->nullable();
             $table->boolean('async')->default(false);
-            $table->integer('priority')->default(0);
+            $table->unsignedInteger('priority')->default(0);
             $table->boolean('enabled')->default(true);
             $table->timestamps();
             $table->softDeletes();

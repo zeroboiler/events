@@ -34,12 +34,12 @@ return new class extends Migration
             $table->string('event');
             $table->string('url');
             $table->json('conditions')->nullable();
-            $table->integer('priority')->default(0);
+            $table->unsignedInteger('priority')->default(0);
             $table->boolean('active')->default(true);
             $table->string('secret')->nullable()->comment('HMAC signing secret for webhook verification');
             $table->timestamp('last_fired_at')->nullable();
-            $table->integer('failure_count')->default(0);
-            $table->integer('delivery_count')->default(0)->comment('Total successful deliveries');
+            $table->unsignedInteger('failure_count')->default(0);
+            $table->unsignedInteger('delivery_count')->default(0)->comment('Total successful deliveries');
             $table->softDeletes();
             $table->timestamps();
 

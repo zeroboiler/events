@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.36.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.37.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 62 test files (Pest)
+└── tests/                      # 63 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -390,7 +390,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (62 test files)
+composer test        # Run Pest test suite (63 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -459,6 +459,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | DomainEvent sourcing (occur, toArray, fromArray, identity, readonly) | ✅ | `EventSourcingTest.php` |
 | WildcardMatcher edge cases (multi-wildcard, extract, backslash, boundary) | ✅ | `WildcardMatcherEdgeCasesTest.php` |
 | Production hardening (readonly keyword, attribute scan, bindings, config, Pest completeness) | ✅ | `ProductionHardeningTest.php` |
+| ParseActions return type (string|array entries, all 5 JSON formats, mixed edge cases) | ✅ | `EventManagerParseActionsTypeTest.php` |
+| Migration unsigned integers (priority, duration_ms, failure_count, delivery_count) | ✅ | `MigrationStructureTest.php` |
 
 ## How It Works
 
@@ -655,6 +657,14 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.37.0
+
+- **Fixed**: `EventManager::parseActions()` — tightened `array_map` callback return type from `mixed` to `string|array` for PHPStan 9 strict compliance with the documented `@return list<string|array{class: string, params?: array<string, mixed>}>` contract.
+- **Fixed**: Migration integer columns changed to `unsignedInteger` — `priority` (triggers), `duration_ms` (event_logs), `priority`/`failure_count`/`delivery_count` (subscriptions) now use `unsignedInteger` instead of `integer` for data integrity (prevents negative values).
+- **Added**: `EventManagerParseActionsTypeTest.php` — 7 tests validating parseActions return type correctness: each entry is either a string class name or an array with a `class` key, covering all 5 JSON formats plus mixed array edge cases.
+- **Added**: 3 migration column type tests in `MigrationStructureTest.php` — unsigned integer storage verification for triggers priority, event_logs duration_ms, and subscriptions priority/failure_count/delivery_count.
+- **Changed**: Version bumped to 1.37.0, test file count updated to 63
 
 ### v1.36.0
 

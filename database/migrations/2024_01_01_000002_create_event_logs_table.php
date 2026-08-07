@@ -37,7 +37,7 @@ return new class extends Migration
             $table->json('payload');
             $table->enum('status', ['pending', 'dispatched', 'completed', 'failed'])->default('pending');
             $table->text('error')->nullable();
-            $table->integer('duration_ms')->nullable();
+            $table->unsignedInteger('duration_ms')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

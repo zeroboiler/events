@@ -78,6 +78,7 @@ uses(TestCase::class)->in(
     'EventsRetryCommandTest.php',
     'EventsRegisterCommandTest.php',
     'ProductionHardeningTest.php',
+    'EventManagerParseActionsTypeTest.php',
 );
 
 // WildcardMatcherTest and EscapesWildcardLikeTest run without TestCase (plain PHP tests)

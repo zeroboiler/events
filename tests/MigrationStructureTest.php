@@ -58,3 +58,30 @@ it('event_logs has foreign key on trigger_id', function (): void {
     expect($log->trigger_id)->toBe($trigger->id);
     expect($log->trigger->id)->toBe($trigger->id);
 });
+
+it('triggers priority column supports unsigned values', function (): void {
+    $trigger = \ZeroBoiler\Events\Models\Trigger::factory()->create(['priority' => PHP_INT_MAX]);
+    expect($trigger->priority)->toBe(PHP_INT_MAX);
+});
+
+it('event_logs duration_ms column supports unsigned values', function (): void {
+    $trigger = \ZeroBoiler\Events\Models\Trigger::factory()->create();
+    $log = \ZeroBoiler\Events\Models\EventLog::factory()->create([
+        'trigger_id' => $trigger->id,
+        'status' => 'completed',
+        'duration_ms' => PHP_INT_MAX,
+    ]);
+    expect($log->duration_ms)->toBe(PHP_INT_MAX);
+});
+
+it('subscriptions unsigned integer columns store correctly', function (): void {
+    $sub = \ZeroBoiler\Events\Models\Subscription::factory()->create([
+        'priority' => PHP_INT_MAX,
+        'failure_count' => PHP_INT_MAX,
+        'delivery_count' => PHP_INT_MAX,
+    ]);
+    $fresh = \ZeroBoiler\Events\Models\Subscription::find($sub->id);
+    expect($fresh->priority)->toBe(PHP_INT_MAX);
+    expect($fresh->failure_count)->toBe(PHP_INT_MAX);
+    expect($fresh->delivery_count)->toBe(PHP_INT_MAX);
+});
