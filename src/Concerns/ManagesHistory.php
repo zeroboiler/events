@@ -114,7 +114,7 @@ trait ManagesHistory
             ->orderByDesc('count')
             ->limit(10)
             ->get()
-            ->map(fn ($row): array => ['event' => $row->event, 'count' => (int) $row->count])
+            ->map(fn (object $row): array => ['event' => (string) $row->event, 'count' => (int) $row->count])
             ->toArray();
 
         // Top failed events
@@ -125,7 +125,7 @@ trait ManagesHistory
             ->orderByDesc('count')
             ->limit(10)
             ->get()
-            ->map(fn ($row): array => ['event' => $row->event, 'count' => (int) $row->count])
+            ->map(fn (object $row): array => ['event' => (string) $row->event, 'count' => (int) $row->count])
             ->toArray();
 
         $totalTriggers = (int) Trigger::count();

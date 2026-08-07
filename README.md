@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.26.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.27.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -333,7 +333,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (49 test files)
+composer test        # Run Pest test suite (53 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -369,6 +369,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Integration (full fire flow) | ✅ | `EventManagerIntegrationTest.php` |
 | Facade proxy, cache invalidation, ActionResolver errors | ✅ | `EventsFacadeProxyTest.php` |
 | Production readiness | ✅ | `ProductionReadyTest.php` |
+| Production deployment (bindings, contracts, config, immutability) | ✅ | `ProductionDeploymentTest.php` |
 | Contract binding (singleton, interface resolution) | ✅ | `ContractBindingTest.php` |
 | Typed properties (models, factories, commands, attributes) | ✅ | `TypedPropertiesTest.php` |
 | Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
@@ -379,9 +380,13 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Readonly properties (#[Readonly] promoted, PHP 8.5) | ✅ | `ReadonlyPropertiesTest.php` |
 | Wildcard integration (cross-segment, catch-all, multi) | ✅ | `WildcardIntegrationTest.php` |
 | Wildcard matcher (exact, *, **, extract, findMatching) | ✅ | `WildcardMatcherTest.php` |
-| EscapesWildcardLike (%, _, \\, *, mixed) | ✅ | `EscapesWildcardLikeTest.php` |
+| EscapesWildcardLike (%, _, \, *, mixed) | ✅ | `EscapesWildcardLikeTest.php` |
 | Fire command (JSON parsing, options, edge cases) | ✅ | `EventsFireCommandTest.php` |
 | Redeliver command (validation, status checks) | ✅ | `EventsRedeliverCommandTest.php` |
+| Enable command (enable disabled, already enabled, non-existent) | ✅ | `EventsEnableCommandTest.php` |
+| Disable command (disable enabled, already disabled, non-existent) | ✅ | `EventsDisableCommandTest.php` |
+| Register command (sync/async, name, priority, auto-name) | ✅ | `EventsRegisterCommandTest.php` |
+| Retry command (invalid status, empty, disabled skip) | ✅ | `EventsRetryCommandTest.php` |
 | EventManager register alias, empty fire, disable/enable non-existent | ✅ | `EventManagerRegisterAliasTest.php` |
 | TriggerBuilder action merging, executeTrigger exception propagation, empty fire | ✅ | `EventManagerAdvancedTest.php` |
 | List command (pagination, event/enable/disable filters) | ✅ | `EventsListCommandTest.php` |
@@ -479,7 +484,46 @@ composer ci          # All checks (lint → analyse → rector → test)
 | EventLog entries with no trigger | Trigger deleted after fire | EventLog references trigger via FK — use soft deletes to preserve referential integrity |
 | Regex condition always false | Pattern exceeds 500 chars or has nested quantifiers | Simplify the regex or increase `ConditionEngine::MAX_REGEX_LENGTH` |
 
+## Production Deployment Checklist
+
+Before deploying to production, verify:
+
+- [ ] **Migrations run**: `php artisan migrate` — all 3 tables created (`triggers`, `event_logs`, `event_subscriptions`)
+- [ ] **Config published**: `php artisan vendor:publish --tag=events-config` — verify `config/events.php` exists
+- [ ] **Queue worker running**: `php artisan queue:work` — required for async triggers
+- [ ] **Queue connection configured**: Set `EVENTS_QUEUE_CONNECTION` if not using the default
+- [ ] **Cache driver configured**: Wildcard trigger caching requires a working cache driver
+- [ ] **Webhook secrets reviewed**: Set `EVENTS_SUB_MAX_FAILURES` for auto-deactivation threshold
+- [ ] **Log retention configured**: Set `EVENTS_LOG_RETENTION_DAYS` to match your compliance requirements
+- [ ] **Rate limiting**: Protect webhook endpoints with the `zeroboiler/security` package or Laravel middleware
+
+### Environment Variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `EVENTS_QUEUE_CONNECTION` | `queue.default` | Queue connection for async triggers |
+| `EVENTS_QUEUE` | `default` | Queue name for async triggers |
+| `EVENTS_RETRY_TRIES` | `3` | Max retry attempts for async jobs |
+| `EVENTS_RETRY_BACKOFF` | `60,300,900` | Comma-separated backoff seconds |
+| `EVENTS_LOG_RETENTION_DAYS` | `30` | Days before logs are eligible for purge |
+| `EVENTS_LOG_PURGE_PENDING` | `false` | Include pending logs in purge |
+| `EVENTS_SUB_MAX_FAILURES` | `10` | Webhook failure threshold for auto-deactivation |
+| `EVENTS_SUB_TIMEOUT` | `30` | Webhook HTTP timeout (seconds) |
+| `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
+
 ## Changelog
+
+### v1.27.0
+
+- **Added**: `ProductionDeploymentTest` — 19 tests covering: contract implementations, Triggerable interface, config merge verification, singleton/transient bindings (EventManager, ConditionEngine, ActionResolver, TriggerBuilder, SubscriptionBuilder), config defaults validation, EventLog status constants, DomainEvent immutability, WebhookAction/DispatchTriggerJob interface checks, model UUID key types, WildcardMatcher static methods, facade accessor
+- **Added**: `EventsEnableCommandTest` — 4 tests: enable disabled trigger, already enabled, non-existent, cache invalidation
+- **Added**: `EventsDisableCommandTest` — 4 tests: disable enabled trigger, already disabled, non-existent, cache invalidation
+- **Added**: `EventsRegisterCommandTest` — 6 tests: sync trigger, async trigger, name option, priority option, auto-name generation, empty action failure
+- **Added**: `EventsRetryCommandTest` — 6 tests: invalid status, no failed logs, no pending logs, disabled trigger skip, orphaned log skip, default status
+- **Added**: Production Deployment Checklist section in README with environment variables reference table
+- **Fixed**: `ManagesHistory::getStats()` closure parameters now typed as `object $row` with explicit `(string)` cast — PHPStan 9 compliance for untyped Eloquent aggregate result rows
+- **Changed**: Pest.php `uses()` updated with 4 new test files (ProductionDeploymentTest, EventsEnableCommandTest, EventsDisableCommandTest, EventsRegisterCommandTest)
+- **Changed**: Version bumped to 1.27.0
 
 ### v1.26.0
 
