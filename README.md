@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.34.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.35.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -654,6 +654,10 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.35.0
+
+- **Fixed**: **CRITICAL** Replaced all `#[\Readonly]` attribute usages with `readonly` modifier keyword across 6 source files — `#[\Readonly]` was removed in PHP 8.5 and caused fatal parse errors. Affected: `DomainEvent`, `EventManager`, `ActionResolver`, `TriggerBuilder`, `SubscriptionBuilder`, `DispatchTriggerJob`.
 
 ### v1.34.0
 

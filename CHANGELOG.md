@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.35.0] — 2026-08-07
+
+### Fixed
+- **CRITICAL**: Replaced all `#[\Readonly]` attribute usages with `readonly` modifier keyword across 6 source files (`DomainEvent`, `EventManager`, `ActionResolver`, `TriggerBuilder`, `SubscriptionBuilder`, `DispatchTriggerJob`). The `#[\Readonly]` attribute was removed in PHP 8.5 and caused fatal parse errors on PHP 8.5+.
+
+---
+
 ## [1.34.0] — 2026-08-07
 
 ### Added

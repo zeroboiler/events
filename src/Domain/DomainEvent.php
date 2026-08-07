@@ -14,18 +14,16 @@ use Ramsey\Uuid\UuidInterface;
 
 final class DomainEvent
 {
-    #[\Readonly]
-    public UuidInterface $eventId;
+    public readonly UuidInterface $eventId;
 
-    #[\Readonly]
-    public DateTimeImmutable $occurredAt;
+    public readonly DateTimeImmutable $occurredAt;
 
     /**
      * @param  array<string, mixed>  $payload
      */
     public function __construct(
-        #[\Readonly] public string $eventType,
-        #[\Readonly] public array $payload = [],
+        public readonly string $eventType,
+        public readonly array $payload = [],
         ?UuidInterface $eventId = null,
         ?DateTimeImmutable $occurredAt = null,
     ): void {
