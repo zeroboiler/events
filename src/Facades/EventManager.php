@@ -50,7 +50,7 @@ use ZeroBoiler\Events\TriggerBuilder;
  *
  * @see \ZeroBoiler\Events\EventManager
  */
-class EventManager extends Facade
+final class EventManager extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
