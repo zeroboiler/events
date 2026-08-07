@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.40.0] — 2026-08-07
+
+### Fixed
+- **SECURITY**: `EventsRedeliverCommand` leaked internal payload keys (`url`, `subscription_id`, `event`, `headers`) to webhook endpoints during redelivery. Extracted `buildRedeliverBody()` method that strips these keys before sending — consistent with `WebhookAction::handle()`.
+
+### Added
+- `EventsPhase9ProductionTest.php` — 38 new tests: redeliver `buildRedeliverBody()` payload stripping, timestamp/redelivered/original_log_id preservation, non-array payload handling, `getTimeout()` config reads, `ConditionEngine` null-safe operators (matches/starts_with/ends_with), model boot UUID auto-generation, TriggerBuilder/SubscriptionBuilder validation, WebhookAction error cases, DispatchTriggerJob edge config, EventLog mark methods, Subscription signing determinism, config key type validation, contract singleton identity, ActionResolver error cases.
+
+### Changed
+- Version bumped to 1.40.0, test file count updated to 67.
+
+---
+
 ## [1.39.0] — 2026-08-07
 
 ### Added

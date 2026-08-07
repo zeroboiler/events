@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.39.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.40.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 66 test files (Pest)
+└── tests/                      # 67 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -390,7 +390,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (65 test files)
+composer test        # Run Pest test suite (67 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -464,6 +464,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | fireModel (attributesToArray, toArray fallback, plain object, event name, empty payload, no-match, metadata override) | ✅ | `EventManagerFireModelTest.php` |
 | ConditionEngine edge cases (strictEquals, operators, nested null, between auto-normalize, regex limits, AND logic) | ✅ | `ConditionEngineEdgeCasesTest.php` |
 | Phase 8 production (dot notation, cache invalidation, trigger builder params, subscription scopes, domain event extras, contract singleton, config validation) | ✅ | `EventsPhase8ProductionTest.php` |
+| Phase 9 production (redeliver payload stripping, timeout config, ConditionEngine null operators, model boot UUID, TriggerBuilder/SubscriptionBuilder validation, WebhookAction error cases, DispatchTriggerJob edge config, EventLog mark methods, Subscription signing determinism, config type validation, contract singleton, ActionResolver errors) | ✅ | `EventsPhase9ProductionTest.php` |
 
 ## How It Works
 
@@ -660,6 +661,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.40.0
+
+- **Fixed**: **SECURITY** `EventsRedeliverCommand` leaked internal payload keys (`url`, `subscription_id`, `event`, `headers`) to webhook endpoints — extracted `buildRedeliverBody()` method that strips these keys, consistent with `WebhookAction::handle()`.
+- **Added**: `EventsPhase9ProductionTest.php` — 38 new tests covering: redeliver `buildRedeliverBody()` payload stripping (url, event, headers, subscription_id), timestamp/redelivered/original_log_id preservation, non-array payload handling, `getTimeout()` config reads (positive, null, zero), `ConditionEngine` null-safe operators (matches/starts_with/ends_with with null actual and null value), EventLog/Subscription/Trigger boot UUID auto-generation, TriggerBuilder empty/"0" event validation and missing action validation, SubscriptionBuilder empty event and invalid URL validation, WebhookAction missing/empty URL error, DispatchTriggerJob non-int backoff config, EventLog `markAsCompleted`/`markAsFailed`, Subscription `signPayload` determinism and null/empty secret, config key type validation (table_names, subscriptions, retry, retention, wildcard_cache_ttl), contract singleton identity, ActionResolver error cases (non-existent class, non-Triggerable class).
+- **Changed**: Version bumped to 1.40.0, test file count updated to 67
 
 ### v1.39.0
 

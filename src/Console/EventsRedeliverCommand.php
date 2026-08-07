@@ -35,6 +35,31 @@ final class EventsRedeliverCommand extends Command
     protected string $description = 'Redeliver a failed webhook delivery';
 
     /**
+     * Build the redeliver webhook body, stripping internal keys from
+     * the payload so they don't leak to the webhook endpoint.
+     *
+     * Consistent with WebhookAction::handle() which removes url, event,
+     * headers, and subscription_id before sending.
+     *
+     * @return array<string, mixed>
+     */
+    private function buildRedeliverBody(EventLog $log): array
+    {
+        $payload = is_array($log->payload) ? $log->payload : [];
+
+        $webhookData = $payload;
+        unset($webhookData['url'], $webhookData['event'], $webhookData['headers'], $webhookData['subscription_id']);
+
+        return [
+            'event' => $log->event,
+            'data' => $webhookData,
+            'timestamp' => Carbon::now()->toIso8601String(),
+            'redelivered' => true,
+            'original_log_id' => $log->id,
+        ];
+    }
+
+    /**
      * Execute the redelivery command.
      */
     public function handle(): int
@@ -76,13 +101,9 @@ final class EventsRedeliverCommand extends Command
         }
 
         // Rebuild the webhook body
-        $body = [
-            'event' => $log->event,
-            'data' => $payload,
-            'timestamp' => Carbon::now()->toIso8601String(),
-            'redelivered' => true,
-            'original_log_id' => $log->id,
-        ];
+        // Strip internal keys from the payload so they don't leak to the
+        // webhook endpoint — consistent with WebhookAction::handle().
+        $body = $this->buildRedeliverBody($log);
 
         $headers = [];
 
