@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.37.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.38.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 63 test files (Pest)
+└── tests/                      # 65 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -390,7 +390,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (63 test files)
+composer test        # Run Pest test suite (65 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -461,6 +461,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Production hardening (readonly keyword, attribute scan, bindings, config, Pest completeness) | ✅ | `ProductionHardeningTest.php` |
 | ParseActions return type (string|array entries, all 5 JSON formats, mixed edge cases) | ✅ | `EventManagerParseActionsTypeTest.php` |
 | Migration unsigned integers (priority, duration_ms, failure_count, delivery_count) | ✅ | `MigrationStructureTest.php` |
+| fireModel (attributesToArray, toArray fallback, plain object, event name, empty payload, no-match, metadata override) | ✅ | `EventManagerFireModelTest.php` |
+| ConditionEngine edge cases (strictEquals, operators, nested null, between auto-normalize, regex limits, AND logic) | ✅ | `ConditionEngineEdgeCasesTest.php` |
 
 ## How It Works
 
@@ -657,6 +659,13 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.38.0
+
+- **Added**: `EventManagerFireModelTest.php` — 7 tests covering `fireModel()` with `attributesToArray` flattening, `toArray` fallback, plain object without serializable methods, correct event name construction, empty attributes, no-match scenario, and metadata key override behavior.
+- **Added**: `ConditionEngineEdgeCasesTest.php` — 22 tests covering `strictEquals` edge cases (same-type, cross-type scalar, array vs non-array, null vs null, float vs int, empty string vs 0, false vs empty string) and operator edge cases (empty conditions, null operator, unknown operator fallback, nested null intermediate, in with empty array, between with non-numeric/non-array/inverted range/boundaries, contains/starts_with/matches with non-string actual, regex max length, regex nested quantifiers, AND logic with multiple conditions).
+- **Changed**: `Pest.php` updated with 2 new test files for TestCase bootstrap.
+- **Changed**: Version bumped to 1.38.0, test file count updated to 65
 
 ### v1.37.0
 
