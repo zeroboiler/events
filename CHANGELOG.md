@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.48.0] — 2026-08-07
+
+### Added
+- `EventManager::listTriggers(?string $event, ?bool $enabled, int $limit)` — list triggers with optional event name (supports wildcards) and enabled status filtering.
+- `EventManager::getTrigger(string $triggerId)` — retrieve a single trigger by ID.
+- `EventManager::deleteTrigger(string $triggerId)` — delete a trigger by ID with automatic cache invalidation.
+- Facade `@method` annotations for `listTriggers()`, `getTrigger()`, and `deleteTrigger()`.
+- `EventsPhase17ProductionTest.php` — 50+ new tests covering: listTriggers (unfiltered, by event, by wildcard, by enabled, limit, empty), getTrigger (exists, not exists), deleteTrigger (success, not found, cache invalidation), fireModel (attributesToArray, toArray), TriggerBuilder multi-action JSON array encoding, Trigger config-driven table names (valid and invalid), EventLog status lifecycle transitions, DomainEvent fromArray edge cases (missing eventType, missing payload, empty array, roundtrip), ConditionEngine operators (starts_with, ends_with, not_empty, between auto-normalize, dot notation, multiple conditions), WildcardMatcher (single/double/catch-all patterns, extractWildcards, cross-segment), config section completeness, Subscription signPayload edge cases (empty/null secret), empty condition dispatch, fire() validation (empty/zero-string), fireModel() validation, cache invalidation on enable/disable/delete.
+
+### Changed
+- Config `events.queue.connection` now uses `?:` (elvis operator) instead of `??` to correctly handle `env()` returning `false` for unset variables — prevents `false` from propagating into the config system.
+- Version bumped to 1.48.0, test file count updated to 75.
+
+---
+
 ## [1.47.0] — 2026-08-07
 
 ### Fixed

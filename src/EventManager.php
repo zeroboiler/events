@@ -90,6 +90,62 @@ final class EventManager
     }
 
     /**
+     * List triggers with optional filtering.
+     *
+     * @param  string|null  $event  Filter by event name (exact or wildcard)
+     * @param  bool|null  $enabled  Filter by enabled status (true=enabled, false=disabled, null=all)
+     * @param  int  $limit  Maximum number of results
+     * @return Collection<int, Trigger>
+     */
+    public function listTriggers(?string $event = null, ?bool $enabled = null, int $limit = 100): Collection
+    {
+        $query = Trigger::query();
+
+        if ($event !== null && $event !== '') {
+            $likePattern = $this->wildcardToLike($event);
+            if ($likePattern !== null) {
+                $query->where('event', 'like', $likePattern);
+            } else {
+                $query->where('event', $event);
+            }
+        }
+
+        if ($enabled !== null) {
+            $query->where('enabled', $enabled);
+        }
+
+        return $query->orderByPriority()->limit($limit)->get();
+    }
+
+    /**
+     * Get a trigger by ID.
+     */
+    public function getTrigger(string $triggerId): ?Trigger
+    {
+        return Trigger::find($triggerId);
+    }
+
+    /**
+     * Delete a trigger by ID.
+     *
+     * Returns true if the trigger was found and deleted, false otherwise.
+     * Automatically invalidates the trigger cache.
+     */
+    public function deleteTrigger(string $triggerId): bool
+    {
+        $trigger = Trigger::find($triggerId);
+
+        if ($trigger === null) {
+            return false;
+        }
+
+        $trigger->delete();
+        $this->invalidateTriggerCache();
+
+        return true;
+    }
+
+    /**
      * Enable a trigger by ID.
      *
      * @param  string  $triggerId  The UUID of the trigger to enable

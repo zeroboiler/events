@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.47.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.48.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -390,7 +390,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (74 test files)
+composer test        # Run Pest test suite (75 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -583,11 +583,14 @@ Before deploying to production, verify:
 |--------|---------|-------------|
 | `on(string $event)` | `TriggerBuilder` | Start building a new trigger |
 | `register(string $event)` | `TriggerBuilder` | Alias for `on()` |
-| `fire(string $event, array $payload)` | `void` | Fire an event and dispatch matching triggers |
-| `fireModel(string $class, string $action, object $model)` | `void` | Fire a model event with flattened attributes |
+| `fire(string $event, array $payload)` | `void` | Fire an event with optional payload |
+| `fireModel(string $modelClass, string $action, object $model)` | `void` | Fire a model event (flattens attributes) |
 | `enable(string $triggerId)` | `bool` | Enable a trigger by ID |
 | `disable(string $triggerId)` | `bool` | Disable a trigger by ID |
 | `invalidateTriggerCache()` | `void` | Clear the wildcard trigger cache |
+| `listTriggers(?string $event, ?bool $enabled, int $limit)` | `Collection` | List triggers with optional filtering |
+| `getTrigger(string $triggerId)` | `Trigger\|null` | Get a trigger by ID |
+| `deleteTrigger(string $triggerId)` | `bool` | Delete a trigger by ID (invalidates cache) |
 | `subscribe(string $event, string $url)` | `SubscriptionBuilder` | Start building a webhook subscription |
 | `unsubscribe(string $subscriptionId)` | `bool` | Remove a subscription by ID |
 | `listSubscriptions(?string $event, bool $activeOnly)` | `Collection` | List subscriptions with optional filtering |
@@ -668,6 +671,16 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.48.0
+
+- **Added**: `EventManager::listTriggers()` — list triggers with optional event name (supports wildcards) and enabled status filtering.
+- **Added**: `EventManager::getTrigger()` — retrieve a single trigger by ID.
+- **Added**: `EventManager::deleteTrigger()` — delete a trigger by ID with automatic cache invalidation.
+- **Added**: Facade `@method` annotations for all new EventManager methods.
+- **Added**: `EventsPhase17ProductionTest.php` — 50+ new tests covering: listTriggers (unfiltered, by event, wildcard, enabled, limit, empty), getTrigger (exists/not found), deleteTrigger (success/not found/cache invalidation), fireModel (attributesToArray/toArray), TriggerBuilder multi-action encoding, config-driven table names, EventLog status lifecycle, DomainEvent edge cases, ConditionEngine operators, WildcardMatcher comprehensive, config completeness, Subscription signPayload, fire/fireModel validation, cache invalidation.
+- **Fixed**: Config `events.queue.connection` now uses `?:` (elvis operator) instead of `??` to correctly handle `env()` returning `false` for unset variables.
+- **Changed**: Version bumped to 1.48.0, test file count updated to 75.
 
 ### v1.47.0
 
