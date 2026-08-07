@@ -40,8 +40,6 @@ class Trigger extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected string $table = 'triggers';
-
     #[\Override]
     public function getTable(): string
     {

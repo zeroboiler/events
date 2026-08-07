@@ -49,8 +49,6 @@ class Subscription extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected string $table = 'event_subscriptions';
-
     #[\Override]
     public function getTable(): string
     {
