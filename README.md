@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.38.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.39.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 65 test files (Pest)
+└── tests/                      # 66 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -463,6 +463,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Migration unsigned integers (priority, duration_ms, failure_count, delivery_count) | ✅ | `MigrationStructureTest.php` |
 | fireModel (attributesToArray, toArray fallback, plain object, event name, empty payload, no-match, metadata override) | ✅ | `EventManagerFireModelTest.php` |
 | ConditionEngine edge cases (strictEquals, operators, nested null, between auto-normalize, regex limits, AND logic) | ✅ | `ConditionEngineEdgeCasesTest.php` |
+| Phase 8 production (dot notation, cache invalidation, trigger builder params, subscription scopes, domain event extras, contract singleton, config validation) | ✅ | `EventsPhase8ProductionTest.php` |
 
 ## How It Works
 
@@ -659,6 +660,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.39.0
+
+- **Added**: `EventsPhase8ProductionTest.php` — 26 new tests covering: ConditionEngine triple-nested dot notation and null intermediate, WildcardMatcher backslash/empty pattern/order preservation/non-matching extract, EventManager fire with empty payload (with and without conditions), cache invalidation across enable/disable/save cycle, TriggerBuilder action params with single (class key) and multiple (classes key) actions, Subscription scopeForEvent (exact and wildcard), Subscription matchesEvent with cross-segment wildcard, Subscription recordDelivery/recordFailure/resetFailures, DomainEvent fromArray extra keys/non-string eventType, contract singleton identity, ActionResolver error cases (non-existent class, non-Triggerable class), comprehensive config key type validation.
+- **Improved**: Subscription model docblocks — `recordDelivery()` now documents `last_fired_at` and `delivery_count` updates, `matchesEvent()` now references `WildcardMatcher::matches()`, `hasExceededFailures()` now has `@param` annotation.
+- **Changed**: Version bumped to 1.39.0, test file count updated to 66
 
 ### v1.38.0
 

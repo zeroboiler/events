@@ -140,6 +140,11 @@ class Subscription extends Model
 
     /**
      * Check if this subscription's event pattern matches a concrete event.
+     *
+     * Uses exact match for non-wildcard events; delegates to WildcardMatcher
+     * for patterns containing `*` or `**`.
+     *
+     * @see WildcardMatcher::matches()
      */
     public function matchesEvent(string $event): bool
     {
@@ -154,6 +159,8 @@ class Subscription extends Model
 
     /**
      * Record a delivery attempt.
+     *
+     * Updates `last_fired_at` to now and increments `delivery_count`.
      */
     public function recordDelivery(): void
     {
@@ -172,7 +179,7 @@ class Subscription extends Model
     }
 
     /**
-     * Reset the failure counter.
+     * Reset the failure counter to zero.
      */
     public function resetFailures(): void
     {
@@ -182,7 +189,10 @@ class Subscription extends Model
     /**
      * Check if the subscription has exceeded the maximum failure threshold.
      *
-     * Reads the default threshold from config when no explicit max is provided.
+     * Reads the default threshold from `events.subscriptions.max_failures` config
+     * when no explicit max is provided.
+     *
+     * @param  int|null  $max  Explicit failure threshold override, or null to use config
      */
     public function hasExceededFailures(?int $max = null): bool
     {

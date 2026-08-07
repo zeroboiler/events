@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.39.0] — 2026-08-07
+
+### Added
+- `EventsPhase8ProductionTest.php` — 26 new tests: ConditionEngine triple-nested dot notation and null intermediate, WildcardMatcher backslash/empty pattern/order preservation, EventManager fire with empty payload, cache invalidation cycle, TriggerBuilder action params encoding, Subscription scopeForEvent/matchesEvent/recordDelivery/recordFailure/resetFailures, DomainEvent fromArray edge cases, contract singleton identity, ActionResolver error cases, config key type validation.
+
+### Improved
+- Subscription model docblocks: `recordDelivery()` documents side effects, `matchesEvent()` references `WildcardMatcher::matches()`, `hasExceededFailures()` has `@param` annotation.
+
+### Changed
+- Version bumped to 1.39.0, test file count updated to 66.
+
+---
+
 ## [1.36.0] — 2026-08-07
 
 ### Fixed
