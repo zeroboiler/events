@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.40.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.41.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 67 test files (Pest)
+└── tests/                      # 68 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -390,7 +390,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (67 test files)
+composer test        # Run Pest test suite (68 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -465,6 +465,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | ConditionEngine edge cases (strictEquals, operators, nested null, between auto-normalize, regex limits, AND logic) | ✅ | `ConditionEngineEdgeCasesTest.php` |
 | Phase 8 production (dot notation, cache invalidation, trigger builder params, subscription scopes, domain event extras, contract singleton, config validation) | ✅ | `EventsPhase8ProductionTest.php` |
 | Phase 9 production (redeliver payload stripping, timeout config, ConditionEngine null operators, model boot UUID, TriggerBuilder/SubscriptionBuilder validation, WebhookAction error cases, DispatchTriggerJob edge config, EventLog mark methods, Subscription signing determinism, config type validation, contract singleton, ActionResolver errors) | ✅ | `EventsPhase9ProductionTest.php` |
+| Phase 10 production (fire/fireModel empty validation, DispatchTriggerJob array backoff config, ConditionEngine operators, WildcardMatcher edge cases, DomainEvent roundtrip, config completeness, ServiceProvider bindings, final classes, readonly properties, strict types enforcement, facade accessor) | ✅ | `EventsPhase10ProductionTest.php` |
 
 ## How It Works
 
@@ -661,6 +662,14 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.41.0
+
+- **Fixed**: **SECURITY** `EventManager::fire()` now validates empty event names — throws `InvalidArgumentException` for empty or `"0"` event strings, preventing silent DB queries and log pollution when called with invalid input.
+- **Fixed**: `EventManager::fireModel()` now validates empty model class and action parameters — throws `InvalidArgumentException` for empty or `"0"` strings, matching the same validation pattern used by `TriggerBuilder::save()` and `SubscriptionBuilder::save()`.
+- **Fixed**: `DispatchTriggerJob` now supports array-format backoff config — previously only comma-separated string format was supported (`'60,300,900'`); now `[60, 300, 900]` array format is also accepted via `events.retry.backoff` config. Float values in arrays are cast to int.
+- **Added**: `EventsPhase10ProductionTest.php` — 40+ new tests covering: fire() empty event validation (empty string, "0", non-empty), fireModel() empty parameter validation (empty/zero model class and action), DispatchTriggerJob array/string/invalid backoff config, float-to-int backoff conversion, empty array backoff, tries config edge cases (zero, negative, non-integer, custom), ConditionEngine strict equality/inequality and empty/not_empty operators, WildcardMatcher comprehensive matching (exact, single-segment, cross-segment, catch-all, double-star, multiple wildcards, empty event), DomainEvent factory/roundtrip/missing fields/invalid UUID, config completeness verification (all keys and sub-keys), ServiceProvider binding verification (singleton for EventManager/ConditionEngine/ActionResolver, transient for TriggerBuilder/SubscriptionBuilder, contract binding), EventLog status constants consistency, final class verification (10 core classes), readonly keyword verification (EventManager and DomainEvent properties), strict types enforcement across all source files, facade accessor verification.
+- **Changed**: Version bumped to 1.41.0, test file count updated to 68
 
 ### v1.40.0
 

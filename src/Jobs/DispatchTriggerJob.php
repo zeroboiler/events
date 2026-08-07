@@ -55,7 +55,13 @@ final class DispatchTriggerJob implements ShouldQueue
         $this->tries = is_int($triesConfig) && $triesConfig > 0 ? $triesConfig : 3;
 
         $backoffConfig = Config::get('events.retry.backoff', '60,300,900');
-        if (is_string($backoffConfig)) {
+        if (is_array($backoffConfig)) {
+            // Support array format directly: [60, 300, 900]
+            $this->backoff = array_map(
+                fn (int|float $v): int => (int) $v,
+                $backoffConfig,
+            );
+        } elseif (is_string($backoffConfig)) {
             $parts = explode(',', $backoffConfig);
             $this->backoff = array_map(
                 fn (string $v): int => (int) trim($v),

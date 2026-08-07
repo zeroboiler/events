@@ -126,10 +126,15 @@ final class EventManager
      *
      * @param  array<string, mixed>  $payload
      *
+     * @throws \InvalidArgumentException If the event name is empty
      * @throws \Throwable If a synchronous trigger action fails (re-thrown after logging)
      */
     public function fire(string $event, array $payload = []): void
     {
+        if ($event === '' || $event === '0') {
+            throw new \InvalidArgumentException('Event name cannot be empty.');
+        }
+
         $triggers = $this->getMatchingTriggers($event);
 
         foreach ($triggers as $trigger) {
@@ -144,7 +149,7 @@ final class EventManager
     /**
      * Fire an event for a model action.
      *
-     * Constructs the event name as `{modelClass}.{action}` (e.g. `App\Models\Order.created`).
+     * Constructs the event name as `{modelClass}.{action}` (e.g. `App\\Models\\Order.created`).
      * The model's attributes are automatically flattened into the payload root so conditions
      * can reference them directly (e.g. `status == 'active'` instead of `model.status == 'active'`).
      * The original model object and metadata are also included in the payload.
@@ -152,9 +157,19 @@ final class EventManager
      * @param  string  $modelClass  The fully-qualified model class name
      * @param  string  $action  The model action (e.g., 'created', 'updated', 'deleted')
      * @param  object  $model  The model instance (must have attributesToArray or toArray method)
+     *
+     * @throws \InvalidArgumentException If the model class or action is empty
      */
     public function fireModel(string $modelClass, string $action, object $model): void
     {
+        if ($modelClass === '' || $modelClass === '0') {
+            throw new \InvalidArgumentException('Model class name cannot be empty.');
+        }
+
+        if ($action === '' || $action === '0') {
+            throw new \InvalidArgumentException('Model action cannot be empty.');
+        }
+
         $event = $modelClass.'.'.$action;
 
         // Flatten model attributes into the payload root so the condition
