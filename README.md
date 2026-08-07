@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 74 test files (Pest)
+└── tests/                      # 76 test files (Pest)
 ```
 
 ### Service Container Bindings
