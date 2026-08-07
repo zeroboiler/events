@@ -85,7 +85,7 @@ final class TriggerBuilder
      * silently discarding it (BUG-2 fix). Deduplication ensures the same class
      * doesn't appear twice.
      *
-     * @return list<string> Resolved action class FQNs
+     * @return list<string> Resolved action class FQNs (plain strings only; no array entries)
      */
     private function resolveActions(): array
     {
