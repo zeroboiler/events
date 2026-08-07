@@ -21,6 +21,7 @@ use ZeroBoiler\Events\Console\EventsRetryCommand;
 use ZeroBoiler\Events\Console\EventsSubscribeCommand;
 use ZeroBoiler\Events\Console\EventsSubscriptionsCommand;
 use ZeroBoiler\Events\Console\EventsUnsubscribeCommand;
+use ZeroBoiler\Events\Contracts\ConditionEngineContract;
 
 final class EventsServiceProvider extends ServiceProvider
 {
@@ -32,6 +33,7 @@ final class EventsServiceProvider extends ServiceProvider
             'events'
         );
 
+        $this->app->singleton(ConditionEngineContract::class, ConditionEngine::class);
         $this->app->singleton(ConditionEngine::class);
         $this->app->singleton(ActionResolver::class);
         $this->app->singleton(EventManager::class, function (Container $app): EventManager {

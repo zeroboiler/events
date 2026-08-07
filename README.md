@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-1.24.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.25.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -315,7 +315,7 @@ EventManager::invalidateTriggerCache();
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (46 test files)
+composer test        # Run Pest test suite (47 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -356,6 +356,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
 | Edge cases (phase 3 — empty conditions, between inverted, in single, fire no-match, sign null secret) | ✅ | `EdgeCasesPhase3Test.php` |
 | Migration structure (columns, types, foreign keys) | ✅ | `MigrationStructureTest.php` |
+| Readonly properties (#[Readonly] promoted, PHP 8.5) | ✅ | `ReadonlyPropertiesTest.php` |
 | Wildcard integration (cross-segment, catch-all, multi) | ✅ | `WildcardIntegrationTest.php` |
 | Wildcard matcher (exact, *, **, extract, findMatching) | ✅ | `WildcardMatcherTest.php` |
 | EscapesWildcardLike (%, _, \\, *, mixed) | ✅ | `EscapesWildcardLikeTest.php` |
@@ -459,6 +460,14 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Regex condition always false | Pattern exceeds 500 chars or has nested quantifiers | Simplify the regex or increase `ConditionEngine::MAX_REGEX_LENGTH` |
 
 ## Changelog
+
+### v1.25.0
+
+- **Added**: `ReadonlyPropertiesTest` — tests verifying `#[\Readonly]` on promoted constructor properties for `EventManager`, `ActionResolver`, `TriggerBuilder`, `SubscriptionBuilder`, `DispatchTriggerJob`, and `DomainEvent`
+- **Added**: Explicit `ConditionEngineContract` → `ConditionEngine` singleton binding in `EventsServiceProvider::register()` — previously the contract was only resolvable through Laravel's auto-concrete resolution
+- **Refactored**: `#[\Readonly]` attribute added to all promoted constructor properties across 5 classes (`EventManager`, `ActionResolver`, `TriggerBuilder`, `SubscriptionBuilder`, `DispatchTriggerJob`) for PHP 8.5 consistency with `DomainEvent`'s existing `#[\Readonly]` usage
+- **Fixed**: `config/events.php` — `queue.connection` default now uses `config('queue.default', 'default')` instead of hardcoded `'default'`, matching README documentation and allowing automatic Laravel queue driver inheritance
+- **Changed**: README test file count updated from 46 to 47; version bumped to 1.25.0
 
 ### v1.24.0
 

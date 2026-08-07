@@ -37,9 +37,9 @@ final class EventManager
     protected const DEFAULT_TRIGGER_CACHE_TTL = 300;
 
     public function __construct(
-        protected ConditionEngine $conditionEngine,
-        protected ActionResolver $actionResolver,
-        protected Container $app,
+        #[\Readonly] protected ConditionEngine $conditionEngine,
+        #[\Readonly] protected ActionResolver $actionResolver,
+        #[\Readonly] protected Container $app,
     ) {}
 
     /**

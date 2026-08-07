@@ -33,10 +33,10 @@ final class DispatchTriggerJob implements ShouldQueue
      * @param  array<string, mixed>  $payload
      */
     public function __construct(
-        public string $triggerId,
-        public string $event,
-        public array $payload,
-        public int $tries = 3,
+        #[\Readonly] public string $triggerId,
+        #[\Readonly] public string $event,
+        #[\Readonly] public array $payload,
+        #[\Readonly] public int $tries = 3,
     ) {
         $triesConfig = Config::get('events.retry.tries', 3);
         $this->tries = is_int($triesConfig) && $triesConfig > 0 ? $triesConfig : 3;
