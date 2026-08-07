@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.46.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.47.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 73 test files (Pest)
+└── tests/                      # 74 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -390,7 +390,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (73 test files)
+composer test        # Run Pest test suite (74 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -471,6 +471,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 13 production (TriggerBuilder deduplication order-preservation, ConditionEngine full operator coverage, O(1) trigger dedup set, DomainEvent immutability, Config type validation, parseActions all 5 formats, WildcardMatcher comprehensive, EscapesWildcardLike, Singleton/transient binding verification, strict types enforcement, Final class verification) | ✅ | `EventsPhase13ProductionTest.php` |
 | Phase 14 production (fireModel edge cases, TriggerBuilder action merging integration, ConditionEngine strictEquals edge cases (0 vs false vs empty string, array vs string, in empty array), WildcardMatcher regex special chars/empty pattern/pure attribute, EventManager cache TTL edge cases (negative/zero/non-integer/custom), EventManager enable/disable non-existent, DomainEvent UUID freshness/timestamp freshness/toArray keys/fromArray edge cases, DispatchTriggerJob constructor edge cases (empty backoff/single backoff/property types), Subscription signPayload empty secret/hasExceededFailures config edge cases/matchesEvent patterns, Factory default state validation, ActionResolver error cases, TriggerBuilder/SubscriptionBuilder validation and fluent interface, WebhookAction missing URL variants, ConditionEngine empty conditions/numeric string/matches null) | ✅ | `EventsPhase14ProductionTest.php` |
 | Phase 15 production (executeTrigger basePayload extraction/null payload/action params merge, TriggerBuilder null/empty conditions save, SubscriptionBuilder URL validation (reject invalid, accept HTTPS), ConditionEngine empty conditions with various payloads, WildcardMatcher findMatchingPatterns type/extractWildcards edge cases, ServiceProvider binding lifecycle (singleton/transient/contract identity), Config type validation (all 6 sections), Facade accessor, Model config-driven table names, TriggerBuilder/SubscriptionBuilder fluent interface, DispatchTriggerJob config-driven properties (tries/queue/connection/backoff formats), EventLog status constants, DomainEvent roundtrip/fresh UUID, Cache invalidation (save/disable/enable), Strict types enforcement, Final class verification) | ✅ | `EventsPhase15ProductionTest.php` |
+| Phase 16 production (EventLog scopes, markAsCompleted/markAsFailed, Trigger scopes and relations, Subscription scopes and matchesEvent patterns, #[\Override] attribute verification, DomainEvent readonly keyword verification) | ✅ | `EventsPhase16ProductionTest.php` |
 
 ## How It Works
 
@@ -667,6 +668,14 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.47.0
+
+- **Fixed**: `DomainEventImmutabilityTest` was checking for `#[\Readonly]` **attribute** via `getAttributes()` + `array_any`, which is incorrect for PHP 8.5 — the `readonly` keyword modifier sets `ReflectionProperty::isReadOnly()` flag, not a `#[\Readonly]` attribute. Test was silently passing on PHP < 8.5 but would fail on PHP 8.5+.
+- **Added**: `#[\Override]` attribute on `ConditionEngine::matches()` — explicitly marks the interface contract implementation for PHPStan override verification.
+- **Added**: `#[\Override]` attribute on `WebhookAction::handle()` — explicitly marks the interface contract implementation for PHPStan override verification.
+- **Added**: `EventsPhase16ProductionTest.php` — 22 new tests covering: EventLog scope methods (scopeWithStatus, scopeFailed, scopePending, scopeCompleted, non-existent status), EventLog markAsCompleted/markAsFailed behavior, Trigger scopes (scopeEnabled, scopeAsync, scopeOrderByPriority), Trigger→EventLog and EventLog→Trigger relations, Subscription scopes (scopeActive, scopeOrderByPriority), Subscription::matchesEvent (exact, single wildcard, cross-segment wildcard), #[\Override] attribute verification on ConditionEngine::matches and WebhookAction::handle, DomainEvent readonly keyword verification (isReadOnly() flag present, #[\Readonly] attribute absent).
+- **Changed**: Version bumped to 1.47.0, test file count updated to 74.
 
 ### v1.46.0
 

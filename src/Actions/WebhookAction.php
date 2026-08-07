@@ -54,6 +54,7 @@ final class WebhookAction implements Triggerable
      *
      * @param  array<string, mixed>  $payload
      */
+    #[\Override]
     public function handle(array $payload): void
     {
         $url = $payload['url'] ?? null;

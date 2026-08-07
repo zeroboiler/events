@@ -14,16 +14,14 @@ test('DomainEvent has all promoted properties readonly', function (): void {
 
     $reflection = new ReflectionClass($event);
 
-    // All promoted constructor properties must have #[\Readonly]
+    // All promoted constructor properties must use the readonly keyword modifier
+    // (NOT the #[\Readonly] attribute, which was removed in PHP 8.5).
     $readonlyProps = ['eventType', 'payload', 'eventId', 'occurredAt'];
     foreach ($readonlyProps as $prop) {
         $property = $reflection->getProperty($prop);
-        $hasReadonly = array_any(
-            $property->getAttributes(),
-            fn (ReflectionAttribute $attr): bool => $attr->getName() === 'Readonly',
-        );
+        $hasReadonlyModifier = $property->isReadOnly();
 
-        expect($hasReadonly)->toBeTrue("Property \${$prop} should have #[\\Readonly] attribute");
+        expect($hasReadonlyModifier)->toBeTrue("Property \${$prop} must have readonly modifier");
     }
 });
 

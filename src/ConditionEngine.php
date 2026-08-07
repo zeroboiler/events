@@ -23,6 +23,7 @@ final class ConditionEngine implements ConditionEngineContract
      * @param  array<string, mixed>  $conditions
      * @param  array<string, mixed>  $payload
      */
+    #[\Override]
     public function matches(array $conditions, array $payload): bool
     {
         foreach ($conditions as $field => $expected) {

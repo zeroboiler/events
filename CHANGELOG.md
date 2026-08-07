@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.47.0] — 2026-08-07
+
+### Fixed
+- `DomainEventImmutabilityTest` was checking for `#[\Readonly]` **attribute** via `getAttributes()` + `array_any`, which is incorrect for PHP 8.5 — the `readonly` keyword modifier sets `ReflectionProperty::isReadOnly()` flag, not a `#[\Readonly]` attribute. Test was silently passing on PHP < 8.5 but would fail on PHP 8.5+.
+
+### Added
+- `#[\Override]` attribute on `ConditionEngine::matches()` — explicitly marks the interface contract implementation for PHPStan override verification.
+- `#[\Override]` attribute on `WebhookAction::handle()` — explicitly marks the interface contract implementation for PHPStan override verification.
+- `EventsPhase16ProductionTest.php` — 22 new tests covering: EventLog scope methods (scopeWithStatus, scopeFailed, scopePending, scopeCompleted, non-existent status), EventLog markAsCompleted/markAsFailed behavior, Trigger scopes (scopeEnabled, scopeAsync, scopeOrderByPriority), Trigger→EventLog and EventLog→Trigger relations, Subscription scopes (scopeActive, scopeOrderByPriority), Subscription::matchesEvent (exact, single wildcard, cross-segment wildcard), #[\Override] attribute verification on ConditionEngine::matches and WebhookAction::handle, DomainEvent readonly keyword verification (isReadOnly() flag present, #[\Readonly] attribute absent).
+
+### Changed
+- Version bumped to 1.47.0, test file count updated to 74.
+
+---
+
 ## [1.46.0] — 2026-08-07
 
 ### Fixed
