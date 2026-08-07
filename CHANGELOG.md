@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.51.0] — 2026-08-07
+
+### Added
+- `EventsPhase20ProductionTest.php` — 45+ production-ready tests covering: strict types enforcement, final class verification, interface contract verification, service provider binding verification, facade accessor, config completeness, model config-driven table names, UUID key types, EventLog status constants, DomainEvent readonly/roundtrip, WildcardMatcher #[Pure], TriggerBuilder/SubscriptionBuilder fluent interface, #[Override] attribute verification, subscription matchesEvent, cache invalidation lifecycle, trigger CRUD, fire/fireModel validation, version consistency.
+- `database_path()` and `storage_path()` helper functions in `tests/helpers.php` — missing global Laravel helpers that could cause errors in test contexts.
+
+### Changed
+- Version bumped to 1.51.0, test file count updated to 78.
+
+---
+
 ## [1.48.0] — 2026-08-07
 
 ### Added

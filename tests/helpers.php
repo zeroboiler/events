@@ -82,6 +82,20 @@ if (! function_exists('config_path')) {
     }
 }
 
+if (! function_exists('database_path')) {
+    function database_path(string $path = ''): string
+    {
+        return '/database/'.($path !== '' ? $path : '');
+    }
+}
+
+if (! function_exists('storage_path')) {
+    function storage_path(string $path = ''): string
+    {
+        return sys_get_temp_dir().'/zb_events_test'.($path !== '' ? '/'.$path : '');
+    }
+}
+
 if (! function_exists('fake')) {
     function fake(?string $locale = null): mixed
     {

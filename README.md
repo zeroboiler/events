@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.50.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.51.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 77 test files (Pest)
+└── tests/                      # 78 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (77 test files)
+composer test        # Run Pest test suite (78 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -476,6 +476,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 16 production (EventLog scopes, markAsCompleted/markAsFailed, Trigger scopes and relations, Subscription scopes and matchesEvent patterns, #[\Override] attribute verification, DomainEvent readonly keyword verification) | ✅ | `EventsPhase16ProductionTest.php` |
 | Phase 18 production (fire/fireModel validation, TriggerBuilder save validation/encoding, SubscriptionBuilder save validation/HMAC, DomainEvent fromArray edge cases, trigger management CRUD, cache invalidation, alias behavior, WildcardMatcher special patterns, ConditionEngine operator coverage) | ✅ | `EventsPhase18ProductionTest.php` |
 | Phase 19 production (console #[\Override] attributes, final classes, typed properties, strict types, config completeness, ServiceProvider bindings, handle() return types) | ✅ | `EventsPhase19ProductionTest.php` |
+| Phase 20 production (strict types, final classes, interface contracts, binding lifecycle, facade accessor, config completeness, model config, status constants, DomainEvent readonly/roundtrip, WildcardMatcher #[Pure], fluent interface, #[Override] verification, matchesEvent, cache invalidation, CRUD, fire/fireModel validation, version consistency) | ✅ | `EventsPhase20ProductionTest.php` |
 
 ## How It Works
 
@@ -675,6 +676,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.51.0
+
+- **Added**: `EventsPhase20ProductionTest.php` — 45+ new tests covering: strict types enforcement across all src/ and test files, final class verification (core classes, models, console commands), interface contract verification (ConditionEngineContract, Triggerable), service provider binding verification (singleton for EventManager/ConditionEngine/ActionResolver, transient for TriggerBuilder/SubscriptionBuilder, contract identity), facade accessor and proxy resolution, config completeness (all 6 sections, table_names, subscriptions, retry keys), model table name config-driven verification, model UUID key type verification, EventLog status constants, DomainEvent readonly properties and roundtrip preservation, WildcardMatcher #[Pure] attribute verification, TriggerBuilder/SubscriptionBuilder fluent interface return types, ConditionEngine/WebhookAction #[Override] attribute verification, subscription matchesEvent (exact, single-segment, cross-segment), cache invalidation lifecycle, trigger CRUD (getTrigger/deleteTrigger non-existent), EventManager fire/fireModel validation, version consistency between composer.json and README.
+- **Added**: `database_path()` and `storage_path()` helper functions in `tests/helpers.php` — previously missing, could cause errors in test contexts that use Laravel global helpers.
+- **Changed**: Version bumped to 1.51.0, test file count updated to 78.
 
 ### v1.50.0
 
