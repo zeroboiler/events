@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.46.0] — 2026-08-07
+
+### Fixed
+- `Pest.php` was missing `EventsPhase14ProductionTest.php` in `uses()` call — tests in that file were not getting Laravel bootstrap and would fail at runtime.
+- `EventManager::executeTrigger()` now extracts `$basePayload` once before the action loop — previously `$log->payload` was re-read and type-checked on every iteration, which could cause inconsistent behavior if the payload was mutated during an action handler.
+- `config/events.php` `queue.connection` now uses null coalescing (`??`) instead of passing `config()` return as `env()` default — prevents non-string config values from being passed as the `env()` second argument.
+
+### Changed
+- `rector.php` upgraded from `LaravelSetList::LARAVEL_110` to `LaravelSetList::LARAVEL_120` for Laravel 13 compatibility.
+- Version bumped to 1.46.0, test file count updated to 73.
+
+### Added
+- `EventsPhase15ProductionTest.php` — 55 new tests covering: executeTrigger basePayload extraction (multi-action, null payload, action params merge), TriggerBuilder null/empty conditions save behavior, SubscriptionBuilder URL validation (reject invalid, accept HTTPS), ConditionEngine empty conditions with various payloads, WildcardMatcher findMatchingPatterns type safety/extractWildcards edge cases, ServiceProvider binding lifecycle (singleton/transient/contract identity), Config type validation (all 6 config sections), Facade accessor, Model config-driven table names, TriggerBuilder/SubscriptionBuilder fluent interface return types, DispatchTriggerJob config-driven properties (tries/queue/connection/backoff formats), EventLog status constants, DomainEvent roundtrip/fresh UUID, Cache invalidation (save/disable/enable), Strict types enforcement across all source files, Final class verification (10 core classes).
+
+---
+
 ## [1.45.0] — 2026-08-07
 
 ### Fixed

@@ -8,7 +8,7 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
     checkUninitializedProperties: false
     treatPhpDocTypesAsCertain: false
-    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false,
     ignoreErrors:
         # Eloquent model magic properties are handled via @property annotations
         - '#Access to an undefined property#'

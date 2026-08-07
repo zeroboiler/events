@@ -324,6 +324,7 @@ final class EventManager
 
         try {
             $actions = $this->parseActions($trigger->action);
+            $basePayload = is_array($log->payload) ? $log->payload : [];
 
             foreach ($actions as $entry) {
                 // parseActions returns a normalised array where each entry
@@ -341,10 +342,7 @@ final class EventManager
 
                 // Merge trigger-level params (e.g. webhook URL) into the
                 // event payload so the action has everything it needs.
-                $payload = is_array($log->payload) ? $log->payload : [];
-                if ($actionParams !== []) {
-                    $payload = array_merge($actionParams, $payload);
-                }
+                $payload = $actionParams !== [] ? array_merge($actionParams, $basePayload) : $basePayload;
 
                 $handler->handle($payload);
             }
