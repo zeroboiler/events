@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
 use Throwable;
+use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\Concerns\ManagesHistory;
 use ZeroBoiler\Events\Concerns\ManagesSubscriptions;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
@@ -23,6 +24,7 @@ use ZeroBoiler\Events\Models\Trigger;
 
 final class EventManager
 {
+    use EscapesWildcardLike;
     use ManagesHistory;
     use ManagesSubscriptions;
 
@@ -233,8 +235,10 @@ final class EventManager
         // instead of "model.status == 'active'").
         $modelData = [];
         if (method_exists($model, 'attributesToArray')) {
+            /** @var array<string, mixed> $modelData */
             $modelData = $model->attributesToArray();
         } elseif (method_exists($model, 'toArray')) {
+            /** @var array<string, mixed> $modelData */
             $modelData = $model->toArray();
         }
 
@@ -268,6 +272,7 @@ final class EventManager
 
         // Build an O(1) lookup set of already-collected trigger IDs
         // to avoid O(n) firstWhere on each wildcard iteration.
+        /** @var array<string, true> $collectedIds */
         $collectedIds = [];
         foreach ($triggers as $t) {
             $collectedIds[$t->id] = true;

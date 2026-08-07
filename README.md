@@ -347,7 +347,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 74 test files (Pest)
+└── tests/                      # 75 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -390,7 +390,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (74 test files)
+composer test        # Run Pest test suite (75 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -472,6 +472,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 14 production (fireModel edge cases, TriggerBuilder action merging integration, ConditionEngine strictEquals edge cases (0 vs false vs empty string, array vs string, in empty array), WildcardMatcher regex special chars/empty pattern/pure attribute, EventManager cache TTL edge cases (negative/zero/non-integer/custom), EventManager enable/disable non-existent, DomainEvent UUID freshness/timestamp freshness/toArray keys/fromArray edge cases, DispatchTriggerJob constructor edge cases (empty backoff/single backoff/property types), Subscription signPayload empty secret/hasExceededFailures config edge cases/matchesEvent patterns, Factory default state validation, ActionResolver error cases, TriggerBuilder/SubscriptionBuilder validation and fluent interface, WebhookAction missing URL variants, ConditionEngine empty conditions/numeric string/matches null) | ✅ | `EventsPhase14ProductionTest.php` |
 | Phase 15 production (executeTrigger basePayload extraction/null payload/action params merge, TriggerBuilder null/empty conditions save, SubscriptionBuilder URL validation (reject invalid, accept HTTPS), ConditionEngine empty conditions with various payloads, WildcardMatcher findMatchingPatterns type/extractWildcards edge cases, ServiceProvider binding lifecycle (singleton/transient/contract identity), Config type validation (all 6 sections), Facade accessor, Model config-driven table names, TriggerBuilder/SubscriptionBuilder fluent interface, DispatchTriggerJob config-driven properties (tries/queue/connection/backoff formats), EventLog status constants, DomainEvent roundtrip/fresh UUID, Cache invalidation (save/disable/enable), Strict types enforcement, Final class verification) | ✅ | `EventsPhase15ProductionTest.php` |
 | Phase 16 production (EventLog scopes, markAsCompleted/markAsFailed, Trigger scopes and relations, Subscription scopes and matchesEvent patterns, #[\Override] attribute verification, DomainEvent readonly keyword verification) | ✅ | `EventsPhase16ProductionTest.php` |
+| Phase 18 production (fire/fireModel validation, TriggerBuilder save validation/encoding, SubscriptionBuilder save validation/HMAC, DomainEvent fromArray edge cases, trigger management CRUD, cache invalidation, alias behavior, WildcardMatcher special patterns, ConditionEngine operator coverage) | ✅ | `EventsPhase18ProductionTest.php` |
 
 ## How It Works
 

@@ -102,7 +102,9 @@ final class TriggerBuilder
         // Deduplicate while preserving insertion order (first occurrence wins).
         // This prevents duplicate dispatch when action() and actions() both
         // contain the same class, or when actions() contains duplicates.
+        /** @var array<string, true> $seen */
         $seen = [];
+        /** @var list<string> $unique */
         $unique = [];
         foreach ($all as $cls) {
             if (! isset($seen[$cls])) {

@@ -64,6 +64,10 @@ final class DomainEvent
             ? $data['eventType']
             : '';
 
+        if ($eventType === '') {
+            throw new \InvalidArgumentException('DomainEvent eventType is required for reconstruction.');
+        }
+
         $payload = isset($data['payload']) && is_array($data['payload'])
             ? $data['payload']
             : [];
