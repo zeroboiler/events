@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.69.0] — 2026-08-08
+
+### Added
+- Database Schema section in README with full table/column/index documentation for `triggers`, `event_logs`, and `event_subscriptions`.
+- Class-level docblock for `DomainEvent` describing its role as an immutable value object for event sourcing.
+- `EventManagerValidationTest.php` — 18 new tests covering: fireModel validation (empty model class, "0" model class, empty action, "0" action), listTriggers filtering (all/no filters, exact event, enabled/disabled status, limit, empty result), getTrigger/deleteTrigger (non-existent ID, found trigger, delete returns false, delete removes and invalidates cache), subscribeWebhook (creates WebhookAction trigger, accepts conditions and priority).
+
+### Fixed
+- `EventManagerAdvancedTest` — corrected `fire event with empty string does nothing` test to match actual behavior (throws `InvalidArgumentException` for empty/"0" event names).
+- Added `"0"` string validation test for `EventManager::fire()`.
+
+### Changed
+- Test file count updated to 97.
+- README test count references updated to 97.
+
+---
+
 ## [1.68.0] — 2026-08-08
 
 ### Added

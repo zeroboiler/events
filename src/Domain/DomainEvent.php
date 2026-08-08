@@ -12,6 +12,13 @@ use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
+/**
+ * Immutable domain event value object for event sourcing patterns.
+ *
+ * Each domain event carries a unique identifier, timestamp, event type,
+ * and arbitrary payload data. Events can be serialized to arrays and
+ * reconstructed from persisted data for event replay.
+ */
 final class DomainEvent
 {
     public readonly UuidInterface $eventId;

@@ -80,6 +80,7 @@ uses(TestCase::class)->in(
     'ProductionHardeningTest.php',
     'EventManagerParseActionsTypeTest.php',
     'EventManagerFireModelTest.php',
+    'EventManagerValidationTest.php',
     'ConditionEngineEdgeCasesTest.php',
     'EventsPhase8ProductionTest.php',
     'EventsPhase9ProductionTest.php',

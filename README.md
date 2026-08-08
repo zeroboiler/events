@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.68.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.69.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -293,6 +293,60 @@ EventManager::invalidateTriggerCache();
 | `zeroboiler:events:unsubscribe {id}` | Remove a webhook subscription |
 | `zeroboiler:events:subscriptions` | List webhook subscriptions |
 
+## Database Schema
+
+### `triggers` Table
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | UUID (primary) | Unique trigger identifier |
+| `name` | string | Human-readable trigger name |
+| `event` | string | Event pattern (supports `*` and `**` wildcards) |
+| `action` | text | JSON-encoded action class(es) with optional params |
+| `conditions` | JSON (nullable) | Condition rules evaluated against the payload |
+| `async` | boolean | Whether to dispatch via queue |
+| `priority` | unsigned int | Execution priority (higher = first) |
+| `enabled` | boolean | Whether the trigger is active |
+| `created_at` / `updated_at` | timestamp | |
+| `deleted_at` | timestamp (nullable) | Soft delete |
+
+**Indexes:** `(event, enabled)`, `priority`
+
+### `event_logs` Table
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | UUID (primary) | Unique log entry identifier |
+| `trigger_id` | UUID (FK → triggers) | Parent trigger reference (cascade delete) |
+| `event` | string | The fired event name |
+| `payload` | JSON | Event payload data |
+| `status` | enum | `pending`, `dispatched`, `completed`, `failed` |
+| `error` | text (nullable) | Error message on failure |
+| `duration_ms` | unsigned int (nullable) | Execution duration in milliseconds |
+| `created_at` / `updated_at` | timestamp | |
+| `deleted_at` | timestamp (nullable) | Soft delete |
+
+**Indexes:** `(trigger_id, status)`, `event`, `created_at`
+
+### `event_subscriptions` Table
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | UUID (primary) | Unique subscription identifier |
+| `event` | string | Subscribed event pattern (supports wildcards) |
+| `url` | string | Webhook delivery endpoint |
+| `conditions` | JSON (nullable) | Condition filters for selective delivery |
+| `priority` | unsigned int | Delivery priority (higher = first) |
+| `active` | boolean | Whether the subscription is active |
+| `secret` | string (nullable) | HMAC signing secret for payload verification |
+| `last_fired_at` | timestamp (nullable) | Last successful delivery timestamp |
+| `failure_count` | unsigned int | Consecutive delivery failures |
+| `delivery_count` | unsigned int | Total successful deliveries |
+| `created_at` / `updated_at` | timestamp | |
+| `deleted_at` | timestamp (nullable) | Soft delete |
+
+**Indexes:** `(event, active)`, `url`
+
 ## Architecture
 
 ### Package Structure
@@ -349,7 +403,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 96 test files (Pest)
+└── tests/                      # 97 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +446,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (96 test files)
+composer test        # Run Pest test suite (97 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)

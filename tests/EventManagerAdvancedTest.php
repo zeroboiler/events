@@ -195,9 +195,13 @@ describe('EventManager fire with no triggers', function (): void {
         expect(EventLog::count())->toBe(0);
     });
 
-    test('fire event with empty string does nothing', function (): void {
-        EventManager::fire('', ['key' => 'value']);
+    test('fire event with empty string throws InvalidArgumentException', function (): void {
+        expect(fn () => EventManager::fire('', ['key' => 'value']))
+            ->toThrow(\InvalidArgumentException::class, 'Event name cannot be empty.');
+    });
 
-        expect(EventLog::count())->toBe(0);
+    test('fire event with "0" string throws InvalidArgumentException', function (): void {
+        expect(fn () => EventManager::fire('0', ['key' => 'value']))
+            ->toThrow(\InvalidArgumentException::class, 'Event name cannot be empty.');
     });
 });
