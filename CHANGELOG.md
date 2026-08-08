@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.65.0] — 2026-08-08
+
+### Added
+- `EventsPhase33ProductionTest.php` — 100+ production-ready tests covering: EventManager CRUD edge cases (getTrigger null, listTriggers empty/all/exact/wildcard/enabled/disabled/limit/null-filters, enable/disable/delete non-existent, delete invalidates cache); model relations (Trigger hasMany EventLog, EventLog belongsTo Trigger, soft delete behavior); DomainEvent fromArray edge cases (minimal valid data, full data preservation, fresh UUID on occur, invalid UUID fallback, invalid datetime fallback, empty/non-string eventType throws); ConditionEngine edge cases (empty conditions true, empty payload false, null/not_null/empty/not_empty operators, AND logic 3+ conditions); WildcardMatcher edge cases (empty pattern/event, no-wildcard extract, single/multi wildcard extract, ** returns empty, findMatchingPatterns order/filters); model scopes (Trigger enabled/async/orderByPriority, Subscription active/orderByPriority); EventLog status transitions (markAsCompleted, markAsFailed, scopeWithStatus, scopePending, scopeCompleted, scopeFailed); Subscription methods (recordDelivery, recordFailure, resetFailures, signPayload null/empty/deterministic/different, hasExceededFailures default/custom, matchesEvent exact/wildcard/cross-segment); TriggerBuilder edge cases (auto-name from event, actions-only, single action with params, multiple actions with classes key); SubscriptionBuilder validation (empty event, empty URL, invalid URL, non-HTTP scheme); EscapesWildcardLike SQL escaping (no wildcard returns null, wildcard converts, SQL special chars); getEventHistory filters (event/status/triggerId/limit); getStats zero-state structure; purgeLogs deletes old logs; ActionResolver errors (non-existent class, non-Triggerable class); config validation (all 6 top-level keys, sub-keys); ServiceProvider binding lifecycle (singleton/transient/contract identity); Facade accessor verification; strict types enforcement all source files; final class verification (11 core + 11 console); console commands are final; version format consistency; #[Override] on ConditionEngine::matches, WebhookAction::handle, EventLog boot/casts/newFactory, Subscription boot, Trigger boot; model config-driven table names; model UUID string key types; migration file existence; factory types and inheritance; Pest.php registration.
+
+### Changed
+- Version bumped to 1.65.0.
+- Test file count updated to 98.
+
+---
+
 ## [1.63.0] — 2026-08-08
 
 ### Added
