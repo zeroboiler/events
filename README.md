@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.52.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.53.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 79 test files (Pest)
+└── tests/                      # 80 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (79 test files)
+composer test        # Run Pest test suite (80 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -677,6 +677,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.53.0
+
+- **Changed**: `rector.php` upgraded from `LaravelSetList::LARAVEL_120` to `LaravelSetList::LARAVEL_130` for Laravel 13 compatibility.
+- **Added**: `EventsProductionReadinessTest.php` — 40+ new tests covering: ServiceProvider binding lifecycle (singleton/transient/contract identity), Facade resolution and proxy verification, config type safety (all 6 sections), fire/fireModel validation, trigger CRUD (getTrigger/deleteTrigger non-existent), subscription management (unsubscribe/getSubscription/listSubscriptions), cache invalidation lifecycle (enable/disable), EventLog status constants, DomainEvent roundtrip preservation, WildcardMatcher `#[Pure]` attribute verification, TriggerBuilder/SubscriptionBuilder fluent interface return types, final class verification (all core + console command classes), strict types enforcement across all source files, version consistency, Subscription signPayload edge cases (null/empty secret), Subscription hasExceededFailures config-driven, Subscription matchesEvent (exact, single-segment wildcard, cross-segment wildcard).
+- **Changed**: Version bumped to 1.53.0, test file count updated to 80.
 
 ### v1.52.0
 
