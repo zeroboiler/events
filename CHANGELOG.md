@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.59.0] — 2026-08-08
+
+### Added
+- `EventsPhase26ProductionTest.php` — 40+ production-ready tests covering: parseActions 5 JSON format handling, WebhookAction payload stripping verification, DispatchTriggerJob public property types and readonly enforcement, DomainEvent fromArray edge cases (empty eventType, invalid UUID, invalid date), Facade @method docblock completeness, config merge verification, Model fillable consistency checks, Factory definition/state return type verification, migration up() existence, EventLog status constants exact match, Triggerable/ConditionEngineContract interface return types, ActionResolver error handling, WildcardMatcher regex special characters, ConditionEngine dot notation, between auto-normalization, and ReDoS protection.
+
+### Changed
+- Version bumped to 1.59.0, test file count updated to 86.
+- Pest.php: Registered `EventsPhase26ProductionTest.php`.
+
+---
+
 ## [1.51.0] — 2026-08-07
 
 ### Added
