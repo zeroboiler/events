@@ -88,4 +88,34 @@ class SubscriptionFactory extends Factory
             'secret' => null,
         ]);
     }
+
+    /**
+     * Set a specific failure count.
+     */
+    public function withFailureCount(int $count): self
+    {
+        return $this->state(fn (array $attributes): array => [
+            'failure_count' => $count,
+        ]);
+    }
+
+    /**
+     * Set a specific delivery count.
+     */
+    public function withDeliveryCount(int $count): self
+    {
+        return $this->state(fn (array $attributes): array => [
+            'delivery_count' => $count,
+        ]);
+    }
+
+    /**
+     * Set a specific priority.
+     */
+    public function withPriority(int $priority): self
+    {
+        return $this->state(fn (array $attributes): array => [
+            'priority' => $priority,
+        ]);
+    }
 }

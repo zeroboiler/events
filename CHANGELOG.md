@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.62.0] — 2026-08-08
+
+### Added
+- New factory state methods: `EventLogFactory::withEvent()`, `forTrigger()`, `withPayload()`, `withDuration()`.
+- New factory state methods: `SubscriptionFactory::withFailureCount()`, `withDeliveryCount()`, `withPriority()`.
+- New factory state methods: `TriggerFactory::forEvent()`, `withAction()`, `withName()`.
+- `EventsPhase29ProductionTest.php` — 65+ production-ready tests covering: factory state methods, factory base definition structure, EventManager API surface, TriggerBuilder/SubscriptionBuilder fluent interface, DomainEvent identity/readonly enforcement, ConditionEngine full operator matrix, WildcardMatcher exhaustive patterns, config completeness, ServiceProvider binding lifecycle, Facade accessor, model key types/casts/status constants, strict types enforcement, final class verification, console command prefix/return types, WildcardMatcher #[Pure], #[Override] verification, trait composition, Subscription signPayload/hasExceededFailures, migration structure, config publish tags, version consistency, EventManager CRUD/fire/fireModel validation.
+
+### Changed
+- Version bumped to 1.62.0.
+- Test file count updated to 94.
+
 ## [1.61.0] — 2026-08-08
 
 ### Fixed

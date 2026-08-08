@@ -70,4 +70,48 @@ class EventLogFactory extends Factory
             'error' => fake()->sentence(),
         ]);
     }
+
+    /**
+     * Set the event name for the log.
+     */
+    public function withEvent(string $event): self
+    {
+        return $this->state(fn (array $attributes): array => [
+            'event' => $event,
+        ]);
+    }
+
+    /**
+     * Set the trigger ID for the log.
+     */
+    public function forTrigger(string $triggerId): self
+    {
+        return $this->state(fn (array $attributes): array => [
+            'trigger_id' => $triggerId,
+        ]);
+    }
+
+    /**
+     * Set a specific payload for the log.
+     *
+     * @param  array<string, mixed>  $payload
+     */
+    public function withPayload(array $payload): self
+    {
+        return $this->state(fn (array $attributes): array => [
+            'payload' => $payload,
+        ]);
+    }
+
+    /**
+     * Set a specific duration in milliseconds.
+     */
+    public function withDuration(int $durationMs): self
+    {
+        return $this->state(fn (array $attributes): array => [
+            'duration_ms' => $durationMs,
+            'status' => EventLog::STATUS_COMPLETED,
+            'error' => null,
+        ]);
+    }
 }

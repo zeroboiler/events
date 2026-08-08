@@ -81,4 +81,34 @@ class TriggerFactory extends Factory
             'priority' => $priority,
         ]);
     }
+
+    /**
+     * Set the event name for the trigger.
+     */
+    public function forEvent(string $event): self
+    {
+        return $this->state(fn (array $attributes): array => [
+            'event' => $event,
+        ]);
+    }
+
+    /**
+     * Set the action handler class for the trigger.
+     */
+    public function withAction(string $action): self
+    {
+        return $this->state(fn (array $attributes): array => [
+            'action' => $action,
+        ]);
+    }
+
+    /**
+     * Set a specific trigger name.
+     */
+    public function withName(string $name): self
+    {
+        return $this->state(fn (array $attributes): array => [
+            'name' => $name,
+        ]);
+    }
 }

@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.61.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.62.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 93 test files (Pest)
+└── tests/                      # 94 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (86 test files)
+composer test        # Run Pest test suite (94 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -486,7 +486,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 25 production (Pest.php Phase24 registration, comprehensive final audit: strict types all files, final class verification, #[\Override] on all overrides, return type declarations, typed properties, interface contracts, config completeness, singleton/transient bindings, version consistency, facade accessor, DomainEvent readonly/roundtrip, WildcardMatcher #[\Pure], EscapesWildcardLike, ConditionEngine full operator matrix, fluent interface verification, model #[\Override] on boot/casts/newFactory/getTable) | ✅ | `EventsPhase25ProductionTest.php` |
 || Phase 26 production (parseActions 5 formats, WebhookAction payload stripping, DispatchTriggerJob property types/readonly, DomainEvent edge cases, Facade @method completeness, Config merge verification, Model fillable consistency, Factory definition/state return types, migration up() existence, EventLog status constants, interface return types, ActionResolver errors, WildcardMatcher regex specials, ConditionEngine dot notation/between-inverted/ReDoS, Subscription signPayload edge cases) | ✅ | `EventsPhase26ProductionTest.php` |
 ||| Phase 27 production (strict types sweep, trait composition validation, config publish tags, console command prefix/final/typed properties, interface parameter types, DomainEvent toArray/fromArray key consistency, Facade resolved instance type, model relation return types, ServiceProvider binding verification, ConditionEngine full operator coverage + AND logic + null rejection, constructor parameter types, model casts completeness, WildcardMatcher #[Pure] verification, EventManager public method return types, final class sweep, composer.json version consistency, model boot UUID generation, WebhookAction/ConditionEngine interface verification, EscapesWildcardLike SQL escaping) | ✅ | `EventsPhase27ProductionTest.php` |
-||| Phase 28 production (DomainEvent constructor void return type removal, EventsUnsubscribeCommand early string cast, comprehensive verification: strict types, final classes, interface contracts, constructor types, readonly properties, config completeness, config type validation, facade accessor, WildcardMatcher #[Pure], EventLog status constants, model config-driven table names, model key type/incrementing consistency, model relation return types, model casts completeness, ServiceProvider bindings (singleton/transient/contract identity), TriggerBuilder/SubscriptionBuilder fluent interface, EventManager public method return types, version consistency, EscapesWildcardLike SQL escaping, ActionResolver types, WebhookAction/ConditionEngine #[Override], console command prefix verification, config publish tags, ManagesHistory/ManagesSubscriptions trait composition, DomainEvent roundtrip/toArray keys, DispatchTriggerJob property types, migration file existence, Pest.php registration) | ✅ | `EventsPhase28ProductionTest.php` |
+|||| Phase 28 production (DomainEvent constructor void return type removal, EventsUnsubscribeCommand early string cast, comprehensive verification: strict types, final classes, interface contracts, constructor types, readonly properties, config completeness, config type validation, facade accessor, WildcardMatcher #[Pure], EventLog status constants, model config-driven table names, model key type/incrementing consistency, model relation return types, model casts completeness, ServiceProvider bindings (singleton/transient/contract identity), TriggerBuilder/SubscriptionBuilder fluent interface, EventManager public method return types, version consistency, EscapesWildcardLike SQL escaping, ActionResolver types, WebhookAction/ConditionEngine #[Override], console command prefix verification, config publish tags, ManagesHistory/ManagesSubscriptions trait composition, DomainEvent roundtrip/toArray keys, DispatchTriggerJob property types, migration file existence, Pest.php registration) | ✅ | `EventsPhase28ProductionTest.php` |
+|||| Phase 29 production (new factory states: EventLogFactory withEvent/forTrigger/withPayload/withDuration, SubscriptionFactory withFailureCount/withDeliveryCount/withPriority, TriggerFactory forEvent/withAction/withName; factory base definition structure; EventManager API surface on/register/enable/disable/deleteTrigger/invalidateTriggerCache; TriggerBuilder/SubscriptionBuilder fluent interface; DomainEvent identity roundtrip/readonly/fromArray edge cases; ConditionEngine full operator matrix + AND logic; WildcardMatcher exhaustive patterns; config completeness/type validation; ServiceProvider binding lifecycle; Facade accessor; model UUID key types/casts/status constants; strict types enforcement; final class verification; console command prefix/return types; WildcardMatcher #[Pure]; #[Override] verification; trait composition; Subscription signPayload/hasExceededFailures; migration structure; config publish tags; version consistency; EventManager CRUD/fire/fireModel validation) | ✅ | `EventsPhase29ProductionTest.php` |
 
 ## How It Works
 
@@ -686,6 +687,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.62.0
+
+- **Added**: New factory state methods: `EventLogFactory::withEvent()`, `forTrigger()`, `withPayload()`, `withDuration()` — allows precise test data creation. `SubscriptionFactory::withFailureCount()`, `withDeliveryCount()`, `withPriority()` — useful for failure/delivery threshold testing. `TriggerFactory::forEvent()`, `withAction()`, `withName()` — convenient for event-specific trigger testing.
+- **Added**: `EventsPhase29ProductionTest.php` — 65+ production-ready tests covering: all new factory state methods (EventLogFactory, SubscriptionFactory, TriggerFactory), factory base definition structure validation, EventManager API surface (on/register/enable/disable/deleteTrigger/invalidateTriggerCache), TriggerBuilder/SubscriptionBuilder fluent interface verification, DomainEvent identity roundtrip preservation and readonly enforcement, DomainEvent fromArray edge cases (missing/empty eventType, invalid UUID), ConditionEngine comprehensive operator matrix (all 19 operators + AND logic + empty conditions), WildcardMatcher exhaustive patterns (exact, single-segment, cross-segment, catch-all, extract, findMatching), config completeness and type validation (all 6 sections), ServiceProvider binding lifecycle (singleton/transient/contract identity), Facade accessor verification, EventLog/Trigger/Subscription model UUID key types, EventLog status constants consistency, model casts completeness, strict types enforcement (all source files), final class verification (all core classes), console command prefix and return type verification, WildcardMatcher #[Pure] attribute, ConditionEngine/WebhookAction #[Override] verification, trait composition verification (ManagesHistory, ManagesSubscriptions, EscapesWildcardLike), Subscription signPayload edge cases, Subscription hasExceededFailures config-driven, migration file existence and structure, config publish tags, version consistency, EventManager CRUD on non-existent IDs, fire/fireModel empty validation.
+- **Changed**: Version bumped to 1.62.0, test file count updated to 94.
 
 ### v1.61.0
 
