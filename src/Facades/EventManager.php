@@ -55,6 +55,7 @@ use ZeroBoiler\Events\TriggerBuilder;
  */
 final class EventManager extends Facade
 {
+    #[\Override]
     protected static function getFacadeAccessor(): string
     {
         return \ZeroBoiler\Events\EventManager::class;
