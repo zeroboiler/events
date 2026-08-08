@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.60.0] — 2026-08-08
+
+### Added
+- `EventsPhase27ProductionTest.php` — 55 new tests covering: strict types enforcement sweep, trait composition validation, config publish tags, console command prefix/final/typed properties, interface parameter types, DomainEvent toArray/fromArray key consistency, Facade resolved instance type, model relation return types, ServiceProvider binding verification, ConditionEngine full operator coverage + AND logic + null rejection, constructor parameter types, model casts completeness, WildcardMatcher #[Pure] verification, EventManager public method return types, final class sweep, composer.json version consistency, model boot UUID generation, WebhookAction/ConditionEngine interface verification, EscapesWildcardLike SQL escaping.
+
+### Fixed
+- Removed `phpstan.neon` from git tracking (local IDE override file, already in `.gitignore`).
+
 ## [1.59.0] — 2026-08-08
 
 ### Added

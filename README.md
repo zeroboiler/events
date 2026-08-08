@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.59.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.60.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 86 test files (Pest)
+└── tests/                      # 92 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -484,7 +484,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 23 production (Facade #[\Override] on getFacadeAccessor, DispatchTriggerJob backoff re-indexing with array_values, config type validation all sections, strict types enforcement, final class verification, WildcardMatcher #[\Pure] attributes, ConditionEngine #[\Override], WebhookAction #[\Override], ServiceProvider binding lifecycle, EventLog status constants consistency, version consistency) | ✅ | `EventsPhase23ProductionTest.php` |
 | Phase 24 production (trait @property-read annotations for PHPStan 9, Pest.php Phase23 inclusion, strict types enforcement, final class verification, #[\Override] on all commands, return type declarations, DomainEvent readonly properties, WildcardMatcher #[\Pure], config completeness, ServiceProvider binding lifecycle, version consistency) | ✅ | `EventsPhase24ProductionTest.php` |
 | Phase 25 production (Pest.php Phase24 registration, comprehensive final audit: strict types all files, final class verification, #[\Override] on all overrides, return type declarations, typed properties, interface contracts, config completeness, singleton/transient bindings, version consistency, facade accessor, DomainEvent readonly/roundtrip, WildcardMatcher #[\Pure], EscapesWildcardLike, ConditionEngine full operator matrix, fluent interface verification, model #[\Override] on boot/casts/newFactory/getTable) | ✅ | `EventsPhase25ProductionTest.php` |
-| Phase 26 production (parseActions 5 formats, WebhookAction payload stripping, DispatchTriggerJob property types/readonly, DomainEvent edge cases, Facade @method completeness, Config merge verification, Model fillable consistency, Factory definition/state return types, migration up() existence, EventLog status constants, interface return types, ActionResolver errors, WildcardMatcher regex specials, ConditionEngine dot notation/between-inverted/ReDoS, Subscription signPayload edge cases) | ✅ | `EventsPhase26ProductionTest.php` |
+|| Phase 26 production (parseActions 5 formats, WebhookAction payload stripping, DispatchTriggerJob property types/readonly, DomainEvent edge cases, Facade @method completeness, Config merge verification, Model fillable consistency, Factory definition/state return types, migration up() existence, EventLog status constants, interface return types, ActionResolver errors, WildcardMatcher regex specials, ConditionEngine dot notation/between-inverted/ReDoS, Subscription signPayload edge cases) | ✅ | `EventsPhase26ProductionTest.php` |
+|| Phase 27 production (strict types sweep, trait composition validation, config publish tags, console command prefix/final/typed properties, interface parameter types, DomainEvent toArray/fromArray key consistency, Facade resolved instance type, model relation return types, ServiceProvider binding verification, ConditionEngine full operator coverage + AND logic + null rejection, constructor parameter types, model casts completeness, WildcardMatcher #[Pure] verification, EventManager public method return types, final class sweep, composer.json version consistency, model boot UUID generation, WebhookAction/ConditionEngine interface verification, EscapesWildcardLike SQL escaping) | ✅ | `EventsPhase27ProductionTest.php` |
 
 ## How It Works
 
@@ -684,6 +685,13 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.60.0
+
+- **Added**: `EventsPhase27ProductionTest.php` — 55 new tests covering: strict types enforcement sweep (all src files), trait composition validation (EscapesWildcardLike usage in EventManager/ManagesHistory/ManagesSubscriptions), ManagesHistory and ManagesSubscriptions public method existence, config publish tags (events-config, events-migrations), console command zeroboiler:events: prefix verification, all console commands final class + typed signature/description properties, interface parameter types (Triggerable handle, ConditionEngineContract matches), DomainEvent toArray key completeness and fromArray roundtrip preservation, DomainEvent final class and readonly properties, Facade resolved instance type verification, model relation return types (Trigger→EventLog HasMany, EventLog→Trigger BelongsTo), ServiceProvider binding verification (ConditionEngineContract singleton, TriggerBuilder/SubscriptionBuilder transient, ActionResolver singleton), ConditionEngine full 19-operator coverage + AND logic + null operand rejection, constructor parameter types (EventManager, TriggerBuilder, SubscriptionBuilder, DispatchTriggerJob), model casts completeness, WildcardMatcher #[Pure] verification on all 3 static methods, EventManager all public method return type declarations, final class sweep (11 core classes), composer.json version consistency with README badge, model boot UUID generation (empty id), EventLog markAsCompleted/markAsFailed existence, WebhookAction Triggerable interface + final verification, ConditionEngine ConditionEngineContract interface + final verification, EscapesWildcardLike SQL special char escaping.
+- **Fixed**: Removed `phpstan.neon` from git tracking (local IDE override file, already in `.gitignore`).
+- **Changed**: Test file count updated to 92.
+- **Changed**: Version bumped to 1.60.0.
 
 ### v1.55.0
 

@@ -1,6 +1,0 @@
-includes:
-    - phpstan.neon.dist
-
-parameters:
-    # Local overrides only — keep this file for IDE integration.
-    # All shared config lives in phpstan.neon.dist.
