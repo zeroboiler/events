@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.61.0] — 2026-08-08
+
+### Fixed
+- Removed explicit `: void` return type declaration from `DomainEvent::__construct()` — PHP 8.5 constructors should not declare return types.
+- `EventsUnsubscribeCommand::handle()` now casts the `id` argument to `string` at assignment time instead of at usage — cleaner and PHPStan 9 compliant.
+
+### Added
+- `EventsPhase28ProductionTest.php` — 55+ production-ready tests covering: DomainEvent constructor void return type verification, EventsUnsubscribeCommand early string cast verification, strict types enforcement sweep, final class verification (core + console commands + WebhookAction), interface contract verification (ConditionEngineContract, Triggerable, parameter counts/signatures), constructor parameter type verification (EventManager, DispatchTriggerJob), DomainEvent readonly property verification, config completeness (all 6 top-level keys + sub-keys), config type validation (table_names, subscriptions, retry, queue, retention, wildcard_cache_ttl), facade accessor correctness, WildcardMatcher #[Pure] attribute on all 3 static methods, EventLog status constants consistency, model config-driven table names, model key type/incrementing consistency (all 3 models), model relation return types (HasMany, BelongsTo), model casts completeness (all 3 models), ServiceProvider bindings (singleton for EventManager/ConditionEngine/ActionResolver, transient for TriggerBuilder/SubscriptionBuilder, contract identity), TriggerBuilder fluent interface (self return + save return type), SubscriptionBuilder fluent interface (self return + save return type), EventManager all public method return type declarations, version consistency (composer.json vs README badge), EscapesWildcardLike SQL special char escaping (percent, underscore, backslash), ActionResolver constructor types and resolve return type, WebhookAction/ConditionEngine #[Override] verification, console command prefix verification (all 11 commands), config publish tags (events-config, events-migrations), ManagesHistory/ManagesSubscriptions trait composition verification, DomainEvent roundtrip/toArray key preservation, DomainEvent toArray required keys, DispatchTriggerJob property types and readonly constructor verification, migration file existence (3 files), Pest.php Phase 28 registration.
+
+### Changed
+- Version bumped to 1.61.0.
+- Test file count updated to 93.
+
 ## [1.60.0] — 2026-08-08
 
 ### Added
