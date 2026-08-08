@@ -12,6 +12,7 @@ use ZeroBoiler\Events\Contracts\Triggerable;
 
 final class SendOrderNotification implements Triggerable
 {
+    #[\Override]
     public function handle(array $payload): void
     {
         // Handle order notification
@@ -20,6 +21,7 @@ final class SendOrderNotification implements Triggerable
 
 final class LogOrderEvent implements Triggerable
 {
+    #[\Override]
     public function handle(array $payload): void
     {
         // Log order event
@@ -28,6 +30,7 @@ final class LogOrderEvent implements Triggerable
 
 final class HighPriority implements Triggerable
 {
+    #[\Override]
     public function handle(array $payload): void
     {
         // Handle high priority action
@@ -36,6 +39,7 @@ final class HighPriority implements Triggerable
 
 final class LowPriority implements Triggerable
 {
+    #[\Override]
     public function handle(array $payload): void
     {
         // Handle low priority action
@@ -44,6 +48,7 @@ final class LowPriority implements Triggerable
 
 final class LogOrderCreated implements Triggerable
 {
+    #[\Override]
     public function handle(array $payload): void
     {
         // Log order created
