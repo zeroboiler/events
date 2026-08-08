@@ -177,6 +177,9 @@ final class ConditionEngine implements ConditionEngineContract
 
     /**
      * Check if actual is between min and max (inclusive).
+     *
+     * Auto-normalizes inverted ranges (e.g., [100, 50] → [50, 100]).
+     * Both range values and actual must be numeric.
      */
     protected function between(mixed $actual, mixed $value): bool
     {
@@ -188,10 +191,16 @@ final class ConditionEngine implements ConditionEngineContract
             return false;
         }
 
-        // Auto-normalize inverted ranges (e.g., [100, 50] → [50, 100])
-        $min = min($value[0], $value[1]);
-        $max = max($value[0], $value[1]);
+        $rawMin = $value[0];
+        $rawMax = $value[1];
 
-        return $actual >= $min && $actual <= $max;
+        if (! is_numeric($rawMin) || ! is_numeric($rawMax)) {
+            return false;
+        }
+
+        $min = (float) min((float) $rawMin, (float) $rawMax);
+        $max = (float) max((float) $rawMin, (float) $rawMax);
+
+        return (float) $actual >= $min && (float) $actual <= $max;
     }
 }

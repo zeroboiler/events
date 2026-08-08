@@ -137,7 +137,9 @@ final class SubscriptionBuilder
         // Reject non-HTTP(S) schemes — webhooks must use HTTP or HTTPS only.
         // filter_var(FILTER_VALIDATE_URL) accepts ftp://, file://, etc.
         $parsed = parse_url($this->url);
-        $scheme = strtolower($parsed['scheme'] ?? '');
+        /** @var string|null $schemeRaw */
+        $schemeRaw = is_array($parsed) ? ($parsed['scheme'] ?? null) : null;
+        $scheme = is_string($schemeRaw) ? strtolower($schemeRaw) : '';
         if ($scheme !== 'http' && $scheme !== 'https') {
             throw new \InvalidArgumentException('Webhook URL must use HTTP or HTTPS protocol');
         }

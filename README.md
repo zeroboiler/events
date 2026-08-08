@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.69.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.70.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -403,7 +403,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 97 test files (Pest)
+└── tests/                      # 98 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -446,7 +446,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (97 test files)
+composer test        # Run Pest test suite (98 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -549,6 +549,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 || Phase 34 production (fire/fireModel validation, TriggerBuilder deduplication/order, SubscriptionBuilder transaction/URL validation/auto-secret, ConditionEngine strictEquals/AND/empty, WildcardMatcher findMatchingPatterns/extract order, DomainEvent fromArray minimal/roundtrip, DispatchTriggerJob backoff/tries config, EventLog status lifecycle, Subscription delivery/failure/signing/matchesEvent/hasExceededFailures, getStats zero-state, purgeLogs, EscapesWildcardLike, ActionResolver errors, Facade accessor, strict types, final classes, config completeness, ServiceProvider bindings, model boot UUID, version consistency, fluent interface) | ✅ | `EventsPhase34ProductionTest.php` |
 || Phase 35 production (signPayload hash_hmac false safety, strict types enforcement, final class verification, interface contracts, ServiceProvider singleton/transient bindings, facade accessor, config completeness all 6 sections, EventLog status constants, DomainEvent readonly keyword, WildcardMatcher #[Pure] attributes, model config-driven table names, return type declarations, console command return types, version consistency) | ✅ | `EventsPhase35ProductionTest.php` |
 || Phase 36 production (trait composition, ConditionEngine getNestedValue edge cases, operator matrix comprehensive, WildcardMatcher special chars, DomainEvent serialization, model fillable/hidden/casts, config structure, factory states, file headers, namespaces, fire/fireModel validation, TriggerBuilder/SubscriptionBuilder validation, DispatchTriggerJob config properties, ServiceProvider bindings, model scopes, WebhookAction interface, EscapesWildcardLike, ActionResolver errors, composer.json structure, migrations, phpstan config, facade completeness, cache TTL, CRUD edge cases, TriggerBuilder resolveActions, version consistency) | ✅ | `EventsPhase36ProductionTest.php` |
+|| Phase 37 production (ConditionEngine between non-numeric rejection, float operators, null actual; SubscriptionBuilder parse_url type safety; fake() helper return type; model relations; Subscription matchesEvent; WebhookAction delivery/failure tracking; DomainEvent fromArray edge cases; config completeness; ServiceProvider bindings; Facade accessor; strict types; final classes; model config tables; version consistency) | ✅ | `EventsPhase37ProductionTest.php` |
 
 ## How It Works
 
@@ -751,6 +752,22 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.70.0
+
+- **Added**: `EventsPhase37ProductionTest.php` — 30+ new production tests covering: ConditionEngine `between()` non-numeric range value rejection, float comparison operators, null actual handling; SubscriptionBuilder URL scheme enforcement with `parse_url` edge cases; `fake()` helper return type verification; Trigger/EventLog model relations; Subscription `matchesEvent` comprehensive patterns; WebhookAction subscription failure/delivery tracking; DomainEvent `fromArray` edge cases (missing payload, non-array payload, invalid UUID, roundtrip preservation); config completeness (all top-level and sub-keys); ServiceProvider binding lifecycle (singleton/transient/contract identity); Facade accessor; version consistency; strict types enforcement; final class verification; model config-driven table names.
+- **Fixed**: **PHPStan 9** `ConditionEngine::between()` now explicitly validates range boundary values as numeric before passing to `min()`/`max()` — previously PHPStan 9 would flag `mixed` values being passed to these functions.
+- **Fixed**: **PHPStan 9** `SubscriptionBuilder::save()` now guards `parse_url()` return value with `is_array()` check before accessing array keys — `parse_url()` can return `false|int` in edge cases (e.g., malformed URLs), and PHPStan 9 flags direct array access on non-array values.
+- **Fixed**: **PHPStan 9** `tests/helpers.php` `fake()` function now has `@return \Faker\Generator` PHPDoc annotation for proper type inference when `fake()->word()` and similar methods are called in tests.
+- **Changed**: Version bumped to 1.70.0, test file count updated to 98.
+
+### v1.69.0
+
+- **Added**: Database Schema section in README with full table/column/index documentation for `triggers`, `event_logs`, and `event_subscriptions`.
+- **Added**: Class-level docblock for `DomainEvent` describing its role as an immutable value object for event sourcing.
+- **Added**: `EventManagerValidationTest.php` — 18 new tests covering: fireModel validation, listTriggers filtering, getTrigger/deleteTrigger edge cases, subscribeWebhook.
+- **Fixed**: `EventManagerAdvancedTest` — corrected empty event fire test to match actual behavior (throws `InvalidArgumentException`).
+- **Changed**: Version bumped to 1.69.0, test file count updated to 97.
 
 ### v1.68.0
 

@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.70.0] — 2026-08-08
+
+### Added
+- `EventsPhase37ProductionTest.php` — 30+ new production tests covering: ConditionEngine `between()` non-numeric range value rejection, float comparison operators, null actual handling; SubscriptionBuilder URL scheme enforcement with `parse_url` edge cases; `fake()` helper return type verification; Trigger/EventLog model relations; Subscription `matchesEvent` comprehensive patterns; WebhookAction subscription failure/delivery tracking; DomainEvent `fromArray` edge cases; config completeness; ServiceProvider binding lifecycle; Facade accessor; version consistency; strict types enforcement; final class verification; model config-driven table names.
+
+### Fixed
+- **PHPStan 9** `ConditionEngine::between()` now explicitly validates range boundary values as numeric before passing to `min()`/`max()` — previously PHPStan 9 would flag `mixed` values being passed to these functions.
+- **PHPStan 9** `SubscriptionBuilder::save()` now guards `parse_url()` return value with `is_array()` check before accessing array keys.
+- **PHPStan 9** `tests/helpers.php` `fake()` function now has `@return \Faker\Generator` PHPDoc annotation for proper type inference.
+
+### Changed
+- Version bumped to 1.70.0, test file count updated to 98.
+
+---
+
 ## [1.69.0] — 2026-08-08
 
 ### Added
