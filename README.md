@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 95 test files (Pest)
+└── tests/                      # 96 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (95 test files)
+composer test        # Run Pest test suite (96 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -488,7 +488,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 ||| Phase 27 production (strict types sweep, trait composition validation, config publish tags, console command prefix/final/typed properties, interface parameter types, DomainEvent toArray/fromArray key consistency, Facade resolved instance type, model relation return types, ServiceProvider binding verification, ConditionEngine full operator coverage + AND logic + null rejection, constructor parameter types, model casts completeness, WildcardMatcher #[Pure] verification, EventManager public method return types, final class sweep, composer.json version consistency, model boot UUID generation, WebhookAction/ConditionEngine interface verification, EscapesWildcardLike SQL escaping) | ✅ | `EventsPhase27ProductionTest.php` |
 |||| Phase 28 production (DomainEvent constructor void return type removal, EventsUnsubscribeCommand early string cast, comprehensive verification: strict types, final classes, interface contracts, constructor types, readonly properties, config completeness, config type validation, facade accessor, WildcardMatcher #[Pure], EventLog status constants, model config-driven table names, model key type/incrementing consistency, model relation return types, model casts completeness, ServiceProvider bindings (singleton/transient/contract identity), TriggerBuilder/SubscriptionBuilder fluent interface, EventManager public method return types, version consistency, EscapesWildcardLike SQL escaping, ActionResolver types, WebhookAction/ConditionEngine #[Override], console command prefix verification, config publish tags, ManagesHistory/ManagesSubscriptions trait composition, DomainEvent roundtrip/toArray keys, DispatchTriggerJob property types, migration file existence, Pest.php registration) | ✅ | `EventsPhase28ProductionTest.php` |
 ||||| Phase 29 production (new factory states: EventLogFactory withEvent/forTrigger/withPayload/withDuration, SubscriptionFactory withFailureCount/withDeliveryCount/withPriority, TriggerFactory forEvent/withAction/withName; factory base definition structure; EventManager API surface on/register/enable/disable/deleteTrigger/invalidateTriggerCache; TriggerBuilder/SubscriptionBuilder fluent interface; DomainEvent identity roundtrip/readonly/fromArray edge cases; ConditionEngine full operator matrix + AND logic; WildcardMatcher exhaustive patterns; config completeness/type validation; ServiceProvider binding lifecycle; Facade accessor; model UUID key types/casts/status constants; strict types enforcement; final class verification; console command prefix/return types; WildcardMatcher #[Pure]; #[Override] verification; trait composition; Subscription signPayload/hasExceededFailures; migration structure; config publish tags; version consistency; EventManager CRUD/fire/fireModel validation) | ✅ | `EventsPhase29ProductionTest.php` |
-||||| Phase 30 production (DispatchTriggerJob eventLogId initial null/constructor config edge cases; WebhookAction payload stripping verification/URL validation; ConditionEngine not_in/in null actual/===/!==/>=/<=/between non-array/regex length/ReDoS rejection/strictEquals cross-type/nested value null; TriggerBuilder resolveActions deduplication/merge/empty; SubscriptionBuilder save validation (ftp URL/non-URL/empty event/empty URL); EventManager listTriggers return type; model getTable config fallback/custom config; DomainEvent fromArray non-string occurredAt/non-array payload; model scopes return types; model relations return types; ActionResolver error cases; factory definition key types; factory parent class; composer autoload PSR-4/extra.laravel; config all section key completeness; ServiceProvider config merge/migration load; WildcardMatcher #[Pure] on all public methods) | ✅ | `EventsPhase30ProductionTest.php` |
+||||| Phase 30 production (DispatchTriggerJob eventLogId initial null/constructor config edge cases; WebhookAction payload stripping verification/URL validation; ConditionEngine not_in/in null actual/===/!==/>=/<=/between non-array/regex length/ReDoS rejection/strictEquals cross-type/nested value null; TriggerBuilder resolveActions deduplication/merge/empty; SubscriptionBuilder save validation (ftp URL/non-URL/empty event/empty URL); EventManager listTriggers return type; model getTable config fallback/custom config; DomainEvent fromArray non-string occurredAt/non-array payload; model scopes return types; model relations return types; ActionResolver error cases; factory definition key types; factory parent class; composer autoload PSR-4/extra.laravel; config all section key completeness; ServiceProvider config merge/migration load; WildcardMatcher #[Pure] on all public methods) | ✅ | `EventsPhase30ProductionTest.php` ||
+|| Phase 31 production (SubscriptionBuilder HTTP-only URL validation — reject ftp://, file://, mailto:; accept http:// and https://; validation ordering — event name before URL scheme, empty URL before scheme check) | ✅ | `EventsPhase31ProductionTest.php` |
 
 ## How It Works
 
@@ -565,6 +566,9 @@ composer ci          # All checks (lint → analyse → rector → test)
 
 ### Rate Limiting & Abuse
 - The package does **not** include built-in rate limiting. Use the [zeroboiler/security](../security) package or Laravel's built-in rate limiting middleware to protect webhook endpoints.
+
+### Webhook URL Scheme Enforcement
+- `SubscriptionBuilder::save()` rejects non-HTTP(S) URL schemes (e.g., `ftp://`, `file://`, `mailto:`) to prevent SSRF-like abuse. Only `http://` and `https://` URLs are accepted for webhook subscriptions.
 
 ## Troubleshooting
 
@@ -688,6 +692,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.63.0
+
+- **Fixed**: **SECURITY** `SubscriptionBuilder::save()` now rejects non-HTTP(S) URL schemes (`ftp://`, `file://`, `mailto:`, etc.) — previously `filter_var(FILTER_VALIDATE_URL)` accepted these, allowing SSRF-like abuse through webhook subscriptions.
+- **Added**: `EventsPhase31ProductionTest.php` — 8 new tests covering HTTP-only URL scheme enforcement: reject ftp://, file://, mailto://; accept http:// and https://; validation ordering (event name checked before URL scheme, empty URL checked before scheme).
+- **Changed**: Version bumped to 1.63.0, test file count updated to 96.
 
 ### v1.62.0
 

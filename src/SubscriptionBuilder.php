@@ -134,6 +134,14 @@ final class SubscriptionBuilder
             throw new \InvalidArgumentException('Webhook URL must be a valid URL');
         }
 
+        // Reject non-HTTP(S) schemes — webhooks must use HTTP or HTTPS only.
+        // filter_var(FILTER_VALIDATE_URL) accepts ftp://, file://, etc.
+        $parsed = parse_url($this->url);
+        $scheme = strtolower($parsed['scheme'] ?? '');
+        if ($scheme !== 'http' && $scheme !== 'https') {
+            throw new \InvalidArgumentException('Webhook URL must use HTTP or HTTPS protocol');
+        }
+
         // Generate a secret if none was provided and auto_generate_secret is enabled
         $autoGenerate = Config::get('events.subscriptions.auto_generate_secret', true);
         if ($this->secret === null && $autoGenerate !== false) {
