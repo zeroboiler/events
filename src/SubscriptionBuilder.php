@@ -119,6 +119,8 @@ final class SubscriptionBuilder
      * when the event fires. The trigger's action_params contain the
      * subscription ID and URL so the WebhookAction can look up the signing
      * secret for HMAC payload verification.
+     *
+     * @throws \InvalidArgumentException If event name is empty, URL is empty/invalid, or URL is non-HTTP(S)
      */
     public function save(): Subscription
     {

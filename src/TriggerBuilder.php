@@ -168,6 +168,8 @@ final class TriggerBuilder
      *
      * Uses a single INSERT to avoid the race condition where a double
      * INSERT→UPDATE could collide on the UUID primary key.
+     *
+     * @throws \InvalidArgumentException If event name is empty or no action is provided
      */
     public function save(): Trigger
     {

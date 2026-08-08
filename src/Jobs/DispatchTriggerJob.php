@@ -26,7 +26,7 @@ final class DispatchTriggerJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /** @var array<int, int> */
+    /** @var list<int> Backoff intervals in seconds between retry attempts */
     public array $backoff = [60, 300, 900];
 
     public string $queue = 'default';
