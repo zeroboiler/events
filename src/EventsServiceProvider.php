@@ -22,6 +22,8 @@ use ZeroBoiler\Events\Console\EventsSubscribeCommand;
 use ZeroBoiler\Events\Console\EventsSubscriptionsCommand;
 use ZeroBoiler\Events\Console\EventsUnsubscribeCommand;
 use ZeroBoiler\Events\Contracts\ConditionEngineContract;
+use ZeroBoiler\Events\SubscriptionBuilder;
+use ZeroBoiler\Events\TriggerBuilder;
 
 final class EventsServiceProvider extends ServiceProvider
 {
