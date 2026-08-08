@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.56.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.57.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 83 test files (Pest)
+└── tests/                      # 84 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (83 test files)
+composer test        # Run Pest test suite (84 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -482,6 +482,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 21 production (return type verification, unused import cleanup, config merge verification, migration config-driven tables, TriggerBuilder deduplication, ConditionEngine null/edge cases, WildcardMatcher comprehensive, DomainEvent readonly/roundtrip, EscapesWildcardLike comprehensive, EventLog status transitions, Pest.php completeness, strict_types enforcement, version format) | ✅ | `EventsPhase21ProductionTest.php` |
 | Phase 22 production (Pest.php duplicate detection, strict types enforcement, final class verification, return type declarations, #[\Override] verification, ServiceProvider binding lifecycle, config completeness, Facade accessor, ConditionEngine operator matrix, WildcardMatcher comprehensive, EscapesWildcardLike, DomainEvent readonly/immutability, model scopes/relations, parseActions @phpstan-return annotation, version consistency, WildcardMatcher #[\Pure], Subscription signPayload, TriggerBuilder/SubscriptionBuilder validation, ActionResolver errors, ManagesHistory/ManagesSubscriptions methods, fluent interface return types, config merge) | ✅ | `EventsPhase22ProductionTest.php` |
 | Phase 23 production (Facade #[\Override] on getFacadeAccessor, DispatchTriggerJob backoff re-indexing with array_values, config type validation all sections, strict types enforcement, final class verification, WildcardMatcher #[\Pure] attributes, ConditionEngine #[\Override], WebhookAction #[\Override], ServiceProvider binding lifecycle, EventLog status constants consistency, version consistency) | ✅ | `EventsPhase23ProductionTest.php` |
+| Phase 24 production (trait @property-read annotations for PHPStan 9, Pest.php Phase23 inclusion, strict types enforcement, final class verification, #[\Override] on all commands, return type declarations, DomainEvent readonly properties, WildcardMatcher #[\Pure], config completeness, ServiceProvider binding lifecycle, version consistency) | ✅ | `EventsPhase24ProductionTest.php` |
 
 ## How It Works
 

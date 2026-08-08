@@ -20,6 +20,8 @@ use ZeroBoiler\Events\Models\Trigger;
  * Extracted from EventManager to reduce class size and improve
  * single-responsibility.
  *
+ * @property-read \Illuminate\Container\Container $app
+ *
  * @mixin \ZeroBoiler\Events\EventManager
  */
 trait ManagesHistory
