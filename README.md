@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 99 test files (Pest)
+└── tests/                      # 95 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (99 test files)
+composer test        # Run Pest test suite (95 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -493,6 +493,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 || Phase 32 production (DomainEvent explicit constructor args roundtrip, SubscriptionBuilder auto-generate secret config, conditions empty→null, WebhookAction URL validation edge cases (missing/empty/non-string), signPayload custom algorithm, DispatchTriggerJob property types, ConditionEngine AND logic 2+3 conditions, WildcardMatcher special patterns extraction, TriggerBuilder deduplication integration, EventLog status transitions, Subscription matchesEvent comprehensive, fire no-match, config type validation, ServiceProvider singleton/transient, Facade accessor, strict types sweep, final class verification, model config-driven tables, version consistency, EscapesWildcardLike, getStats zero-state, Trigger/Subscription scopes, DomainEvent fromArray roundtrip) | ✅ | `EventsPhase32ProductionTest.php` |
 || Phase 33 production (EventManager CRUD edge cases, model relations, DomainEvent fromArray edge cases, ConditionEngine empty/null/AND logic, WildcardMatcher extract/findMatching, model scopes, EventLog status transitions, Subscription delivery/failure/signing/matching, TriggerBuilder auto-name/actions/params, SubscriptionBuilder validation/rejection, EscapesWildcardLike SQL escaping, getEventHistory filters, getStats zero-state, purgeLogs, ActionResolver errors, config validation, ServiceProvider singleton/transient/contract, Facade accessor, strict types enforcement, final class verification, console command final, version consistency, #[Override] verification, model config tables, model key types, migration existence, factory types, Pest.php registration) | ✅ | `EventsPhase33ProductionTest.php` |
 || Phase 34 production (fire/fireModel validation, TriggerBuilder deduplication/order, SubscriptionBuilder transaction/URL validation/auto-secret, ConditionEngine strictEquals/AND/empty, WildcardMatcher findMatchingPatterns/extract order, DomainEvent fromArray minimal/roundtrip, DispatchTriggerJob backoff/tries config, EventLog status lifecycle, Subscription delivery/failure/signing/matchesEvent/hasExceededFailures, getStats zero-state, purgeLogs, EscapesWildcardLike, ActionResolver errors, Facade accessor, strict types, final classes, config completeness, ServiceProvider bindings, model boot UUID, version consistency, fluent interface) | ✅ | `EventsPhase34ProductionTest.php` |
+|| Phase 35 production (signPayload hash_hmac false safety, strict types enforcement, final class verification, interface contracts, ServiceProvider singleton/transient bindings, facade accessor, config completeness all 6 sections, EventLog status constants, DomainEvent readonly keyword, WildcardMatcher #[Pure] attributes, model config-driven table names, return type declarations, console command return types, version consistency) | ✅ | `EventsPhase35ProductionTest.php` |
 
 ## How It Works
 
@@ -695,6 +696,13 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.67.0
+
+- **Fixed**: `Subscription::signPayload()` now handles `hash_hmac()` returning `false` (e.g., if the algorithm is unsupported) — previously the `string|false` return was passed directly as `string`, which could cause PHPStan 9 type errors at runtime. Now returns empty string on `false`.
+- **Added**: `EventsPhase35ProductionTest.php` — 40+ new tests covering: signPayload hash_hmac false safety (null secret, empty secret, valid secret, deterministic signatures, different payloads, sha256 correctness), strict types enforcement across all src/ files, final class verification for all 25 classes (core + models + console commands), interface contracts (ConditionEngineContract, Triggerable), ServiceProvider singleton/transient binding lifecycle (EventManager, ConditionEngine, ActionResolver, ConditionEngineContract, TriggerBuilder, SubscriptionBuilder), facade accessor correctness, config completeness all 6 sections (table_names, queue, retry, retention, subscriptions, wildcard_cache_ttl) with sub-key validation, EventLog status constants, DomainEvent readonly keyword verification (all 4 properties), WildcardMatcher #[Pure] attribute verification (all 3 static methods), model config-driven table names (Trigger, EventLog, Subscription), model UUID key types and non-incrementing, return type declarations on all EventManager/TriggerBuilder/SubscriptionBuilder public methods, console command handle() return type verification (all 11 commands), version consistency.
+- **Fixed**: README test file count corrected from 99 to 95.
+- **Changed**: Version bumped to 1.67.0, test file count updated to 95.
 
 ### v1.64.0
 

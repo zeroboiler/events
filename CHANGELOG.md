@@ -8,12 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [1.67.0] — 2026-08-08
 
+### Fixed
+- `Subscription::signPayload()` now handles `hash_hmac()` returning `false` (e.g., unsupported algorithm) — previously the `string|false` return was passed directly as `string`, causing potential PHPStan 9 type errors. Now returns empty string on `false`.
+- README test file count corrected from 99 to 95.
+
 ### Added
+- `EventsPhase35ProductionTest.php` — 40+ production-ready tests covering: signPayload hash_hmac false safety (null secret, empty secret, valid secret, deterministic signatures, different payloads, sha256 correctness), strict types enforcement across all src/ files, final class verification for all 25 classes (core + models + console commands), interface contracts (ConditionEngineContract, Triggerable), ServiceProvider singleton/transient binding lifecycle (EventManager, ConditionEngine, ActionResolver, ConditionEngineContract, TriggerBuilder, SubscriptionBuilder), facade accessor correctness, config completeness all 6 sections (table_names, queue, retry, retention, subscriptions, wildcard_cache_ttl) with sub-key validation, EventLog status constants, DomainEvent readonly keyword verification (all 4 properties), WildcardMatcher #[Pure] attribute verification (all 3 static methods), model config-driven table names (Trigger, EventLog, Subscription), model UUID key types and non-incrementing, return type declarations on all EventManager/TriggerBuilder/SubscriptionBuilder public methods, console command handle() return type verification (all 11 commands), version consistency.
 - `EventsPhase34ProductionTest.php` — 75+ production-ready tests covering: EventManager fire/fireModel validation (empty/zero event, empty model class, empty action), TriggerBuilder resolveActions deduplication order preservation, action() + actions() merge order, SubscriptionBuilder transaction atomicity (subscription + internal trigger), ftp/file URL scheme rejection, auto-generate secret behavior, ConditionEngine strictEquals cross-type, AND logic, empty conditions, WildcardMatcher findMatchingPatterns order preservation/empty results, extractWildcards single/cross-segment/non-matching, DomainEvent fromArray minimal data reconstruction, fromArray empty eventType throws, roundtrip preservation, toArray key completeness, DispatchTriggerJob backoff config (string default, array format, null fallback), tries config, EventLog status lifecycle (pending→dispatched→completed→failed), markAsCompleted/markAsFailed, Subscription recordDelivery/resetFailures/recordFailure, signPayload null secret/deterministic/different payloads, matchesEvent exact/single-segment/cross-segment, hasExceededFailures config/custom, getStats zero-state structure, purgeLogs completed+failed before threshold, invalidateTriggerCache, listTriggers empty results, getTrigger/deleteTrigger/enable/disable non-existent returns null/false, ActionResolver non-existent class/non-Triggerable class, Facade accessor verification, strict_types enforcement all source files, final class verification core + console, ConditionEngineContract interface implementation, config completeness all 6 top-level keys, config subscriptions keys, ServiceProvider singleton/transient bindings, EventLog/Trigger/Subscription boot UUID generation, version consistency, register alias for on, TriggerBuilder/SubscriptionBuilder fluent interface returns self, getEventHistory all filters empty, EscapesWildcardLike null/non-wildcard/asterisk/SQL escaping.
 
 ### Changed
 - Version bumped to 1.67.0.
-- Test file count updated to 99.
+- Test file count updated to 95.
 
 ---
 
