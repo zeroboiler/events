@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.53.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.54.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 80 test files (Pest)
+└── tests/                      # 86 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (80 test files)
+composer test        # Run Pest test suite (86 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -475,9 +475,11 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 14 production (fireModel edge cases, TriggerBuilder action merging integration, ConditionEngine strictEquals edge cases (0 vs false vs empty string, array vs string, in empty array), WildcardMatcher regex special chars/empty pattern/pure attribute, EventManager cache TTL edge cases (negative/zero/non-integer/custom), EventManager enable/disable non-existent, DomainEvent UUID freshness/timestamp freshness/toArray keys/fromArray edge cases, DispatchTriggerJob constructor edge cases (empty backoff/single backoff/property types), Subscription signPayload empty secret/hasExceededFailures config edge cases/matchesEvent patterns, Factory default state validation, ActionResolver error cases, TriggerBuilder/SubscriptionBuilder validation and fluent interface, WebhookAction missing URL variants, ConditionEngine empty conditions/numeric string/matches null) | ✅ | `EventsPhase14ProductionTest.php` |
 | Phase 15 production (executeTrigger basePayload extraction/null payload/action params merge, TriggerBuilder null/empty conditions save, SubscriptionBuilder URL validation (reject invalid, accept HTTPS), ConditionEngine empty conditions with various payloads, WildcardMatcher findMatchingPatterns type/extractWildcards edge cases, ServiceProvider binding lifecycle (singleton/transient/contract identity), Config type validation (all 6 sections), Facade accessor, Model config-driven table names, TriggerBuilder/SubscriptionBuilder fluent interface, DispatchTriggerJob config-driven properties (tries/queue/connection/backoff formats), EventLog status constants, DomainEvent roundtrip/fresh UUID, Cache invalidation (save/disable/enable), Strict types enforcement, Final class verification) | ✅ | `EventsPhase15ProductionTest.php` |
 | Phase 16 production (EventLog scopes, markAsCompleted/markAsFailed, Trigger scopes and relations, Subscription scopes and matchesEvent patterns, #[\Override] attribute verification, DomainEvent readonly keyword verification) | ✅ | `EventsPhase16ProductionTest.php` |
+| Phase 17 production (listTriggers CRUD with filters/wildcards/limit, getTrigger/deleteTrigger, fireModel with attributesToArray/toArray, TriggerBuilder multi/single action save, config-driven model table names, EventLog status transitions, DomainEvent fromArray edge cases, ConditionEngine operators (starts_with, ends_with, not_empty, between, dot notation, AND logic), WildcardMatcher comprehensive, config type validation, signPayload edge cases, empty conditions dispatch, fire/fireModel validation, cache invalidation lifecycle, enable/disable cache) | ✅ | `EventsPhase17ProductionTest.php` |
 | Phase 18 production (fire/fireModel validation, TriggerBuilder save validation/encoding, SubscriptionBuilder save validation/HMAC, DomainEvent fromArray edge cases, trigger management CRUD, cache invalidation, alias behavior, WildcardMatcher special patterns, ConditionEngine operator coverage) | ✅ | `EventsPhase18ProductionTest.php` |
 | Phase 19 production (console #[\Override] attributes, final classes, typed properties, strict types, config completeness, ServiceProvider bindings, handle() return types) | ✅ | `EventsPhase19ProductionTest.php` |
 | Phase 20 production (strict types, final classes, interface contracts, binding lifecycle, facade accessor, config completeness, model config, status constants, DomainEvent readonly/roundtrip, WildcardMatcher #[Pure], fluent interface, #[Override] verification, matchesEvent, cache invalidation, CRUD, fire/fireModel validation, version consistency) | ✅ | `EventsPhase20ProductionTest.php` |
+| Phase 21 production (return type verification for all EventManager methods, unused import cleanup, config merge verification, migration config-driven tables, TriggerBuilder deduplication, ConditionEngine null/edge cases, WildcardMatcher comprehensive edge cases, DomainEvent readonly properties, EscapesWildcardLike comprehensive, EventLog status transitions, Trigger scopes, Pest.php completeness, strict_types enforcement, version format) | ✅ | `EventsPhase21ProductionTest.php` |
 
 ## How It Works
 
