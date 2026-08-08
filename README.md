@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.54.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.55.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 86 test files (Pest)
+└── tests/                      # 82 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (86 test files)
+composer test        # Run Pest test suite (82 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -479,7 +479,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 18 production (fire/fireModel validation, TriggerBuilder save validation/encoding, SubscriptionBuilder save validation/HMAC, DomainEvent fromArray edge cases, trigger management CRUD, cache invalidation, alias behavior, WildcardMatcher special patterns, ConditionEngine operator coverage) | ✅ | `EventsPhase18ProductionTest.php` |
 | Phase 19 production (console #[\Override] attributes, final classes, typed properties, strict types, config completeness, ServiceProvider bindings, handle() return types) | ✅ | `EventsPhase19ProductionTest.php` |
 | Phase 20 production (strict types, final classes, interface contracts, binding lifecycle, facade accessor, config completeness, model config, status constants, DomainEvent readonly/roundtrip, WildcardMatcher #[Pure], fluent interface, #[Override] verification, matchesEvent, cache invalidation, CRUD, fire/fireModel validation, version consistency) | ✅ | `EventsPhase20ProductionTest.php` |
-| Phase 21 production (return type verification for all EventManager methods, unused import cleanup, config merge verification, migration config-driven tables, TriggerBuilder deduplication, ConditionEngine null/edge cases, WildcardMatcher comprehensive edge cases, DomainEvent readonly properties, EscapesWildcardLike comprehensive, EventLog status transitions, Trigger scopes, Pest.php completeness, strict_types enforcement, version format) | ✅ | `EventsPhase21ProductionTest.php` |
+| Phase 21 production (return type verification, unused import cleanup, config merge verification, migration config-driven tables, TriggerBuilder deduplication, ConditionEngine null/edge cases, WildcardMatcher comprehensive, DomainEvent readonly/roundtrip, EscapesWildcardLike comprehensive, EventLog status transitions, Pest.php completeness, strict_types enforcement, version format) | ✅ | `EventsPhase21ProductionTest.php` |
+| Phase 22 production (Pest.php duplicate detection, strict types enforcement, final class verification, return type declarations, #[Override] verification, ServiceProvider binding lifecycle, config completeness, Facade accessor, ConditionEngine operator matrix, WildcardMatcher comprehensive, EscapesWildcardLike, DomainEvent readonly/immutability, model scopes/relations, parseActions @phpstan-return annotation, version consistency, WildcardMatcher #[Pure], Subscription signPayload, TriggerBuilder/SubscriptionBuilder validation, ActionResolver errors, ManagesHistory/ManagesSubscriptions methods, fluent interface return types, config merge) | ✅ | `EventsPhase22ProductionTest.php` |
 
 ## How It Works
 
@@ -679,6 +680,13 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.55.0
+
+- **Fixed**: Duplicate `EventsPhase17ProductionTest.php` entry in `Pest.php` `uses()` list — now correctly lists `EventsPhase18ProductionTest.php` once.
+- **Added**: `@phpstan-return` annotation on `EventManager::parseActions()` — explicitly declares the PHPStan return type (`list<string|array{class: string, params?: array<string, mixed>}>`) for stricter type inference at PHPStan level 9.
+- **Added**: `EventsPhase22ProductionTest.php` — 80+ new tests covering: Pest.php duplicate detection and completeness, strict types enforcement (all source + test files), final class verification (all core + console commands), return type declarations (all public methods on core classes), `#[Override]` attribute verification (interfaces, models, ServiceProvider), ServiceProvider binding lifecycle (singleton/transient/contract identity), config completeness (all 6 sections + sub-keys), Facade accessor correctness, ConditionEngine full operator matrix (all 19 operators + empty + null + AND logic + dot notation), WildcardMatcher comprehensive patterns (exact, *, **, catch-all, multi-wildcard, findMatching, extractWildcards), EscapesWildcardLike trait behavior (null, *, SQL escaping), DomainEvent readonly properties + roundtrip preservation + immutability, model scopes and relations verification, EventLog status constants consistency, `parseActions` `@phpstan-return` annotation presence, version consistency (composer.json vs README badge), WildcardMatcher `#[Pure]` attribute, Subscription signPayload edge cases, TriggerBuilder/SubscriptionBuilder save validation, ActionResolver error handling, ManagesHistory/ManagesSubscriptions trait method existence, fluent interface return types, config merge verification.
+- **Changed**: Version bumped to 1.55.0, test file count updated to 82.
 
 ### v1.53.0
 

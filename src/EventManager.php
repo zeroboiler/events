@@ -438,6 +438,8 @@ final class EventManager
      * - JSON array of objects:  [{"class": "...", "params": {...}}, ...]
      *
      * @return list<string|array{class: string, params?: array<string, mixed>}>
+     *
+     * @phpstan-return list<string|array{class: string, params?: array<string, mixed>}>
      */
     protected function parseActions(string $action): array
     {
