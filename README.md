@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.62.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.63.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 94 test files (Pest)
+└── tests/                      # 95 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (94 test files)
+composer test        # Run Pest test suite (95 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -487,7 +487,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 || Phase 26 production (parseActions 5 formats, WebhookAction payload stripping, DispatchTriggerJob property types/readonly, DomainEvent edge cases, Facade @method completeness, Config merge verification, Model fillable consistency, Factory definition/state return types, migration up() existence, EventLog status constants, interface return types, ActionResolver errors, WildcardMatcher regex specials, ConditionEngine dot notation/between-inverted/ReDoS, Subscription signPayload edge cases) | ✅ | `EventsPhase26ProductionTest.php` |
 ||| Phase 27 production (strict types sweep, trait composition validation, config publish tags, console command prefix/final/typed properties, interface parameter types, DomainEvent toArray/fromArray key consistency, Facade resolved instance type, model relation return types, ServiceProvider binding verification, ConditionEngine full operator coverage + AND logic + null rejection, constructor parameter types, model casts completeness, WildcardMatcher #[Pure] verification, EventManager public method return types, final class sweep, composer.json version consistency, model boot UUID generation, WebhookAction/ConditionEngine interface verification, EscapesWildcardLike SQL escaping) | ✅ | `EventsPhase27ProductionTest.php` |
 |||| Phase 28 production (DomainEvent constructor void return type removal, EventsUnsubscribeCommand early string cast, comprehensive verification: strict types, final classes, interface contracts, constructor types, readonly properties, config completeness, config type validation, facade accessor, WildcardMatcher #[Pure], EventLog status constants, model config-driven table names, model key type/incrementing consistency, model relation return types, model casts completeness, ServiceProvider bindings (singleton/transient/contract identity), TriggerBuilder/SubscriptionBuilder fluent interface, EventManager public method return types, version consistency, EscapesWildcardLike SQL escaping, ActionResolver types, WebhookAction/ConditionEngine #[Override], console command prefix verification, config publish tags, ManagesHistory/ManagesSubscriptions trait composition, DomainEvent roundtrip/toArray keys, DispatchTriggerJob property types, migration file existence, Pest.php registration) | ✅ | `EventsPhase28ProductionTest.php` |
-|||| Phase 29 production (new factory states: EventLogFactory withEvent/forTrigger/withPayload/withDuration, SubscriptionFactory withFailureCount/withDeliveryCount/withPriority, TriggerFactory forEvent/withAction/withName; factory base definition structure; EventManager API surface on/register/enable/disable/deleteTrigger/invalidateTriggerCache; TriggerBuilder/SubscriptionBuilder fluent interface; DomainEvent identity roundtrip/readonly/fromArray edge cases; ConditionEngine full operator matrix + AND logic; WildcardMatcher exhaustive patterns; config completeness/type validation; ServiceProvider binding lifecycle; Facade accessor; model UUID key types/casts/status constants; strict types enforcement; final class verification; console command prefix/return types; WildcardMatcher #[Pure]; #[Override] verification; trait composition; Subscription signPayload/hasExceededFailures; migration structure; config publish tags; version consistency; EventManager CRUD/fire/fireModel validation) | ✅ | `EventsPhase29ProductionTest.php` |
+||||| Phase 29 production (new factory states: EventLogFactory withEvent/forTrigger/withPayload/withDuration, SubscriptionFactory withFailureCount/withDeliveryCount/withPriority, TriggerFactory forEvent/withAction/withName; factory base definition structure; EventManager API surface on/register/enable/disable/deleteTrigger/invalidateTriggerCache; TriggerBuilder/SubscriptionBuilder fluent interface; DomainEvent identity roundtrip/readonly/fromArray edge cases; ConditionEngine full operator matrix + AND logic; WildcardMatcher exhaustive patterns; config completeness/type validation; ServiceProvider binding lifecycle; Facade accessor; model UUID key types/casts/status constants; strict types enforcement; final class verification; console command prefix/return types; WildcardMatcher #[Pure]; #[Override] verification; trait composition; Subscription signPayload/hasExceededFailures; migration structure; config publish tags; version consistency; EventManager CRUD/fire/fireModel validation) | ✅ | `EventsPhase29ProductionTest.php` |
+||||| Phase 30 production (DispatchTriggerJob eventLogId initial null/constructor config edge cases; WebhookAction payload stripping verification/URL validation; ConditionEngine not_in/in null actual/===/!==/>=/<=/between non-array/regex length/ReDoS rejection/strictEquals cross-type/nested value null; TriggerBuilder resolveActions deduplication/merge/empty; SubscriptionBuilder save validation (ftp URL/non-URL/empty event/empty URL); EventManager listTriggers return type; model getTable config fallback/custom config; DomainEvent fromArray non-string occurredAt/non-array payload; model scopes return types; model relations return types; ActionResolver error cases; factory definition key types; factory parent class; composer autoload PSR-4/extra.laravel; config all section key completeness; ServiceProvider config merge/migration load; WildcardMatcher #[Pure] on all public methods) | ✅ | `EventsPhase30ProductionTest.php` |
 
 ## How It Works
 

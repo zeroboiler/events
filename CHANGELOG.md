@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.63.0] — 2026-08-08
+
+### Added
+- `EventsPhase30ProductionTest.php` — 80+ production-ready tests covering: DispatchTriggerJob eventLogId initial null state and constructor config edge cases (invalid/zero tries); WebhookAction payload stripping verification and URL validation (empty, missing, non-string); ConditionEngine operator edge cases (not_in/in with null actual, === strict identity, !== strict inequality, >= and <= with null, between non-array value, regex max length rejection, catastrophic backtracking pattern rejection, strictEquals cross-type scalar comparison, getNestedValue missing nested keys); TriggerBuilder resolveActions deduplication (all duplicates, action+actions merge, empty); SubscriptionBuilder save validation (ftp URL scheme, non-URL string, empty event, empty URL); EventManager listTriggers return type; model getTable config fallback (custom value, non-string config, default); DomainEvent fromArray edge cases (non-string occurredAt, non-array payload); model scope return type verification; model relation return types; ActionResolver error cases (non-existent class, non-Triggerable class); factory definition key types; factory parent class verification; composer autoload PSR-4 and extra.laravel structure; config all section key completeness; ServiceProvider config merge and migration load verification; WildcardMatcher #[Pure] on all public static methods.
+
+### Changed
+- Removed deprecated `setAccessible(true)` call from Phase 29 test (PHP 8.5+ makes all reflection methods accessible by default).
+- Version bumped to 1.63.0.
+- Test file count updated to 95.
+
+---
+
 ## [1.62.0] — 2026-08-08
 
 ### Added

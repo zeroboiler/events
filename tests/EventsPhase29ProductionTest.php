@@ -601,7 +601,7 @@ it('EscapesWildcardLike handles SQL special characters', function (): void {
     $engine = new ConditionEngine;
 
     $ref = new ReflectionMethod($engine, 'wildcardToLike');
-    $ref->setAccessible(true);
+    // PHP 8.5+ no longer requires setAccessible — removed deprecated call
 
     // Percent sign in pattern should be escaped
     $result = $ref->invoke($engine, 'test%*');
