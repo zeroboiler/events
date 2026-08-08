@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.68.0] — 2026-08-08
+
+### Added
+- `EventsPhase36ProductionTest.php` — 80+ new comprehensive production tests covering: trait composition (EventManager/ManagesHistory/ManagesSubscriptions/EscapesWildcardLike), ConditionEngine getNestedValue edge cases (missing key, non-array intermediate, non-nested, deeply nested), operator matrix comprehensive (empty array condition, single key-value, multi-condition AND, strictEquals cross-type, between inverted, matches long pattern/nested quantifiers), WildcardMatcher special chars (parens, plus, brackets, exact, catch-all empty rejection, extractWildcards edge cases), DomainEvent serialization (toArray key completeness, fromArray preservation, empty eventType throws, non-string throws, fresh UUID, readonly verification), model fillable/hidden/casts arrays (Trigger/EventLog/Subscription), config file structure and default values, factory state methods return types, file header license comment presence, namespace declarations, fire/fireModel validation (empty event, "0" event, empty model class, empty action), TriggerBuilder validation (empty event, no action), SubscriptionBuilder validation (empty event, empty URL, non-HTTP URL), conditions conversion, DispatchTriggerJob config-driven properties (tries, backoff, queue, connection, eventLogId), ServiceProvider binding integrity (singleton/transient verification), model scopes (Trigger/EventLog/Subscription), WebhookAction interface compliance, EscapesWildcardLike behavior, ActionResolver error handling, composer.json autoload/extra.laravel structure, migration file integrity (up/down methods, file count), phpstan config structure, facade @method completeness, cache TTL edge cases, CRUD edge cases (getTrigger/deleteTrigger/enable/disable non-existent), TriggerBuilder resolveActions (deduplication, merge), version consistency.
+
+### Changed
+- Version bumped to 1.68.0.
+- Test file count updated to 96.
+
+---
+
 ## [1.67.0] — 2026-08-08
 
 ### Fixed

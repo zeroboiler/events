@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.67.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.68.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 95 test files (Pest)
+└── tests/                      # 96 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -494,6 +494,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 || Phase 33 production (EventManager CRUD edge cases, model relations, DomainEvent fromArray edge cases, ConditionEngine empty/null/AND logic, WildcardMatcher extract/findMatching, model scopes, EventLog status transitions, Subscription delivery/failure/signing/matching, TriggerBuilder auto-name/actions/params, SubscriptionBuilder validation/rejection, EscapesWildcardLike SQL escaping, getEventHistory filters, getStats zero-state, purgeLogs, ActionResolver errors, config validation, ServiceProvider singleton/transient/contract, Facade accessor, strict types enforcement, final class verification, console command final, version consistency, #[Override] verification, model config tables, model key types, migration existence, factory types, Pest.php registration) | ✅ | `EventsPhase33ProductionTest.php` |
 || Phase 34 production (fire/fireModel validation, TriggerBuilder deduplication/order, SubscriptionBuilder transaction/URL validation/auto-secret, ConditionEngine strictEquals/AND/empty, WildcardMatcher findMatchingPatterns/extract order, DomainEvent fromArray minimal/roundtrip, DispatchTriggerJob backoff/tries config, EventLog status lifecycle, Subscription delivery/failure/signing/matchesEvent/hasExceededFailures, getStats zero-state, purgeLogs, EscapesWildcardLike, ActionResolver errors, Facade accessor, strict types, final classes, config completeness, ServiceProvider bindings, model boot UUID, version consistency, fluent interface) | ✅ | `EventsPhase34ProductionTest.php` |
 || Phase 35 production (signPayload hash_hmac false safety, strict types enforcement, final class verification, interface contracts, ServiceProvider singleton/transient bindings, facade accessor, config completeness all 6 sections, EventLog status constants, DomainEvent readonly keyword, WildcardMatcher #[Pure] attributes, model config-driven table names, return type declarations, console command return types, version consistency) | ✅ | `EventsPhase35ProductionTest.php` |
+|| Phase 36 production (trait composition, ConditionEngine getNestedValue edge cases, operator matrix comprehensive, WildcardMatcher special chars, DomainEvent serialization, model fillable/hidden/casts, config structure, factory states, file headers, namespaces, fire/fireModel validation, TriggerBuilder/SubscriptionBuilder validation, DispatchTriggerJob config properties, ServiceProvider bindings, model scopes, WebhookAction interface, EscapesWildcardLike, ActionResolver errors, composer.json structure, migrations, phpstan config, facade completeness, cache TTL, CRUD edge cases, TriggerBuilder resolveActions, version consistency) | ✅ | `EventsPhase36ProductionTest.php` |
 
 ## How It Works
 
@@ -696,6 +697,11 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.68.0
+
+- **Added**: `EventsPhase36ProductionTest.php` — 80+ new comprehensive tests covering: trait composition (EventManager/ManagesHistory/ManagesSubscriptions/EscapesWildcardLike), ConditionEngine getNestedValue edge cases (missing key, non-array intermediate, non-nested, deeply nested), operator matrix comprehensive (empty array condition, single key-value, multi-condition AND, strictEquals cross-type, between inverted, matches long pattern/nested quantifiers), WildcardMatcher special chars (parens, plus, brackets, exact, catch-all empty rejection, extractWildcards edge cases), DomainEvent serialization (toArray key completeness, fromArray preservation, empty eventType throws, non-string throws, fresh UUID, readonly verification), model fillable/hidden/casts arrays (Trigger/EventLog/Subscription), config file structure and default values, factory state methods return types, file header license comment presence, namespace declarations, fire/fireModel validation (empty event, "0" event, empty model class, empty action), TriggerBuilder validation (empty event, no action), SubscriptionBuilder validation (empty event, empty URL, non-HTTP URL), conditions conversion, DispatchTriggerJob config-driven properties (tries, backoff, queue, connection, eventLogId), ServiceProvider binding integrity (singleton/transient verification), model scopes (Trigger/EventLog/Subscription), WebhookAction interface compliance, EscapesWildcardLike behavior, ActionResolver error handling, composer.json autoload/extra.laravel structure, migration file integrity (up/down methods, file count), phpstan config structure, facade @method completeness, cache TTL edge cases, CRUD edge cases (getTrigger/deleteTrigger/enable/disable non-existent), TriggerBuilder resolveActions (deduplication, merge), version consistency.
+- **Changed**: Version bumped to 1.68.0, test file count updated to 96.
 
 ### v1.67.0
 
