@@ -11,13 +11,6 @@
         "php_unit_fqcn_annotation": true,
         "blank_line_before_statement": {
             "statements": ["break", "continue", "declare", "return", "throw", "try"]
-        },
-        "header_comment": {
-            "comment_type": "PHPDoc",
-            "header": "This file is part of ZeroBoiler, licensed under the proprietary license.",
-            "location": "after_open",
-            "separate": "bottom"
         }
-    },
-    "exclude": ["tests/Fixtures"]
+    }
 }
