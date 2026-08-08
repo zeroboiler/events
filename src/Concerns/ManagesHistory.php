@@ -21,8 +21,7 @@ use ZeroBoiler\Events\Models\Trigger;
  * single-responsibility.
  *
  * @property-read \Illuminate\Container\Container $app
- *
- * @mixin \ZeroBoiler\Events\EventManager
+ * @property-read \ZeroBoiler\Events\EventManager $manager
  */
 trait ManagesHistory
 {
