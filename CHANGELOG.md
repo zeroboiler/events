@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.66.0] — 2026-08-08
+
+### Fixed
+- Facade `@method` annotations now use fully-qualified class names for all return types and parameters, replacing relative imports. This enables proper IDE autocompletion and PHPStan analysis without relying on `use` imports in the Facade stub.
+
+---
+
 ## [1.65.0] — 2026-08-08
 
 ### Added
