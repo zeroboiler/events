@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.66.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.67.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 98 test files (Pest)
+└── tests/                      # 99 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (98 test files)
+composer test        # Run Pest test suite (99 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -492,6 +492,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 || Phase 31 production (SubscriptionBuilder HTTP-only URL validation — reject ftp://, file://, mailto:; accept http:// and https://; validation ordering — event name before URL scheme, empty URL before scheme check) | ✅ | `EventsPhase31ProductionTest.php` |
 || Phase 32 production (DomainEvent explicit constructor args roundtrip, SubscriptionBuilder auto-generate secret config, conditions empty→null, WebhookAction URL validation edge cases (missing/empty/non-string), signPayload custom algorithm, DispatchTriggerJob property types, ConditionEngine AND logic 2+3 conditions, WildcardMatcher special patterns extraction, TriggerBuilder deduplication integration, EventLog status transitions, Subscription matchesEvent comprehensive, fire no-match, config type validation, ServiceProvider singleton/transient, Facade accessor, strict types sweep, final class verification, model config-driven tables, version consistency, EscapesWildcardLike, getStats zero-state, Trigger/Subscription scopes, DomainEvent fromArray roundtrip) | ✅ | `EventsPhase32ProductionTest.php` |
 || Phase 33 production (EventManager CRUD edge cases, model relations, DomainEvent fromArray edge cases, ConditionEngine empty/null/AND logic, WildcardMatcher extract/findMatching, model scopes, EventLog status transitions, Subscription delivery/failure/signing/matching, TriggerBuilder auto-name/actions/params, SubscriptionBuilder validation/rejection, EscapesWildcardLike SQL escaping, getEventHistory filters, getStats zero-state, purgeLogs, ActionResolver errors, config validation, ServiceProvider singleton/transient/contract, Facade accessor, strict types enforcement, final class verification, console command final, version consistency, #[Override] verification, model config tables, model key types, migration existence, factory types, Pest.php registration) | ✅ | `EventsPhase33ProductionTest.php` |
+|| Phase 34 production (fire/fireModel validation, TriggerBuilder deduplication/order, SubscriptionBuilder transaction/URL validation/auto-secret, ConditionEngine strictEquals/AND/empty, WildcardMatcher findMatchingPatterns/extract order, DomainEvent fromArray minimal/roundtrip, DispatchTriggerJob backoff/tries config, EventLog status lifecycle, Subscription delivery/failure/signing/matchesEvent/hasExceededFailures, getStats zero-state, purgeLogs, EscapesWildcardLike, ActionResolver errors, Facade accessor, strict types, final classes, config completeness, ServiceProvider bindings, model boot UUID, version consistency, fluent interface) | ✅ | `EventsPhase34ProductionTest.php` |
 
 ## How It Works
 
