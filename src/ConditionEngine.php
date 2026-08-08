@@ -55,10 +55,10 @@ final class ConditionEngine implements ConditionEngineContract
 
             // Guard against null actual values for comparison operators
             return match ($operator) {
-                '>' => $actual !== null && is_numeric($actual) && $actual > $value,
-                '>=' => $actual !== null && is_numeric($actual) && $actual >= $value,
-                '<' => $actual !== null && is_numeric($actual) && $actual < $value,
-                '<=' => $actual !== null && is_numeric($actual) && $actual <= $value,
+                '>' => $actual !== null && $value !== null && is_numeric($actual) && is_numeric($value) && $actual > $value,
+                '>=' => $actual !== null && $value !== null && is_numeric($actual) && is_numeric($value) && $actual >= $value,
+                '<' => $actual !== null && $value !== null && is_numeric($actual) && is_numeric($value) && $actual < $value,
+                '<=' => $actual !== null && $value !== null && is_numeric($actual) && is_numeric($value) && $actual <= $value,
                 '=' => $this->strictEquals($actual, $value),
                 '===' => $actual === $value,
                 '!=' => ! $this->strictEquals($actual, $value),

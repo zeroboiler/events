@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.51.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.52.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -349,7 +349,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 78 test files (Pest)
+└── tests/                      # 79 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -392,7 +392,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (78 test files)
+composer test        # Run Pest test suite (79 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -467,6 +467,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | ConditionEngine edge cases (strictEquals, operators, nested null, between auto-normalize, regex limits, AND logic) | ✅ | `ConditionEngineEdgeCasesTest.php` |
 | Phase 8 production (dot notation, cache invalidation, trigger builder params, subscription scopes, domain event extras, contract singleton, config validation) | ✅ | `EventsPhase8ProductionTest.php` |
 | Phase 9 production (redeliver payload stripping, timeout config, ConditionEngine null operators, model boot UUID, TriggerBuilder/SubscriptionBuilder validation, WebhookAction error cases, DispatchTriggerJob edge config, EventLog mark methods, Subscription signing determinism, config type validation, contract singleton, ActionResolver errors) | ✅ | `EventsPhase9ProductionTest.php` |
+| Null-value comparison operators (>, >=, <, <= with null value/actual, between null, in/not_in null, null/not_null operators) | ✅ | `ConditionEngineNullComparisonTest.php` |
 | Phase 10 production (fire/fireModel empty validation, DispatchTriggerJob array backoff config, ConditionEngine operators, WildcardMatcher edge cases, DomainEvent roundtrip, config completeness, ServiceProvider bindings, final classes, readonly properties, strict types enforcement, facade accessor) | ✅ | `EventsPhase10ProductionTest.php` |
 | Phase 11 production (SubscriptionBuilder transaction atomicity, validation-before-transaction, action params verification, WebhookAction subscription failure tracking optimization, hasExceededFailures config/custom, delivery tracking, signPayload determinism) | ✅ | `EventsPhase11ProductionTest.php` |
 | Phase 12 production (ServiceProvider bindings, Facade accessor, WildcardMatcher edge cases, ConditionEngine operator coverage, DomainEvent roundtrip/edge cases, Trigger model scopes, EventLog mark methods, Subscription signing/failures/matching, EventManager fire/fireModel, Config completeness, Strict types enforcement, Final class verification, EscapesWildcardLike) | ✅ | `EventsPhase12ProductionTest.php` |
@@ -644,7 +645,7 @@ Before deploying to production, verify:
 
 | Operator | Syntax | Description |
 |----------|--------|-------------|
-| `>`, `>=`, `<`, `<=` | `['amount', ['>', 100]]` | Numeric comparison (null-safe) |
+| `>`, `>=`, `<`, `<=` | `['amount', ['>', 100]]` | Numeric comparison (null-safe; both operands must be non-null) |
 | `=`, `===` | `['status', 'paid']` / `['flag', ['===', true]]` | Equality / strict equality |
 | `!=`, `!==` | `['status', ['!=', 'draft']]` | Inequality / strict inequality |
 | `in` | `['role', ['in', ['admin', 'mod']]]` | Value in array |
@@ -676,6 +677,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.52.0
+
+- **Fixed**: **CRITICAL** `ConditionEngine` comparison operators (`>`, `>=`, `<`, `<=`) now guard against null `$value` in addition to null `$actual` — previously, conditions like `['amount', ['>', null]]` would evaluate incorrectly due to PHP type juggling (e.g., `100 > null` → true). All 4 operators now require both operands to be non-null and numeric.
+- **Added**: `ConditionEngineNullComparisonTest.php` — 11 new tests covering: null value comparison rejection (all 4 operators), null actual value comparison rejection (all 4 operators), correct non-null comparison evaluation, between operator with null value, between operator with inverted range, `in`/`not_in` with null value, and `null`/`not_null` operator behavior.
+- **Changed**: Version bumped to 1.52.0, test file count updated to 79.
 
 ### v1.51.0
 
