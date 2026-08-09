@@ -54,17 +54,17 @@ use ZeroBoiler\Events\WildcardMatcher;
  */
 
 describe('Phase 47 Production Tests', function () {
-    describe('rector.php Laravel 13 compatibility', function () {
-        it('contains LARAVEL_130 set reference', function () {
+    describe('rector.php Laravel compatibility', function () {
+        it('contains LaravelSetList reference', function () {
             $rectorFile = file_get_contents(__DIR__.'/../rector.php');
             expect($rectorFile)->toBeString();
             expect($rectorFile)->toContain('LaravelSetList');
-            expect($rectorFile)->toContain('LARAVEL_130');
+            expect($rectorFile)->toContain('LARAVEL_120');
         });
 
-        it('does not reference LARAVEL_120', function () {
+        it('does not reference non-existent LARAVEL_130', function () {
             $rectorFile = file_get_contents(__DIR__.'/../rector.php');
-            expect($rectorFile)->not->toContain('LARAVEL_120');
+            expect($rectorFile)->not->toContain('LARAVEL_130');
         });
     });
 
