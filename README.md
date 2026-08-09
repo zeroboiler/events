@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.77.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.78.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -756,6 +756,10 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.78.0
+
+- **Fixed**: `EventsPhase41ProductionTest.php` was missing from `Pest.php` `uses()` call — tests in that file were not getting Laravel bootstrap and would fail at runtime.
 
 ### v1.77.0
 

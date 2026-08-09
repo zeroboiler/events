@@ -83,7 +83,7 @@ it('WildcardMatcher is final class with #[Pure] on all public methods', function
             }
         }
         // Only check key public API methods
-        if (in_array($method->getName(), ['match', 'isMatch', 'extractWildcards', 'findMatchingPatterns'], true)) {
+        if (in_array($method->getName(), ['matches', 'extractWildcards', 'findMatchingPatterns'], true)) {
             expect($hasPure)->toBeTrue("WildcardMatcher::{$method->getName()} missing #[Pure] attribute");
         }
     }
@@ -121,10 +121,10 @@ it('all 11 console commands have zeroboiler:events: prefix', function (): void {
 it('config file has all required top-level keys', function (): void {
     $config = require __DIR__.'/../config/events.php';
 
-    expect($config)->toHaveKey('events');
-    expect($config)->toHaveKey('subscriptions');
-    expect($config)->toHaveKey('logging');
+    expect($config)->toHaveKey('table_names');
+    expect($config)->toHaveKey('queue');
     expect($config)->toHaveKey('retry');
-    expect($config)->toHaveKey('cache');
-    expect($config)->toHaveKey('default_connection');
+    expect($config)->toHaveKey('retention');
+    expect($config)->toHaveKey('subscriptions');
+    expect($config)->toHaveKey('wildcard_cache_ttl');
 });
