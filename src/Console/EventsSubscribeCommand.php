@@ -27,26 +27,37 @@ final class EventsSubscribeCommand extends Command
     public function handle(EventManager $eventManager): int
     {
         $event = $this->argument('event');
+        if (! is_string($event)) {
+            $this->error('Event name must be a string.');
+
+            return Command::FAILURE;
+        }
+
         $url = $this->argument('url');
+        if (! is_string($url)) {
+            $this->error('Webhook URL must be a string.');
+
+            return Command::FAILURE;
+        }
+
         $secret = $this->option('secret');
         $filter = $this->option('filter');
         $priority = (int) $this->option('priority');
         $async = $this->option('async') === true;
 
-        $builder = $eventManager->subscribe((string) $event, (string) $url)
+        $builder = $eventManager->subscribe($event, $url)
             ->priority($priority);
 
         if ($async) {
             $builder->async();
         }
 
-        if ($secret !== null && $secret !== '') {
-            $builder->withSecret(is_string($secret) ? $secret : '');
+        if (is_string($secret) && $secret !== '') {
+            $builder->withSecret($secret);
         }
 
-        if ($filter !== null && $filter !== '') {
-            $filterString = is_string($filter) ? $filter : '';
-            $conditions = json_decode($filterString, true);
+        if (is_string($filter) && $filter !== '') {
+            $conditions = json_decode($filter, true);
             if (json_last_error() !== \JSON_ERROR_NONE) {
                 $this->error('Invalid JSON in --filter option: '.json_last_error_msg());
 

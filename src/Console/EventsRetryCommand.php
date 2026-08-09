@@ -25,7 +25,8 @@ final class EventsRetryCommand extends Command
     #[\Override]
     public function handle(EventManager $eventManager): int
     {
-        $status = (string) $this->option('status');
+        $statusOption = $this->option('status');
+        $status = is_string($statusOption) ? $statusOption : '';
 
         if (! in_array($status, [EventLog::STATUS_FAILED, EventLog::STATUS_PENDING], true)) {
             $this->error('Invalid status. Must be "failed" or "pending".');

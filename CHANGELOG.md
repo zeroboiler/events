@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.94.0] — 2026-08-09
+
+### Fixed
+- `EventsRegisterCommand::handle()` now uses `is_string()` type guards on `$event` and `$action` arguments — `$this->argument()` returns `string|array<int, string>|null` in Laravel 13, and the previous `(string)` cast would silently coerce array values. Early return with error message on non-string input.
+- `EventsSubscribeCommand::handle()` now uses `is_string()` type guards on `$event` and `$url` arguments — same issue as EventsRegisterCommand. Also simplified `$secret` and `$filter` option guards from redundant ternary `is_string()` checks to clean `is_string()` guard clauses.
+- `EventsRetryCommand::handle()` now uses `is_string()` type guard on `$status` option — `$this->option('status')` returns `string|bool|int|null|array`, and the previous `(string)` cast could produce incorrect values from boolean/array inputs.
+
+### Added
+- `EventsPhase53ProductionTest.php` — 35 new production tests covering: EventsRegisterCommand is_string() type guards (event + action), EventsSubscribeCommand is_string() type guards (event + url + secret + filter), EventsRetryCommand is_string() guard, comprehensive quality verification (strict types all source files, final class verification 11 core + 11 console commands, Singleton/transient binding verification, contract identity, config completeness all 6 sections + sub-keys, EventLog status constants, DomainEvent roundtrip preservation, WildcardMatcher #[Pure] attribute verification, EscapesWildcardLike trait usage in 7 classes, model config-driven table names, UUID key types, EventManager public API surface completeness 20 methods, fluent interface return types, Pest.php test file count accuracy, version consistency).
+
+### Changed
+- Version bumped to 1.94.0, test file count updated to 120.
+
+---
+
 ## [1.93.0] — 2026-08-09
 
 ### Fixed

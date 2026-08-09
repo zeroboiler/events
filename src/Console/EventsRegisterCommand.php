@@ -26,18 +26,30 @@ final class EventsRegisterCommand extends Command
     public function handle(EventManager $eventManager): int
     {
         $event = $this->argument('event');
+        if (! is_string($event)) {
+            $this->error('Event name must be a string.');
+
+            return Command::FAILURE;
+        }
+
         $action = $this->argument('action');
+        if (! is_string($action)) {
+            $this->error('Action class must be a string.');
+
+            return Command::FAILURE;
+        }
+
         $name = $this->option('name');
         $async = $this->option('async') === true;
         $priority = (int) $this->option('priority');
 
-        $builder = $eventManager->on((string) $event);
+        $builder = $eventManager->on($event);
 
         if ($name !== null && $name !== '') {
             $builder->name((string) $name);
         }
 
-        $builder->action((string) $action)->async($async)->priority($priority);
+        $builder->action($action)->async($async)->priority($priority);
 
         try {
             $trigger = $builder->save();

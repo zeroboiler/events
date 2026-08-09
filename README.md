@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.93.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.94.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -417,7 +417,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 119 test files (Pest)
+└── tests/                      # 120 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -460,7 +460,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (119 test files)
+composer test        # Run Pest test suite (120 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -581,6 +581,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 48 production (phpstan.neon.dist tightened ignores, parseActions 5 formats return types, ConditionEngine unknown/empty operators, WebhookAction payload stripping, SubscriptionBuilder auto-secret, DispatchTriggerJob config normalization, factory state returns, strict types, final classes, interfaces, #[Pure], #[Override], readonly properties, ServiceProvider bindings, config completeness, version consistency, fluent interface, Facade accessor) | ✅ | `EventsPhase48ProductionTest.php` |
 | Phase 49 production (strict types verification, config completeness, ConditionEngine operator coverage, WildcardMatcher all documented patterns + extractWildcards, DomainEvent serialization round-trip + fromArray invalid eventType, Triggerable interface signature, ConditionEngineContract implementation, Facade accessor, EventLog status constants, DispatchTriggerJob constructor params, EscapesWildcardLike trait usage in EventManager/ManagesHistory/ManagesSubscriptions) | ✅ | `EventsPhase49ProductionTest.php` |
 | Phase 52 production (EventsListCommand/EventsSubscriptionsCommand is_string() type guards, EventsLogCommand is_string() verification, README test file count accuracy, version consistency, all console --event commands type safety, no deprecated !== null guard, ServiceProvider 11 commands, config completeness, strict types enforcement, final class verification, Pest.php registration) | ✅ | `EventsPhase52ProductionTest.php` |
+| Phase 53 production (EventsRegisterCommand/EventsSubscribeCommand is_string() type guards, EventsRetryCommand is_string() guard, comprehensive quality verification: strict types, final classes, console commands, Singleton/transient bindings, contract identity, config completeness, status constants, DomainEvent roundtrip, WildcardMatcher #[Pure], EscapesWildcardLike trait usage, model config-driven tables, key types, API surface completeness, fluent interface, Pest.php completeness, version consistency) | ✅ | `EventsPhase53ProductionTest.php` |
 
 ## How It Works
 
@@ -783,6 +784,13 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.94.0
+
+- **Fixed**: `EventsRegisterCommand` now uses `is_string()` type guards on `$event` and `$action` arguments instead of `(string)` casts — `$this->argument()` returns `string|array|null` in Laravel 13, and silent coercion of array values could cause unexpected behavior.
+- **Fixed**: `EventsSubscribeCommand` now uses `is_string()` type guards on `$event`, `$url`, `$secret`, and `$filter` inputs — simplified from redundant ternary checks to clean guard clauses.
+- **Fixed**: `EventsRetryCommand` now uses `is_string()` type guard on `$status` option — `$this->option('status')` can return `bool|int|array`.
+- **Added**: `EventsPhase53ProductionTest.php` — 35 new production tests covering: type guard verification on 3 console commands, strict types enforcement, final class verification, Singleton/transient bindings, config completeness, DomainEvent roundtrip, WildcardMatcher #[Pure], EscapesWildcardLike usage, model config-driven tables, API surface completeness, fluent interface, Pest.php registration, version consistency.
 
 ### v1.91.0
 
