@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.73.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.74.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -288,7 +288,7 @@ EventManager::invalidateTriggerCache();
 | `zeroboiler:events:disable {id}` | Disable a trigger |
 | `zeroboiler:events:retry {logId}` | Retry a failed event log |
 | `zeroboiler:events:redeliver {logId}` | Redeliver an event log |
-| `zeroboiler:events:log` | View event log history |
+| `zeroboiler:events:log` | View event logs (supports `--event` with wildcards) |
 | `zeroboiler:events:subscribe` | Create a webhook subscription |
 | `zeroboiler:events:unsubscribe {id}` | Remove a webhook subscription |
 | `zeroboiler:events:subscriptions` | List webhook subscriptions |
@@ -403,7 +403,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 100 test files (Pest)
+└── tests/                      # 101 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -446,7 +446,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (100 test files)
+composer test        # Run Pest test suite (101 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -504,6 +504,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | TriggerBuilder action merging, executeTrigger exception propagation, empty fire | ✅ | `EventManagerAdvancedTest.php` |
 | List command (pagination, event/enable/disable filters) | ✅ | `EventsListCommandTest.php` |
 | Log command (trigger/status filters, limit, validation) | ✅ | `EventsLogCommandTest.php` |
+| Log command event filter (exact, wildcard, combined, limit) | ✅ | `EventsLogCommandEventFilterTest.php` |
 | Subscribe command (secret, filter, async, priority) | ✅ | `EventsSubscribeCommandTest.php` |
 | Unsubscribe command (remove, non-existent) | ✅ | `EventsUnsubscribeCommandTest.php` |
 | Subscriptions command (event/active/inactive/wildcard filters, pagination) | ✅ | `EventsSubscriptionsCommandTest.php` |
@@ -754,6 +755,13 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.74.0
+
+- **Added**: `--event` option to `zeroboiler:events:log` command — filter event logs by event name with wildcard support (e.g., `--event=order.*`). Previously, the log command only supported `--trigger` and `--status` filters, despite `EventManager::getEventHistory()` supporting event filtering.
+- **Added**: `EventsLogCommandEventFilterTest.php` — 7 new tests covering: exact event filter, wildcard event filter, no filter (all logs), no matching events, combined event + status filter, combined event + trigger filter, limit with event filter.
+- **Fixed**: `EventManager::deleteTrigger()` docblock — added missing `@param` annotation for PHPStan 9 and IDE hover tooltips.
+- **Changed**: Version bumped to 1.74.0, test file count updated to 101.
 
 ### v1.73.0
 

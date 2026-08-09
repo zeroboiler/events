@@ -38,6 +38,7 @@ uses(TestCase::class)->in(
     'EventHistoryStatsTest.php',
     'EventsListCommandTest.php',
     'EventsLogCommandTest.php',
+    'EventsLogCommandEventFilterTest.php',
     'EventsServiceProviderConfigTest.php',
     'EventsSubscribeCommandTest.php',
     'EventsSubscriptionsCommandTest.php',

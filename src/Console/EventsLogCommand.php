@@ -9,11 +9,15 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Console;
 
 use Illuminate\Console\Command;
+use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\Models\EventLog;
 
 final class EventsLogCommand extends Command
 {
+    use EscapesWildcardLike;
+
     protected string $signature = 'zeroboiler:events:log
+                           {--event= : Filter by event name (supports wildcards)}
                            {--trigger= : Filter by trigger ID}
                            {--status= : Filter by status (pending|dispatched|completed|failed)}
                            {--limit=50 : Number of logs to show}';
@@ -24,6 +28,17 @@ final class EventsLogCommand extends Command
     public function handle(): int
     {
         $query = EventLog::query();
+
+        $eventFilter = $this->option('event');
+        if ($eventFilter !== null && $eventFilter !== '') {
+            $eventString = is_string($eventFilter) ? $eventFilter : '';
+            $likePattern = $this->wildcardToLike($eventString);
+            if ($likePattern !== null) {
+                $query->where('event', 'like', $likePattern);
+            } else {
+                $query->where('event', $eventString);
+            }
+        }
 
         $triggerId = $this->option('trigger');
         if ($triggerId !== null && $triggerId !== '') {

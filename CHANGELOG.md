@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.74.0] — 2026-08-09
+
+### Added
+- `--event` option to `zeroboiler:events:log` command — filter event logs by event name with wildcard support (e.g., `--event=order.*`).
+- `EventsLogCommandEventFilterTest.php` — 7 new tests covering: exact event filter, wildcard event filter, no filter (all logs), no matching events, combined event + status filter, combined event + trigger filter, limit with event filter.
+
+### Fixed
+- `EventManager::deleteTrigger()` docblock — added missing `@param` annotation for PHPStan 9 and IDE hover tooltips.
+
+### Changed
+- Version bumped to 1.74.0, test file count updated to 101.
+
+---
+
 ## [1.70.0] — 2026-08-08
 
 ### Added

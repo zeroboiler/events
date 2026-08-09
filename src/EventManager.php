@@ -132,6 +132,8 @@ final class EventManager
      *
      * Returns true if the trigger was found and deleted, false otherwise.
      * Automatically invalidates the trigger cache.
+     *
+     * @param  string  $triggerId  The UUID of the trigger to delete
      */
     public function deleteTrigger(string $triggerId): bool
     {
