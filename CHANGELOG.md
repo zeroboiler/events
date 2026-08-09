@@ -6,6 +6,41 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.83.0] — 2026-08-09
+
+### Added
+- `EventsPhase44ProductionTest.php` — comprehensive final audit tests: CHANGELOG.md presence and version consistency, composer.json autoload PSR-4 structure, rector.php presence and Laravel 130 set, .gitignore completeness (vendor, phpstan.neon, phpstan-baseline.neon, composer.lock), database/migrations directory and file count, database/factories directory and file count, all config file keys present in phpstan.neon.dist, phpstan level 9, all source file license headers, facade `@method` annotations completeness vs EventManager public API, WebhookAction `getTimeout()` and `getMaxFailures()` return type, EventLog `casts()` return type, DomainEvent `fromArray()` graceful handling of all edge cases, SubscriptionBuilder `save()` transaction atomicity verification, ManagesHistory `getStats()` return structure shape, rector.php strict_types enforcement, EventsRedeliverCommand `buildRedeliverBody()` private method existence and return type, phpstan.neon.dist ignoreErrors count, all test files in Pest.php registered or documented as standalone, EventsUnsubscribeCommand `$id` cast type safety, EventsSubscribeCommand `$event`/`$url` cast type safety.
+
+### Changed
+- Version bumped to 1.83.0, test file count updated to 107.
+
+---
+
+## [1.82.0] — 2026-08-09
+
+### Added
+- `EventManager::fire()` now accepts an optional `$async` parameter — when `true`, forces all matching triggers to be dispatched asynchronously via queue, overriding individual trigger `async` settings.
+- `--async` flag to `zeroboiler:events:fire` command.
+
+### Fixed
+- `zeroboiler:events:fire` `--payload` key=value pairs now correctly defer to `--json` keys (JSON takes precedence).
+- `ConditionEngine` unknown operator `default` branch now returns `false` instead of falling through to `strictEquals()`.
+
+### Changed
+- Facade `@method` annotation for `fire()` updated to include `$async` parameter; version bumped to 1.82.0.
+
+---
+
+## [1.81.0] — 2026-08-09
+
+### Added
+- `EventsPhase42ProductionTest.php` — 37 new production tests covering fireModel key collision, empty attributes, parseActions edge cases, DispatchTriggerJob eventLogId, WebhookAction internal key stripping, ConditionEngine empty/missing, WildcardMatcher no-wildcard, builder defaults, CRUD empty state, EventLog constants, signPayload edge cases, ServiceProvider commands, Facade accessor, DomainEvent freshness, config completeness, version consistency.
+
+### Changed
+- Version bumped to 1.81.0, test file count updated to 105.
+
+---
+
 ## [1.80.0] — 2026-08-09
 
 ### Added

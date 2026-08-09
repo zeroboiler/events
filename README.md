@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.82.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.83.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -417,7 +417,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 106 test files (Pest)
+└── tests/                      # 107 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -460,7 +460,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (106 test files)
+composer test        # Run Pest test suite (107 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -570,7 +570,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 40 production (strict types, final classes, interface contracts, #[Override] verification, ServiceProvider bindings, config completeness, model config tables, EventLog status constants, DomainEvent readonly/roundtrip, WildcardMatcher #[Pure], EscapesWildcardLike, ActionResolver errors, ConditionEngine full operator matrix, WildcardMatcher comprehensive, Subscription signing/failure/matching, EventManager CRUD/fire/fireModel validation, TriggerBuilder/SubscriptionBuilder fluent interface, cache invalidation, getStats zero-state, version consistency, Pest.php completeness, composer.json structure, console command prefix, model key types, parseActions edge cases, Migration existence, DispatchTriggerJob config properties, trait method verification, file headers, EventLog status lifecycle) | ✅ | `EventsPhase40ProductionTest.php` |
 | Full lifecycle integration (fire→dispatch→log→stats, priority ordering, cache invalidation, history filtering, purge logs, DomainEvent roundtrip, ActionResolver edge cases, WildcardMatcher comprehensive, ConditionEngine all operators) | ✅ | `EventsLifecycleIntegrationTest.php` |
 | Phase 42 production (fireModel key collision, empty attributes, parseActions edge cases, DispatchTriggerJob eventLogId, WebhookAction payload stripping, ConditionEngine empty/missing, WildcardMatcher no-wildcard, builder defaults, CRUD empty state, EventLog constants, signPayload edge cases, ServiceProvider commands, Facade accessor, DomainEvent freshness, config completeness, version consistency) | ✅ | `EventsPhase42ProductionTest.php` |
-| Phase 43 production (fire() async parameter, ConditionEngine unknown operator fix, EventsFireCommand JSON precedence fix, EventsFireCommand --async flag, Facade annotation, all 19 operators, config completeness, version consistency, strict types, final classes) | ✅ | `EventsPhase43ProductionTest.php` |
+|| Phase 43 production (fire() async parameter, ConditionEngine unknown operator fix, EventsFireCommand JSON precedence fix, EventsFireCommand --async flag, Facade annotation, all 19 operators, config consistency, strict types, final classes) | ✅ | `EventsPhase43ProductionTest.php` |
+| Phase 44 production (CHANGELOG presence, composer.json autoload/extra, rector.php Laravel 130, .gitignore completeness, database directories, phpstan config, license headers, facade @method completeness, WebhookAction private method return types, EventLog casts type, DomainEvent fromArray edge cases, getStats structure, test file registration, command type safety, version consistency) | ✅ | `EventsPhase44ProductionTest.php` |
 
 ## How It Works
 
@@ -773,6 +774,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.83.0
+
+- **Added**: `EventsPhase44ProductionTest.php` — 22 new production tests covering: CHANGELOG.md presence and version consistency, composer.json autoload PSR-4 structure, rector.php presence and Laravel 130 set, .gitignore completeness, database directories (migrations/factories), phpstan config level and ignore errors, all source file license headers, facade `@method` annotations completeness, WebhookAction private method return types, EventLog `casts()` return type, DomainEvent `fromArray()` edge cases (empty array, non-string eventType, invalid UUID, invalid datetime, full roundtrip), ManagesHistory `getStats()` return structure shape, test file registration in Pest.php vs standalone, EventsUnsubscribeCommand `$id` string cast, EventsSubscribeCommand `$event`/`$url` string casts, EventsRedeliverCommand `buildRedeliverBody()` private method existence and return type, version consistency (composer.json vs README badge).
+- **Added**: CHANGELOG.md entries for v1.81.0, v1.82.0, v1.83.0 (previously only in README changelog section).
+- **Changed**: Version bumped to 1.83.0, test file count updated to 107.
 
 ### v1.82.0
 
