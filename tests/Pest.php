@@ -133,6 +133,7 @@ uses(TestCase::class)->in(
     'ManagesHistoryPurgeLogsTest.php',
     'EventsPhase47ProductionTest.php',
     'EventsPhase48ProductionTest.php',
+    'EventsPhase49ProductionTest.php',
 );
 
 // WildcardMatcherTest and EscapesWildcardLikeTest run without TestCase (plain PHP tests)

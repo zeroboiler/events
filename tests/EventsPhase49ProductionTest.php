@@ -50,7 +50,7 @@ describe('Phase 49 Production Audit', function (): void {
     });
 
     test('ConditionEngine operators match documented set', function (): void {
-        $reflection = new ReflectionClass(\ZeroBoiler\ConditionEngine::class);
+        $reflection = new ReflectionClass(\ZeroBoiler\Events\ConditionEngine::class);
         $method = $reflection->getMethod('evaluateCondition');
 
         // Verify all documented operators exist in the match expression
@@ -118,7 +118,7 @@ describe('Phase 49 Production Audit', function (): void {
         $restored = \ZeroBoiler\Events\Domain\DomainEvent::fromArray($data);
 
         expect($restored->eventId->toString())->toBe($event->eventId->toString());
-        expect($restored->eventType)->toBe('user.eventType');
+        expect($restored->eventType)->toBe('user.registered');
     });
 
     test('DomainEvent fromArray with invalid eventType throws', function (): void {
@@ -139,7 +139,7 @@ describe('Phase 49 Production Audit', function (): void {
     });
 
     test('ConditionEngineContract interface is implemented by ConditionEngine', function (): void {
-        $reflection = new ReflectionClass(\ZeroBoiler\ConditionEngine::class);
+        $reflection = new ReflectionClass(\ZeroBoiler\Events\ConditionEngine::class);
         expect($reflection->implementsInterface(\ZeroBoiler\Events\Contracts\ConditionEngineContract::class))->toBeTrue();
     });
 

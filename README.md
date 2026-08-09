@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.90.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.91.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -417,7 +417,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 120 test files (Pest)
+└── tests/                      # 118 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -460,7 +460,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (120 test files)
+composer test        # Run Pest test suite (118 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -579,6 +579,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | ManagesHistory purgeLogs (old completed/failed purge, includePending, empty DB, recent log preservation) | ✅ | `ManagesHistoryPurgeLogsTest.php` |
 | Phase 47 production (helpers clean imports, readonly class audit, DomainEvent roundtrip, ConditionEngine full operator matrix, WildcardMatcher comprehensive, Subscription signPayload edge cases, Factory states, strict types, license headers, version consistency, Pest.php registration, model config tables, key types, API surface completeness) | ✅ | `EventsPhase47ProductionTest.php` |
 | Phase 48 production (phpstan.neon.dist tightened ignores, parseActions 5 formats return types, ConditionEngine unknown/empty operators, WebhookAction payload stripping, SubscriptionBuilder auto-secret, DispatchTriggerJob config normalization, factory state returns, strict types, final classes, interfaces, #[Pure], #[Override], readonly properties, ServiceProvider bindings, config completeness, version consistency, fluent interface, Facade accessor) | ✅ | `EventsPhase48ProductionTest.php` |
+| Phase 49 production (strict types verification, config completeness, ConditionEngine operator coverage, WildcardMatcher all documented patterns + extractWildcards, DomainEvent serialization round-trip + fromArray invalid eventType, Triggerable interface signature, ConditionEngineContract implementation, Facade accessor, EventLog status constants, DispatchTriggerJob constructor params, EscapesWildcardLike trait usage in EventManager/ManagesHistory/ManagesSubscriptions) | ✅ | `EventsPhase49ProductionTest.php` |
 
 ## How It Works
 
@@ -781,6 +782,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.91.0
+
+- **Fixed**: `EventsPhase49ProductionTest.php` — corrected 3 wrong class references (`\ZeroBoiler\ConditionEngine` → `\ZeroBoiler\Events\ConditionEngine`) and fixed `DomainEvent` round-trip assertion (`user.eventType` → `user.registered`).
+- **Fixed**: Registered `EventsPhase49ProductionTest.php` in `tests/Pest.php` so it runs with the full test suite.
+- **Updated**: README test file count from 120 to 118 (reflects actual registered test files).
 
 ### v1.90.0
 
