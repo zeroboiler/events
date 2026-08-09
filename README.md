@@ -417,7 +417,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 118 test files (Pest)
+└── tests/                      # 117 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -460,7 +460,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (118 test files)
+composer test        # Run Pest test suite (117 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -787,7 +787,7 @@ Before deploying to production, verify:
 
 - **Fixed**: `EventsPhase49ProductionTest.php` — corrected 3 wrong class references (`\ZeroBoiler\ConditionEngine` → `\ZeroBoiler\Events\ConditionEngine`) and fixed `DomainEvent` round-trip assertion (`user.eventType` → `user.registered`).
 - **Fixed**: Registered `EventsPhase49ProductionTest.php` in `tests/Pest.php` so it runs with the full test suite.
-- **Updated**: README test file count from 120 to 118 (reflects actual registered test files).
+- **Updated**: README test file count from 118 to 117 (reflects actual test files on disk).
 
 ### v1.90.0
 
