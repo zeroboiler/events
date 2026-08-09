@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.80.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.81.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -403,7 +403,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 104 test files (Pest)
+└── tests/                      # 105 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -446,7 +446,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (104 test files)
+composer test        # Run Pest test suite (105 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -555,6 +555,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 39 production (README version consistency, test file count accuracy, standalone test verification, Pest.php completeness) | ✅ | `EventsPhase39ProductionTest.php` |
 | Phase 40 production (strict types, final classes, interface contracts, #[Override] verification, ServiceProvider bindings, config completeness, model config tables, EventLog status constants, DomainEvent readonly/roundtrip, WildcardMatcher #[Pure], EscapesWildcardLike, ActionResolver errors, ConditionEngine full operator matrix, WildcardMatcher comprehensive, Subscription signing/failure/matching, EventManager CRUD/fire/fireModel validation, TriggerBuilder/SubscriptionBuilder fluent interface, cache invalidation, getStats zero-state, version consistency, Pest.php completeness, composer.json structure, console command prefix, model key types, parseActions edge cases, Migration existence, DispatchTriggerJob config properties, trait method verification, file headers, EventLog status lifecycle) | ✅ | `EventsPhase40ProductionTest.php` |
 | Full lifecycle integration (fire→dispatch→log→stats, priority ordering, cache invalidation, history filtering, purge logs, DomainEvent roundtrip, ActionResolver edge cases, WildcardMatcher comprehensive, ConditionEngine all operators) | ✅ | `EventsLifecycleIntegrationTest.php` |
+| Phase 42 production (fireModel key collision, empty attributes, parseActions edge cases, DispatchTriggerJob eventLogId, WebhookAction payload stripping, ConditionEngine empty/missing, WildcardMatcher no-wildcard, builder defaults, CRUD empty state, EventLog constants, signPayload edge cases, ServiceProvider commands, Facade accessor, DomainEvent freshness, config completeness, version consistency) | ✅ | `EventsPhase42ProductionTest.php` |
 
 ## How It Works
 
@@ -757,6 +758,11 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.81.0
+
+- **Added**: `EventsPhase42ProductionTest.php` — 37 new production tests covering: fireModel key collision with model attributes named `model`/`model_class`/`action` (metadata overrides), fireModel with empty attributes, parseActions whitespace-only/empty classes array/single-in-classes-format edge cases, DispatchTriggerJob eventLogId initial null state, WebhookAction internal key stripping verification, ConditionEngine empty conditions/missing key, WildcardMatcher dot-separated no-wildcard patterns/extractWildcards no-wildcard, SubscriptionBuilder/TriggerBuilder default priority, EventManager CRUD empty state (listTriggers/getTrigger/deleteTrigger/getEventHistory), EventLog status constants completeness, Subscription signPayload edge cases (null/empty/deterministic/different payloads), ServiceProvider command registration completeness, Facade getFacadeAccessor correctness, DomainEvent UUID freshness/timestamp freshness/toArray key completeness, config completeness all 6 sections (table_names/subscriptions/retry/retention/queue/wildcard_cache_ttl), composer.json version badge consistency.
+- **Changed**: README test file count updated from 104 to 105; version bumped to 1.81.0.
 
 ### v1.80.0
 
