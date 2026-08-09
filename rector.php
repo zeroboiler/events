@@ -10,7 +10,7 @@ return RectorConfig::configure()
         __DIR__.'/src',
     ])
     ->withSets([
-        LaravelSetList::LARAVEL_130,
+        LaravelSetList::LARAVEL_120,
     ])
     ->withSkip([
         // Skip specific files if needed

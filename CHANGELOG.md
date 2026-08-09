@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.84.0] — 2026-08-09
+
+### Fixed
+- **rector.php**: Changed `LaravelSetList::LARAVEL_130` to `LaravelSetList::LARAVEL_120` — `LARAVEL_130` constant does not exist in `driftingly/rector-laravel ^2.5` and would cause a runtime error when running `rector`.
+
+### Added
+- `EventsPhase45ProductionTest.php` — 55+ comprehensive final audit tests: rector.php valid LaravelSetList constant, all source files strict_types, final class verification (14 classes), no `#[\Readonly]` attribute usage, readonly keyword on DomainEvent/EventManager properties, return type declarations on all public methods (4 classes, 45+ methods), `#[\Override]` on ConditionEngine::matches and WebhookAction::handle, `#[\Pure]` on all 3 WildcardMatcher static methods, trait composition verification (EventManager 3 traits, Subscription EscapesWildcardLike), PHPStan config (level 9, bootstrapFiles, paths), composer.json structure (PHP 8.5, PSR-4, extra.laravel), config completeness (6 top-level sections + sub-keys), model config-driven table names, UUID string key types, non-incrementing models, console command prefix verification (11 commands), migration structure (3 files, up/down), EventLog status constants (4), interface contracts (ConditionEngineContract, Triggerable), ServiceProvider binding methods, Facade accessor, factory definitions (3 models), .gitignore completeness, version consistency, source file license headers.
+
+### Changed
+- Version bumped to 1.84.0, test file count updated to 108.
+
+---
+
 ## [1.83.0] — 2026-08-09
 
 ### Added
