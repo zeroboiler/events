@@ -46,7 +46,7 @@ final class EventsLogCommand extends Command
         }
 
         $status = $this->option('status');
-        if ($status !== null && $status !== '') {
+        if (is_string($status) && $status !== '') {
             if (! in_array($status, EventLog::$statuses, true)) {
                 $this->error('Invalid status. Must be one of: '.implode(', ', EventLog::$statuses));
 

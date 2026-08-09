@@ -450,13 +450,14 @@ final class EventManager
      */
     protected function parseActions(string $action): array
     {
-        // Empty action string — return empty list
-        if ($action === '' || $action === '0') {
+        // Empty or whitespace-only action string — return empty list
+        $trimmed = trim($action);
+        if ($trimmed === '' || $trimmed === '0') {
             return [];
         }
 
         // Try to decode as JSON first
-        $decoded = json_decode($action, true);
+        $decoded = json_decode($trimmed, true);
 
         if (is_array($decoded)) {
             // Handle {"classes": [...], "params": {...}} — multiple actions with shared params

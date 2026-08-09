@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.85.0] — 2026-08-09
+
+### Fixed
+- **PHPStan 9** `EventManager::parseActions()` now trims whitespace from action strings before processing — whitespace-only action strings (spaces, tabs, newlines) now correctly return an empty array instead of falling through to a `[trim_result]` single-entry array.
+- **PHPStan 9** `EventsLogCommand::handle()` now uses `is_string()` type guard on `$this->option('status')` before the `!== ''` check — `$this->option()` returns `string|array<bool>|null`, and the previous `!== null` guard did not protect against array values reaching `in_array()`.
+
+### Added
+- `EventsPhase46ProductionTest.php` — 22 new production tests covering: parseActions whitespace trimming (spaces, tabs, newlines, JSON with surrounding whitespace, plain class name with surrounding whitespace), EventsLogCommand is_string type safety on status option, README Phase 45 test coverage table entry, strict types enforcement (all src files), final class verification (11 core + 11 console commands), `#[\Override]` on ConditionEngine::matches, WebhookAction::handle, and all console command handle() methods, WildcardMatcher `#[\Pure]` on all 3 public static methods, config completeness (all 6 top-level sections + table_names/subscriptions sub-keys), model config-driven table names (Trigger/EventLog/Subscription), EventLog status constants (4 constants + $statuses array), ServiceProvider binding lifecycle (singletons for EventManager/ConditionEngine/ActionResolver, transients for TriggerBuilder/SubscriptionBuilder, contract identity), Facade accessor correctness, DomainEvent readonly properties + roundtrip preservation, EscapesWildcardLike behavior (null for non-wildcard, asterisk-to-percent), version consistency (composer.json vs README badge), interface contracts (ConditionEngineContract, Triggerable), source file license headers (all src files), TriggerBuilder fluent interface (8 methods return self), SubscriptionBuilder fluent interface (6 methods return self), composer.json PSR-4 autoload structure, composer.json Laravel extra provider, EventManager public method return type declarations, phpstan.neon.dist structure (level 9, paths).
+
+### Changed
+- Version bumped to 1.85.0, test file count updated to 109.
+
+---
+
 ## [1.84.0] — 2026-08-09
 
 ### Fixed
