@@ -75,7 +75,7 @@ final class ConditionEngine implements ConditionEngineContract
                 'starts_with' => is_string($actual) && is_string($value) && str_starts_with($actual, $value),
                 'ends_with' => is_string($actual) && is_string($value) && str_ends_with($actual, $value),
                 'matches' => is_string($actual) && is_string($value) && $this->safeRegexMatch($value, $actual),
-                default => $this->strictEquals($actual, $expected),
+                default => false,
             };
         }
 

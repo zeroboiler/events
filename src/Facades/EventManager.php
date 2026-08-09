@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static \ZeroBoiler\Events\TriggerBuilder on(string $event)
  * @method static \ZeroBoiler\Events\TriggerBuilder register(string $event)
- * @method static void fire(string $event, array<string, mixed> $payload = [])
+ * @method static void fire(string $event, array<string, mixed> $payload = [], bool $async = false)
  * @method static void fireModel(string $modelClass, string $action, object $model)
  * @method static bool enable(string $triggerId)
  * @method static bool disable(string $triggerId)

@@ -185,11 +185,13 @@ final class EventManager
      * Fire an event and dispatch all matching triggers.
      *
      * @param  array<string, mixed>  $payload
+     * @param  bool  $async  When true, forces all matching triggers to be dispatched asynchronously via queue.
+     *                       When false, triggers are dispatched according to their individual `async` setting.
      *
      * @throws \InvalidArgumentException If the event name is empty
      * @throws \Throwable If a synchronous trigger action fails (re-thrown after logging)
      */
-    public function fire(string $event, array $payload = []): void
+    public function fire(string $event, array $payload = [], bool $async = false): void
     {
         if ($event === '' || $event === '0') {
             throw new \InvalidArgumentException('Event name cannot be empty.');
@@ -202,7 +204,7 @@ final class EventManager
                 continue;
             }
 
-            $this->dispatchTrigger($trigger, $event, $payload);
+            $this->dispatchTrigger($trigger, $event, $payload, forceAsync: $async);
         }
     }
 
@@ -348,10 +350,13 @@ final class EventManager
      * Dispatch a trigger (sync or async).
      *
      * @param  array<string, mixed>  $payload
+     * @param  bool  $forceAsync  When true, forces async dispatch regardless of the trigger's async setting.
      */
-    protected function dispatchTrigger(Trigger $trigger, string $event, array $payload): void
+    protected function dispatchTrigger(Trigger $trigger, string $event, array $payload, bool $forceAsync = false): void
     {
-        if ($trigger->async) {
+        $shouldAsync = $forceAsync || $trigger->async;
+
+        if ($shouldAsync) {
             // Create the EventLog inside the job so that if the job never
             // runs (queue down, Redis flushed, etc.) no orphaned log entry
             // is left behind in the database. See bug #632.

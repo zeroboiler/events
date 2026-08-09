@@ -16,7 +16,8 @@ final class EventsFireCommand extends Command
     protected string $signature = 'zeroboiler:events:fire
                            {event : The event name}
                            {--payload=* : Key=value pairs for payload}
-                           {--json= : JSON string (or @file path) for complex/nested payloads}';
+                           {--json= : JSON string (or @file path) for complex/nested payloads}
+                           {--async : Dispatch event triggers asynchronously via queue}';
 
     protected string $description = 'Manually fire an event';
 
@@ -47,7 +48,8 @@ final class EventsFireCommand extends Command
             $payload = $jsonPayload;
         }
 
-        // Merge in --payload key=value pairs (json takes precedence for keys)
+        // Merge in --payload key=value pairs (json takes precedence —
+        // --payload keys are only set if not already present from --json).
         $payloadOptions = $this->option('payload');
         if (is_array($payloadOptions)) {
             foreach ($payloadOptions as $item) {
@@ -56,11 +58,17 @@ final class EventsFireCommand extends Command
                 }
 
                 [$key, $value] = explode('=', (string) $item, 2);
-                $payload[$key] = $value;
+                if (! array_key_exists($key, $payload)) {
+                    $payload[$key] = $value;
+                }
             }
         }
 
         $this->info("Firing event: {$event}");
+
+        if ($this->option('async')) {
+            $this->comment('Async mode: triggers will be queued for dispatch.');
+        }
 
         if ($payload !== []) {
             $this->info('Payload:');
@@ -73,7 +81,7 @@ final class EventsFireCommand extends Command
         }
 
         try {
-            $eventManager->fire($event, $payload);
+            $eventManager->fire($event, $payload, async: (bool) $this->option('async'));
 
             $this->info('Event fired successfully!');
 
