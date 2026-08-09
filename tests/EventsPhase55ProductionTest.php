@@ -6,14 +6,12 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Eloquent\Model;
 use ZeroBoiler\Events\ActionResolver;
 use ZeroBoiler\Events\ConditionEngine;
 use ZeroBoiler\Events\ConditionEngineContract;
 use ZeroBoiler\Events\Domain\DomainEvent;
 use ZeroBoiler\Events\Actions\WebhookAction;
 use ZeroBoiler\Events\EventsServiceProvider;
-use ZeroBoiler\Events\Facades\EventManager;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Subscription;
@@ -42,7 +40,7 @@ test('all source files have declare(strict_types=1)', function (): void {
 
 test('core classes are final', function (): void {
     $finalClasses = [
-        EventManager::class,
+        \ZeroBoiler\Events\EventManager::class,
         ConditionEngine::class,
         WildcardMatcher::class,
         ActionResolver::class,
@@ -109,17 +107,8 @@ test('WildcardMatcher public methods have #[Pure] attribute', function (): void 
 
     foreach ($methods as $method) {
         $m = $ref->getMethod($method);
-        $attrs = $m->getAttributes(\Attribute::class);
         $hasPure = false;
-        foreach ($attrs as $attr) {
-            if ($attr->getName() === 'Pure' || str_ends_with($attr->getName(), '\\Pure')) {
-                $hasPure = true;
-                break;
-            }
-        }
-        // In PHP 8.5+, #[\Pure] is an attribute
-        $phpAttrs = $m->getAttributes();
-        foreach ($phpAttrs as $attr) {
+        foreach ($m->getAttributes() as $attr) {
             if ($attr->getName() === 'Pure') {
                 $hasPure = true;
                 break;
@@ -145,8 +134,8 @@ test('DomainEvent readonly properties', function (): void {
 
 test('EventManager is singleton', function (): void {
     $app = app();
-    $first = $app->make(EventManager::class);
-    $second = $app->make(EventManager::class);
+    $first = $app->make(\ZeroBoiler\Events\EventManager::class);
+    $second = $app->make(\ZeroBoiler\Events\EventManager::class);
     expect($first)->toBe($second);
 });
 
@@ -255,8 +244,8 @@ test('EventLog $statuses array contains all constants', function (): void {
 test('Facade accessor returns EventManager class name', function (): void {
     $ref = new ReflectionClass(\ZeroBoiler\Events\Facades\EventManager::class);
     $method = $ref->getMethod('getFacadeAccessor');
-    $method->setAccessible(true);
-    expect($method->invoke(null))->toBe(EventManager::class);
+    $method->setAccessible(true); // @phpstan-ignore method.deprecated — needed for protected method
+    expect($method->invoke(null))->toBe(\ZeroBoiler\Events\EventManager::class);
 });
 
 // ─── Model Config-Driven Table Names ────────────────────────────────────────
@@ -360,8 +349,8 @@ test('EscapesWildcardLike escapes SQL special chars', function (): void {
     };
 
     // Percent and underscore should be escaped
-    expect($trait->wildcardToLike('order.%*'))->toBe('order.\\%\\%');
-    expect($trait->wildcardToLike('order._*'))->toBe('order.\\_%');
+    expect($trait->wildcardToLike('order.%*'))->toBe('order.\%%');
+    expect($trait->wildcardToLike('order._*'))->toBe('order.\_%');
 });
 
 // ─── ActionResolver Errors ───────────────────────────────────────────────────
