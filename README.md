@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.79.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.80.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -403,7 +403,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 103 test files (Pest)
+└── tests/                      # 104 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -446,7 +446,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (103 test files)
+composer test        # Run Pest test suite (104 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -554,6 +554,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 38 production (README table format, save() @throws docblocks, DispatchTriggerJob typed $backoff) | ✅ | `EventsPhase38ProductionTest.php` |
 | Phase 39 production (README version consistency, test file count accuracy, standalone test verification, Pest.php completeness) | ✅ | `EventsPhase39ProductionTest.php` |
 | Phase 40 production (strict types, final classes, interface contracts, #[Override] verification, ServiceProvider bindings, config completeness, model config tables, EventLog status constants, DomainEvent readonly/roundtrip, WildcardMatcher #[Pure], EscapesWildcardLike, ActionResolver errors, ConditionEngine full operator matrix, WildcardMatcher comprehensive, Subscription signing/failure/matching, EventManager CRUD/fire/fireModel validation, TriggerBuilder/SubscriptionBuilder fluent interface, cache invalidation, getStats zero-state, version consistency, Pest.php completeness, composer.json structure, console command prefix, model key types, parseActions edge cases, Migration existence, DispatchTriggerJob config properties, trait method verification, file headers, EventLog status lifecycle) | ✅ | `EventsPhase40ProductionTest.php` |
+| Full lifecycle integration (fire→dispatch→log→stats, priority ordering, cache invalidation, history filtering, purge logs, DomainEvent roundtrip, ActionResolver edge cases, WildcardMatcher comprehensive, ConditionEngine all operators) | ✅ | `EventsLifecycleIntegrationTest.php` |
 
 ## How It Works
 
@@ -756,6 +757,11 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.80.0
+
+- **Added**: `EventsLifecycleIntegrationTest.php` — comprehensive integration tests covering: full lifecycle (fire→dispatch→log→stats), trigger priority ordering (higher priority dispatched first, same priority ordered by creation time), wildcard cache invalidation (new trigger visibility, disable prevents matches), event history filtering (by status, wildcard event, limit), purge logs (completed/only/pending-include), DomainEvent roundtrip (all fields preserved, missing eventType throws, invalid UUID generates fresh, invalid datetime uses now), ActionResolver edge cases (non-existent class, non-Triggerable class, valid class), WildcardMatcher comprehensive (exact, single/cross/catch-all, multiple, extract, findMatching), ConditionEngine all operators (equality, >, between, in, contains, null/not_null, starts_with/ends_with, nested dot notation, AND logic).
+- **Changed**: README test file count updated from 103 to 104; version bumped to 1.80.0.
 
 ### v1.79.0
 

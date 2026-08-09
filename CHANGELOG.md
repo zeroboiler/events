@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.80.0] — 2026-08-09
+
+### Added
+- `EventsLifecycleIntegrationTest.php` — comprehensive integration tests covering: full lifecycle (fire→dispatch→log→stats), trigger priority ordering (higher priority dispatched first, same priority ordered by creation time), wildcard cache invalidation (new trigger visibility, disable prevents matches), event history filtering (by status, wildcard event, limit), purge logs (completed/only/pending-include), DomainEvent roundtrip (all fields preserved, missing eventType throws, invalid UUID generates fresh, invalid datetime uses now), ActionResolver edge cases (non-existent class, non-Triggerable class, valid class), WildcardMatcher comprehensive (exact, single/cross/catch-all, multiple, extract, findMatching), ConditionEngine all operators (equality, >, between, in, contains, null/not_null, starts_with/ends_with, nested dot notation, AND logic).
+
+### Changed
+- Version bumped to 1.80.0, test file count updated to 104.
+
+---
+
 ## [1.75.0] — 2026-08-09
 
 ### Added
