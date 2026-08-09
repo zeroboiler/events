@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.92.0] — 2026-08-09
+
+### Fixed
+- README test file count updated from 117 to 118 (actual test file count after recent additions).
+
+### Added
+- `EventsPhase51ProductionTest.php` — comprehensive production audit tests covering: EventManager::register() alias behavior, DomainEvent::occur() factory method, TriggerBuilder validation error messages for empty event/action, ActionResolver edge cases (non-existent class, non-Triggerable class, error message format), SubscriptionBuilder secret auto-generation regex validation, ConditionEngine `between()` with inverted range, WildcardMatcher::extractWildcards() with no-wildcard pattern, EventLog::$statuses array consistency with constants, Trigger::scopeEnabled/disabled/async scopes, DispatchTriggerJob config-driven queue/connection at construction, WebhookAction internal key stripping consistency.
+
+### Changed
+- Version bumped to 1.92.0.
+
+---
+
 ## [1.90.0] — 2026-08-09
 
 ### Fixed
