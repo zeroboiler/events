@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.88.0] — 2026-08-09
+
+### Added
+- `SubscriptionScopeForEventTest.php` — 6 new tests covering `Subscription::scopeForEvent()`: exact match, wildcard match, cross-segment wildcard, no-match for unrelated events, wildcard pattern input, and Builder chaining.
+- `ManagesHistoryPurgeLogsTest.php` — 4 new tests covering `ManagesHistory::purgeLogs()`: old completed/failed purge (default), includePending mode, no-op when no logs are old enough, and graceful empty database handling.
+
+### Changed
+- Version bumped to 1.88.0, test file count updated to 114.
+
+---
+
 ## [1.86.0] — 2026-08-09
 
 ### Added

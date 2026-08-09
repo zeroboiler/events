@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.87.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.88.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -417,7 +417,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 112 test files (Pest)
+└── tests/                      # 114 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -460,7 +460,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (112 test files)
+composer test        # Run Pest test suite (114 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -574,7 +574,9 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 42 production (fireModel key collision, empty attributes, parseActions edge cases, DispatchTriggerJob eventLogId, WebhookAction payload stripping, ConditionEngine empty/missing, WildcardMatcher no-wildcard, builder defaults, CRUD empty state, EventLog constants, signPayload edge cases, ServiceProvider commands, Facade accessor, DomainEvent freshness, config completeness, version consistency) | ✅ | `EventsPhase42ProductionTest.php` |
 | Phase 43 production (fire() async parameter, ConditionEngine unknown operator fix, EventsFireCommand JSON precedence fix, EventsFireCommand --async flag, Facade annotation, all 19 operators, config consistency, strict types, final classes) | ✅ | `EventsPhase43ProductionTest.php` |
 | Phase 44 production (CHANGELOG presence, composer.json autoload/extra, rector.php Laravel set, .gitignore completeness, database directories, phpstan config, license headers, facade @method completeness, WebhookAction private method return types, EventLog casts type, DomainEvent fromArray edge cases, getStats structure, test file registration, command type safety, version consistency) | ✅ | `EventsPhase44ProductionTest.php` |
-| Phase 45 production (rector.php valid LaravelSetList constant, all source files strict_types, final class verification — 14 classes, no `#[Readonly]` attribute usage, readonly keyword on DomainEvent/EventManager properties, return type declarations on all public methods, `#[Override]` on ConditionEngine::matches and WebhookAction::handle, `#[Pure]` on all 3 WildcardMatcher static methods, trait composition verification, PHPStan config, composer.json structure, config completeness, model config-driven table names, console command prefix verification, migration structure, EventLog status constants, interface contracts, ServiceProvider binding methods, Facade accessor, factory definitions, .gitignore completeness, version consistency, source file license headers) | ✅ | `EventsPhase45ProductionTest.php` |
+| Phase 45 production (rector.php valid LaravelSetList constant, all source files strict_types, final class verification — 14 classes, no `#[Readonly]` attribute usage, readonly keyword on DomainEvent/EventManager properties, return type declarations on all public methods, `#[\Override]` on ConditionEngine::matches and WebhookAction::handle, `#[\Pure]` on all 3 WildcardMatcher static methods, trait composition verification, PHPStan config, composer.json structure, config completeness, model config-driven table names, console command prefix verification, migration structure, EventLog status constants, interface contracts, ServiceProvider binding methods, Facade accessor, factory definitions, .gitignore completeness, version consistency, source file license headers) | ✅ | `EventsPhase45ProductionTest.php` |
+| Subscription scopeForEvent (exact, wildcard, cross-segment, no-match, non-wildcard chaining) | ✅ | `SubscriptionScopeForEventTest.php` |
+| ManagesHistory purgeLogs (old completed/failed purge, includePending, empty DB, recent log preservation) | ✅ | `ManagesHistoryPurgeLogsTest.php` |
 
 ## How It Works
 
@@ -777,6 +779,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.88.0
+
+- **Added**: `SubscriptionScopeForEventTest.php` — 6 new tests covering `Subscription::scopeForEvent()`: exact match, wildcard match, cross-segment wildcard, no-match for unrelated events, wildcard pattern input, and Builder chaining.
+- **Added**: `ManagesHistoryPurgeLogsTest.php` — 4 new tests covering `ManagesHistory::purgeLogs()`: old completed/failed purge (default), includePending mode, no-op when no logs are old enough, and graceful empty database handling.
+- **Changed**: Version bumped to 1.88.0, test file count updated to 114.
 
 ### v1.87.0
 
