@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.95.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.96.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -417,7 +417,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 121 test files (Pest)
+└── tests/                      # 122 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -460,7 +460,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (121 test files)
+composer test        # Run Pest test suite (122 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -582,7 +582,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 49 production (strict types verification, config completeness, ConditionEngine operator coverage, WildcardMatcher all documented patterns + extractWildcards, DomainEvent serialization round-trip + fromArray invalid eventType, Triggerable interface signature, ConditionEngineContract implementation, Facade accessor, EventLog status constants, DispatchTriggerJob constructor params, EscapesWildcardLike trait usage in EventManager/ManagesHistory/ManagesSubscriptions) | ✅ | `EventsPhase49ProductionTest.php` |
 | Phase 52 production (EventsListCommand/EventsSubscriptionsCommand is_string() type guards, EventsLogCommand is_string() verification, README test file count accuracy, version consistency, all console --event commands type safety, no deprecated !== null guard, ServiceProvider 11 commands, config completeness, strict types enforcement, final class verification, Pest.php registration) | ✅ | `EventsPhase52ProductionTest.php` |
 | Phase 53 production (EventsRegisterCommand/EventsSubscribeCommand is_string() type guards, EventsRetryCommand is_string() guard, comprehensive quality verification: strict types, final classes, console commands, Singleton/transient bindings, contract identity, config completeness, status constants, DomainEvent roundtrip, WildcardMatcher #[Pure], EscapesWildcardLike trait usage, model config-driven tables, key types, API surface completeness, fluent interface, Pest.php completeness, version consistency) | ✅ | `EventsPhase53ProductionTest.php` |
-| Phase 54 production (strict types sweep, final class verification, interface contracts, ServiceProvider binding lifecycle, Facade accessor, Config completeness all 6 sections, EventLog status constants, DomainEvent roundtrip + empty eventType, WildcardMatcher comprehensive, EscapesWildcardLike SQL escaping, model config-driven tables, model key types, DispatchTriggerJob property types, console command prefix verification, version consistency, Subscription signPayload edge cases, Subscription matchesEvent patterns, ActionResolver errors, composer.json autoload PSR-4, trait method presence, fluent interface return types, PHPStan config, license headers, EventManager public method return types) | ✅ | `EventsPhase54ProductionTest.php` |
+| Phase 54 production (strict types sweep, final class verification, interface contracts, ServiceProvider binding lifecycle, Facade accessor, Config completeness all 6 sections, EventLog status constants, DomainEvent roundtrip + empty eventType, WildcardMatcher comprehensive, EscapesWildcardLike SQL escaping, model config-driven table names, model key types, DispatchTriggerJob property types, console command prefix verification, version consistency, Subscription signPayload edge cases, Subscription matchesEvent patterns, ActionResolver errors, composer.json autoload PSR-4, trait method presence, fluent interface return types, PHPStan config, license headers, EventManager public method return types) | ✅ | `EventsPhase54ProductionTest.php` |
+| Phase 55 production (CHANGELOG sync, comprehensive audit: strict types all source files, final classes 10 core + 11 console commands, interface contracts, ServiceProvider binding lifecycle, Facade accessor, Config completeness 6 sections + sub-keys, EventLog status constants + $statuses array, model config-driven table names + UUID string keys + non-incrementing, DomainEvent readonly + roundtrip, WildcardMatcher readonly class + #[Pure] + comprehensive patterns, EscapesWildcardLike SQL escaping, ActionResolver error cases, Subscription signPayload edge cases, ConditionEngine full 19-operator matrix + AND logic + dot notation, WildcardMatcher exact/cross-segment/catch-all/empty, ConditionEngine comparison/equality/array/string/null/between/regex operators, license headers, command prefix verification, version consistency, composer.json autoload/extra, migration existence, CHANGELOG sync, phpstan.neon.dist level 9) | ✅ | `EventsPhase55ProductionTest.php` |
 
 ## How It Works
 
@@ -785,6 +786,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.96.0
+
+- **Fixed**: CHANGELOG.md was missing v1.95.0 entry — synchronized with README changelog.
+- **Added**: `EventsPhase55ProductionTest.php` — 55 new production tests covering: CHANGELOG sync verification, comprehensive Phase 55 audit (strict types enforcement across all source files, final class verification for 10 core + 11 console commands, interface contracts — ConditionEngineContract and Triggerable, ServiceProvider binding lifecycle — singleton/transient/contract identity, Facade accessor correctness, Config completeness — all 6 sections with sub-keys: table_names 3 entries, queue 2 entries, retry 2 entries, retention 2 entries, subscriptions 4 entries, wildcard_cache_ttl 1 entry, EventLog status constants + $statuses array consistency, model config-driven table names for Trigger/EventLog/Subscription, UUID string key type verification, non-incrementing verification, DomainEvent readonly properties + roundtrip preservation, WildcardMatcher readonly class verification + #[Pure] attribute on all 3 public methods + comprehensive patterns — exact/single-segment/cross-segment/catch-all/empty, EscapesWildcardLike SQL escaping — null for non-wildcard/asterisk-to-percent/special chars, ActionResolver error handling — non-existent class and non-Triggerable class, Subscription signPayload edge cases — null/empty/deterministic, ConditionEngine full 19-operator matrix + AND logic + dot notation nesting, license headers on all source files, all console commands zeroboiler:events: prefix verification, composer.json version consistency with README badge, composer.json PSR-4 autoload + dev autoload + extra.laravel structure, all 3 migration file existence, phpstan.neon.dist level 9 configuration presence).
+- **Changed**: Version bumped to 1.96.0, test file count updated to 122.
 
 ### v1.95.0
 

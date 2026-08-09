@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.96.0] — 2026-08-09
+
+### Fixed
+- CHANGELOG.md was missing v1.95.0 entry — synchronized with README changelog.
+
+### Changed
+- Version bumped to 1.96.0.
+
+---
+
+## [1.95.0] — 2026-08-09
+
+### Fixed
+- README test file count corrected from 120 to 125 (reflects actual test files on disk).
+
+### Added
+- `EventsPhase54ProductionTest.php` — 54 new production tests.
+
+### Changed
+- Version bumped to 1.95.0.
+
+---
+
 ## [1.94.0] — 2026-08-09
 
 ### Fixed
