@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.75.0] — 2026-08-09
+
+### Added
+- `EventsPhase40ProductionTest.php` — 60+ comprehensive production tests covering: strict types enforcement, final class verification (all core + 11 console commands), interface contracts, `#[\Override]` verification (all overrides), ServiceProvider bindings (singleton/transient/contract), Facade accessor, config completeness (all 6 sections), model config-driven table names, EventLog status constants, DomainEvent readonly/roundtrip, WildcardMatcher `#[\Pure]`, EscapesWildcardLike, ActionResolver errors, ConditionEngine full 19-operator matrix, WildcardMatcher comprehensive patterns, Subscription signing/failure/matching, EventManager CRUD/fire/fireModel validation, TriggerBuilder/SubscriptionBuilder fluent interface, cache invalidation, getStats zero-state, version consistency, Pest.php completeness (100 registered, 2 standalone), composer.json structure, console command prefix, model key types, parseActions all 5 formats, Migration existence, DispatchTriggerJob config, trait method verification, file headers, EventLog status lifecycle.
+
+### Changed
+- Version bumped to 1.75.0, test file count updated to 102.
+
+---
+
 ## [1.74.0] — 2026-08-09
 
 ### Added

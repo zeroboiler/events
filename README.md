@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.74.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.75.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -403,7 +403,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 101 test files (Pest)
+└── tests/                      # 102 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -446,7 +446,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (101 test files)
+composer test        # Run Pest test suite (102 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -553,6 +553,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 37 production (ConditionEngine between non-numeric rejection, float operators, null actual; SubscriptionBuilder parse_url type safety; fake() helper return type; model relations; Subscription matchesEvent; WebhookAction delivery/failure tracking; DomainEvent fromArray edge cases; config completeness; ServiceProvider bindings; Facade accessor; strict types; final classes; model config tables; version consistency) | ✅ | `EventsPhase37ProductionTest.php` |
 | Phase 38 production (README table format, save() @throws docblocks, DispatchTriggerJob typed $backoff) | ✅ | `EventsPhase38ProductionTest.php` |
 | Phase 39 production (README version consistency, test file count accuracy, standalone test verification, Pest.php completeness) | ✅ | `EventsPhase39ProductionTest.php` |
+| Phase 40 production (strict types, final classes, interface contracts, #[Override] verification, ServiceProvider bindings, config completeness, model config tables, EventLog status constants, DomainEvent readonly/roundtrip, WildcardMatcher #[Pure], EscapesWildcardLike, ActionResolver errors, ConditionEngine full operator matrix, WildcardMatcher comprehensive, Subscription signing/failure/matching, EventManager CRUD/fire/fireModel validation, TriggerBuilder/SubscriptionBuilder fluent interface, cache invalidation, getStats zero-state, version consistency, Pest.php completeness, composer.json structure, console command prefix, model key types, parseActions edge cases, Migration existence, DispatchTriggerJob config properties, trait method verification, file headers, EventLog status lifecycle) | ✅ | `EventsPhase40ProductionTest.php` |
 
 ## How It Works
 
@@ -755,6 +756,11 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.75.0
+
+- **Added**: `EventsPhase40ProductionTest.php` — 60+ comprehensive production tests covering: strict types enforcement across all src/ files, final class verification (all core classes + 11 console commands), interface contracts (ConditionEngineContract, Triggerable), `#[\Override]` attribute verification (all overrides on ConditionEngine, WebhookAction, all 11 console commands, all 3 models), ServiceProvider binding lifecycle (EventManager/ConditionEngine/ActionResolver singletons, TriggerBuilder/SubscriptionBuilder transients, ConditionEngineContract identity), Facade accessor, config completeness (all 6 sections + sub-keys), config type validation, model config-driven table names (Trigger/EventLog/Subscription), EventLog status constants, DomainEvent readonly properties + roundtrip preservation + UUID freshness, WildcardMatcher `#[\Pure]` attributes on all public methods, WildcardMatcher comprehensive pattern matching (exact/single-segment/cross-segment/catch-all/multi-wildcard/extract/findMatching), EscapesWildcardLike behavior (null for non-wildcard, asterisk-to-percent conversion), ActionResolver error handling (non-existent class, non-Triggerable class), ConditionEngine full 19-operator matrix + AND logic + null safety + dot notation + between auto-normalize + ReDoS protection, Subscription signing (null/empty secret, deterministic signatures, config-driven algorithm), Subscription failure tracking (hasExceededFailures config/custom), Subscription matchesEvent (exact, single-segment wildcard, cross-segment wildcard), EventManager CRUD edge cases (enable/disable/deleteTrigger non-existent, getTrigger non-existent), EventManager fire/fireModel validation (empty event, zero event, empty class), TriggerBuilder fluent interface (all methods return self), TriggerBuilder resolveActions deduplication + action/merge, SubscriptionBuilder fluent interface, cache invalidation lifecycle, getStats zero-state structure, version consistency (composer.json vs README badge), Pest.php completeness (all 100 registered files exist on disk, no duplicates, standalone test files exist), total test file count accuracy (102 files), composer.json structure (PSR-4 autoload, extra.laravel providers, PHP ^8.5), console command zeroboiler:events: prefix verification, model key types/incrementing, parseActions all 5 JSON formats + edge cases, Migration file existence, DispatchTriggerJob config-driven properties, ManagesHistory/ManagesSubscriptions trait method verification, file license headers, EventLog status lifecycle (markAsCompleted/markAsFailed), phpstan.neon.dist existence.
+- **Changed**: Version bumped to 1.75.0, test file count updated to 102.
 
 ### v1.74.0
 
