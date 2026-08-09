@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.89.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.90.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -578,6 +578,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Subscription scopeForEvent (exact, wildcard, cross-segment, no-match, non-wildcard chaining) | ✅ | `SubscriptionScopeForEventTest.php` |
 | ManagesHistory purgeLogs (old completed/failed purge, includePending, empty DB, recent log preservation) | ✅ | `ManagesHistoryPurgeLogsTest.php` |
 | Phase 47 production (helpers clean imports, readonly class audit, DomainEvent roundtrip, ConditionEngine full operator matrix, WildcardMatcher comprehensive, Subscription signPayload edge cases, Factory states, strict types, license headers, version consistency, Pest.php registration, model config tables, key types, API surface completeness) | ✅ | `EventsPhase47ProductionTest.php` |
+| Phase 48 production (phpstan.neon.dist tightened ignores, parseActions 5 formats return types, ConditionEngine unknown/empty operators, WebhookAction payload stripping, SubscriptionBuilder auto-secret, DispatchTriggerJob config normalization, factory state returns, strict types, final classes, interfaces, #[Pure], #[Override], readonly properties, ServiceProvider bindings, config completeness, version consistency, fluent interface, Facade accessor) | ✅ | `EventsPhase48ProductionTest.php` |
 
 ## How It Works
 
@@ -780,6 +781,12 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.90.0
+
+- **Fixed**: Tightened `phpstan.neon.dist` ignore patterns — replaced overly broad `Access to an undefined property.*#` with specific patterns targeting `Eloquent\Model::` dynamic properties and `$this->payload` only, preventing real type errors from being silently ignored.
+- **Added**: `EventsPhase48ProductionTest.php` — 30+ new production tests covering: phpstan.neon.dist tightened ignore patterns, parseActions return type correctness for all 5 formats (single, JSON array, JSON object, classes+params, empty), ConditionEngine unknown/empty operator behavior, WebhookAction payload key stripping completeness, SubscriptionBuilder auto-secret format validation, DispatchTriggerJob constructor config normalization (string/array backoff, invalid config defaults, queue/connection), factory state method return type consistency, strict types enforcement, final class verification (11 core + 11 console commands), interface contracts, WildcardMatcher `#[Pure]` verification, DomainEvent/EventManager readonly properties, ServiceProvider binding lifecycle (singleton/transient/contract identity), config completeness (all 6 sections + sub-keys), EventLog status constants, version consistency, fluent interface return types, Facade accessor, `#[Override]` verification, model config-driven table names.
+- **Changed**: Version bumped to 1.90.0.
 
 ### v1.89.0
 

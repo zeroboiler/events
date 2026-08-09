@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.90.0] — 2026-08-09
+
+### Fixed
+- Tightened `phpstan.neon.dist` ignore patterns — replaced overly broad `Access to an undefined property.*#` with specific patterns targeting `Eloquent\Model::` dynamic properties and `$this->payload` only.
+
+### Added
+- `EventsPhase48ProductionTest.php` — 30+ new production tests covering: phpstan.neon.dist tightened ignore patterns, parseActions return type correctness, ConditionEngine unknown/empty operator behavior, WebhookAction payload key stripping, SubscriptionBuilder auto-secret format, DispatchTriggerJob config normalization, factory state return types, strict types enforcement, final class verification, interface contracts, WildcardMatcher `#[Pure]`, readonly properties, ServiceProvider bindings, config completeness, version consistency, fluent interface, Facade accessor, `#[Override]` verification, model config-driven table names.
+
+### Changed
+- Version bumped to 1.90.0.
+
+---
+
 ## [1.89.0] — 2026-08-09
 
 ### Fixed

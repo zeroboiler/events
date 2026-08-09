@@ -8,5 +8,6 @@ parameters:
         - '#Call to an undefined method.*::orderByPriority\(\)#'
         - '#Call to an undefined method.*::scopeOrderByPriority\(\)#'
         - '#Dynamic call to static method.*is missing#'
-        - '#Access to an undefined property.*#'
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::#'
+        - '#Access to an undefined property.*\$this->payload#'
     bootstrapFiles: []
