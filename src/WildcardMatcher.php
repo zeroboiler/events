@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events;
 
-final class WildcardMatcher
+readonly final class WildcardMatcher
 {
     /**
      * Match a pattern with wildcards against an event string.

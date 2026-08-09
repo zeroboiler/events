@@ -264,6 +264,7 @@ final class FireModelCaptureAction implements \ZeroBoiler\Events\Contracts\Trigg
         $this->callback = $callback;
     }
 
+    #[\Override]
     public function handle(array $payload): void
     {
         ($this->callback)($payload);
@@ -275,6 +276,7 @@ final class FireModelCaptureAction implements \ZeroBoiler\Events\Contracts\Trigg
  */
 final class FireModelNoOpAction implements \ZeroBoiler\Events\Contracts\Triggerable
 {
+    #[\Override]
     public function handle(array $payload): void
     {
         // Intentionally empty

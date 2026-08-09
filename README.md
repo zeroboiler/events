@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.85.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.86.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -417,7 +417,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 109 test files (Pest)
+└── tests/                      # 110 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -460,7 +460,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (109 test files)
+composer test        # Run Pest test suite (110 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -499,6 +499,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Production deployment (bindings, contracts, config, immutability) | ✅ | `ProductionDeploymentTest.php` |
 | Contract binding (singleton, interface resolution) | ✅ | `ContractBindingTest.php` |
 | Typed properties (models, factories, commands, attributes) | ✅ | `TypedPropertiesTest.php` |
+| EventManager wildcard cache (population, invalidation, disabled exclusion, cross-segment) | ✅ | `EventManagerWildcardCacheTest.php` |
 | Edge cases (phase 1 + 2) | ✅ | `EdgeCasesTest.php`, `EdgeCasesPhase2Test.php` |
 | Edge cases (phase 3 — empty conditions, between inverted, in single, fire no-match, sign null secret) | ✅ | `EdgeCasesPhase3Test.php` |
 | Migration structure (columns, types, foreign keys) | ✅ | `MigrationStructureTest.php` |
@@ -775,6 +776,11 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+- **Added**: `EventManagerWildcardCacheTest.php` — 9 tests covering: wildcard trigger cache population on first fire, cache invalidation on register/disable/enable/delete, exact triggers unaffected by wildcard cache, disabled wildcard triggers excluded from cache, cross-segment wildcard trigger caching, multiple wildcard triggers cached together.
+- **Refactored**: `WildcardMatcher` is now `readonly final class` — enforces stateless design, prevents accidental instance property additions.
+- **Refactored**: `ConditionEngine::strictEquals()` now has `#[\Pure]` attribute — documents side-effect-free pure function.
+- **Changed**: Version bumped to 1.86.0
 
 ### v1.85.0
 

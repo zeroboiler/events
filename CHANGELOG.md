@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.86.0] — 2026-08-09
+
+### Added
+- `EventManagerWildcardCacheTest.php` — 9 tests covering wildcard trigger cache population on first fire, cache invalidation on register/disable/enable/delete, exact triggers unaffected by wildcard cache, disabled wildcard triggers excluded from cache, cross-segment wildcard trigger caching, multiple wildcard triggers cached together.
+
+### Refactored
+- `WildcardMatcher` is now `readonly final class` — enforces stateless design, prevents accidental instance property additions.
+- `ConditionEngine::strictEquals()` now has `#[\Pure]` attribute — documents side-effect-free pure function for PHPStan.
+- `FireModelCaptureAction::handle()` and `FireModelNoOpAction::handle()` now have `#[\Override]` attribute — consistent with all other Triggerable implementations.
+
+### Changed
+- Version bumped to 1.86.0
+
+---
+
 ## [1.85.0] — 2026-08-09
 
 ### Fixed

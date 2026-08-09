@@ -95,6 +95,7 @@ uses(TestCase::class)->in(
     'EventsPhase17ProductionTest.php',
     'EventsPhase18ProductionTest.php',
     'EventManagerCrudTest.php',
+    'EventManagerWildcardCacheTest.php',
     'EventsPhase19ProductionTest.php',
     'EventsPhase20ProductionTest.php',
     'ConditionEngineNullComparisonTest.php',

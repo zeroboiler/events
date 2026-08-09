@@ -90,6 +90,7 @@ final class ConditionEngine implements ConditionEngineContract
      * string comparison for scalar values of different types.
      * Returns false for non-scalar mixed types (e.g., array vs string).
      */
+    #[\Pure]
     private function strictEquals(mixed $actual, mixed $expected): bool
     {
         if (get_debug_type($actual) === get_debug_type($expected)) {
