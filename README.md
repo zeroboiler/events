@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.88.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.89.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -417,7 +417,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 114 test files (Pest)
+└── tests/                      # 115 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -460,7 +460,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (119 test files)
+composer test        # Run Pest test suite (115 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -577,6 +577,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 45 production (rector.php valid LaravelSetList constant, all source files strict_types, final class verification — 14 classes, no `#[Readonly]` attribute usage, readonly keyword on DomainEvent/EventManager properties, return type declarations on all public methods, `#[\Override]` on ConditionEngine::matches and WebhookAction::handle, `#[\Pure]` on all 3 WildcardMatcher static methods, trait composition verification, PHPStan config, composer.json structure, config completeness, model config-driven table names, console command prefix verification, migration structure, EventLog status constants, interface contracts, ServiceProvider binding methods, Facade accessor, factory definitions, .gitignore completeness, version consistency, source file license headers) | ✅ | `EventsPhase45ProductionTest.php` |
 | Subscription scopeForEvent (exact, wildcard, cross-segment, no-match, non-wildcard chaining) | ✅ | `SubscriptionScopeForEventTest.php` |
 | ManagesHistory purgeLogs (old completed/failed purge, includePending, empty DB, recent log preservation) | ✅ | `ManagesHistoryPurgeLogsTest.php` |
+| Phase 47 production (rector LARAVEL_130, helpers clean imports, readonly class audit, DomainEvent roundtrip, ConditionEngine full operator matrix, WildcardMatcher comprehensive, Subscription signPayload edge cases, Factory states, strict types, license headers, version consistency, Pest.php registration, model config tables, key types, API surface completeness) | ✅ | `EventsPhase47ProductionTest.php` |
 
 ## How It Works
 
@@ -779,6 +780,13 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.89.0
+
+- **Fixed**: `rector.php` upgraded from `LaravelSetList::LARAVEL_120` to `LaravelSetList::LARAVEL_130` for Laravel 13 compatibility.
+- **Fixed**: `tests/helpers.php` removed 7 unused Faker provider `use` import statements — providers are now referenced with fully-qualified class names in `fake()` to avoid dead imports.
+- **Added**: `EventsPhase47ProductionTest.php` — 80+ new production tests covering: rector LARAVEL_130 verification, helpers.php clean imports, WildcardMatcher readonly class + `#[Pure]` on all public methods, DomainEvent readonly promoted properties, EventManager readonly promoted properties, ActionResolver readonly promoted properties, ConditionEngine `#[Override]`, WebhookAction `#[Override]` + Triggerable interface, DispatchTriggerJob final class + ShouldQueue + typed properties, all 11 console commands final verification, ServiceProvider register/boot + `#[Override]`, Facade accessor + `#[Override]`, config completeness (all 6 sections + sub-keys), EventLog status constants, Triggerable/ConditionEngineContract interface contracts, ManagesHistory/ManagesSubscriptions trait methods, EscapesWildcardLike trait usage, TriggerBuilder/SubscriptionBuilder fluent interface return types, WildcardMatcher comprehensive patterns (exact, single, cross-segment, catch-all, extract, findMatching), ConditionEngine full 19-operator matrix + AND logic + dot notation + empty conditions + unknown operators, DomainEvent roundtrip + empty eventType validation, Subscription signPayload edge cases (null/empty/deterministic), factory state return types (all 3 factories), strict types enforcement, license headers, version consistency, Pest.php registration, model config-driven table names, key types/non-incrementing, phpstan.neon.dist configuration, EventManager public API surface completeness (20 methods).
+- **Changed**: Version bumped to 1.89.0, test file count updated to 115.
 
 ### v1.88.0
 

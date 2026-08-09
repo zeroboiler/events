@@ -6,13 +6,6 @@
 
 declare(strict_types=1);
 
-use Faker\Provider\en_US\Address;
-use Faker\Provider\en_US\Company;
-use Faker\Provider\en_US\Person;
-use Faker\Provider\Internet;
-use Faker\Provider\Lorem;
-use Faker\Provider\Miscellaneous;
-use Faker\Provider\PhoneNumber;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 
@@ -107,14 +100,14 @@ if (! function_exists('fake')) {
         if ($faker === null) {
             $faker = new \Faker\Generator;
             // Add concrete providers manually, excluding the abstract Text provider
-            $faker->addProvider(new Address($faker));
-            $faker->addProvider(new Company($faker));
-            $faker->addProvider(new Person($faker));
-            $faker->addProvider(new Lorem($faker));
-            $faker->addProvider(new Internet($faker));
-            $faker->addProvider(new PhoneNumber($faker));
+            $faker->addProvider(new \Faker\Provider\en_US\Address($faker));
+            $faker->addProvider(new \Faker\Provider\en_US\Company($faker));
+            $faker->addProvider(new \Faker\Provider\en_US\Person($faker));
+            $faker->addProvider(new \Faker\Provider\Lorem($faker));
+            $faker->addProvider(new \Faker\Provider\Internet($faker));
+            $faker->addProvider(new \Faker\Provider\PhoneNumber($faker));
             $faker->addProvider(new \Faker\Provider\DateTime($faker));
-            $faker->addProvider(new Miscellaneous($faker));
+            $faker->addProvider(new \Faker\Provider\Miscellaneous($faker));
         }
 
         return $faker;
