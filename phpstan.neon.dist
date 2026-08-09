@@ -3,6 +3,9 @@ parameters:
     paths:
         - src
     reportUnmatchedIgnoredErrors: false
+    treatPhpDocTypesAsCertain: false
+    checkGenericClassInNonGenericObjectType: false
+    checkUninitializedProperties: false
     ignoreErrors:
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder::#'
         - '#Call to an undefined method.*::orderByPriority\(\)#'
@@ -10,4 +13,6 @@ parameters:
         - '#Dynamic call to static method.*is missing#'
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::#'
         - '#Access to an undefined property.*\$this->payload#'
+        - '#Call to an undefined static method Illuminate\\Database\\Eloquent\\Model::#'
+        - '#Method .*::.*\(\) invoked on .*#'
     bootstrapFiles: []

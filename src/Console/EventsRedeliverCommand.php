@@ -88,7 +88,8 @@ final class EventsRedeliverCommand extends Command
 
         // Find the subscription associated with this trigger (if any)
         $payload = is_array($log->payload) ? $log->payload : [];
-        $subscriptionId = $payload['subscription_id'] ?? null;
+        $subscriptionIdRaw = $payload['subscription_id'] ?? null;
+        $subscriptionId = is_string($subscriptionIdRaw) ? $subscriptionIdRaw : null;
         $url = $payload['url'] ?? null;
 
         if (! is_string($url) || $url === '') {
@@ -114,7 +115,7 @@ final class EventsRedeliverCommand extends Command
         $headers = [];
 
         // Re-sign if subscription exists
-        if ($subscriptionId !== null && is_string($subscriptionId)) {
+        if ($subscriptionId !== null) {
             $subscription = Subscription::find($subscriptionId);
             if ($subscription !== null) {
                 $signedBody = json_encode($body, \JSON_THROW_ON_ERROR);
@@ -136,7 +137,7 @@ final class EventsRedeliverCommand extends Command
                 $redeliverDuration = (int) ((microtime(true) - $redeliverStart) * 1000);
                 $log->markAsCompleted($redeliverDuration);
 
-                if ($subscriptionId !== null && is_string($subscriptionId)) {
+                if ($subscriptionId !== null) {
                     Subscription::find($subscriptionId)?->recordDelivery();
                 }
 

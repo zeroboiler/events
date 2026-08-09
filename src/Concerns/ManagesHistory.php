@@ -108,6 +108,13 @@ trait ManagesHistory
             ->whereNotNull('duration_ms')
             ->avg('duration_ms');
 
+        // avg() returns int|float|null from Eloquent
+        if ($avgDuration !== null && is_numeric($avgDuration)) {
+            $avgDuration = round((float) $avgDuration, 2);
+        } else {
+            $avgDuration = null;
+        }
+
         // Top events by fire count
         $topEvents = (clone $logQuery)
             ->select('event', DB::raw('COUNT(*) as count'))
@@ -115,7 +122,10 @@ trait ManagesHistory
             ->orderByDesc('count')
             ->limit(10)
             ->get()
-            ->map(fn (object $row): array => ['event' => (string) $row->event, 'count' => (int) $row->count])
+            ->map(fn (object $row): array => [
+                'event' => isset($row->event) ? (string) $row->event : '',
+                'count' => isset($row->count) && is_numeric($row->count) ? (int) $row->count : 0,
+            ])
             ->toArray();
 
         // Top failed events
@@ -126,7 +136,10 @@ trait ManagesHistory
             ->orderByDesc('count')
             ->limit(10)
             ->get()
-            ->map(fn (object $row): array => ['event' => (string) $row->event, 'count' => (int) $row->count])
+            ->map(fn (object $row): array => [
+                'event' => isset($row->event) ? (string) $row->event : '',
+                'count' => isset($row->count) && is_numeric($row->count) ? (int) $row->count : 0,
+            ])
             ->toArray();
 
         $totalTriggers = (int) Trigger::count();
@@ -142,7 +155,7 @@ trait ManagesHistory
             'dispatched' => $dispatched,
             'success_rate' => $successRate,
             'failure_rate' => $failureRate,
-            'avg_duration_ms' => $avgDuration !== null ? round((float) $avgDuration, 2) : null,
+            'avg_duration_ms' => $avgDuration,
             'top_events' => $topEvents,
             'top_failed_events' => $topFailedEvents,
         ];

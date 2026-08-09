@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.96.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.97.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -417,7 +417,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 122 test files (Pest)
+└── tests/                      # 123 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -460,7 +460,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (122 test files)
+composer test        # Run Pest test suite (123 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -584,6 +584,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 53 production (EventsRegisterCommand/EventsSubscribeCommand is_string() type guards, EventsRetryCommand is_string() guard, comprehensive quality verification: strict types, final classes, console commands, Singleton/transient bindings, contract identity, config completeness, status constants, DomainEvent roundtrip, WildcardMatcher #[Pure], EscapesWildcardLike trait usage, model config-driven tables, key types, API surface completeness, fluent interface, Pest.php completeness, version consistency) | ✅ | `EventsPhase53ProductionTest.php` |
 | Phase 54 production (strict types sweep, final class verification, interface contracts, ServiceProvider binding lifecycle, Facade accessor, Config completeness all 6 sections, EventLog status constants, DomainEvent roundtrip + empty eventType, WildcardMatcher comprehensive, EscapesWildcardLike SQL escaping, model config-driven table names, model key types, DispatchTriggerJob property types, console command prefix verification, version consistency, Subscription signPayload edge cases, Subscription matchesEvent patterns, ActionResolver errors, composer.json autoload PSR-4, trait method presence, fluent interface return types, PHPStan config, license headers, EventManager public method return types) | ✅ | `EventsPhase54ProductionTest.php` |
 | Phase 55 production (CHANGELOG sync, comprehensive audit: strict types all source files, final classes 10 core + 11 console commands, interface contracts, ServiceProvider binding lifecycle, Facade accessor, Config completeness 6 sections + sub-keys, EventLog status constants + $statuses array, model config-driven table names + UUID string keys + non-incrementing, DomainEvent readonly + roundtrip, WildcardMatcher readonly class + #[Pure] + comprehensive patterns, EscapesWildcardLike SQL escaping, ActionResolver error cases, Subscription signPayload edge cases, ConditionEngine full 19-operator matrix + AND logic + dot notation, WildcardMatcher exact/cross-segment/catch-all/empty, ConditionEngine comparison/equality/array/string/null/between/regex operators, license headers, command prefix verification, version consistency, composer.json autoload/extra, migration existence, CHANGELOG sync, phpstan.neon.dist level 9) | ✅ | `EventsPhase55ProductionTest.php` |
+| Phase 56 production (ConditionEngine deep nesting/type coercion/float comparison, WildcardMatcher advanced patterns/edge cases, TriggerBuilder validation, SubscriptionBuilder URL scheme rejection, DomainEvent serialization roundtrip, EventManager fireModel validation, EventLog status transitions, Subscription signPayload determinism, DispatchTriggerJob config, cache invalidation lifecycle, ServiceProvider binding integrity, strict_types enforcement) | ✅ | `EventsPhase56ProductionTest.php` |
 
 ## How It Works
 
@@ -786,6 +787,17 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.97.0
+
+- **Fixed**: `phpstan.neon.dist` — added missing `treatPhpDocTypesAsCertain: false`, `checkGenericClassInNonGenericObjectType: false`, `checkUninitializedProperties: false` for PHPStan 9 compatibility
+- **Fixed**: `phpstan.neon.dist` — added `Call to an undefined static method` and `Method .*::.*\(\) invoked on .*` ignore patterns for Eloquent `__call`/`__callStatic` magic method resolution without Larastan
+- **Fixed**: `ManagesHistory::getStats()` — added `is_numeric()` guard on `avg('duration_ms')` result before `round()` call for PHPStan 9 mixed-to-float safety
+- **Fixed**: `ManagesHistory::getStats()` — added `isset()` and `is_numeric()` guards on aggregate query row properties (`$row->event`, `$row->count`) for PHPStan 9 type safety
+- **Fixed**: `EventsRedeliverCommand` — replaced loose `mixed` `$subscriptionId` with explicit `is_string()` type guard at extraction point, eliminating redundant `is_string()` checks downstream
+- **Refactored**: `SubscriptionBuilder::save()` — removed redundant `@var` docblock on `$schemeRaw` (type is already inferred from `is_string()` guard)
+- **Added**: `EventsPhase56ProductionTest.php` — 30 new production tests covering: ConditionEngine deep nesting/type coercion/float comparison, WildcardMatcher advanced patterns/edge cases, TriggerBuilder validation edge cases, SubscriptionBuilder URL scheme rejection (ftp/file), DomainEvent serialization roundtrip, EventManager fireModel validation, EventLog status transitions, Subscription signPayload determinism, DispatchTriggerJob config behavior, cache invalidation lifecycle, ServiceProvider binding integrity (singleton/transient/contract), all src files strict_types enforcement
+- **Changed**: Version bumped to 1.97.0, test file count updated to 123.
 
 ### v1.96.0
 

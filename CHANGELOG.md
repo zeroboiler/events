@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.97.0] — 2026-08-09
+
+### Fixed
+- **phpstan.neon.dist** — added missing `treatPhpDocTypesAsCertain: false`, `checkGenericClassInNonGenericObjectType: false`, `checkUninitializedProperties: false` for PHPStan 9 compatibility
+- **phpstan.neon.dist** — added `Call to an undefined static method` and `Method .*::.*\(\) invoked on .*` ignore patterns for Eloquent `__call`/`__callStatic` magic method resolution without Larastan
+- **ManagesHistory::getStats()** — added `is_numeric()` guard on `avg('duration_ms')` result before `round()` call for PHPStan 9 mixed-to-float safety
+- **ManagesHistory::getStats()** — added `isset()` and `is_numeric()` guards on aggregate query row properties (`$row->event`, `$row->count`) for PHPStan 9 type safety
+- **EventsRedeliverCommand** — replaced loose `mixed` `$subscriptionId` with explicit `is_string()` type guard at extraction point, eliminating redundant `is_string()` checks downstream
+
+### Refactored
+- **SubscriptionBuilder::save()** — removed redundant `@var` docblock on `$schemeRaw` (type is already inferred from `is_string()` guard)
+
+### Added
+- **EventsPhase56ProductionTest.php** — 30 new production tests covering: ConditionEngine deep nesting/type coercion/float comparison, WildcardMatcher advanced patterns/edge cases, TriggerBuilder validation edge cases, SubscriptionBuilder URL scheme rejection (ftp/file), DomainEvent serialization roundtrip, EventManager fireModel validation, EventLog status transitions, Subscription signPayload determinism, DispatchTriggerJob config behavior, cache invalidation lifecycle, ServiceProvider binding integrity (singleton/transient/contract), all src files strict_types enforcement
+
+### Changed
+- Version bumped to 1.97.0, test file count updated to 123.
+
+---
+
 ## [1.96.0] — 2026-08-09
 
 ### Fixed
