@@ -460,7 +460,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (114 test files)
+composer test        # Run Pest test suite (119 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
