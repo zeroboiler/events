@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.92.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.93.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -580,6 +580,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 47 production (helpers clean imports, readonly class audit, DomainEvent roundtrip, ConditionEngine full operator matrix, WildcardMatcher comprehensive, Subscription signPayload edge cases, Factory states, strict types, license headers, version consistency, Pest.php registration, model config tables, key types, API surface completeness) | ✅ | `EventsPhase47ProductionTest.php` |
 | Phase 48 production (phpstan.neon.dist tightened ignores, parseActions 5 formats return types, ConditionEngine unknown/empty operators, WebhookAction payload stripping, SubscriptionBuilder auto-secret, DispatchTriggerJob config normalization, factory state returns, strict types, final classes, interfaces, #[Pure], #[Override], readonly properties, ServiceProvider bindings, config completeness, version consistency, fluent interface, Facade accessor) | ✅ | `EventsPhase48ProductionTest.php` |
 | Phase 49 production (strict types verification, config completeness, ConditionEngine operator coverage, WildcardMatcher all documented patterns + extractWildcards, DomainEvent serialization round-trip + fromArray invalid eventType, Triggerable interface signature, ConditionEngineContract implementation, Facade accessor, EventLog status constants, DispatchTriggerJob constructor params, EscapesWildcardLike trait usage in EventManager/ManagesHistory/ManagesSubscriptions) | ✅ | `EventsPhase49ProductionTest.php` |
+| Phase 52 production (EventsListCommand/EventsSubscriptionsCommand is_string() type guards, EventsLogCommand is_string() verification, README test file count accuracy, version consistency, all console --event commands type safety, no deprecated !== null guard, ServiceProvider 11 commands, config completeness, strict types enforcement, final class verification, Pest.php registration) | ✅ | `EventsPhase52ProductionTest.php` |
 
 ## How It Works
 

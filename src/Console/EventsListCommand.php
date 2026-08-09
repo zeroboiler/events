@@ -32,8 +32,8 @@ final class EventsListCommand extends Command
 
         // Filter by event name (supports wildcards via LIKE)
         $eventFilter = $this->option('event');
-        if ($eventFilter !== null && $eventFilter !== '') {
-            $likePattern = $this->wildcardToLike((string) $eventFilter);
+        if (is_string($eventFilter) && $eventFilter !== '') {
+            $likePattern = $this->wildcardToLike($eventFilter);
             if ($likePattern !== null) {
                 $query->where('event', 'like', $likePattern);
             } else {

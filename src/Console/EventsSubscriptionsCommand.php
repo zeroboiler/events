@@ -31,13 +31,12 @@ final class EventsSubscriptionsCommand extends Command
         $query = Subscription::query();
 
         $eventFilter = $this->option('event');
-        if ($eventFilter !== null && $eventFilter !== '') {
-            $eventString = is_string($eventFilter) ? $eventFilter : '';
-            $likePattern = $this->wildcardToLike($eventString);
+        if (is_string($eventFilter) && $eventFilter !== '') {
+            $likePattern = $this->wildcardToLike($eventFilter);
             if ($likePattern !== null) {
                 $query->where('event', 'like', $likePattern);
             } else {
-                $query->where('event', $eventString);
+                $query->where('event', $eventFilter);
             }
         }
 

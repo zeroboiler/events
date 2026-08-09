@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.93.0] — 2026-08-09
+
+### Fixed
+- `EventsListCommand::handle()` now uses `is_string()` type guard on `$eventFilter` option — `$this->option('event')` returns `string|array<bool>|null`, and the previous `!== null` guard did not protect against array values reaching `wildcardToLike()`.
+- `EventsSubscriptionsCommand::handle()` now uses `is_string()` type guard on `$eventFilter` option — same issue as EventsListCommand, simplified from the redundant `is_string($eventFilter) ? $eventFilter : ''` ternary.
+- README test file count corrected from 119 to 118 then to 119 (matches actual test files on disk after adding Phase52 test).
+
+### Added
+- `EventsPhase52ProductionTest.php` — 12 new production tests covering: EventsListCommand is_string() type guard, EventsSubscriptionsCommand is_string() type guard, EventsLogCommand is_string() verification, README test file count accuracy, composer.json version consistency, all console commands with --event use is_string(), no deprecated !== null guard pattern, ServiceProvider 11 command registration, config completeness (all 6 sections + sub-keys), strict types enforcement, final class verification, Pest.php Phase52 registration.
+
+### Changed
+- Version bumped to 1.93.0.
+
+---
+
 ## [1.92.0] — 2026-08-09
 
 ### Fixed
