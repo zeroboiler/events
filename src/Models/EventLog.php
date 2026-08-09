@@ -186,6 +186,7 @@ class EventLog extends Model
         return [
             'payload' => 'array',
             'duration_ms' => 'int',
+            'error' => 'string',
         ];
     }
 }

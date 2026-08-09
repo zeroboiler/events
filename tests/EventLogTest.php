@@ -189,3 +189,16 @@ test('event log can store complex payload', function (): void {
     expect($log->payload['user']['name'])->toBe('John Doe')
         ->and($log->payload['order']['total'])->toBe(149.99);
 });
+
+test('event log casts error to string', function (): void {
+    $log = EventLog::factory()->failed()->create();
+
+    expect($log->error)->toBeString()
+        ->and($log->error)->not->toBeEmpty();
+});
+
+test('event log error is null for non-failed logs', function (): void {
+    $log = EventLog::factory()->completed()->create();
+
+    expect($log->error)->toBeNull();
+});
