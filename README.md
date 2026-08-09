@@ -403,7 +403,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 102 test files (Pest)
+└── tests/                      # 103 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -446,7 +446,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (102 test files)
+composer test        # Run Pest test suite (103 test files)
 composer analyse     # PHPStan level 9
 composer lint        # Laravel Pint
 composer ci          # All checks (lint → analyse → rector → test)
@@ -756,6 +756,11 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.76.0
+
+- **Added**: `EventsPhase41ProductionTest.php` — README test count accuracy verification, composer.json autoload structure, phpstan level 9, final class verification (EventManager, ConditionEngine, WildcardMatcher), DomainEvent readonly properties, WildcardMatcher #[Pure] on key public methods, console command zeroboiler:events: prefix validation, config completeness (all 6 sections), version badge consistency.
+- **Fixed**: README test file count verified accurate (103 files on disk).
 
 ### v1.75.0
 
