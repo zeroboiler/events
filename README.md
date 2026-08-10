@@ -490,7 +490,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (132 test files)
+composer test        # Run Pest test suite (133 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -828,6 +828,11 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v2.8.0
+
+- **Improved**: Production readiness review — comprehensive manual code audit of all 31 source files for PHP 8.5 syntax, strict types, return type declarations, docblocks, typed properties, `#[Override]`/`#[Pure]` attributes, and PHPStan 9 compliance.
+- **Changed**: Test file count updated to 133.
 
 ### v2.7.0
 

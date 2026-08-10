@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2.8.0] — 2026-08-10
+
+### Improved
+- Production readiness review — comprehensive manual code audit of all 31 source files for PHP 8.5 syntax, strict types, return type declarations, docblocks, typed properties, `#[Override]`/`#[Pure]` attributes, and PHPStan 9 compliance.
+
+### Changed
+- Test file count updated to 133.
+
+---
+
 ## [2.6.0] — 2026-08-10
 
 ### Refactored
