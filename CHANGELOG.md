@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [3.4.0] — 2026-08-10
+
+### Fixed
+- README test file count corrected from 142 to 138 (136 Pest-registered + 2 standalone + 5 support files).
+- `phpstan.neon.dist` — changed `reportUnmatchedIgnoredErrors` from `false` to `true` to surface stale ignore patterns; tightened Facade ignore to specific facades (Config, Cache, Queue, Log, DB, Http) instead of wildcard catch-all.
+
+### Added
+- `EventsPhase68ProductionTest.php` — 50 comprehensive production tests covering: strict types enforcement all source files, final class verification (10 core + 12 console commands), WildcardMatcher readonly + #[Pure] attribute verification, DomainEvent readonly properties + roundtrip preservation, ConditionEngine full 19-operator matrix + AND logic + dot notation, WildcardMatcher comprehensive patterns (exact, single, cross-segment, catch-all, findMatching, extract), ActionResolver error cases (non-existent class, non-Triggerable class), fire/fireModel empty string validation, Subscription signPayload null/empty/deterministic, phpstan.neon.dist level max + targeted ignores + reportUnmatchedIgnoredErrors, ServiceProvider singleton/transient bindings + #[Override] verification, Facade accessor + #[Override], composer.json version/structure, EventLog status constants, model config-driven table names + UUID keys + #[Override] on boot/casts/newFactory/getTable, fluent interface return types, migration/factory existence, command prefix verification, config completeness (7 sections), trait method presence (ManagesHistory + ManagesSubscriptions), EscapesWildcardLike trait usage, version consistency (composer.json + README), license headers.
+
+### Changed
+- Version bumped to 3.4.0.
+
+---
+
 ## [3.3.0] — 2026-08-10
 
 ### Fixed
