@@ -447,7 +447,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 133 test files (Pest)
+└── tests/                      # 135 test files (133 Pest + 2 standalone)
 ```
 
 ### Service Container Bindings
@@ -490,7 +490,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (133 test files)
+composer test        # Run Pest test suite (135 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -624,6 +624,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Health command integration (JSON output keys, healthy system checks, global disable detection, inactive subscription detection, getConfig() helper refactor consistency) | ✅ | `EventsHealthIntegrationTest.php` |
 | Phase 63 production (strict types, final classes, readonly + #[Pure], ConditionEngine/Triggerable interface, DomainEvent readonly/roundtrip/fromArray, WildcardMatcher readonly + #[Pure], EventLog status constants, config completeness, model config tables, key types, EventManager 21 API methods, fluent interface, ConditionEngine 19-operator matrix, WildcardMatcher comprehensive, EscapesWildcardLike SQL, ActionResolver errors, fire/fireModel validation, signPayload null/deterministic, getStats structure/zero-state, TriggerBuilder/SubscriptionBuilder validation, matchesEvent wildcards, composer.json autoload/extra, migrations/factories, version consistency, license headers, singleton/transient bindings, contract identity, console prefix, handle() return types, phpstan config, TriggerBuilder resolveActions dedup, public method return types) | ✅ | `EventsPhase63ProductionTest.php` |
 | Phase 64 production (EventLog scopeStalePending, Subscription scopeExceededFailures, getStalePendingLogs API, deactivateExceededSubscriptions API, config-driven threshold handling, limit support, eager-loaded triggers, facade annotations, inactive skip logic, non-int config fallback) | ✅ | `EventsPhase64ProductionTest.php` |
+| Facade method coverage (accessor resolution, @method↔public method mapping, proxy type verification) | ✅ | `FacadeMethodCoverageTest.php` |
 
 ## How It Works
 
@@ -840,8 +841,9 @@ Before deploying to production, verify:
 - **Added**: `EventManager::getStalePendingLogs(Carbon $before, int $limit)` — get stuck pending event logs with eager-loaded triggers.
 - **Added**: `EventManager::deactivateExceededSubscriptions()` — batch-deactivate all subscriptions that have exceeded the failure threshold. Returns count of deactivated subscriptions.
 - **Added**: Facade `@method` annotations for `getStalePendingLogs()` and `deactivateExceededSubscriptions()`.
-- **Added**: README API Reference updated with 2 new methods; test coverage table updated with Phase 64 entry.
-- **Changed**: Version bumped to 3.0.0 (production-ready milestone), test file count updated to 133.
+- **Added**: `FacadeMethodCoverageTest.php` — 4 tests verifying facade accessor resolution, `@method`↔public method mapping completeness, proxy type correctness, and coverage gap detection.
+- **Fixed**: README test file count corrected to 135 (133 Pest-registered + 2 standalone).
+- **Changed**: Version bumped to 3.0.0 (production-ready milestone).
 
 ### v2.9.0
 
