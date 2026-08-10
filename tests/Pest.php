@@ -144,6 +144,7 @@ uses(TestCase::class)->in(
     'EventsGlobalDisableTest.php',
     'EventsPhase58ProductionTest.php',
     'EventsHealthCommandTest.php',
+    'EventsHealthIntegrationTest.php',
     'EventsPhase60ProductionTest.php',
     'EventsPhase61ProductionTest.php',
     'EventsPhase62ProductionTest.php',

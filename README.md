@@ -1,9 +1,10 @@
 # ZeroBoiler Events
 
-|![Latest Version](https://img.shields.io/badge/version-2.5.0-blue)
-|[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
-[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
-[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
+|![Latest Version](https://img.shields.io/badge/version-2.6.0-blue)|
+|[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
+|[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
+|[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
+|[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
 
@@ -402,10 +403,10 @@ events/
 │   │   ├── EventLogFactory.php
 │   │   ├── SubscriptionFactory.php
 │   │   └── TriggerFactory.php
-│   └── migrations/
-│       ├── 2024_01_01_000001_create_triggers_table.php
-│       ├── 2024_01_01_000002_create_event_logs_table.php
-│       └── 2025_06_28_000001_create_event_subscriptions_table.php
+├── migrations/
+│   ├── 2024_01_01_000001_create_triggers_table.php
+│   ├── 2024_01_01_000002_create_event_logs_table.php
+│   └── 2025_06_28_000001_create_event_subscriptions_table.php
 ├── src/
 │   ├── Actions/
 │   │   └── WebhookAction.php   # Triggerable: HTTP POST webhook dispatch
@@ -446,7 +447,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 129 test files (Pest)
+└── tests/                      # 131 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -620,6 +621,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 59 production (12 console commands final, 10 core classes final, WildcardMatcher readonly + #[Pure], DomainEvent readonly properties, EventLog status constants, interface contracts, ServiceProvider singleton/transient bindings, config completeness) | ✅ | `EventsHealthCommandTest.php` |
 | Phase 60 production (strict types, final classes, readonly + #[Pure], ConditionEngine between() null-coalescing safety, all operators with empty payload, config completeness, model key types, factory states, facade accessor, phpstan config, WildcardMatcher comprehensive, license headers, version consistency) | ✅ | `EventsPhase60ProductionTest.php` |
 | Phase 61 production (source strict_types, core/console finals, readonly promoted props, DomainEvent readonly, interfaces, #[Pure], status constants, config 7 sections, ServiceProvider bindings, Facade accessor, config-driven tables, UUID key types, trait composition, API surface, fluent interface, 19-operator matrix, WildcardMatcher comprehensive, version consistency, test count) | ✅ | `EventsPhase61ProductionTest.php` |
+| Health command integration (JSON output keys, healthy system checks, global disable detection, inactive subscription detection, getConfig() helper refactor consistency) | ✅ | `EventsHealthIntegrationTest.php` |
 
 ## How It Works
 
@@ -826,6 +828,13 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v2.6.0
+
+- **Refactored**: `EventManager` — extracted `getConfig()` helper method to DRY up repeated config repository access pattern (was duplicated 4× across `isDisabled()`, `setEnabled()`, `fire()`, `getTriggerCacheTtl()`). All config reads now go through a single typed method.
+- **Added**: `EventsHealthIntegrationTest.php` — integration tests for health command output structure, global disable detection, inactive subscription detection, and `getConfig()` helper consistency.
+- **Added**: CI workflow badge to README.
+- **Changed**: Version bumped to 2.6.0, test file count updated to 131.
 
 ### v2.5.0
 

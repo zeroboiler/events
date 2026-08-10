@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2.6.0] — 2026-08-10
+
+### Refactored
+- `EventManager` — extracted `getConfig()` protected helper method to DRY up repeated config repository access pattern (was duplicated 4× across `isDisabled()`, `setEnabled()`, `fire()`, `getTriggerCacheTtl()`). All config reads now go through a single typed method with proper `assert()` type narrowing.
+
+### Added
+- `EventsHealthIntegrationTest.php` — integration tests for health command output structure, global disable detection, inactive subscription detection, and `getConfig()` helper consistency.
+- CI workflow badge to README.
+
+### Changed
+- Version bumped to 2.6.0.
+- Test file count updated to 131.
+
+---
+
 ## [2.4.0] — 2026-08-10
 
 ### Added

@@ -45,14 +45,24 @@ final class EventManager
     ) {}
 
     /**
-     * Get the wildcard trigger cache TTL from config or use default.
+     * Get the config repository from the container with type narrowing.
+     *
+     * @return \Illuminate\Contracts\Config\Repository
      */
-    protected function getTriggerCacheTtl(): int
+    protected function getConfig(): \Illuminate\Contracts\Config\Repository
     {
         $config = $this->app->get('config');
         assert($config instanceof \Illuminate\Contracts\Config\Repository);
 
-        $ttl = $config->get('events.wildcard_cache_ttl', self::DEFAULT_TRIGGER_CACHE_TTL);
+        return $config;
+    }
+
+    /**
+     * Get the wildcard trigger cache TTL from config or use default.
+     */
+    protected function getTriggerCacheTtl(): int
+    {
+        $ttl = $this->getConfig()->get('events.wildcard_cache_ttl', self::DEFAULT_TRIGGER_CACHE_TTL);
 
         return is_int($ttl) && $ttl > 0 ? $ttl : self::DEFAULT_TRIGGER_CACHE_TTL;
     }
@@ -98,10 +108,7 @@ final class EventManager
      */
     public function isDisabled(): bool
     {
-        $config = $this->app->get('config');
-        assert($config instanceof \Illuminate\Contracts\Config\Repository);
-
-        return $config->get('events.disabled', false) === true;
+        return $this->getConfig()->get('events.disabled', false) === true;
     }
 
     /**
@@ -113,10 +120,7 @@ final class EventManager
      */
     public function setEnabled(bool $enabled): void
     {
-        $config = $this->app->get('config');
-        assert($config instanceof \Illuminate\Contracts\Config\Repository);
-
-        $config->set('events.disabled', ! $enabled);
+        $this->getConfig()->set('events.disabled', ! $enabled);
     }
 
     /**
@@ -226,9 +230,7 @@ final class EventManager
         }
 
         // Global disable check — allows maintenance-mode-like suppression
-        $config = $this->app->get('config');
-        assert($config instanceof \Illuminate\Contracts\Config\Repository);
-        $disabled = $config->get('events.disabled', false);
+        $disabled = $this->getConfig()->get('events.disabled', false);
         if ($disabled === true) {
             return;
         }
