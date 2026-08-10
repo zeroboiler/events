@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [3.6.0] — 2026-08-10
+
+### Added
+- `EventsServiceProvider::provides()` — returns the full list of 6 services provided by the provider for lazy provider optimization in Laravel's deferred provider system.
+- `EventsPhase70ProductionTest.php` — 25 new production tests covering: `provides()` service list/count/resolvability, `ConditionEngine::strictEquals` pure unit tests (same type, different type, scalar cross-type coercion, zero vs empty string, bool false vs "0", float NaN, array vs scalar, null vs non-null), `ConditionEngine::between()` edge cases (non-array value, 3-element array, 1-element array, non-numeric boundaries, null boundaries, float actual, string-numeric actual, boundary inclusivity), `SubscriptionBuilder` URL scheme validation (ftp://, file://, mailto:// rejection), `EventManager::deleteTrigger` non-existent ID, config-driven `max_failures` type safety (non-int config fallback to 10, null config fallback).
+
+### Changed
+- Version bumped to 3.6.0, test file count updated to 140.
+
+---
+
 ## [3.5.0] — 2026-08-10
 
 ### Fixed

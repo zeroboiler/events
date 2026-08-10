@@ -28,6 +28,9 @@ use ZeroBoiler\Events\TriggerBuilder;
 
 final class EventsServiceProvider extends ServiceProvider
 {
+    /**
+     * Register services.
+     */
     #[\Override]
     public function register(): void
     {
@@ -54,6 +57,9 @@ final class EventsServiceProvider extends ServiceProvider
         $this->app->bind(TriggerBuilder::class);
     }
 
+    /**
+     * Bootstrap services.
+     */
     #[\Override]
     public function boot(): void
     {
@@ -85,5 +91,25 @@ final class EventsServiceProvider extends ServiceProvider
                 EventsRedeliverCommand::class,
             ]);
         }
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * Enables lazy loading of the service provider when only specific
+     * services are requested by the container.
+     *
+     * @return list<string>
+     */
+    public function provides(): array
+    {
+        return [
+            EventManager::class,
+            ConditionEngine::class,
+            ConditionEngineContract::class,
+            ActionResolver::class,
+            TriggerBuilder::class,
+            SubscriptionBuilder::class,
+        ];
     }
 }

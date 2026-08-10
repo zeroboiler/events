@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-3.5.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-3.6.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-success)]()|
@@ -449,7 +449,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 139 test files (137 Pest + 2 standalone + 5 support)
+└── tests/                      # 140 test files (138 Pest + 2 standalone + 5 support)
 ```
 
 ### Service Container Bindings
@@ -492,7 +492,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (139 test files)
+composer test        # Run Pest test suite (140 test files)
 composer analyse     # PHPStan level max (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -631,6 +631,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 66 production (WildcardMatcher regex error safety via === 1 check, comprehensive findMatchingPatterns/extractWildcards, catch-all/** patterns, regex special chars, DomainEvent serialization roundtrip/fromArray edge cases/invalid UUID, ConditionEngine full 19-operator matrix + strict identity + AND logic + dot notation + empty conditions + unknown operators + in null safety + between auto-normalize, EscapesWildcardLike null/non-wildcard/asterisk-percent/underscore-percent, EventLog status constants consistency, config completeness 7 sections, ServiceProvider singleton/transient binding verification, Facade accessor resolution, strict types enforcement all source files, final class verification 10 core + 12 console commands, WildcardMatcher #[Pure] attribute verification, model config-driven table names, model UUID string key types + non-incrementing) | ✅ | `EventsPhase66ProductionTest.php` |
 | Phase 67 production (getStats edge cases, getStalePendingLogs, deactivateExceededSubscriptions, purgeLogs, fire/fireModel validation, listTriggers/listSubscriptions/getEventHistory, WildcardMatcher findMatchingPatterns/extractWildcards, DomainEvent fromArray, ConditionEngine empty/unknown operators, EscapesWildcardLike, unsubscribe/getSubscription) | ✅ | `EventsPhase67ProductionTest.php` |
 | Phase 68 production (strict types all files, final classes, readonly + #[Pure], ConditionEngine 19-operator matrix + AND logic, WildcardMatcher comprehensive, ActionResolver errors, fire/fireModel validation, Subscription signPayload, phpstan config, ServiceProvider bindings, Facade accessor, config completeness, fluent interface, migration/factory, command prefix, trait methods, version consistency, license headers) | ✅ | `EventsPhase68ProductionTest.php` |
+| Phase 70 production (ServiceProvider provides() lazy loading, ConditionEngine strictEquals pure unit tests, ConditionEngine between() edge cases, SubscriptionBuilder URL scheme rejection, EventManager deleteTrigger, config-driven max_failures type safety) | ✅ | `EventsPhase70ProductionTest.php` |
 
 ## How It Works
 
@@ -839,6 +840,12 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v3.6.0
+
+- **Added**: `EventsServiceProvider::provides()` — returns list of all services for lazy provider optimization.
+- **Added**: `EventsPhase70ProductionTest.php` — 25 new tests covering: `provides()` service list/count/resolvability, `ConditionEngine::strictEquals` unit tests (same/different type, zero vs empty, float NaN, array vs scalar, null coercion), `ConditionEngine::between()` edge cases (non-array, 3-element, 1-element, non-numeric boundaries, null boundaries, float actual, string-numeric actual, boundary inclusivity), `SubscriptionBuilder` URL scheme validation (ftp, file, mailto rejection), `EventManager::deleteTrigger` non-existent ID, config-driven `max_failures` type safety.
+- **Changed**: Version bumped to 3.6.0, test file count updated to 140.
 
 ### v3.4.0
 
