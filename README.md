@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-2.7.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-2.8.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -447,7 +447,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 131 test files (Pest)
+└── tests/                      # 132 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -490,7 +490,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (130 test files)
+composer test        # Run Pest test suite (132 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
