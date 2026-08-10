@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [3.3.0] — 2026-08-10
+
+### Fixed
+- Added missing `use Illuminate\Support\Carbon` import in `EventLog` model — `scopeStalePending(Carbon $before)` parameter type now resolves correctly for PHPStan 9.
+- Added missing `use Illuminate\Support\Carbon` import in `Trigger` model — PHPDoc `@property Carbon` annotations now resolve correctly.
+
+### Improved
+- README `getStats()` return type documentation expanded to include all 12 fields: `total_logs`, `total_triggers`, `active_triggers`, `completed`, `failed`, `pending`, `dispatched`, `success_rate`, `failure_rate`, `avg_duration_ms`, `top_events`, `top_failed_events`.
+
+### Added
+- `EventsPhase67ProductionTest.php` — 40+ comprehensive production tests covering: `getStats` edge cases (zero-state, only-completed, only-failed, mixed rates, since-filter, no-duration, top-events aggregation, top-failed-events filtering), `getStalePendingLogs` boundary filtering, `deactivateExceededSubscriptions` batch logic, `purgeLogs` with include-pending toggle and date boundary, fire/fireModel validation (empty string, zero-string, empty class/action), fireModel event name construction, deleteTrigger non-existent cache invalidation, setEnabled runtime disable, listTriggers/listSubscriptions/getEventHistory with wildcard/status/triggerId/activeOnly filters, WildcardMatcher findMatchingPatterns subset and extractWildcards ** pattern, DomainEvent fromArray invalid eventType/missing eventType/invalid UUID/invalid datetime graceful degradation, ConditionEngine empty conditions/empty array/inverted between/not-null/not-empty/empty operators, EscapesWildcardLike percent-underscore escaping, unsubscribe/getSubscription non-existent returns.
+
+### Changed
+- Version bumped to 3.3.0.
+
+---
+
 ## [3.2.0] — 2026-08-10
 
 ### Fixed

@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-3.2.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-3.3.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-success)]()|
@@ -276,8 +276,10 @@ $history = EventManager::getEventHistory(
 
 // Aggregate statistics
 $stats = EventManager::getStats(since: now()->subDays(7));
-// Returns: total_logs, completed, failed, success_rate, avg_duration_ms,
-//          top_events, top_failed_events, etc.
+// Returns: total_logs, total_triggers, active_triggers,
+//          completed, failed, pending, dispatched,
+//          success_rate (%), failure_rate (%),
+//          avg_duration_ms, top_events, top_failed_events
 
 // Purge old logs
 $deleted = EventManager::purgeLogs(
