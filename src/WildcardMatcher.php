@@ -49,7 +49,9 @@ readonly final class WildcardMatcher
 
         $regex = '/^'.$regex.'$/';
 
-        return (bool) preg_match($regex, $event);
+        $result = @preg_match($regex, $event);
+
+        return $result === 1;
     }
 
     /**

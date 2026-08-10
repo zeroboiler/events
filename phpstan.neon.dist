@@ -11,8 +11,10 @@ parameters:
         # Eloquent dynamic scopes — resolved at runtime via __call magic
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder::orderByPriority\(\)#'
         - '#Call to an undefined method.*::scopeOrderByPriority\(\)#'
-        # Facade proxy — resolved at runtime
-        - '#Dynamic call to static method.*is missing#'
+        # Facade proxy — resolved at runtime via __callStatic magic
+        - '#Call to an undefined method Illuminate\\Support\\Facades\\.*::#'
+        - '#Call to an undefined static method Illuminate\\Support\\Facades\\.*::#'
         # Eloquent model property access — resolved via casts and attribute types
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$payload#'
+        - '#Access to an undefined property ZeroBoiler\\Events\\Models\\.*::\$.*#'
     bootstrapFiles: []

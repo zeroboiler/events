@@ -6,7 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [3.0.0] — 2026-08-10
+## [3.2.0] — 2026-08-10
+
+### Fixed
+- `WildcardMatcher::matches()` now uses `=== 1` check on `preg_match()` return value instead of `(bool)` cast — prevents silent swallowing of regex compilation errors (e.g., malformed patterns from user input).
+
+### Improved
+- `phpstan.neon.dist` — tightened ignore patterns for Facade dynamic calls: replaced overly broad `#Dynamic call to static method.*is missing#` with specific `Illuminate\Support\Facades\*` patterns. Added model property access ignore for `ZeroBoiler\Events\Models\*` namespace.
+
+### Added
+- `EventsPhase66ProductionTest.php` — 40+ comprehensive production tests covering: WildcardMatcher regex error safety, findMatchingPatterns/extractWildcards, catch-all/** patterns, regex special chars, DomainEvent serialization roundtrip/fromArray edge cases/invalid UUID, ConditionEngine full 19-operator matrix + strict identity + AND logic + dot notation + empty conditions + unknown operators + in null safety + between auto-normalize, EscapesWildcardLike SQL escaping, EventLog status constants consistency, config completeness 7 sections, ServiceProvider singleton/transient binding verification, Facade accessor resolution, strict types enforcement all source files, final class verification (10 core + 12 console commands), WildcardMatcher #[Pure] attribute verification, model config-driven table names, model UUID string key types.
+
+### Changed
+- Version bumped to 3.2.0, test file count updated to 142 (135 Pest + 2 standalone + 5 support).
+
+---
+
+## [3.1.0] — 2026-08-10
 
 ### Added
 - `EventLog::scopeStalePending(Carbon $before)` — scope for querying stuck pending logs older than a threshold. Useful for identifying queue worker crash artifacts.

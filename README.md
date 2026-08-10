@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-3.1.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-3.2.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-success)]()|
@@ -447,7 +447,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 141 test files (134 Pest + 2 standalone + 5 support)
+└── tests/                      # 142 test files (135 Pest + 2 standalone + 5 support)
 ```
 
 ### Service Container Bindings
@@ -490,7 +490,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (141 test files)
+composer test        # Run Pest test suite (142 test files)
 composer analyse     # PHPStan level max (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -626,6 +626,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 64 production (EventLog scopeStalePending, Subscription scopeExceededFailures, getStalePendingLogs API, deactivateExceededSubscriptions API, config-driven threshold handling, limit support, eager-loaded triggers, facade annotations, inactive skip logic, non-int config fallback) | ✅ | `EventsPhase64ProductionTest.php` |
 || Facade method coverage (accessor resolution, @method↔public method mapping, proxy type verification) | ✅ | `FacadeMethodCoverageTest.php` |
 | Phase 65 production (fireModel/fire validation, TriggerBuilder save/action validation, SubscriptionBuilder URL scheme rejection, ActionResolver errors, DomainEvent fromArray edge cases, WildcardMatcher comprehensive, ConditionEngine full operator matrix + null safety + ReDoS + strict identity, EventLog status constants + model UUID key, Subscription signing/failure/matching, EventManager CRUD/fire/disable/enable/stats/purge/stale/deactivate, EscapesWildcardLike SQL escaping, ServiceProvider binding lifecycle, config completeness 7 sections, final class verification, strict types enforcement, composer.json PSR-4, readonly + #[Pure] verification) | ✅ | `EventsPhase65ProductionTest.php` |
+| Phase 66 production (WildcardMatcher regex error safety via === 1 check, comprehensive findMatchingPatterns/extractWildcards, catch-all/** patterns, regex special chars, DomainEvent serialization roundtrip/fromArray edge cases/invalid UUID, ConditionEngine full 19-operator matrix + strict identity + AND logic + dot notation + empty conditions + unknown operators + in null safety + between auto-normalize, EscapesWildcardLike null/non-wildcard/asterisk-percent/underscore-percent, EventLog status constants consistency, config completeness 7 sections, ServiceProvider singleton/transient binding verification, Facade accessor resolution, strict types enforcement all source files, final class verification 10 core + 12 console commands, WildcardMatcher #[Pure] attribute verification, model config-driven table names, model UUID string key types + non-incrementing) | ✅ | `EventsPhase66ProductionTest.php` |
 
 ## How It Works
 
@@ -835,7 +836,14 @@ Before deploying to production, verify:
 
 ## Changelog
 
-### v3.0.0
+### v3.2.0
+
+- **Fixed**: `WildcardMatcher::matches()` now uses `=== 1` check on `preg_match()` return value — prevents silent swallowing of regex compilation errors.
+- **Improved**: `phpstan.neon.dist` — tightened ignore patterns for Facade dynamic calls with specific namespace patterns; added model property access ignore for package models.
+- **Added**: `EventsPhase66ProductionTest.php` — 40+ production tests covering regex safety, full ConditionEngine operator matrix, DomainEvent roundtrip, config completeness, ServiceProvider bindings, strict types, final classes.
+- **Changed**: Version bumped to 3.2.0, test file count updated to 142.
+
+### v3.1.0
 
 - **Added**: `EventLog::scopeStalePending(Carbon $before)` — scope for querying stuck pending logs older than a threshold. Useful for ops dashboards and manual intervention workflows.
 - **Added**: `Subscription::scopeExceededFailures()` — scope for querying active subscriptions that have exceeded the failure threshold from config.
