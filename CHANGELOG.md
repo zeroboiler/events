@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2.4.0] — 2026-08-10
+
+### Added
+- **EventsPhase61ProductionTest.php** — 37 comprehensive production readiness tests covering: all 31 source files strict_types enforcement, all core classes final verification, WildcardMatcher readonly final class, all 12 console commands final, EventManager/ActionResolver constructor readonly promoted properties, DomainEvent readonly properties, ConditionEngine/ConditionEngineContract interface implementation, WebhookAction/Triggerable interface implementation, DispatchTriggerJob/ShouldQueue implementation, WildcardMatcher #[Pure] attribute verification, EventLog status constants, config completeness (7 sections + sub-keys), ServiceProvider binding correctness, Facade accessor, models config-driven table names, model string UUID key types, EscapesWildcardLike behavior, DomainEvent roundtrip identity, ConditionEngine full 19-operator matrix, WildcardMatcher comprehensive patterns, EventManager API surface completeness, TriggerBuilder/SubscriptionBuilder fluent interface, phpstan.neon.dist level 9, composer.json structure, migration/factory file existence, license headers, trait composition, fire/fireModel validation, signPayload null secret, ActionResolver errors, getStats zero-state, global disable behavior, regex special chars safety, version consistency, test file count accuracy.
+
+### Changed
+- Version bumped to 2.4.0.
+- Test file count updated to 129.
+
+---
+
 ## [2.3.0] — 2026-08-10
 
 ### Fixed

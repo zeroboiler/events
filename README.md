@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-2.3.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-2.4.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -446,7 +446,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 128 test files (Pest)
+└── tests/                      # 129 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -489,7 +489,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (128 test files)
+composer test        # Run Pest test suite (129 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -619,6 +619,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Health command (diagnostic, JSON output, cache check, ServiceProvider registration) | ✅ | `EventsHealthCommandTest.php` |
 | Phase 59 production (12 console commands final, 10 core classes final, WildcardMatcher readonly + #[Pure], DomainEvent readonly properties, EventLog status constants, interface contracts, ServiceProvider singleton/transient bindings, config completeness) | ✅ | `EventsHealthCommandTest.php` |
 | Phase 60 production (strict types, final classes, readonly + #[Pure], ConditionEngine between() null-coalescing safety, all operators with empty payload, config completeness, model key types, factory states, facade accessor, phpstan config, WildcardMatcher comprehensive, license headers, version consistency) | ✅ | `EventsPhase60ProductionTest.php` |
+| Phase 61 production (source strict_types, core/console finals, readonly promoted props, DomainEvent readonly, interfaces, #[Pure], status constants, config 7 sections, ServiceProvider bindings, Facade accessor, config-driven tables, UUID key types, trait composition, API surface, fluent interface, 19-operator matrix, WildcardMatcher comprehensive, version consistency, test count) | ✅ | `EventsPhase61ProductionTest.php` |
 
 ## How It Works
 
@@ -825,6 +826,11 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v2.4.0
+
+- **Added**: `EventsPhase61ProductionTest.php` — 37 comprehensive production readiness tests covering: all 31 source files strict_types enforcement, all core classes final verification, WildcardMatcher readonly final class, all 12 console commands final, EventManager constructor readonly promoted properties, ActionResolver constructor readonly promoted properties, DomainEvent readonly properties (promoted + body-set), ConditionEngine/ConditionEngineContract interface implementation, WebhookAction/Triggerable interface implementation, DispatchTriggerJob/ShouldQueue implementation, WildcardMatcher #[Pure] attribute verification, EventLog status constants (4 statuses), config completeness (7 sections + sub-keys), ServiceProvider binding correctness (singletons, transients, contract identity), Facade accessor, models config-driven table names, model string UUID key types + non-incrementing, EscapesWildcardLike null return for non-wildcard + asterisk-to-percent, DomainEvent roundtrip identity preservation, ConditionEngine full 19-operator matrix + AND logic, WildcardMatcher comprehensive patterns (exact, single/cross-segment, catch-all, multi-wildcard, extract), EventManager API surface completeness (21 public methods), TriggerBuilder/SubscriptionBuilder fluent interface, phpstan.neon.dist level 9, composer.json structure (name/type/PHP version/autoload/extra.laravel), migration + factory file existence (3+3), license headers on all source files, ManagesHistory/ManagesSubscriptions/EscapesWildcardLike trait composition, EventManager fire/fireModel validation, Subscription signPayload null secret, ActionResolver non-existent class error, getStats zero-state structure, EventManager global disable behavior, WildcardMatcher regex special characters safety, version consistency, test file count accuracy.
+- **Changed**: Version bumped to 2.4.0, test file count updated to 129.
 
 ### v2.3.0
 
