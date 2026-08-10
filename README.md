@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|![Latest Version](https://img.shields.io/badge/version-2.6.0-blue)|
+|[![version](https://img.shields.io/badge/version-2.7.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -828,6 +828,11 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v2.7.0
+
+- **Added**: `EventsFinalProductionAuditTest.php` — 22 comprehensive production audit tests covering: strict types enforcement across all source files, final class verification for core classes and console commands, readonly properties on DomainEvent/EventManager/ActionResolver, interface contract verification (ConditionEngineContract, Triggerable), ServiceProvider binding correctness, Facade accessor verification, config completeness (all 7 sections + sub-keys), model config-driven table names, EventLog status constants, WildcardMatcher readonly class + #[Pure] attributes, EscapesWildcardLike trait composition, DispatchTriggerJob ShouldQueue implementation, migration/factory file existence, composer.json autoload/extra structure, phpstan.neon.dist level 9, EventManager public API surface (21 methods), version consistency.
+- **Changed**: Version bumped to 2.7.0, test file count updated to 132.
 
 ### v2.6.0
 
