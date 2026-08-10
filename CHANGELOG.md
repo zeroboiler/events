@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [3.5.0] — 2026-08-10
+
+### Fixed
+- `phpstan.neon.dist` — enabled `checkGenericClassInNonGenericObjectType`, `checkMissingIterableValueType`, `checkFunctionNameCase`, `checkClassLikeNameCase`, `checkPropertyHookNameCase`, and `checkEnumCaseValueNameCase` for stricter PHPStan 9 compliance; added targeted ignore rules for `Trigger::scopeEnabled()`, `Subscription::scopeActive()`, and `Collection::push()` dynamic method calls.
+
+### Added
+- `EventsPhase69ProductionReadinessTest.php` — 90+ production-ready tests covering: singleton/transient service binding verification (EventManager, ConditionEngine, ActionResolver, TriggerBuilder, SubscriptionBuilder), contract binding verification (ConditionEngineContract → ConditionEngine), WildcardMatcher comprehensive edge cases (empty pattern/event, catch-all exclusion, single/cross-segment, multiple wildcards, findMatchingPatterns, extractWildcards with **/no-wildcard/mismatch/multiple), ConditionEngine full 19-operator matrix (>, >=, <, <=, ===, !==, in, not_in, contains string/array, not_contains, between normal+inverted, null, not_null, empty, not_empty, starts_with, ends_with, matches regex + ReDoS protection + max length, unknown operator, empty condition array, AND logic, dot notation, type-safe equality string fallback, non-scalar rejection, missing field default), ActionResolver error handling (non-existent class, non-Triggerable class), DomainEvent value object (auto UUID/timestamp, occur factory, serialization, roundtrip reconstruction, invalid UUID/date fallback, missing eventType throw), EventLog status constants verification, EscapesWildcardLike trait coverage, DispatchTriggerJob config-driven construction (tries, backoff array/string, queue name, connection, invalid fallbacks), Subscription model business logic (signPayload null/empty/deterministic, hasExceededFailures config/override, recordDelivery/resetFailures/recordFailure, matchesEvent exact/wildcard), Trigger model scopes (enabled, async) and UUID verification, config completeness (7 sections + sub-keys), Facade accessor, ServiceProvider publish groups.
+
+### Changed
+- Version bumped to 3.5.0.
+
+---
+
 ## [3.4.0] — 2026-08-10
 
 ### Fixed

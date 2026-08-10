@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-3.4.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-3.5.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-success)]()|

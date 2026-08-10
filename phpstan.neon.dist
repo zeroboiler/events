@@ -4,9 +4,13 @@ parameters:
         - src
     reportUnmatchedIgnoredErrors: true
     treatPhpDocTypesAsCertain: false
-    checkGenericClassInNonGenericObjectType: false
+    checkGenericClassInNonGenericObjectType: true
     checkUninitializedProperties: false
-    checkMissingIterableValueType: false
+    checkMissingIterableValueType: true
+    checkFunctionNameCase: true
+    checkClassLikeNameCase: true
+    checkPropertyHookNameCase: true
+    checkEnumCaseValueNameCase: true
     ignoreErrors:
         # Eloquent dynamic scopes — resolved at runtime via __call magic
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder::orderByPriority\(\)#'
@@ -15,6 +19,12 @@ parameters:
         - '#Call to an undefined (static )?method Illuminate\\Support\\Facades\\(Config|Cache|Queue|Log|DB)::.*#'
         - '#Call to an undefined (static )?method Illuminate\\Support\\Facades\\Http::.*#'
         # Eloquent model property access — resolved via casts and attribute types
-        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\\$payload#'
-        - '#Access to an undefined property ZeroBoiler\\Events\\Models\\(Trigger|EventLog|Subscription)::\\$.*#'
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$payload#'
+        - '#Access to an undefined property ZeroBoiler\\Events\\Models\\(Trigger|EventLog|Subscription)::\$.*#'
+        # Trigger::enabled() scope — resolved via dynamic __call
+        - '#Call to an undefined method ZeroBoiler\\Events\\Models\\Trigger::scopeEnabled\(\)#'
+        # Subscription::active() scope — resolved via dynamic __call
+        - '#Call to an undefined method ZeroBoiler\\Events\\Models\\Subscription::scopeActive\(\)#'
+        # Eloquent Collection::push() mutator — resolved at runtime
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection::push\(\)#'
     bootstrapFiles: []
