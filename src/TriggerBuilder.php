@@ -70,9 +70,16 @@ final class TriggerBuilder
      * Set multiple action handler classes.
      *
      * @param  array<int, string>  $classes
+     * @throws \InvalidArgumentException If any class name is not a non-empty string
      */
     public function actions(array $classes): self
     {
+        foreach ($classes as $cls) {
+            if (! is_string($cls) || $cls === '' || $cls === '0') {
+                throw new \InvalidArgumentException('Each action class must be a non-empty string.');
+            }
+        }
+
         $this->actions = $classes;
 
         return $this;

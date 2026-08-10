@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-2.4.0-blue)]()
+|![Latest Version](https://img.shields.io/badge/version-2.5.0-blue)
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -489,7 +489,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (129 test files)
+composer test        # Run Pest test suite (130 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -826,6 +826,13 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v2.5.0
+
+- **Improved**: `phpstan.neon.dist` — tightened `ignoreErrors` to only target genuinely dynamic Eloquent magic methods (orderByPriority, scopeOrderByPriority, facade dynamic calls, model payload access). Removed overly broad catch-all patterns that could mask real type errors.
+- **Added**: `TriggerBuilder::actions()` — input validation that rejects non-string and empty string entries with `InvalidArgumentException`.
+- **Added**: `EventsPhase62ProductionTest.php` — 11 new production tests covering: EventManager delete trigger (existing/non-existent/with-logs), TriggerBuilder actions validation (non-string/empty/valid/dedup), WildcardMatcher #[Pure] attribute verification (all 3 static methods), EventManager global disable integration (setEnabled toggle, fire suppression).
+- **Changed**: Version bumped to 2.5.0, test file count updated to 130.
 
 ### v2.4.0
 

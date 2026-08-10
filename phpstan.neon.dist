@@ -8,12 +8,11 @@ parameters:
     checkUninitializedProperties: false
     checkMissingIterableValueType: false
     ignoreErrors:
-        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder::#'
-        - '#Call to an undefined method.*::orderByPriority\(\)#'
+        # Eloquent dynamic scopes — resolved at runtime via __call magic
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder::orderByPriority\(\)#'
         - '#Call to an undefined method.*::scopeOrderByPriority\(\)#'
+        # Facade proxy — resolved at runtime
         - '#Dynamic call to static method.*is missing#'
-        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::#'
-        - '#Access to an undefined property.*\$this->payload#'
-        - '#Call to an undefined static method Illuminate\\Database\\Eloquent\\Model::#'
-        - '#Method .*::.*\(\) invoked on .*#'
+        # Eloquent model property access — resolved via casts and attribute types
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$payload#'
     bootstrapFiles: []
