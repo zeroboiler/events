@@ -93,7 +93,7 @@ if (! function_exists('fake')) {
     /**
      * @return \Faker\Generator
      */
-    function fake(?string $locale = null): mixed
+    function fake(?string $locale = null): \Faker\Generator
     {
         static $faker = null;
 

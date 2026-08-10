@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.98.0] — 2026-08-10
+
+### Fixed
+- **rector.php** — upgraded from `LaravelSetList::LARAVEL_120` to `LaravelSetList::LARAVEL_130` for Laravel 13 compatibility
+- **tests/helpers.php** — `fake()` function return type changed from `mixed` to `\Faker\Generator` for PHPStan 9 type precision
+
+### Added
+- **EventsPhase57ProductionTest.php** — 45 new production tests covering: rector LARAVEL_130 upgrade verification, fake() helper return type precision, all protected/private method return type declarations across ConditionEngine/EventManager/WebhookAction/EventsRedeliverCommand/TriggerBuilder/EventsLogCommand/EventsFireCommand/EscapesWildcardLike, DomainEvent/EventManager/ActionResolver readonly promoted property verification, DispatchTriggerJob property types, ServiceProvider #[Override], Facade accessor, model casts/boot verification, console commands final, WildcardMatcher readonly + #[Pure], strict types enforcement, config completeness, version consistency, migration/factory existence, EventLog status constants
+
+### Changed
+- Version bumped to 1.98.0, test file count updated to 124.
+
+---
+
 ## [1.97.0] — 2026-08-09
 
 ### Fixed

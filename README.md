@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.97.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.98.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -417,7 +417,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 123 test files (Pest)
+└── tests/                      # 124 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -460,7 +460,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (123 test files)
+composer test        # Run Pest test suite (124 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -585,6 +585,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 54 production (strict types sweep, final class verification, interface contracts, ServiceProvider binding lifecycle, Facade accessor, Config completeness all 6 sections, EventLog status constants, DomainEvent roundtrip + empty eventType, WildcardMatcher comprehensive, EscapesWildcardLike SQL escaping, model config-driven table names, model key types, DispatchTriggerJob property types, console command prefix verification, version consistency, Subscription signPayload edge cases, Subscription matchesEvent patterns, ActionResolver errors, composer.json autoload PSR-4, trait method presence, fluent interface return types, PHPStan config, license headers, EventManager public method return types) | ✅ | `EventsPhase54ProductionTest.php` |
 | Phase 55 production (CHANGELOG sync, comprehensive audit: strict types all source files, final classes 10 core + 11 console commands, interface contracts, ServiceProvider binding lifecycle, Facade accessor, Config completeness 6 sections + sub-keys, EventLog status constants + $statuses array, model config-driven table names + UUID string keys + non-incrementing, DomainEvent readonly + roundtrip, WildcardMatcher readonly class + #[Pure] + comprehensive patterns, EscapesWildcardLike SQL escaping, ActionResolver error cases, Subscription signPayload edge cases, ConditionEngine full 19-operator matrix + AND logic + dot notation, WildcardMatcher exact/cross-segment/catch-all/empty, ConditionEngine comparison/equality/array/string/null/between/regex operators, license headers, command prefix verification, version consistency, composer.json autoload/extra, migration existence, CHANGELOG sync, phpstan.neon.dist level 9) | ✅ | `EventsPhase55ProductionTest.php` |
 | Phase 56 production (ConditionEngine deep nesting/type coercion/float comparison, WildcardMatcher advanced patterns/edge cases, TriggerBuilder validation, SubscriptionBuilder URL scheme rejection, DomainEvent serialization roundtrip, EventManager fireModel validation, EventLog status transitions, Subscription signPayload determinism, DispatchTriggerJob config, cache invalidation lifecycle, ServiceProvider binding integrity, strict_types enforcement) | ✅ | `EventsPhase56ProductionTest.php` |
+| Phase 57 production (rector LARAVEL_130 upgrade, fake() helper return type precision, all protected/private method return type declarations across core classes, DomainEvent/EventManager/ActionResolver readonly promoted property verification, DispatchTriggerJob property types, ServiceProvider #[Override], Facade accessor, model casts/boot verification, console command final classes, WildcardMatcher readonly + #[Pure], strict types enforcement, config completeness, version consistency, migration/factory existence, EventLog status constants) | ✅ | `EventsPhase57ProductionTest.php` |
 
 ## How It Works
 
@@ -787,6 +788,13 @@ Before deploying to production, verify:
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
 
 ## Changelog
+
+### v1.98.0
+
+- **Fixed**: `rector.php` upgraded from `LaravelSetList::LARAVEL_120` to `LaravelSetList::LARAVEL_130` for Laravel 13 compatibility.
+- **Fixed**: `tests/helpers.php` `fake()` function return type changed from `mixed` to `\Faker\Generator` for PHPStan 9 type precision.
+- **Added**: `EventsPhase57ProductionTest.php` — 45 new production tests covering: rector LARAVEL_130 upgrade verification, fake() helper return type precision, all protected/private method return type declarations across ConditionEngine/EventManager/WebhookAction/EventsRedeliverCommand/TriggerBuilder/EventsLogCommand/EventsFireCommand/EscapesWildcardLike, DomainEvent/EventManager/ActionResolver readonly promoted property verification, DispatchTriggerJob property types (triggerId/event/payload/tries/backoff/queue/connection/eventLogId), ServiceProvider #[Override] on register/boot, Facade getFacadeAccessor, model casts/boot return type verification, all 11 console commands final class verification, all 9 core classes final verification, WildcardMatcher readonly class + #[Pure] on all public methods, strict types enforcement across all source files, config completeness 6 sections, version consistency, all 3 migration files existence, all 3 factory files existence, EventLog status constants.
+- **Changed**: Version bumped to 1.98.0, test file count updated to 124.
 
 ### v1.97.0
 
