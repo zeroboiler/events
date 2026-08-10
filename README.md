@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-2.2.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-2.3.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -446,7 +446,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 127 test files (Pest)
+└── tests/                      # 128 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -489,7 +489,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (127 test files)
+composer test        # Run Pest test suite (128 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -618,6 +618,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 58 production (config duplicate comment cleanup, phpstan config hardening, comprehensive final audit: strict types, final classes, readonly promoted properties, interface contracts, singleton/transient bindings, facade accessor, config completeness, model config tables, DomainEvent readonly/roundtrip, WildcardMatcher readonly + #[Pure], EscapesWildcardLike, EventLog status constants, EventManager API surface, fluent interface, composer.json structure, phpstan config, console command prefix, migration/factory existence) | ✅ | `EventsPhase58ProductionTest.php` |
 | Health command (diagnostic, JSON output, cache check, ServiceProvider registration) | ✅ | `EventsHealthCommandTest.php` |
 | Phase 59 production (12 console commands final, 10 core classes final, WildcardMatcher readonly + #[Pure], DomainEvent readonly properties, EventLog status constants, interface contracts, ServiceProvider singleton/transient bindings, config completeness) | ✅ | `EventsHealthCommandTest.php` |
+| Phase 60 production (strict types, final classes, readonly + #[Pure], ConditionEngine between() null-coalescing safety, all operators with empty payload, config completeness, model key types, factory states, facade accessor, phpstan config, WildcardMatcher comprehensive, license headers, version consistency) | ✅ | `EventsPhase60ProductionTest.php` |
 
 ## How It Works
 
@@ -824,6 +825,12 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v2.3.0
+
+- **Fixed**: `ConditionEngine::between()` now uses null-coalescing (`$value[0] ?? null`) when extracting range boundaries from the condition value — prevents PHPStan 9 array-access-on-mixed errors and gracefully handles malformed condition arrays with missing indices.
+- **Added**: `EventsPhase60ProductionTest.php` — 20 comprehensive production tests covering: strict types enforcement, final class verification (7 core + 12 console commands), interface contracts (ConditionEngineContract, Triggerable), WildcardMatcher readonly class + #[Pure] attributes, DomainEvent readonly properties + roundtrip identity, ConditionEngine between() null-coalescing safety, ConditionEngine all operators with empty payload, null/not_null operators, EventLog status constants, ServiceProvider register/boot methods, Facade accessor, config completeness (7 sections + sub-keys), migration file existence, factory definitions + required keys, model UUID string key types + non-incrementing, phpstan config level 9, composer version consistency, Laravel extra providers/aliases, EventManager/ActionResolver constructor readonly params, EscapesWildcardLike trait method + behavior, WildcardMatcher comprehensive patterns + extract + findMatchingPatterns, license headers, test file count accuracy.
+- **Changed**: Version bumped to 2.3.0, test file count updated to 128.
 
 ### v2.2.0
 

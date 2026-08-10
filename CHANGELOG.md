@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2.3.0] — 2026-08-10
+
+### Fixed
+- `ConditionEngine::between()` now uses null-coalescing (`$value[0] ?? null`) when extracting range boundaries from the condition value — prevents PHPStan 9 `array-access-on-mixed` errors and gracefully handles malformed condition arrays with missing indices.
+
+### Added
+- **EventsPhase60ProductionTest.php** — 20 comprehensive production readiness tests covering: strict types enforcement across all source files, final class verification (7 core + 12 console commands), interface contracts (ConditionEngineContract, Triggerable), WildcardMatcher readonly class + #[Pure] attributes, DomainEvent readonly properties + roundtrip identity preservation, ConditionEngine between() null-coalescing safety, ConditionEngine all operators with empty payload, null/not_null operators, EventLog status constants + $statuses array, ServiceProvider register/boot method signatures, Facade accessor correctness, config completeness (7 sections + sub-keys), migration file existence (3 files), factory definitions + required keys (3 factories), model UUID string key types + non-incrementing, phpstan.neon.dist level 9 verification, composer version consistency, Laravel extra providers/aliases, EventManager/ActionResolver constructor readonly params, EscapesWildcardLike trait method signature + behavior, WildcardMatcher comprehensive patterns + extractWildcards + findMatchingPatterns, license headers on all source files, test file count accuracy.
+
+### Changed
+- Version bumped to 2.3.0.
+- Test file count updated to 128.
+
+---
+
 ## [2.2.0] — 2026-08-10
 
 ### Fixed

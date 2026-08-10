@@ -192,8 +192,8 @@ final class ConditionEngine implements ConditionEngineContract
             return false;
         }
 
-        $rawMin = $value[0];
-        $rawMax = $value[1];
+        $rawMin = $value[0] ?? null;
+        $rawMax = $value[1] ?? null;
 
         if (! is_numeric($rawMin) || ! is_numeric($rawMax)) {
             return false;
