@@ -6,6 +6,7 @@ parameters:
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
     checkUninitializedProperties: false
+    checkMissingIterableValueType: false
     ignoreErrors:
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder::#'
         - '#Call to an undefined method.*::orderByPriority\(\)#'

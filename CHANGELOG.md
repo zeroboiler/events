@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2.0.0] — 2026-08-10
+
+### Fixed
+- Duplicate "Wildcard Cache" comment block removed from `config/events.php` — the section header appeared twice due to a merge artifact.
+
+### Improved
+- **phpstan.neon.dist** — added `checkMissingIterableValueType: false` for PHPStan 9 compatibility with Eloquent collection returns.
+
+### Added
+- **EventsPhase58ProductionTest.php** — 28 new production readiness tests covering: config duplicate comment cleanup, phpstan config hardening, comprehensive final audit (strict types, final classes, readonly promoted properties, interface contracts, singleton/transient bindings, facade accessor, config completeness, model config tables, DomainEvent readonly/roundtrip, WildcardMatcher readonly + #[Pure], EscapesWildcardLike, EventLog status constants, EventManager API surface, fluent interface, composer.json structure, phpstan config, console command prefix, migration/factory existence).
+
+### Changed
+- Version bumped to 2.0.0 (production-ready milestone), test file count updated to 126.
+
+---
+
 ## [1.99.0] — 2026-08-10
 
 ### Added

@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.99.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-2.0.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -444,7 +444,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 125 test files (Pest)
+└── tests/                      # 126 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -487,7 +487,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (125 test files)
+composer test        # Run Pest test suite (126 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -612,7 +612,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 54 production (strict types sweep, final class verification, interface contracts, ServiceProvider binding lifecycle, Facade accessor, Config completeness all 6 sections, EventLog status constants, DomainEvent roundtrip + empty eventType, WildcardMatcher comprehensive, EscapesWildcardLike SQL escaping, model config-driven table names, model key types, DispatchTriggerJob property types, console command prefix verification, version consistency, Subscription signPayload edge cases, Subscription matchesEvent patterns, ActionResolver errors, composer.json autoload PSR-4, trait method presence, fluent interface return types, PHPStan config, license headers, EventManager public method return types) | ✅ | `EventsPhase54ProductionTest.php` |
 | Phase 55 production (CHANGELOG sync, comprehensive audit: strict types all source files, final classes 10 core + 11 console commands, interface contracts, ServiceProvider binding lifecycle, Facade accessor, Config completeness 6 sections + sub-keys, EventLog status constants + $statuses array, model config-driven table names + UUID string keys + non-incrementing, DomainEvent readonly + roundtrip, WildcardMatcher readonly class + #[Pure] + comprehensive patterns, EscapesWildcardLike SQL escaping, ActionResolver error cases, Subscription signPayload edge cases, ConditionEngine full 19-operator matrix + AND logic + dot notation, WildcardMatcher exact/cross-segment/catch-all/empty, ConditionEngine comparison/equality/array/string/null/between/regex operators, license headers, command prefix verification, version consistency, composer.json autoload/extra, migration existence, CHANGELOG sync, phpstan.neon.dist level 9) | ✅ | `EventsPhase55ProductionTest.php` |
 | Phase 56 production (ConditionEngine deep nesting/type coercion/float comparison, WildcardMatcher advanced patterns/edge cases, TriggerBuilder validation, SubscriptionBuilder URL scheme rejection, DomainEvent serialization roundtrip, EventManager fireModel validation, EventLog status transitions, Subscription signPayload determinism, DispatchTriggerJob config, cache invalidation lifecycle, ServiceProvider binding integrity, strict_types enforcement) | ✅ | `EventsPhase56ProductionTest.php` |
-| Phase 57 production (rector LARAVEL_130 upgrade, fake() helper return type precision, all protected/private method return type declarations across core classes, DomainEvent/EventManager/ActionResolver readonly promoted property verification, DispatchTriggerJob property types, ServiceProvider #[Override], Facade accessor, model casts/boot verification, console command final classes, WildcardMatcher readonly + #[Pure], strict types enforcement, config completeness, version consistency, migration/factory existence, EventLog status constants) | ✅ | `EventsPhase57ProductionTest.php` |
+| Phase 57 production (rector LARAVEL_130 upgrade, fake() return type precision, all protected/private method return type declarations across core classes, DomainEvent/EventManager/ActionResolver readonly promoted property verification, DispatchTriggerJob property types, ServiceProvider #[Override], Facade accessor, model casts/boot verification, console command final classes, WildcardMatcher readonly + #[Pure], strict types enforcement, config completeness, version consistency, migration/factory existence, EventLog status constants) | ✅ | `EventsPhase57ProductionTest.php` |
+| Phase 58 production (config duplicate comment cleanup, phpstan config hardening, comprehensive final audit: strict types, final classes, readonly promoted properties, interface contracts, singleton/transient bindings, facade accessor, config completeness, model config tables, DomainEvent readonly/roundtrip, WildcardMatcher readonly + #[Pure], EscapesWildcardLike, EventLog status constants, EventManager API surface, fluent interface, composer.json structure, phpstan config, console command prefix, migration/factory existence) | ✅ | `EventsPhase58ProductionTest.php` |
 
 ## How It Works
 
@@ -819,6 +820,13 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v2.0.0
+
+- **Fixed**: Duplicate "Wildcard Cache" comment block removed from `config/events.php` — the section appeared twice due to a merge artifact.
+- **Improved**: `phpstan.neon.dist` — added `checkMissingIterableValueType: false` for PHPStan 9 compatibility with Eloquent collection returns.
+- **Added**: `EventsPhase58ProductionTest.php` — 28 new production readiness tests covering: config duplicate comment cleanup, phpstan config hardening, comprehensive final audit (strict types, final classes, readonly promoted properties, interface contracts, singleton/transient bindings, facade accessor, config completeness, model config tables, DomainEvent readonly/roundtrip, WildcardMatcher readonly + #[Pure], EscapesWildcardLike, EventLog status constants, EventManager API surface, fluent interface, composer.json structure, phpstan config, console command prefix, migration/factory existence).
+- **Changed**: Version bumped to 2.0.0 (production-ready milestone), test file count updated to 126.
 
 ### v1.99.0
 

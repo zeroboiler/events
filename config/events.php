@@ -73,17 +73,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Wildcard Cache
-    |--------------------------------------------------------------------------
-    |
-    | Enabled wildcard triggers are cached to avoid a DB query on every fire()
-    | call. The cache is automatically invalidated on trigger create, enable,
-    | and disable operations. Set to null to disable caching entirely.
-    |
-    */
-
-    /*
-    |--------------------------------------------------------------------------
     | Global Disable
     |--------------------------------------------------------------------------
     |
