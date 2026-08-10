@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2.1.0] — 2026-08-10
+
+### Added
+- **EventsHealthCommand** (`zeroboiler:events:health`) — production diagnostic command that checks event system health: global disable status, database connectivity, active trigger count, subscription health, recent event statistics (24h), queue configuration, and optional cache driver verification (`--check-cache`). Supports `--json` output for monitoring dashboards and automated health checks.
+- **EventsHealthCommandTest.php** — 12 new tests covering: health command existence and final class, signature validation (zeroboiler:events:health), --json and --check-cache options, handle() return type and #[Override] attribute, ServiceProvider registration, strict_types enforcement, license header, extends Command, and a comprehensive Phase 59 production audit (12 console commands final, 10 core classes final, WildcardMatcher readonly + #[Pure], DomainEvent readonly properties, EventLog status constants, interface contracts, ServiceProvider singleton/transient bindings, config completeness).
+
+### Changed
+- Test file count updated to 127.
+- EventsServiceProvider now registers 12 console commands (was 11).
+
+---
+
 ## [2.0.0] — 2026-08-10
 
 ### Fixed

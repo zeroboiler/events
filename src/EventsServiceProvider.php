@@ -13,6 +13,7 @@ use Illuminate\Support\ServiceProvider;
 use ZeroBoiler\Events\Console\EventsDisableCommand;
 use ZeroBoiler\Events\Console\EventsEnableCommand;
 use ZeroBoiler\Events\Console\EventsFireCommand;
+use ZeroBoiler\Events\Console\EventsHealthCommand;
 use ZeroBoiler\Events\Console\EventsListCommand;
 use ZeroBoiler\Events\Console\EventsLogCommand;
 use ZeroBoiler\Events\Console\EventsRedeliverCommand;
@@ -76,6 +77,7 @@ final class EventsServiceProvider extends ServiceProvider
                 EventsRetryCommand::class,
                 EventsEnableCommand::class,
                 EventsDisableCommand::class,
+                EventsHealthCommand::class,
                 // Subscription commands
                 EventsSubscribeCommand::class,
                 EventsUnsubscribeCommand::class,

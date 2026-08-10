@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-2.0.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-2.1.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -70,7 +70,7 @@ EventManager::fire('order.placed', ['order_id' => 123, 'total' => 150]);
 - **Domain Events** — First-class `DomainEvent` value object for event sourcing patterns with UUID, timestamp, serialization, and reconstruction.
 - **Event History & Stats** — Query event logs, filter by event/status/trigger, and get aggregate statistics (success rates, avg duration, top events).
 - **Log Retention** — Configurable automatic purge of old event logs.
-- **CLI Commands** — Full set of Artisan commands for managing triggers, subscriptions, and event logs.
+- **CLI Commands** — Full set of Artisan commands for managing triggers, subscriptions, event logs, and a health check diagnostic for ops monitoring.
 
 ## Installation
 
@@ -333,6 +333,7 @@ When disabled, all `fire()` calls silently return without dispatching any trigge
 | `zeroboiler:events:subscribe` | Create a webhook subscription |
 | `zeroboiler:events:unsubscribe {id}` | Remove a webhook subscription |
 | `zeroboiler:events:subscriptions` | List webhook subscriptions |
+| `zeroboiler:events:health` | Diagnostic health check (supports `--json`) |
 
 ## Database Schema
 
@@ -412,6 +413,7 @@ events/
 │   │   ├── EventsDisableCommand.php
 │   │   ├── EventsEnableCommand.php
 │   │   ├── EventsFireCommand.php
+│   │   ├── EventsHealthCommand.php
 │   │   ├── EventsListCommand.php
 │   │   ├── EventsLogCommand.php
 │   │   ├── EventsRedeliverCommand.php
@@ -444,7 +446,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 126 test files (Pest)
+└── tests/                      # 127 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -487,7 +489,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (126 test files)
+composer test        # Run Pest test suite (127 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -614,6 +616,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 56 production (ConditionEngine deep nesting/type coercion/float comparison, WildcardMatcher advanced patterns/edge cases, TriggerBuilder validation, SubscriptionBuilder URL scheme rejection, DomainEvent serialization roundtrip, EventManager fireModel validation, EventLog status transitions, Subscription signPayload determinism, DispatchTriggerJob config, cache invalidation lifecycle, ServiceProvider binding integrity, strict_types enforcement) | ✅ | `EventsPhase56ProductionTest.php` |
 | Phase 57 production (rector LARAVEL_130 upgrade, fake() return type precision, all protected/private method return type declarations across core classes, DomainEvent/EventManager/ActionResolver readonly promoted property verification, DispatchTriggerJob property types, ServiceProvider #[Override], Facade accessor, model casts/boot verification, console command final classes, WildcardMatcher readonly + #[Pure], strict types enforcement, config completeness, version consistency, migration/factory existence, EventLog status constants) | ✅ | `EventsPhase57ProductionTest.php` |
 | Phase 58 production (config duplicate comment cleanup, phpstan config hardening, comprehensive final audit: strict types, final classes, readonly promoted properties, interface contracts, singleton/transient bindings, facade accessor, config completeness, model config tables, DomainEvent readonly/roundtrip, WildcardMatcher readonly + #[Pure], EscapesWildcardLike, EventLog status constants, EventManager API surface, fluent interface, composer.json structure, phpstan config, console command prefix, migration/factory existence) | ✅ | `EventsPhase58ProductionTest.php` |
+| Health command (diagnostic, JSON output, cache check, ServiceProvider registration) | ✅ | `EventsHealthCommandTest.php` |
+| Phase 59 production (12 console commands final, 10 core classes final, WildcardMatcher readonly + #[Pure], DomainEvent readonly properties, EventLog status constants, interface contracts, ServiceProvider singleton/transient bindings, config completeness) | ✅ | `EventsHealthCommandTest.php` |
 
 ## How It Works
 
@@ -820,6 +824,12 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v2.1.0
+
+- **Added**: `zeroboiler:events:health` diagnostic command — checks event system health including database connectivity, trigger counts, subscription health, recent event statistics, queue configuration, and optional cache connectivity verification. Supports `--json` output for monitoring dashboards and `--check-cache` for cache driver validation.
+- **Added**: `EventsHealthCommandTest.php` — 12 new tests covering health command existence, signature, options, return types, #[Override] attribute, ServiceProvider registration, strict types enforcement, license header, and a comprehensive Phase 59 production audit (12 console commands final, 10 core classes final, WildcardMatcher readonly + #[Pure], DomainEvent readonly, EventLog status constants, interface contracts, ServiceProvider bindings, config completeness).
+- **Changed**: Test file count updated to 127.
 
 ### v2.0.0
 
