@@ -52,12 +52,13 @@ final class EventsHealthCommand extends Command
         ];
 
         // 2. Database connectivity — try to query triggers table
+        $totalTriggers = 0;
         try {
-            $triggerCount = Trigger::count();
+            $totalTriggers = Trigger::count();
             $results['database'] = [
                 'status' => 'OK',
-                'message' => "Database connection healthy. {$triggerCount} trigger(s) in table.",
-                'trigger_count' => $triggerCount,
+                'message' => "Database connection healthy. {$totalTriggers} trigger(s) in table.",
+                'trigger_count' => $totalTriggers,
             ];
         } catch (\Throwable $e) {
             $hasCritical = true;
@@ -67,9 +68,8 @@ final class EventsHealthCommand extends Command
             ];
         }
 
-        // 3. Active triggers count
-        $activeTriggers = Trigger::enabled()->count();
-        $totalTriggers = Trigger::count();
+        // 3. Active triggers count (reuse DB query result from step 2)
+        $activeTriggers = $totalTriggers > 0 ? Trigger::enabled()->count() : 0;
         $results['active_triggers'] = [
             'status' => $totalTriggers > 0 && $activeTriggers === 0 ? 'WARNING' : 'OK',
             'message' => "{$activeTriggers} active / {$totalTriggers} total trigger(s).",

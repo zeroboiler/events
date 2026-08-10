@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-2.1.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-2.2.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -824,6 +824,12 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v2.2.0
+
+- **Fixed**: `EventsHealthCommand` now reuses the `Trigger::count()` result from the database connectivity check instead of issuing a duplicate query for the active triggers section — reduces DB round-trips during health diagnostics.
+- **Fixed**: `CreatesApplication` test bootstrap now includes `events.disabled` config key in the default test configuration — previously tests relying on `EventManager::isDisabled()` would get `null` instead of the expected default `false`.
+- **Changed**: Version bumped to 2.2.0.
 
 ### v2.1.0
 

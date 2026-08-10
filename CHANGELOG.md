@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2.2.0] — 2026-08-10
+
+### Fixed
+- `EventsHealthCommand` now reuses the `Trigger::count()` result from the database connectivity check instead of issuing a duplicate query for the active triggers section — reduces DB round-trips during health diagnostics.
+- `CreatesApplication` test bootstrap now includes `events.disabled` config key in the default test configuration — previously tests relying on `EventManager::isDisabled()` would get `null` instead of the expected default `false`.
+
+---
+
 ## [2.1.0] — 2026-08-10
 
 ### Added

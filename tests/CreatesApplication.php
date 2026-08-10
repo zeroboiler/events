@@ -123,6 +123,7 @@ trait CreatesApplication
                     'signature_algorithm' => 'sha256',
                 ],
                 'wildcard_cache_ttl' => 300,
+                'disabled' => false,
             ],
         ]);
         $app->instance('config', $config);
