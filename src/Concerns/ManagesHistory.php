@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use ZeroBoiler\Events\Models\EventLog;
+use ZeroBoiler\Events\Models\Subscription;
 use ZeroBoiler\Events\Models\Trigger;
 
 /**
@@ -182,5 +183,41 @@ trait ManagesHistory
         }
 
         return (int) $query->delete();
+    }
+
+    /**
+     * Get stuck/pending event logs older than a given threshold.
+     *
+     * Useful for ops dashboards and manual intervention workflows
+     * to identify logs stuck in pending status (e.g., queue worker crash).
+     *
+     * @return Collection<int, EventLog>
+     */
+    public function getStalePendingLogs(Carbon $before, int $limit = 100): Collection
+    {
+        return EventLog::query()
+            ->with('trigger')
+            ->stalePending($before)
+            ->latest()
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Deactivate all subscriptions that have exceeded the failure threshold.
+     *
+     * @return int Number of deactivated subscriptions
+     */
+    public function deactivateExceededSubscriptions(): int
+    {
+        $count = 0;
+        $subs = Subscription::active()->exceededFailures()->get();
+
+        foreach ($subs as $sub) {
+            $sub->update(['active' => false]);
+            $count++;
+        }
+
+        return $count;
     }
 }

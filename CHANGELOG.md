@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [3.0.0] — 2026-08-10
+
+### Added
+- `EventLog::scopeStalePending(Carbon $before)` — scope for querying stuck pending logs older than a threshold. Useful for identifying queue worker crash artifacts.
+- `Subscription::scopeExceededFailures()` — scope for querying active subscriptions that have exceeded the failure threshold from `events.subscriptions.max_failures` config.
+- `EventManager::getStalePendingLogs(Carbon $before, int $limit)` — get stuck pending event logs with eager-loaded trigger relationships. Uses the new `scopeStalePending` scope.
+- `EventManager::deactivateExceededSubscriptions()` — batch-deactivate all active subscriptions exceeding the failure threshold. Returns count of deactivated subscriptions. Skips already-inactive subscriptions.
+- Facade `@method` annotations for `getStalePendingLogs()` and `deactivateExceededSubscriptions()`.
+- `EventsPhase64ProductionTest.php` — 10 comprehensive production tests covering: EventLog scopeStalePending (stale/fresh/completed filtering), Subscription scopeExceededFailures (threshold matching, config-driven threshold, non-int config fallback, inactive skip), getStalePendingLogs (trigger eager-loading, limit support), deactivateExceededSubscriptions (batch deactivation, zero-count, inactive skip).
+
+### Changed
+- Version bumped to 3.0.0, test file count updated to 133.
+- README enriched with Phase 64 test coverage, API reference entries, and v3.0.0 changelog.
+
+---
+
 ## [2.9.0] — 2026-08-10
 
 ### Fixed

@@ -147,6 +147,21 @@ class EventLog extends Model
     }
 
     /**
+     * Scope a query to only include pending event logs older than a threshold.
+     *
+     * Useful for identifying stuck event logs that may need manual
+     * intervention (e.g., queue worker crash, DB connection lost).
+     *
+     * @param  Builder<EventLog>  $query
+     * @return Builder<EventLog>
+     */
+    public function scopeStalePending(Builder $query, Carbon $before): Builder
+    {
+        return $query->where('status', self::STATUS_PENDING)
+            ->where('created_at', '<', $before);
+    }
+
+    /**
      * Mark the log as completed.
      */
     public function markAsCompleted(int $durationMs): void

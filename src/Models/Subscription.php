@@ -186,6 +186,23 @@ class Subscription extends Model
     }
 
     /**
+     * Scope a query to only include subscriptions that have exceeded
+     * the failure threshold and should be deactivated.
+     *
+     * Reads the threshold from `events.subscriptions.max_failures` config.
+     *
+     * @param  Builder<Subscription>  $query
+     * @return Builder<Subscription>
+     */
+    public function scopeExceededFailures(Builder $query): Builder
+    {
+        $threshold = Config::get('events.subscriptions.max_failures', 10);
+        $max = is_int($threshold) ? $threshold : 10;
+
+        return $query->where('failure_count', '>=', $max);
+    }
+
+    /**
      * Check if the subscription has exceeded the maximum failure threshold.
      *
      * Reads the default threshold from `events.subscriptions.max_failures` config

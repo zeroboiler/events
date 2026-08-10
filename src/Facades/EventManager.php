@@ -44,6 +44,8 @@ use Illuminate\Support\Facades\Facade;
  *     top_failed_events: array<int, array{event: string, count: int}>
  * } getStats(?\Illuminate\Support\Carbon $since = null)
  * @method static int purgeLogs(\Illuminate\Support\Carbon $before, bool $includePending = false)
+ * @method static \Illuminate\Database\Eloquent\Collection<int, \ZeroBoiler\Events\Models\EventLog> getStalePendingLogs(\Illuminate\Support\Carbon $before, int $limit = 100)
+ * @method static int deactivateExceededSubscriptions()
  * @method static void executeTrigger(\ZeroBoiler\Events\Models\Trigger $trigger, \ZeroBoiler\Events\Models\EventLog $log)
  *
  * @see \ZeroBoiler\Events\EventManager

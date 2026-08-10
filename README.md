@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-2.9.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-3.0.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -623,6 +623,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 61 production (source strict_types, core/console finals, readonly promoted props, DomainEvent readonly, interfaces, #[Pure], status constants, config 7 sections, ServiceProvider bindings, Facade accessor, config-driven tables, UUID key types, trait composition, API surface, fluent interface, 19-operator matrix, WildcardMatcher comprehensive, version consistency, test count) | ✅ | `EventsPhase61ProductionTest.php` |
 | Health command integration (JSON output keys, healthy system checks, global disable detection, inactive subscription detection, getConfig() helper refactor consistency) | ✅ | `EventsHealthIntegrationTest.php` |
 | Phase 63 production (strict types, final classes, readonly + #[Pure], ConditionEngine/Triggerable interface, DomainEvent readonly/roundtrip/fromArray, WildcardMatcher readonly + #[Pure], EventLog status constants, config completeness, model config tables, key types, EventManager 21 API methods, fluent interface, ConditionEngine 19-operator matrix, WildcardMatcher comprehensive, EscapesWildcardLike SQL, ActionResolver errors, fire/fireModel validation, signPayload null/deterministic, getStats structure/zero-state, TriggerBuilder/SubscriptionBuilder validation, matchesEvent wildcards, composer.json autoload/extra, migrations/factories, version consistency, license headers, singleton/transient bindings, contract identity, console prefix, handle() return types, phpstan config, TriggerBuilder resolveActions dedup, public method return types) | ✅ | `EventsPhase63ProductionTest.php` |
+| Phase 64 production (EventLog scopeStalePending, Subscription scopeExceededFailures, getStalePendingLogs API, deactivateExceededSubscriptions API, config-driven threshold handling, limit support, eager-loaded triggers, facade annotations, inactive skip logic, non-int config fallback) | ✅ | `EventsPhase64ProductionTest.php` |
 
 ## How It Works
 
@@ -756,6 +757,8 @@ Before deploying to production, verify:
 | `getEventHistory(?string $event, ?string $status, ?string $triggerId, int $limit)` | `Collection` | Query event log history |
 | `getStats(?Carbon $since)` | `array` | Get aggregate statistics |
 | `purgeLogs(Carbon $before, bool $includePending)` | `int` | Purge old event logs |
+| `getStalePendingLogs(Carbon $before, int $limit)` | `Collection` | Get stuck pending logs older than threshold |
+| `deactivateExceededSubscriptions()` | `int` | Deactivate all subscriptions that exceeded failure threshold |
 | `executeTrigger(Trigger $trigger, EventLog $log)` | `void` | Execute a trigger synchronously (throws on failure) |
 
 ### TriggerBuilder
@@ -829,6 +832,16 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v3.0.0
+
+- **Added**: `EventLog::scopeStalePending(Carbon $before)` — scope for querying stuck pending logs older than a threshold. Useful for ops dashboards and manual intervention workflows.
+- **Added**: `Subscription::scopeExceededFailures()` — scope for querying active subscriptions that have exceeded the failure threshold from config.
+- **Added**: `EventManager::getStalePendingLogs(Carbon $before, int $limit)` — get stuck pending event logs with eager-loaded triggers.
+- **Added**: `EventManager::deactivateExceededSubscriptions()` — batch-deactivate all subscriptions that have exceeded the failure threshold. Returns count of deactivated subscriptions.
+- **Added**: Facade `@method` annotations for `getStalePendingLogs()` and `deactivateExceededSubscriptions()`.
+- **Added**: README API Reference updated with 2 new methods; test coverage table updated with Phase 64 entry.
+- **Changed**: Version bumped to 3.0.0 (production-ready milestone), test file count updated to 133.
 
 ### v2.9.0
 
