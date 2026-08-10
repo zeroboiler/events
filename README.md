@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-2.8.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-2.9.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -447,7 +447,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 132 test files (Pest)
+└── tests/                      # 133 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -622,6 +622,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 60 production (strict types, final classes, readonly + #[Pure], ConditionEngine between() null-coalescing safety, all operators with empty payload, config completeness, model key types, factory states, facade accessor, phpstan config, WildcardMatcher comprehensive, license headers, version consistency) | ✅ | `EventsPhase60ProductionTest.php` |
 | Phase 61 production (source strict_types, core/console finals, readonly promoted props, DomainEvent readonly, interfaces, #[Pure], status constants, config 7 sections, ServiceProvider bindings, Facade accessor, config-driven tables, UUID key types, trait composition, API surface, fluent interface, 19-operator matrix, WildcardMatcher comprehensive, version consistency, test count) | ✅ | `EventsPhase61ProductionTest.php` |
 | Health command integration (JSON output keys, healthy system checks, global disable detection, inactive subscription detection, getConfig() helper refactor consistency) | ✅ | `EventsHealthIntegrationTest.php` |
+| Phase 63 production (strict types, final classes, readonly + #[Pure], ConditionEngine/Triggerable interface, DomainEvent readonly/roundtrip/fromArray, WildcardMatcher readonly + #[Pure], EventLog status constants, config completeness, model config tables, key types, EventManager 21 API methods, fluent interface, ConditionEngine 19-operator matrix, WildcardMatcher comprehensive, EscapesWildcardLike SQL, ActionResolver errors, fire/fireModel validation, signPayload null/deterministic, getStats structure/zero-state, TriggerBuilder/SubscriptionBuilder validation, matchesEvent wildcards, composer.json autoload/extra, migrations/factories, version consistency, license headers, singleton/transient bindings, contract identity, console prefix, handle() return types, phpstan config, TriggerBuilder resolveActions dedup, public method return types) | ✅ | `EventsPhase63ProductionTest.php` |
 
 ## How It Works
 
@@ -829,10 +830,16 @@ Before deploying to production, verify:
 
 ## Changelog
 
+### v2.9.0
+
+- **Fixed**: README test file count corrected from 133 to 132 (verified: 130 in Pest.php `uses()` block + 2 standalone tests).
+- **Added**: `EventsPhase63ProductionTest.php` — 51 comprehensive production tests covering: strict types enforcement, final class verification (10 core + 12 console commands), ConditionEngine/ConditionEngineContract interface implementation, WebhookAction/Triggerable/DispatchTriggerJob/ShouldQueue interface implementation, DomainEvent readonly/immutability/roundtrip/fromArray edge cases, WildcardMatcher readonly class + #[Pure] attributes, EventLog status constants + $statuses array, config completeness (7 sections + sub-keys), config-driven model table names, model UUID string key types + non-incrementing, ServiceProvider register/boot #[Override] attributes, Facade getFacadeAccessor, EventManager 21 public API methods, TriggerBuilder/SubscriptionBuilder fluent interface, ConditionEngine full 19-operator matrix, WildcardMatcher comprehensive patterns (exact, *, **, multi, catch-all, cross-segment), EscapesWildcardLike SQL escaping, DomainEvent fromArray rejection, ActionResolver error handling, EventManager fire/fireModel validation, Subscription signPayload null/deterministic, getStats structure + zero-state, TriggerBuilder/SubscriptionBuilder validation, Subscription matchesEvent wildcards, composer.json autoload/extra structure, migration/factory existence, version consistency, license headers, singleton/transient bindings, contract identity, console command prefix verification, console command handle() return types, phpstan.neon.dist level 9, TriggerBuilder actions() validation, TriggerBuilder resolveActions deduplication, public method return type declarations.
+- **Changed**: Test file count updated to 133, version bumped to 2.9.0.
+
 ### v2.8.0
 
 - **Improved**: Production readiness review — comprehensive manual code audit of all 31 source files for PHP 8.5 syntax, strict types, return type declarations, docblocks, typed properties, `#[Override]`/`#[Pure]` attributes, and PHPStan 9 compliance.
-- **Changed**: Test file count updated to 133.
+- **Changed**: Test file count updated to 132.
 
 ### v2.7.0
 

@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2.9.0] — 2026-08-10
+
+### Fixed
+- README test file count corrected from 133 to 132.
+
+### Added
+- `EventsPhase63ProductionTest.php` — 51 comprehensive production tests.
+
+### Changed
+- Test file count updated to 133, version bumped to 2.9.0.
+
+---
+
 ## [2.8.0] — 2026-08-10
 
 ### Improved
