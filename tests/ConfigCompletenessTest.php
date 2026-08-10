@@ -19,6 +19,7 @@ describe('Events config completeness', function (): void {
                 'retry',
                 'retention',
                 'subscriptions',
+                'disabled',
                 'wildcard_cache_ttl',
             ]);
     });
@@ -79,5 +80,11 @@ describe('Events config completeness', function (): void {
 
         expect($ttl)->toBeInt()
             ->and($ttl)->toBeGreaterThanOrEqual(0);
+    });
+
+    test('config disabled is a boolean', function (): void {
+        $disabled = config('events.disabled');
+
+        expect($disabled)->toBeBool();
     });
 });

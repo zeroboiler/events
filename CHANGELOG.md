@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.99.0] — 2026-08-10
+
+### Added
+- **events.disabled** config key and `EVENTS_DISABLED` env variable — globally disables the event system. When true, all `fire()` calls silently return without dispatching triggers. Useful for maintenance windows and testing environments.
+- **EventManager::isDisabled()** — check if the event system is globally disabled.
+- **EventManager::setEnabled(bool $enabled)** — enable or disable the event system at runtime (in-memory only).
+- **Facade** `@method` annotations for `isDisabled()` and `setEnabled()`.
+- **EventsGlobalDisableTest.php** — 13 new tests covering global disable/enable behavior, fire suppression, empty event validation, and facade proxy.
+- **ConfigCompletenessTest** — added `disabled` key validation.
+
+### Changed
+- Version bumped to 1.99.0, test file count updated to 125.
+- README enriched with global disable documentation, API reference, env variable, troubleshooting entry, and config example.
+
+---
+
 ## [1.98.0] — 2026-08-10
 
 ### Fixed

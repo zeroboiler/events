@@ -92,6 +92,34 @@ final class EventManager
     }
 
     /**
+     * Check if the event system is globally disabled.
+     *
+     * Reads the `events.disabled` config value.
+     */
+    public function isDisabled(): bool
+    {
+        $config = $this->app->get('config');
+        assert($config instanceof \Illuminate\Contracts\Config\Repository);
+
+        return $config->get('events.disabled', false) === true;
+    }
+
+    /**
+     * Globally enable or disable the event system at runtime.
+     *
+     * This only affects the in-memory config and does not persist
+     * across requests. Use `EVENTS_DISABLED=true` in .env for
+     * persistent disable.
+     */
+    public function setEnabled(bool $enabled): void
+    {
+        $config = $this->app->get('config');
+        assert($config instanceof \Illuminate\Contracts\Config\Repository);
+
+        $config->set('events.disabled', ! $enabled);
+    }
+
+    /**
      * List triggers with optional filtering.
      *
      * @param  string|null  $event  Filter by event name (exact or wildcard)
@@ -195,6 +223,14 @@ final class EventManager
     {
         if ($event === '' || $event === '0') {
             throw new \InvalidArgumentException('Event name cannot be empty.');
+        }
+
+        // Global disable check — allows maintenance-mode-like suppression
+        $config = $this->app->get('config');
+        assert($config instanceof \Illuminate\Contracts\Config\Repository);
+        $disabled = $config->get('events.disabled', false);
+        if ($disabled === true) {
+            return;
         }
 
         $triggers = $this->getMatchingTriggers($event);

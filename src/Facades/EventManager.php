@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool enable(string $triggerId)
  * @method static bool disable(string $triggerId)
  * @method static void invalidateTriggerCache()
+ * @method static bool isDisabled()
+ * @method static void setEnabled(bool $enabled)
  * @method static \Illuminate\Database\Eloquent\Collection<int, \ZeroBoiler\Events\Models\Trigger> listTriggers(?string $event = null, ?bool $enabled = null, int $limit = 100)
  * @method static \ZeroBoiler\Events\Models\Trigger|null getTrigger(string $triggerId)
  * @method static bool deleteTrigger(string $triggerId)

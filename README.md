@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| [![Latest Version](https://img.shields.io/badge/version-1.98.0-blue)]()
+| [![Latest Version](https://img.shields.io/badge/version-1.99.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -119,6 +119,8 @@ return [
         'timeout' => env('EVENTS_SUB_TIMEOUT', 30),
         'signature_algorithm' => 'sha256',
     ],
+
+    'disabled' => env('EVENTS_DISABLED', false),
 
     'wildcard_cache_ttl' => env('EVENTS_WILDCARD_CACHE_TTL', 300),
 ];
@@ -291,6 +293,31 @@ EventManager::disable($triggerId);
 EventManager::invalidateTriggerCache();
 ```
 
+### Global Disable
+
+The event system can be globally disabled — useful for maintenance windows or testing:
+
+```php
+// Check if disabled
+if (EventManager::isDisabled()) {
+    // ...
+}
+
+// Disable at runtime (in-memory only)
+EventManager::setEnabled(false);
+
+// Re-enable
+EventManager::setEnabled(true);
+```
+
+Or via environment variable (persistent across requests):
+
+```env
+EVENTS_DISABLED=true
+```
+
+When disabled, all `fire()` calls silently return without dispatching any triggers.
+
 ## CLI Commands
 
 | Command | Description |
@@ -417,7 +444,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 124 test files (Pest)
+└── tests/                      # 125 test files (Pest)
 ```
 
 ### Service Container Bindings
@@ -460,7 +487,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (124 test files)
+composer test        # Run Pest test suite (125 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -678,6 +705,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | `ActionResolver` throws | Action class not found or not Triggerable | Verify the class exists, is autoloaded, and implements `Triggerable` |
 | EventLog entries with no trigger | Trigger deleted after fire | EventLog references trigger via FK — use soft deletes to preserve referential integrity |
 | Regex condition always false | Pattern exceeds 500 chars or has nested quantifiers | Simplify the regex or increase `ConditionEngine::MAX_REGEX_LENGTH` |
+| Events not firing globally | `events.disabled` is `true` | Check `EVENTS_DISABLED` env var or call `EventManager::setEnabled(true)` |
 
 ## Production Deployment Checklist
 
@@ -705,6 +733,8 @@ Before deploying to production, verify:
 | `enable(string $triggerId)` | `bool` | Enable a trigger by ID |
 | `disable(string $triggerId)` | `bool` | Disable a trigger by ID |
 | `invalidateTriggerCache()` | `void` | Clear the wildcard trigger cache |
+| `isDisabled()` | `bool` | Check if the event system is globally disabled |
+| `setEnabled(bool $enabled)` | `void` | Enable or disable the event system at runtime |
 | `listTriggers(?string $event, ?bool $enabled, int $limit)` | `Collection` | List triggers with optional filtering |
 | `getTrigger(string $triggerId)` | `Trigger\|null` | Get a trigger by ID |
 | `deleteTrigger(string $triggerId)` | `bool` | Delete a trigger by ID (invalidates cache) |
@@ -786,8 +816,20 @@ Before deploying to production, verify:
 | `EVENTS_SUB_TIMEOUT` | `30` | Webhook HTTP timeout (seconds) |
 | `EVENTS_SUB_SIGNATURE_ALGORITHM` | `sha256` | HMAC signature algorithm for webhook payloads |
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Wildcard trigger cache TTL (seconds) |
+| `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v1.99.0
+
+- **Added**: `events.disabled` config key and `EVENTS_DISABLED` env variable — globally disables the event system. When true, all `fire()` calls silently return without dispatching triggers.
+- **Added**: `EventManager::isDisabled()` — check if the event system is globally disabled.
+- **Added**: `EventManager::setEnabled(bool $enabled)` — enable or disable the event system at runtime (in-memory only).
+- **Added**: Facade `@method` annotations for `isDisabled()` and `setEnabled()`.
+- **Added**: `EventsGlobalDisableTest.php` — 13 new tests covering global disable/enable behavior, fire suppression, edge cases, and facade proxy.
+- **Added**: Config completeness test for `disabled` key.
+- **Updated**: README with global disable documentation, API reference, env variable, troubleshooting entry, and config example.
+- **Changed**: Version bumped to 1.99.0, test file count updated to 125.
 
 ### v1.98.0
 

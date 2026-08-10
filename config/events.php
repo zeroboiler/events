@@ -82,5 +82,29 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | Global Disable
+    |--------------------------------------------------------------------------
+    |
+    | Set to true to completely disable the event system. When disabled,
+    | all fire() calls will silently return without dispatching any triggers.
+    | Useful for maintenance windows or testing environments.
+    |
+    */
+
+    'disabled' => env('EVENTS_DISABLED', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Wildcard Cache
+    |--------------------------------------------------------------------------
+    |
+    | Enabled wildcard triggers are cached to avoid a DB query on every fire()
+    | call. The cache is automatically invalidated on trigger create, enable,
+    | and disable operations. Set to null to disable caching entirely.
+    |
+    */
+
     'wildcard_cache_ttl' => env('EVENTS_WILDCARD_CACHE_TTL', 300),
 ];
