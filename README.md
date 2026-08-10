@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-3.7.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-3.8.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-success)]()|
@@ -449,7 +449,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 142 test files (140 Pest + 2 standalone + 5 support)
+└── tests/                      # 143 test files (141 Pest + 2 standalone + 5 support)
 ```
 
 ### Service Container Bindings
@@ -492,7 +492,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (142 test files)
+composer test        # Run Pest test suite (143 test files)
 composer analyse     # PHPStan level max (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -632,6 +632,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 67 production (getStats edge cases, getStalePendingLogs, deactivateExceededSubscriptions, purgeLogs, fire/fireModel validation, listTriggers/listSubscriptions/getEventHistory, WildcardMatcher findMatchingPatterns/extractWildcards, DomainEvent fromArray, ConditionEngine empty/unknown operators, EscapesWildcardLike, unsubscribe/getSubscription) | ✅ | `EventsPhase67ProductionTest.php` |
 | Phase 68 production (strict types all files, final classes, readonly + #[Pure], ConditionEngine 19-operator matrix + AND logic, WildcardMatcher comprehensive, ActionResolver errors, fire/fireModel validation, Subscription signPayload, phpstan config, ServiceProvider bindings, Facade accessor, config completeness, fluent interface, migration/factory, command prefix, trait methods, version consistency, license headers) | ✅ | `EventsPhase68ProductionTest.php` |
 | Phase 70 production (ServiceProvider provides() lazy loading, ConditionEngine strictEquals pure unit tests, ConditionEngine between() edge cases, SubscriptionBuilder URL scheme rejection, EventManager deleteTrigger, config-driven max_failures type safety) | ✅ | `EventsPhase70ProductionTest.php` |
+| EventManager setEnabled/disable runtime toggle (setEnabled false/true, fire suppression/resumption, isDisabled config states) | ✅ | `EventManagerSetEnabledTest.php` |
 
 ## How It Works
 
@@ -840,6 +841,11 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v3.8.0
+
+- **Added**: `EventManagerSetEnabledTest.php` — 7 dedicated tests covering `setEnabled()` runtime toggle, fire suppression/resumption, and `isDisabled()` config states.
+- **Changed**: Version bumped to 3.8.0, test file count updated to 143.
 
 ### v3.6.0
 

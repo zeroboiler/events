@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [3.8.0] — 2026-08-10
+
+### Added
+- `EventManagerSetEnabledTest.php` — 7 dedicated tests covering: `setEnabled(false)` disables at runtime, `setEnabled(true)` re-enables, fire suppression when disabled, fire resumption after re-enable, `isDisabled()` with `true`/`false`/`null` config values.
+
+### Changed
+- Version bumped to 3.8.0, test file count updated to 143.
+
+---
+
 ## [3.7.0] — 2026-08-10
 
 ### Fixed
