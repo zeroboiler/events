@@ -64,12 +64,8 @@ describe('Facade method coverage', function (): void {
         $managerOnly = array_diff($managerPublic, $facadeMethods);
         // Allow internal methods that don't need facade exposure
         $allowedMissing = [
-            'getConfig',           // Internal helper
-            'getTriggerCacheTtl',  // Internal helper
-            'getMatchingTriggers', // Protected-ish internal
-            'shouldDispatch',      // Protected
-            'dispatchTrigger',     // Protected
-            'parseActions',        // Protected
+            'getConfig',           // Internal config accessor helper
+            'getTriggerCacheTtl',  // Internal cache TTL helper
         ];
 
         $unexpectedMissing = array_diff($managerOnly, $allowedMissing);

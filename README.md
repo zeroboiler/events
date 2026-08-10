@@ -1,9 +1,9 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-3.0.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-3.1.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
-|[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
+|[![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-success)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -447,7 +447,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 135 test files (133 Pest + 2 standalone)
+└── tests/                      # 141 test files (134 Pest + 2 standalone + 5 support)
 ```
 
 ### Service Container Bindings
@@ -490,8 +490,8 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (135 test files)
-composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
+composer test        # Run Pest test suite (141 test files)
+composer analyse     # PHPStan level max (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
 composer ci          # All checks (lint → analyse → rector → test)
@@ -624,7 +624,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Health command integration (JSON output keys, healthy system checks, global disable detection, inactive subscription detection, getConfig() helper refactor consistency) | ✅ | `EventsHealthIntegrationTest.php` |
 | Phase 63 production (strict types, final classes, readonly + #[Pure], ConditionEngine/Triggerable interface, DomainEvent readonly/roundtrip/fromArray, WildcardMatcher readonly + #[Pure], EventLog status constants, config completeness, model config tables, key types, EventManager 21 API methods, fluent interface, ConditionEngine 19-operator matrix, WildcardMatcher comprehensive, EscapesWildcardLike SQL, ActionResolver errors, fire/fireModel validation, signPayload null/deterministic, getStats structure/zero-state, TriggerBuilder/SubscriptionBuilder validation, matchesEvent wildcards, composer.json autoload/extra, migrations/factories, version consistency, license headers, singleton/transient bindings, contract identity, console prefix, handle() return types, phpstan config, TriggerBuilder resolveActions dedup, public method return types) | ✅ | `EventsPhase63ProductionTest.php` |
 | Phase 64 production (EventLog scopeStalePending, Subscription scopeExceededFailures, getStalePendingLogs API, deactivateExceededSubscriptions API, config-driven threshold handling, limit support, eager-loaded triggers, facade annotations, inactive skip logic, non-int config fallback) | ✅ | `EventsPhase64ProductionTest.php` |
-| Facade method coverage (accessor resolution, @method↔public method mapping, proxy type verification) | ✅ | `FacadeMethodCoverageTest.php` |
+|| Facade method coverage (accessor resolution, @method↔public method mapping, proxy type verification) | ✅ | `FacadeMethodCoverageTest.php` |
+| Phase 65 production (fireModel/fire validation, TriggerBuilder save/action validation, SubscriptionBuilder URL scheme rejection, ActionResolver errors, DomainEvent fromArray edge cases, WildcardMatcher comprehensive, ConditionEngine full operator matrix + null safety + ReDoS + strict identity, EventLog status constants + model UUID key, Subscription signing/failure/matching, EventManager CRUD/fire/disable/enable/stats/purge/stale/deactivate, EscapesWildcardLike SQL escaping, ServiceProvider binding lifecycle, config completeness 7 sections, final class verification, strict types enforcement, composer.json PSR-4, readonly + #[Pure] verification) | ✅ | `EventsPhase65ProductionTest.php` |
 
 ## How It Works
 
