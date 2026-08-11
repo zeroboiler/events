@@ -237,5 +237,5 @@ test('test file count is accurate (Phase 76)', function (): void {
         return ! in_array(basename($f), $supportFiles, true);
     }));
 
-    expect($testFiles)->toHaveCount(150);
+    expect($testFiles)->toHaveCount(151);
 });
