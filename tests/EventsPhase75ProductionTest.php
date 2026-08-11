@@ -589,7 +589,5 @@ test('test file count is accurate', function (): void {
         return ! in_array(basename($f), $supportFiles, true);
     }));
 
-    // Expect 149 test files (146 previously + this new one + 2 standalone)
-    // WildcardMatcherTest and EscapesWildcardLikeTest don't use TestCase
     expect($testFiles)->toHaveCount(149);
 });
