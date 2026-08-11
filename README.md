@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-4.1.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-4.2.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -449,7 +449,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 146 test files (144 Pest + 2 standalone + 5 support)
+└── tests/                      # 148 test files (146 Pest + 2 standalone + 5 support)
 ```
 
 ### Service Container Bindings
@@ -463,6 +463,36 @@ events/
 | `TriggerBuilder` | Transient | Fresh instance per resolution |
 | `SubscriptionBuilder` | Transient | Fresh instance per resolution |
 | `EventManager` (Facade) | `getFacadeAccessor()` → `EventManager::class` | Resolved from container |
+
+### EventManager Public Methods
+
+The `EventManager` class exposes 23 public methods (excluding constructor):
+
+| # | Method | Description |
+|---|--------|-------------|
+| 1 | `on(string)` | Start building a trigger |
+| 2 | `register(string)` | Alias for `on()` |
+| 3 | `fire(string, array, bool)` | Fire an event |
+| 4 | `fireModel(string, string, object)` | Fire a model event |
+| 5 | `enable(string)` | Enable a trigger |
+| 6 | `disable(string)` | Disable a trigger |
+| 7 | `invalidateTriggerCache()` | Clear wildcard cache |
+| 8 | `isDisabled()` | Check global disable |
+| 9 | `setEnabled(bool)` | Runtime disable toggle |
+| 10 | `listTriggers(...)` | List triggers |
+| 11 | `getTrigger(string)` | Get trigger by ID |
+| 12 | `deleteTrigger(string)` | Delete trigger |
+| 13 | `subscribe(string, string)` | Start webhook subscription |
+| 14 | `unsubscribe(string)` | Remove subscription |
+| 15 | `listSubscriptions(...)` | List subscriptions |
+| 16 | `getSubscription(string)` | Get subscription |
+| 17 | `subscribeWebhook(...)` | Quick webhook create |
+| 18 | `getEventHistory(...)` | Query event logs |
+| 19 | `getStats(...)` | Aggregate statistics |
+| 20 | `purgeLogs(...)` | Purge old logs |
+| 21 | `getStalePendingLogs(...)` | Get stuck logs |
+| 22 | `deactivateExceededSubscriptions()` | Deactivate failed subs |
+| 23 | `executeTrigger(Trigger, EventLog)` | Execute trigger sync |
 
 ### Core Classes
 
@@ -492,7 +522,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (146 test files)
+composer test        # Run Pest test suite (148 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -634,7 +664,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 70 production (ServiceProvider provides() lazy loading, ConditionEngine strictEquals pure unit tests, ConditionEngine between() edge cases, SubscriptionBuilder URL scheme rejection, EventManager deleteTrigger, config-driven max_failures type safety) | ✅ | `EventsPhase70ProductionTest.php` |
 | EventManager setEnabled/disable runtime toggle (setEnabled false/true, fire suppression/resumption, isDisabled config states) | ✅ | `EventManagerSetEnabledTest.php` |
 | Phase 72 production (all source strict_types, final classes 11, WildcardMatcher readonly+#[Pure], DomainEvent readonly promoted props, ConditionEngineContract/WebhookAction/Triggerable interfaces, DispatchTriggerJob ShouldQueue, EventLog 4 status constants, models UUID string key+non-incrementing+config-driven tables, EventManager/ActionResolver readonly promoted constructor props, fluent interface TriggerBuilder/SubscriptionBuilder, Facade accessor, 12 console commands final+int return, config 7 sections, composer autoload PSR-4+extra.laravel, phpstan level 9, 3 migrations up/down, 3 factories definition, EventManager 22 public API methods, EscapesWildcardLike trait composition, ManagesHistory/ManagesSubscriptions methods, version consistency) | ✅ | `EventsPhase72ProductionTest.php` |
-| PHPStan level 9 upgrade (config level, badge, CI verification, composer PHPStan version, phpstan options) | ✅ | `EventsPhase73ProductionTest.php` |
+|| PHPStan level 9 upgrade (config level, badge, CI verification, composer PHPStan version, phpstan options) | ✅ | `EventsPhase73ProductionTest.php` ||
+| Phase 74 production (executeTrigger public API verification, 23 EventManager public methods count, Facade @method coverage, WildcardMatcher edge cases, ConditionEngine string-numeric between, reversed range auto-normalize, SubscriptionBuilder validation ordering, TriggerBuilder empty-string rejection, fire/fireModel empty validation, test file count accuracy) | ✅ | `EventsPhase74ProductionTest.php` |
 
 ## How It Works
 
@@ -843,6 +874,14 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v4.2.0
+
+- **Added**: `EventsPhase74ProductionTest.php` — 20 new tests covering: EventManager executeTrigger public API verification (signature, return type), EventManager 23 public methods count verification, Facade @method annotation count, WildcardMatcher findMatchingPatterns order preservation, extractWildcards non-matching, empty string event handling, ConditionEngine between with string numeric values, between with reversed range auto-normalization, SubscriptionBuilder validation ordering (empty event before URL scheme, empty URL before scheme, ftp:// rejection), TriggerBuilder actions empty-string rejection, EventManager fire/fireModel empty validation, test file count accuracy (148 test files: 146 Pest + 2 standalone).
+- **Added**: EventManager public methods table in README architecture section.
+- **Fixed**: README test file count corrected to 148 (146 Pest-registered + 2 standalone + 5 support files).
+- **Changed**: Version bumped to 4.2.0.
+- **Changed**: Pest.php updated with EventsPhase74ProductionTest.php registration.
 
 ### v4.1.0
 
