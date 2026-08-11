@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-4.2.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-4.3.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -449,7 +449,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 148 test files (146 Pest + 2 standalone + 5 support)
+└── tests/                      # 149 test files (147 Pest + 2 standalone + 5 support)
 ```
 
 ### Service Container Bindings
@@ -522,7 +522,7 @@ The `EventManager` class exposes 23 public methods (excluding constructor):
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (148 test files)
+composer test        # Run Pest test suite (149 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -665,6 +665,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | EventManager setEnabled/disable runtime toggle (setEnabled false/true, fire suppression/resumption, isDisabled config states) | ✅ | `EventManagerSetEnabledTest.php` |
 | Phase 72 production (all source strict_types, final classes 11, WildcardMatcher readonly+#[Pure], DomainEvent readonly promoted props, ConditionEngineContract/WebhookAction/Triggerable interfaces, DispatchTriggerJob ShouldQueue, EventLog 4 status constants, models UUID string key+non-incrementing+config-driven tables, EventManager/ActionResolver readonly promoted constructor props, fluent interface TriggerBuilder/SubscriptionBuilder, Facade accessor, 12 console commands final+int return, config 7 sections, composer autoload PSR-4+extra.laravel, phpstan level 9, 3 migrations up/down, 3 factories definition, EventManager 22 public API methods, EscapesWildcardLike trait composition, ManagesHistory/ManagesSubscriptions methods, version consistency) | ✅ | `EventsPhase72ProductionTest.php` |
 || PHPStan level 9 upgrade (config level, badge, CI verification, composer PHPStan version, phpstan options) | ✅ | `EventsPhase73ProductionTest.php` ||
+| Phase 75 production (config completeness 7 sections, ServiceProvider bindings singleton/transient/contract, Facade accessor, #[Override]/#[Pure] attributes, strict types, final classes, readonly properties, EventLog status constants, DomainEvent roundtrip/immutability, EscapesWildcardLike SQL escaping, ActionResolver errors, ConditionEngine full 19-operator matrix + AND logic + null safety + empty conditions, WildcardMatcher comprehensive, Subscription signPayload null/empty/deterministic, model config-driven table names, model UUID key types, composer.json autoload/extra, migration/factory existence, version consistency, file headers, ServiceProvider provides() lazy loading, test count accuracy) | ✅ | `EventsPhase75ProductionTest.php` |
 | Phase 74 production (executeTrigger public API verification, 23 EventManager public methods count, Facade @method coverage, WildcardMatcher edge cases, ConditionEngine string-numeric between, reversed range auto-normalize, SubscriptionBuilder validation ordering, TriggerBuilder empty-string rejection, fire/fireModel empty validation, test file count accuracy) | ✅ | `EventsPhase74ProductionTest.php` |
 
 ## How It Works
@@ -874,6 +875,13 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v4.3.0
+
+- **Added**: `EventsPhase75ProductionTest.php` — 50+ comprehensive production readiness tests covering: config completeness (7 sections + sub-keys), ServiceProvider bindings (singleton/transient/contract identity), Facade accessor, #[Override]/#[Pure] attribute verification, strict types enforcement, final class verification, readonly property verification, EventLog status constants, DomainEvent roundtrip/immutability, EscapesWildcardLike SQL escaping, ActionResolver error cases, ConditionEngine full 19-operator matrix + AND logic + null safety + empty conditions, WildcardMatcher comprehensive patterns (exact/single/cross-segment/catch-all/multi/extract/findMatchingPatterns), Subscription signPayload (null/empty/deterministic), model config-driven table names, model UUID string key types + non-incrementing, composer.json autoload/extra structure, migration existence, factory existence, version consistency, file headers, ServiceProvider provides() lazy loading, test file count accuracy.
+- **Added**: `EventsPhase75ProductionTest.php` registered in Pest.php.
+- **Fixed**: README test file count corrected to 149 (147 Pest-registered + 2 standalone).
+- **Changed**: Version bumped to 4.3.0.
 
 ### v4.2.0
 
