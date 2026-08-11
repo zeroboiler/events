@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.9.0-blue)]()|
+|[![Latest Version](https://img.shields.io/badge/version-4.10.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -686,6 +686,12 @@ Test coverage spans:
 - Service provider bindings, config completeness, migrations, factories
 
 ## Changelog
+
+### v4.10.0
+
+- Fixed: `EventsPhase82ProductionAuditTest` — corrected `getConfig()` return type assertion to use resolved FQN (`Illuminate\Contracts\Config\Repository`) instead of the import alias (`ZeroBoiler\Events\ConfigRepository`)
+- Added: `EventsPhase83ProductionAuditTest.php` — comprehensive Phase 83 production audit covering: return type completeness across all classes, strict types verification, typed model properties, docblock presence on public API, contract interface correctness, constructor DI validation, config key consistency, deprecated PHP feature checks, error handling patterns, WildcardMatcher edge cases, ConditionEngine null-safety, DomainEvent reconstruction edge cases, and composer.json correctness
+- Verified: All source files have `declare(strict_types=1)`, all methods have explicit return type declarations, all model properties are typed
 
 ### v4.9.0
 

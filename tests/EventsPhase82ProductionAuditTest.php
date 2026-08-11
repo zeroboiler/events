@@ -83,13 +83,15 @@ describe('Phase 82 Production Audit', function (): void {
             expect($code)->toContain('use Illuminate\\Contracts\\Config\\Repository as ConfigRepository');
         });
 
-        test('getConfig() return type is ConfigRepository alias', function (): void {
+        test('getConfig() return type is ConfigRepository (resolved FQN)', function (): void {
             $reflection = new ReflectionClass(\ZeroBoiler\Events\EventManager::class);
             $method = $reflection->getMethod('getConfig');
 
             $returnType = $method->getReturnType();
             expect($returnType)->not->toBeNull();
-            expect((string) $returnType)->toBe('ZeroBoiler\\Events\\ConfigRepository');
+            // ReflectionMethod::getReturnType() resolves import aliases to the FQN.
+            // The source uses `use Illuminate\Contracts\Config\Repository as ConfigRepository`.
+            expect((string) $returnType)->toBe('Illuminate\\Contracts\\Config\\Repository');
         });
     });
 
