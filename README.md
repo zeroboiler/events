@@ -1,9 +1,9 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-4.0.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-4.1.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
-|[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()|
+|[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -449,7 +449,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 145 test files (143 Pest + 2 standalone + 5 support)
+└── tests/                      # 146 test files (144 Pest + 2 standalone + 5 support)
 ```
 
 ### Service Container Bindings
@@ -492,8 +492,8 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (145 test files)
-composer analyse     # PHPStan level max (uses phpstan.neon.dist)
+composer test        # Run Pest test suite (146 test files)
+composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
 composer ci          # All checks (lint → analyse → rector → test)
@@ -633,7 +633,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 68 production (strict types all files, final classes, readonly + #[Pure], ConditionEngine 19-operator matrix + AND logic, WildcardMatcher comprehensive, ActionResolver errors, fire/fireModel validation, Subscription signPayload, phpstan config, ServiceProvider bindings, Facade accessor, config completeness, fluent interface, migration/factory, command prefix, trait methods, version consistency, license headers) | ✅ | `EventsPhase68ProductionTest.php` |
 | Phase 70 production (ServiceProvider provides() lazy loading, ConditionEngine strictEquals pure unit tests, ConditionEngine between() edge cases, SubscriptionBuilder URL scheme rejection, EventManager deleteTrigger, config-driven max_failures type safety) | ✅ | `EventsPhase70ProductionTest.php` |
 | EventManager setEnabled/disable runtime toggle (setEnabled false/true, fire suppression/resumption, isDisabled config states) | ✅ | `EventManagerSetEnabledTest.php` |
-| Phase 72 production (all source strict_types, final classes 11, WildcardMatcher readonly+#[Pure], DomainEvent readonly promoted props, ConditionEngineContract/WebhookAction/Triggerable interfaces, DispatchTriggerJob ShouldQueue, EventLog 4 status constants, models UUID string key+non-incrementing+config-driven tables, EventManager/ActionResolver readonly promoted constructor props, fluent interface TriggerBuilder/SubscriptionBuilder, Facade accessor, 12 console commands final+int return, config 7 sections, composer autoload PSR-4+extra.laravel, phpstan level 8, 3 migrations up/down, 3 factories definition, EventManager 22 public API methods, EscapesWildcardLike trait composition, ManagesHistory/ManagesSubscriptions methods, version consistency) | ✅ | `EventsPhase72ProductionTest.php` |
+| Phase 72 production (all source strict_types, final classes 11, WildcardMatcher readonly+#[Pure], DomainEvent readonly promoted props, ConditionEngineContract/WebhookAction/Triggerable interfaces, DispatchTriggerJob ShouldQueue, EventLog 4 status constants, models UUID string key+non-incrementing+config-driven tables, EventManager/ActionResolver readonly promoted constructor props, fluent interface TriggerBuilder/SubscriptionBuilder, Facade accessor, 12 console commands final+int return, config 7 sections, composer autoload PSR-4+extra.laravel, phpstan level 9, 3 migrations up/down, 3 factories definition, EventManager 22 public API methods, EscapesWildcardLike trait composition, ManagesHistory/ManagesSubscriptions methods, version consistency) | ✅ | `EventsPhase72ProductionTest.php` |
+| PHPStan level 9 upgrade (config level, badge, CI verification, composer PHPStan version, phpstan options) | ✅ | `EventsPhase73ProductionTest.php` |
 
 ## How It Works
 
@@ -842,6 +843,13 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v4.1.0
+
+- **Changed**: `phpstan.neon.dist` — upgraded PHPStan level from `8` to `9` for maximum static analysis strictness.
+- **Changed**: README PHPStan badge updated from Level 8 to Level 9.
+- **Added**: `EventsPhase73ProductionTest.php` — 9 new tests covering: phpstan.neon.dist level 9 verification, src path scanning, treatPhpDocTypesAsCertain false, reportUnmatchedIgnoredErrors true, checkUninitializedProperties false, CI workflow phpstan.neon.dist reference, CI PHP 8.5 version, composer.json PHP ^8.5 requirement, composer.json phpstan ^2.2 requirement.
+- **Changed**: Test file count updated to 146 (144 Pest + 2 standalone).
 
 ### v3.9.0
 
