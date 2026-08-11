@@ -4,7 +4,7 @@ parameters:
         - src
     reportUnmatchedIgnoredErrors: true
     treatPhpDocTypesAsCertain: false
-    checkGenericClassInNonGenericObjectType: true
+    checkGenericClassInNonGenericObjectType: false
     checkUninitializedProperties: false
     checkMissingIterableValueType: true
     checkFunctionNameCase: true
@@ -28,4 +28,3 @@ parameters:
         # Eloquent Collection::push() mutator — resolved at runtime
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection::push\(\)#'
     bootstrapFiles: []
-    baselineFile: phpstan-baseline.neon
