@@ -409,7 +409,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 157+ test files (Pest + support)
+└── tests/                      # 158+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -665,7 +665,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (157+ test files)
+composer test        # Run Pest test suite (158+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -692,6 +692,9 @@ Test coverage spans:
 - Removed: `SerializesModels` trait from `DispatchTriggerJob` (job stores only primitives — strings and arrays — no Eloquent models; prevents misleading PHPStan analysis)
 - Added: `#[Override]` attribute on `DispatchTriggerJob::handle()` and `DispatchTriggerJob::failed()` for PHPStan compliance
 - Added: `EventsPhase81ProductionAuditTest.php` — comprehensive Phase 81 production audit
+- Added: `EventsServiceProviderBindingsTest.php` — comprehensive container binding, DI lifetime, and edge-case tests for EventManager, TriggerBuilder, SubscriptionBuilder, ActionResolver, WildcardMatcher, and DispatchTriggerJob
+- Fixed: `phpstan.neon.dist` — added `checkGenericClassInNonGenericObjectType` and `checkUninitializedProperties` for stricter PHPStan 9 analysis
+- Updated: README test file count to 158+
 
 ### v4.7.0
 

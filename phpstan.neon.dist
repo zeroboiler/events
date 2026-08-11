@@ -5,6 +5,8 @@ parameters:
     reportUnmatchedIgnoredErrors: true
     treatPhpDocTypesAsCertain: false
     checkMissingIterableValueType: true
+    checkGenericClassInNonGenericObjectType: true
+    checkUninitializedProperties: true
     checkFunctionNameCase: true
     checkClassLikeNameCase: true
     checkPropertyHookNameCase: true
