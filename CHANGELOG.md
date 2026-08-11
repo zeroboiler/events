@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.5.0] — 2026-08-11
+
+### Fixed
+- Unused import `use ZeroBoiler\Events\EventManager` removed from `EventsHealthCommand` — was imported but never referenced.
+- Test file count corrected to 152 (150 Pest-registered + 2 standalone).
+
+### Added
+- `EventsPhase77ProductionTest.php` — 67 comprehensive production tests: unused import cleanup, all source strict_types sweep, final classes 10 core + 12 console, interface contracts, ServiceProvider #[Override] verification, singleton/transient bindings + contract identity + provides() count, Facade accessor + @method count, config completeness 7 sections + sub-keys, EventLog 4 status constants, DomainEvent readonly + roundtrip + fromArray rejection, WildcardMatcher readonly + #[Pure] + comprehensive patterns, EscapesWildcardLike SQL escaping, fluent interface, model config-driven tables + UUID keys + non-incrementing + casts, getStats zero state, Subscription signPayload + matchesEvent, cache invalidation lifecycle, fire/fireModel validation, TriggerBuilder/SubscriptionBuilder validation, DispatchTriggerJob config, ActionResolver errors, composer.json autoload/extra + PHP ^8.5 + PHPStan ^2.2, migrations/factories, phpstan.neon.dist, version consistency, file headers.
+- `EventsPhase77ProductionTest.php` registered in Pest.php.
+- Phase 77 test coverage entry in README.
+
+---
+
 ## [4.2.0] — 2026-08-11
 
 ### Added

@@ -449,7 +449,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 151 test files (Pest + support)
+└── tests/                      # 152 test files (Pest + support)
 ```
 
 ### Service Container Bindings
@@ -522,7 +522,7 @@ The `EventManager` class exposes 23 public methods (excluding constructor):
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (151 test files)
+composer test        # Run Pest test suite (152 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -671,6 +671,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | EventManager direct EscapesWildcardLike trait (listTriggers wildcard, exact, cross-segment, wildcardToLike null/conversion/escaping, direct class_uses) | ✅ | `EventManagerWildcardTraitTest.php` |
 | Phase 74 production (executeTrigger public API verification, 23 EventManager public methods count, Facade @method coverage, WildcardMatcher edge cases, ConditionEngine string-numeric between, reversed range auto-normalize, SubscriptionBuilder validation ordering, TriggerBuilder empty-string rejection, fire/fireModel empty validation, test file count accuracy) | ✅ | `EventsPhase74ProductionTest.php` |
 | Phase 76 production (ServiceProvider provides()/register()/boot() #[Override], WebhookAction implements Triggerable, DispatchTriggerJob implements ShouldQueue, ConditionEngine/WildcardMatcher readonly final classes, DomainEvent final + readonly properties, model table name config fallback, phpstan.neon.dist baselineFile + checkGenericClass, config completeness, Trigger model fillable/hidden, EventLog scopeWithStatus + scopeStalePending, Subscription matchesEvent wildcard/cross-segment/exact) | ✅ | `EventsPhase76ProductionTest.php` |
+| Phase 77 production (unused import cleanup — EventsHealthCommand, all source strict_types sweep, final classes 10 core + 12 console, interface contracts ConditionEngine/Triggerable/ShouldQueue, ServiceProvider #[Override] on register/boot/provides, singleton/transient bindings + contract identity + provides() count, Facade accessor + @method count, config completeness 7 sections + sub-keys, EventLog 4 status constants, DomainEvent readonly + roundtrip + fromArray rejection, WildcardMatcher readonly + #[Pure] + comprehensive patterns, EscapesWildcardLike SQL escaping, fluent interface TriggerBuilder/SubscriptionBuilder, model config-driven table names + UUID keys + non-incrementing + casts, getStats zero state + structure, Subscription signPayload null/empty/deterministic + matchesEvent wildcards, cache invalidation lifecycle, fire/fireModel validation, TriggerBuilder/SubscriptionBuilder validation, DispatchTriggerJob config-driven properties, ActionResolver errors, composer.json autoload/extra + PHP ^8.5 + PHPStan ^2.2, migrations up/down existence, factory definition existence, phpstan.neon.dist level 9 + baselineFile + src path, version consistency, file headers) | ✅ | `EventsPhase77ProductionTest.php` |
 
 ## How It Works
 
@@ -882,12 +883,11 @@ Before deploying to production, verify:
 
 ### v4.5.0
 
-- **Fixed**: Version bumped to 4.5.0 (sync with latest release tag).
-- **Fixed**: `EventsPhase76ProductionTest.php` registered in Pest.php — was missing from the test runner registration.
-- **Fixed**: Test file count updated to 151 (149 Pest-registered + 2 standalone).
-- **Added**: Phase 76 test coverage entry in README test coverage table.
-- **Added**: Phase 76 tests covering: ServiceProvider provides()/register()/boot() #[Override], WebhookAction implements Triggerable, DispatchTriggerJob implements ShouldQueue, ConditionEngine/WildcardMatcher readonly final classes, DomainEvent final + readonly properties, model table name config fallback, phpstan.neon.dist baselineFile + checkGenericClass, config completeness, Trigger model fillable/hidden, EventLog scopeWithStatus + scopeStalePending, Subscription matchesEvent wildcard/cross-segment/exact.
-- **Fixed**: README test file counts corrected (151 test files total, 151 in testing section).
+- **Fixed**: Unused import `use ZeroBoiler\Events\EventManager` removed from `EventsHealthCommand` — was imported but never referenced, cluttering the class namespace.
+- **Fixed**: Test file count corrected to 152 (150 Pest-registered + 2 standalone).
+- **Added**: `EventsPhase77ProductionTest.php` — 67 comprehensive production tests covering: unused import cleanup verification, all source strict_types sweep, final classes 10 core + 12 console, interface contracts (ConditionEngine/Triggerable/ShouldQueue/ConditionEngineContract method signatures), ServiceProvider #[Override] on register/boot/provides, singleton/transient bindings + contract identity + provides() count, Facade accessor + @method count, config completeness 7 sections + sub-keys, EventLog 4 status constants, DomainEvent readonly + roundtrip + fromArray rejection, WildcardMatcher readonly + #[Pure] + comprehensive patterns (exact/single/cross-segment/catch-all/empty), EscapesWildcardLike SQL escaping, fluent interface TriggerBuilder/SubscriptionBuilder, model config-driven table names + UUID string keys + non-incrementing + casts, getStats zero state + structure, Subscription signPayload null/empty/deterministic + matchesEvent wildcards, cache invalidation lifecycle, fire/fireModel validation, TriggerBuilder/SubscriptionBuilder validation, DispatchTriggerJob config-driven properties, ActionResolver errors, composer.json autoload/extra + PHP ^8.5 + PHPStan ^2.2, migrations up/down existence + factory definition existence, phpstan.neon.dist level 9 + baselineFile + src path, version consistency, file headers.
+- **Added**: `EventsPhase77ProductionTest.php` registered in Pest.php.
+- **Added**: Phase 77 test coverage entry in README test coverage table.
 
 ### v4.4.0
 

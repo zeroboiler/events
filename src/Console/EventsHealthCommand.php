@@ -11,7 +11,6 @@ namespace ZeroBoiler\Events\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Subscription;
 use ZeroBoiler\Events\Models\Trigger;
