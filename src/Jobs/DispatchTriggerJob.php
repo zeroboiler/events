@@ -11,7 +11,6 @@ namespace ZeroBoiler\Events\Jobs;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -24,7 +23,6 @@ final class DispatchTriggerJob implements ShouldQueue
 {
     use InteractsWithQueue;
     use Queueable;
-    use SerializesModels;
 
     /** @var list<int> Backoff intervals in seconds between retry attempts */
     public array $backoff = [60, 300, 900];
@@ -85,6 +83,7 @@ final class DispatchTriggerJob implements ShouldQueue
      */
     protected ?string $eventLogId = null;
 
+    #[\Override]
     public function handle(EventManager $eventManager): void
     {
         $trigger = Trigger::find($this->triggerId);
@@ -114,6 +113,7 @@ final class DispatchTriggerJob implements ShouldQueue
         $eventManager->executeTrigger($trigger, $log);
     }
 
+    #[\Override]
     public function failed(Throwable $exception): void
     {
         Log::error('DispatchTriggerJob failed permanently', [

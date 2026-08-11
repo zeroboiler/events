@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.7.0-blue)]()|
+|[![Latest Version](https://img.shields.io/badge/version-4.8.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -686,6 +686,12 @@ Test coverage spans:
 - Service provider bindings, config completeness, migrations, factories
 
 ## Changelog
+
+### v4.8.0
+
+- Removed: `SerializesModels` trait from `DispatchTriggerJob` (job stores only primitives — strings and arrays — no Eloquent models; prevents misleading PHPStan analysis)
+- Added: `#[Override]` attribute on `DispatchTriggerJob::handle()` and `DispatchTriggerJob::failed()` for PHPStan compliance
+- Added: `EventsPhase81ProductionAuditTest.php` — comprehensive Phase 81 production audit
 
 ### v4.7.0
 
