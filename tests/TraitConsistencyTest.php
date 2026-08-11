@@ -29,10 +29,16 @@ describe('Console commands use EscapesWildcardLike trait', function (): void {
             ->toHaveKey(\ZeroBoiler\Events\Concerns\EscapesWildcardLike::class);
     });
 
-    test('EventManager uses EscapesWildcardLike via ManagesHistory trait', function (): void {
+    test('EventManager uses EscapesWildcardLike trait directly and via ManagesHistory/ManagesSubscriptions', function (): void {
         $uses = class_uses_recursive(\ZeroBoiler\Events\EventManager::class);
 
         expect($uses)
+            ->toBeArray()
+            ->toHaveKey(\ZeroBoiler\Events\Concerns\EscapesWildcardLike::class);
+
+        // Also verify direct usage (not just via trait-of-trait)
+        $directUses = class_uses(\ZeroBoiler\Events\EventManager::class);
+        expect($directUses)
             ->toBeArray()
             ->toHaveKey(\ZeroBoiler\Events\Concerns\EscapesWildcardLike::class);
     });

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
 use Throwable;
+use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\Concerns\ManagesHistory;
 use ZeroBoiler\Events\Concerns\ManagesSubscriptions;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
@@ -23,6 +24,7 @@ use ZeroBoiler\Events\Models\Trigger;
 
 final class EventManager
 {
+    use EscapesWildcardLike;
     use ManagesHistory;
     use ManagesSubscriptions;
 
