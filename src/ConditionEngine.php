@@ -39,6 +39,7 @@ final class ConditionEngine implements ConditionEngineContract
      * Evaluate a single condition.
      *
      * @param  array<string, mixed>  $payload
+     * @return bool True if the condition matches, false otherwise
      */
     protected function evaluateCondition(string $field, mixed $expected, array $payload): bool
     {

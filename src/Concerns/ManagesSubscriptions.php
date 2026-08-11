@@ -88,7 +88,9 @@ trait ManagesSubscriptions
             $query->active();
         }
 
-        return $query->orderByPriority()->get();
+        return $query->orderByPriority()
+            ->orderBy('created_at')
+            ->get();
     }
 
     /**
