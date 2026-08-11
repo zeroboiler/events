@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-3.9.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-4.0.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()|
@@ -449,7 +449,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 144 test files (142 Pest + 2 standalone + 5 support)
+└── tests/                      # 145 test files (143 Pest + 2 standalone + 5 support)
 ```
 
 ### Service Container Bindings
@@ -492,7 +492,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (144 test files)
+composer test        # Run Pest test suite (145 test files)
 composer analyse     # PHPStan level max (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -633,6 +633,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 68 production (strict types all files, final classes, readonly + #[Pure], ConditionEngine 19-operator matrix + AND logic, WildcardMatcher comprehensive, ActionResolver errors, fire/fireModel validation, Subscription signPayload, phpstan config, ServiceProvider bindings, Facade accessor, config completeness, fluent interface, migration/factory, command prefix, trait methods, version consistency, license headers) | ✅ | `EventsPhase68ProductionTest.php` |
 | Phase 70 production (ServiceProvider provides() lazy loading, ConditionEngine strictEquals pure unit tests, ConditionEngine between() edge cases, SubscriptionBuilder URL scheme rejection, EventManager deleteTrigger, config-driven max_failures type safety) | ✅ | `EventsPhase70ProductionTest.php` |
 | EventManager setEnabled/disable runtime toggle (setEnabled false/true, fire suppression/resumption, isDisabled config states) | ✅ | `EventManagerSetEnabledTest.php` |
+| Phase 72 production (all source strict_types, final classes 11, WildcardMatcher readonly+#[Pure], DomainEvent readonly promoted props, ConditionEngineContract/WebhookAction/Triggerable interfaces, DispatchTriggerJob ShouldQueue, EventLog 4 status constants, models UUID string key+non-incrementing+config-driven tables, EventManager/ActionResolver readonly promoted constructor props, fluent interface TriggerBuilder/SubscriptionBuilder, Facade accessor, 12 console commands final+int return, config 7 sections, composer autoload PSR-4+extra.laravel, phpstan level 8, 3 migrations up/down, 3 factories definition, EventManager 22 public API methods, EscapesWildcardLike trait composition, ManagesHistory/ManagesSubscriptions methods, version consistency) | ✅ | `EventsPhase72ProductionTest.php` |
 
 ## How It Works
 
@@ -841,6 +842,14 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v3.9.0
+
+### v4.0.0
+
+- **Changed**: Version bumped to 4.0.0 (production-ready milestone).
+- **Added**: `EventsPhase72ProductionTest.php` — 30 comprehensive production audit tests: all source files strict_types enforcement, 11 core final classes, WildcardMatcher readonly + #[Pure], DomainEvent readonly promoted properties, ConditionEngineContract/Triggerable interfaces, DispatchTriggerJob ShouldQueue, EventLog 4 status constants, model UUID string key types + non-incrementing + config-driven table names, EventManager/ActionResolver readonly promoted constructor properties, TriggerBuilder/SubscriptionBuilder fluent interface, Facade accessor, 12 console commands final + int return types, config completeness (7 sections), composer autoload PSR-4 + extra.laravel, phpstan level 8, 3 migration files up/down, 3 factory files definition, EventManager 22 public API methods, EscapesWildcardLike trait composition, ManagesHistory/ManagesSubscriptions trait methods, version consistency.
+- **Changed**: Test file count updated to 145 (143 Pest + 2 standalone).
 
 ### v3.9.0
 

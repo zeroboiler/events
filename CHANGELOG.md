@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.0.0] — 2026-08-11
+
+### Changed
+- Version bumped to 4.0.0 (production-ready milestone).
+
+### Added
+- `EventsPhase72ProductionTest.php` — 30 comprehensive production audit tests: all source files strict_types enforcement, 11 core final classes, WildcardMatcher readonly + #[Pure], DomainEvent readonly promoted properties, ConditionEngineContract/Triggerable interfaces, DispatchTriggerJob ShouldQueue, EventLog 4 status constants, model UUID string key types + non-incrementing + config-driven table names, EventManager/ActionResolver readonly promoted constructor properties, TriggerBuilder/SubscriptionBuilder fluent interface, Facade accessor, 12 console commands final + int return types, config completeness (7 sections), composer autoload PSR-4 + extra.laravel, phpstan level 8, 3 migration files up/down, 3 factory files definition, EventManager 22 public API methods, EscapesWildcardLike trait composition, ManagesHistory/ManagesSubscriptions trait methods, version consistency.
+- Test file count updated to 145 (143 Pest + 2 standalone).
+
+---
+
 ## [3.9.0] — 2026-08-11
 
 ### Fixed
