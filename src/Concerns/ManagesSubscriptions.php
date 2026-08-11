@@ -17,10 +17,10 @@ use ZeroBoiler\Events\SubscriptionBuilder;
  * Webhook subscription management operations.
  *
  * Extracted from EventManager to reduce class size and improve
- * single-responsibility.
+ * single-responsibility. Must be used inside the EventManager class
+ * which provides the `$app` container property and `register()` method.
  *
  * @property-read \Illuminate\Container\Container $app
- * @property-read \ZeroBoiler\Events\EventManager $manager
  */
 trait ManagesSubscriptions
 {

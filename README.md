@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.10.0-blue)]()|
+|[![Latest Version](https://img.shields.io/badge/version-4.11.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -409,7 +409,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 161+ test files (Pest + support)
+└── tests/                      # 162+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -665,7 +665,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (161+ test files)
+composer test        # Run Pest test suite (162+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -686,6 +686,12 @@ Test coverage spans:
 - Service provider bindings, config completeness, migrations, factories
 
 ## Changelog
+
+### v4.11.0
+
+- Fixed: Trait docblocks (`ManagesSubscriptions`, `ManagesHistory`) removed reference to non-existent `$manager` property — now accurately documents the `$app` property requirement
+- Added: `EventsPhase84ProductionAuditTest.php` — comprehensive Phase 84 production audit covering: WildcardMatcher `findMatchingPatterns()` return types and edge cases, `extractWildcards()` empty/extraction fidelity, SubscriptionBuilder URL scheme validation (ftp, file, mailto, javascript), DomainEvent `fromArray()` extra fields, invalid UUID/date handling, reconstruction fidelity and immutability verification, TriggerBuilder action+actions merging and deduplication, trait docblock correctness, ConditionEngine type safety edge cases (inverted ranges, null operands, empty operators), EventManager fire validation edge cases
+- Verified: All 31 source files pass manual PHPStan 9 audit — strict types, typed properties, return type declarations, `#[\Override]`/`#[\Pure]` attributes, comprehensive docblocks
 
 ### v4.10.0
 

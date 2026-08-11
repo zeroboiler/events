@@ -19,10 +19,10 @@ use ZeroBoiler\Events\Models\Trigger;
  * Event history, statistics and log-purge operations.
  *
  * Extracted from EventManager to reduce class size and improve
- * single-responsibility.
+ * single-responsibility. Must be used inside the EventManager class
+ * which provides the `$app` container property.
  *
  * @property-read \Illuminate\Container\Container $app
- * @property-read \ZeroBoiler\Events\EventManager $manager
  */
 trait ManagesHistory
 {
