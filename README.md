@@ -1,9 +1,9 @@
 # ZeroBoiler Events
 
-|[![version](https://img.shields.io/badge/version-3.8.0-blue)]()|
+|[![version](https://img.shields.io/badge/version-3.9.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
-|[![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-success)]()|
+|[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -449,7 +449,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 143 test files (141 Pest + 2 standalone + 5 support)
+└── tests/                      # 144 test files (142 Pest + 2 standalone + 5 support)
 ```
 
 ### Service Container Bindings
@@ -492,7 +492,7 @@ events/
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (143 test files)
+composer test        # Run Pest test suite (144 test files)
 composer analyse     # PHPStan level max (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -841,6 +841,14 @@ Before deploying to production, verify:
 | `EVENTS_DISABLED` | `false` | Globally disable the event system |
 
 ## Changelog
+
+### v3.9.0
+
+- **Fixed**: `EventsLogCommand` — added `is_string()` type guard on `--trigger` option to prevent PHPStan 9 mixed-to-string type error.
+- **Fixed**: `phpstan.neon.dist` — changed level from `max` to `8` for PHPStan 2.x compatibility (PHPStan 2.x does not support `max` level).
+- **Fixed**: CI workflow — explicitly specified `--configuration=phpstan.neon.dist` for reliable config resolution.
+- **Added**: `EventsPhase71ProductionTest.php` — 18 new tests covering: ConditionEngine missing field in payload (null/equality/comparison/null/not_null/empty/not_empty), deep nested dot notation (triple nesting, null intermediate, missing intermediate, flat key with dots), WildcardMatcher edge cases (empty patterns, trailing dots, single-dot, extractWildcards empty, findMatchingPatterns order), ConditionEngineContract type verification and singleton resolution.
+- **Changed**: Version bumped to 3.9.0, test file count updated to 144, PHPStan badge updated to Level 8.
 
 ### v3.8.0
 

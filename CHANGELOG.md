@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [3.9.0] — 2026-08-11
+
+### Fixed
+- `EventsLogCommand` — added `is_string()` type guard on `--trigger` option to prevent PHPStan 9 mixed-to-string type error.
+- `phpstan.neon.dist` — changed level from `max` to `8` for PHPStan 2.x compatibility (PHPStan 2.x does not support `max` level).
+- CI workflow — explicitly specified `--configuration=phpstan.neon.dist` for reliable config resolution.
+
+### Added
+- `EventsPhase71ProductionTest.php` — 18 new tests covering: ConditionEngine missing field in payload (null/equality/comparison/null/not_null/empty/not_empty), deep nested dot notation (triple nesting, null intermediate, missing intermediate, flat key with dots), WildcardMatcher edge cases (empty patterns, trailing dots, single-dot, extractWildcards empty, findMatchingPatterns order), ConditionEngineContract type verification and singleton resolution.
+
+### Changed
+- Version bumped to 3.9.0, test file count updated to 144, PHPStan badge updated to Level 8.
+
+---
+
 ## [3.8.0] — 2026-08-10
 
 ### Added

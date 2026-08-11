@@ -41,7 +41,7 @@ final class EventsLogCommand extends Command
         }
 
         $triggerId = $this->option('trigger');
-        if ($triggerId !== null && $triggerId !== '') {
+        if (is_string($triggerId) && $triggerId !== '') {
             $query->where('trigger_id', $triggerId);
         }
 
