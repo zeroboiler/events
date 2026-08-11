@@ -449,7 +449,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 153 test files (Pest + support)
+└── tests/                      # 154 test files (Pest + support)
 ```
 
 ### Service Container Bindings
@@ -522,7 +522,7 @@ The `EventManager` class exposes 23 public methods (excluding constructor):
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (153 test files)
+composer test        # Run Pest test suite (154 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -633,6 +633,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Phase 39 production (README version consistency, test file count accuracy, standalone test verification, Pest.php completeness) | ✅ | `EventsPhase39ProductionTest.php` |
 | Phase 40 production (strict types, final classes, interface contracts, #[Override] verification, ServiceProvider bindings, config completeness, model config tables, EventLog status constants, DomainEvent readonly/roundtrip, WildcardMatcher #[Pure], EscapesWildcardLike, ActionResolver errors, ConditionEngine full operator matrix, WildcardMatcher comprehensive, Subscription signing/failure/matching, EventManager CRUD/fire/fireModel validation, TriggerBuilder/SubscriptionBuilder fluent interface, cache invalidation, getStats zero-state, version consistency, Pest.php completeness, composer.json structure, console command prefix, model key types, parseActions edge cases, Migration existence, DispatchTriggerJob config properties, trait method verification, file headers, EventLog status lifecycle) | ✅ | `EventsPhase40ProductionTest.php` |
 | Full lifecycle integration (fire→dispatch→log→stats, priority ordering, cache invalidation, history filtering, purge logs, DomainEvent roundtrip, ActionResolver edge cases, WildcardMatcher comprehensive, ConditionEngine all operators) | ✅ | `EventsLifecycleIntegrationTest.php` |
+| Comprehensive integration (fire/dispatch/validation, CRUD, subscription lifecycle, wildcard match, cache management, condition engine operators, domain event roundtrip, config-driven job properties, EscapesWildcardLike, ServiceProvider bindings) | ✅ | `EventsIntegrationTest.php` |
 | Phase 42 production (fireModel key collision, empty attributes, parseActions edge cases, DispatchTriggerJob eventLogId, WebhookAction payload stripping, ConditionEngine empty/missing, WildcardMatcher no-wildcard, builder defaults, CRUD empty state, EventLog constants, signPayload edge cases, ServiceProvider commands, Facade accessor, DomainEvent freshness, config completeness, version consistency) | ✅ | `EventsPhase42ProductionTest.php` |
 | Phase 43 production (fire() async parameter, ConditionEngine unknown operator fix, EventsFireCommand JSON precedence fix, EventsFireCommand --async flag, Facade annotation, all 19 operators, config consistency, strict types, final classes) | ✅ | `EventsPhase43ProductionTest.php` |
 | Phase 44 production (CHANGELOG presence, composer.json autoload/extra, rector.php Laravel set, .gitignore completeness, database directories, phpstan config, license headers, facade @method completeness, WebhookAction private method return types, EventLog casts type, DomainEvent fromArray edge cases, getStats structure, test file registration, command type safety, version consistency) | ✅ | `EventsPhase44ProductionTest.php` |
