@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.8.0-blue)]()|
+|[![Latest Version](https://img.shields.io/badge/version-4.9.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -409,7 +409,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 158+ test files (Pest + support)
+└── tests/                      # 161+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -665,7 +665,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (158+ test files)
+composer test        # Run Pest test suite (161+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -686,6 +686,16 @@ Test coverage spans:
 - Service provider bindings, config completeness, migrations, factories
 
 ## Changelog
+
+### v4.9.0
+
+- Fixed: `EventManager::getConfig()` — replaced `assert()` with proper `instanceof` check and `RuntimeException` for PHPStan level 9 compliance
+- Fixed: `EventManager::on()` — replaced `assert()` with proper `instanceof` check and `RuntimeException`
+- Fixed: `ManagesSubscriptions::subscribe()` — replaced `assert()` with proper `instanceof` check and `RuntimeException`
+- Removed: Unnecessary `assert($result instanceof Collection)` in `getEnabledWildcardTriggers()`
+- Added: `ConfigRepository` import alias in `EventManager` for clean return type declaration
+- Added: `EventsPhase82ProductionAuditTest.php` — comprehensive Phase 82 production audit (type safety, PHPStan config, ServiceProvider, config completeness, final classes, readonly, immutability, migration config, facade coverage)
+- Verified: `phpstan.neon.dist` has all PHPStan 9 checks enabled (including `checkGenericClassInNonGenericObjectType`, `checkMissingIterableValueType`, `checkClassLikeNameCase`, `checkPropertyHookNameCase`, `checkEnumCaseValueNameCase`)
 
 ### v4.8.0
 

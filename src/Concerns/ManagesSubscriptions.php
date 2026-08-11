@@ -39,7 +39,11 @@ trait ManagesSubscriptions
     public function subscribe(string $event, string $url): SubscriptionBuilder
     {
         $builder = $this->app->make(SubscriptionBuilder::class);
-        assert($builder instanceof SubscriptionBuilder);
+
+        if (! $builder instanceof SubscriptionBuilder) {
+            throw new \RuntimeException('SubscriptionBuilder could not be resolved from the container.');
+        }
+
         $builder->on($event)->to($url);
 
         return $builder;

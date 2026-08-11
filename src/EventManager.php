@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events;
 
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -46,15 +47,16 @@ final class EventManager
 
     /**
      * Get the config repository from the container with type narrowing.
-     *
-     * @return \Illuminate\Contracts\Config\Repository
      */
-    protected function getConfig(): \Illuminate\Contracts\Config\Repository
+    protected function getConfig(): ConfigRepository
     {
         $config = $this->app->get('config');
-        assert($config instanceof \Illuminate\Contracts\Config\Repository);
 
-        return $config;
+        if ($config instanceof ConfigRepository) {
+            return $config;
+        }
+
+        throw new \RuntimeException('Config repository not available in the container.');
     }
 
     /**
@@ -75,7 +77,11 @@ final class EventManager
     public function on(string $event): TriggerBuilder
     {
         $builder = $this->app->make(TriggerBuilder::class);
-        assert($builder instanceof TriggerBuilder);
+
+        if (! $builder instanceof TriggerBuilder) {
+            throw new \RuntimeException('TriggerBuilder could not be resolved from the container.');
+        }
+
         $builder->on($event);
 
         return $builder;
@@ -365,8 +371,6 @@ final class EventManager
             ->where('event', 'like', '%*%')
             ->orderByPriority()
             ->get();
-
-        assert($result instanceof Collection);
 
         Cache::put(self::WILDCARD_TRIGGER_CACHE_KEY, $result, $this->getTriggerCacheTtl());
 
