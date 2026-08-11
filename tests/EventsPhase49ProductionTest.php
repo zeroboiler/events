@@ -72,37 +72,37 @@ describe('Phase 49 Production Audit', function (): void {
 
     test('WildcardMatcher supports all documented patterns', function (): void {
         // Exact match
-        expect(\ZeroBoiler\WildcardMatcher::matches('order.placed', 'order.placed'))->toBeTrue();
-        expect(\ZeroBoiler\WildcardMatcher::matches('order.placed', 'order.shipped'))->toBeFalse();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('order.placed', 'order.placed'))->toBeTrue();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('order.placed', 'order.shipped'))->toBeFalse();
 
         // Single-segment wildcard
-        expect(\ZeroBoiler\WildcardMatcher::matches('order.*', 'order.placed'))->toBeTrue();
-        expect(\ZeroBoiler\WildcardMatcher::matches('order.*', 'order.placed.extra'))->toBeFalse();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('order.*', 'order.placed'))->toBeTrue();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('order.*', 'order.placed.extra'))->toBeFalse();
 
         // Cross-segment wildcard
-        expect(\ZeroBoiler\WildcardMatcher::matches('order.**', 'order.placed'))->toBeTrue();
-        expect(\ZeroBoiler\WildcardMatcher::matches('order.**', 'order.placed.extra'))->toBeTrue();
-        expect(\ZeroBoiler\WildcardMatcher::matches('order.**', 'order.placed.extra.detail'))->toBeTrue();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('order.**', 'order.placed'))->toBeTrue();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('order.**', 'order.placed.extra'))->toBeTrue();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('order.**', 'order.placed.extra.detail'))->toBeTrue();
 
         // Catch-all
-        expect(\ZeroBoiler\WildcardMatcher::matches('*', 'order.placed'))->toBeTrue();
-        expect(\ZeroBoiler\WildcardMatcher::matches('*', ''))->toBeFalse();
-        expect(\ZeroBoiler\WildcardMatcher::matches('**', 'anything'))->toBeTrue();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('*', 'order.placed'))->toBeTrue();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('*', ''))->toBeFalse();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('**', 'anything'))->toBeTrue();
 
         // Multiple wildcards
-        expect(\ZeroBoiler\WildcardMatcher::matches('*.order.*', 'user.order.created'))->toBeTrue();
-        expect(\ZeroBoiler\WildcardMatcher::matches('*.order.*', 'user.order.created.extra'))->toBeFalse();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('*.order.*', 'user.order.created'))->toBeTrue();
+        expect(\ZeroBoiler\Events\WildcardMatcher::matches('*.order.*', 'user.order.created.extra'))->toBeFalse();
     });
 
     test('WildcardMatcher extractWildcards works correctly', function (): void {
-        $result = \ZeroBoiler\WildcardMatcher::extractWildcards('user.*.created', 'user.profile.created');
+        $result = \ZeroBoiler\Events\WildcardMatcher::extractWildcards('user.*.created', 'user.profile.created');
         expect($result)->toBe(['profile']);
 
         // Cross-segment wildcards return empty
-        expect(\ZeroBoiler\WildcardMatcher::extractWildcards('order.**', 'order.placed.extra'))->toBe([]);
+        expect(\ZeroBoiler\Events\WildcardMatcher::extractWildcards('order.**', 'order.placed.extra'))->toBe([]);
 
         // Non-matching pattern returns empty
-        expect(\ZeroBoiler\WildcardMatcher::extractWildcards('user.*.created', 'other.order.deleted'))->toBe([]);
+        expect(\ZeroBoiler\Events\WildcardMatcher::extractWildcards('user.*.created', 'other.order.deleted'))->toBe([]);
     });
 
     test('DomainEvent serialization round-trip preserves identity', function (): void {

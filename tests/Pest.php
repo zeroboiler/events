@@ -136,6 +136,7 @@ uses(TestCase::class)->in(
     'EventsPhase47ProductionTest.php',
     'EventsPhase48ProductionTest.php',
     'EventsPhase49ProductionTest.php',
+    'EventsPhase50ProductionTest.php',
     'EventsPhase51ProductionTest.php',
     'EventsPhase52ProductionTest.php',
     'EventsPhase53ProductionTest.php',

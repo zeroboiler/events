@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.6.0] — 2026-08-11
+
+### Fixed
+- **CRITICAL** `EventsPhase49ProductionTest.php` — `WildcardMatcher` references used wrong namespace `\ZeroBoiler\WildcardMatcher` instead of `\ZeroBoiler\Events\WildcardMatcher` (15 occurrences). All wildcard matching and extract tests in Phase 49 would fail at runtime with class-not-found errors.
+- `phpstan.neon.dist` — consolidated `now()` and `database_path()` undefined-function suppressions into single regex rule for maintainability. Added missing `database_path()` suppression (used in `EventsServiceProvider::boot()` migration publishing).
+- `EventManager::parseActions()` — `array_is_list` branch arrow function now checks `is_string($entry)` before `is_array($entry)` for more explicit PHPStan type narrowing (string pass-through avoids unnecessary cast; array entries preserved as-is from JSON decode).
+
+### Added
+- `EventsPhase50ProductionTest.php` — 30 comprehensive production audit tests: final classes verification (9 core), readonly class check (WildcardMatcher), trait hierarchy validation (EventManager + ManagesHistory + ManagesSubscriptions → EscapesWildcardLike), interface contract verification (ConditionEngine → ConditionEngineContract, WebhookAction → Triggerable), method signature validation (matches, handle), DomainEvent readonly properties (4/4), constructor parameter types (EventManager 3 params, ActionResolver 1, TriggerBuilder 1, SubscriptionBuilder 1, DispatchTriggerJob 3), public method count (≥23), fire empty validation, ConditionEngine cross-type comparison, WildcardMatcher edge cases, phpstan.neon.dist config validation (level 9, src-only, treatPhpDocTypesAsCertain), composer.json PHP 8.5 + Laravel 13, config completeness (all top-level + nested keys).
+- `EventsPhase50ProductionTest.php` registered in Pest.php.
+
+---
+
 ## [4.5.0] — 2026-08-11
 
 ### Fixed

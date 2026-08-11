@@ -516,9 +516,13 @@ final class EventManager
 
             // Sequential list → normalise each entry
             if (array_is_list($decoded)) {
-                // List of entries — normalise each one
+                // List of entries — normalise each one.
+                // When an entry is an array, it should already be in the
+                // {class: string, params?: array} format from JSON decode.
                 return array_map(
-                    fn (mixed $entry): string|array => is_array($entry) ? $entry : (string) $entry,
+                    fn (mixed $entry): string|array => is_string($entry)
+                        ? $entry
+                        : (is_array($entry) ? $entry : (string) $entry),
                     $decoded,
                 );
             }

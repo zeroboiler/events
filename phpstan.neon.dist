@@ -12,16 +12,11 @@ parameters:
     checkPropertyHookNameCase: true
     checkEnumCaseValueNameCase: true
     ignoreErrors:
-        # Facade proxy — resolved at runtime via __callStatic magic
         - '#Call to an undefined (static )?method Illuminate\\Support\\Facades\\(Config|Cache|Queue|Log|DB)::.*#'
         - '#Call to an undefined (static )?method Illuminate\\Support\\Facades\\Http::.*#'
-        # Eloquent model dynamic property access — resolved via casts and attribute annotations
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$payload#'
         - '#Access to an undefined property ZeroBoiler\\Events\\Models\\(Trigger|EventLog|Subscription)::\$.*#'
-        # Eloquent Collection::push() mutator — resolved at runtime
-        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection::push\(\)#'
-        # Subscription::scopeForEvent uses EscapesWildcardLike trait method via $this
-        - '#Call to an undefined method ZeroBoiler\\Events\\Models\\Subscription::wildcardToLike\(\)#'
-        # now() global helper — resolved via Laravel framework bootstrap
-        - '#Call to an undefined function now\(\)#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection::push\\(\\)#'
+        - '#Call to an undefined method ZeroBoiler\\Events\\Models\\Subscription::wildcardToLike\\(\\)#'
+        - '#Call to an undefined function (now|database_path)\\(\\)#'
     bootstrapFiles: []
