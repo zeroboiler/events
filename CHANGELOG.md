@@ -6,6 +6,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.2.0] — 2026-08-11
+
+### Added
+- `EventsPhase74ProductionTest.php` — 20 new tests covering: EventManager executeTrigger public API verification (signature, return type), EventManager 23 public methods count verification, Facade @method annotation count, WildcardMatcher findMatchingPatterns order preservation, extractWildcards non-matching, empty string event handling, ConditionEngine between with string numeric values, between with reversed range auto-normalization, SubscriptionBuilder validation ordering (empty event before URL scheme, empty URL before scheme, ftp:// rejection), TriggerBuilder actions empty-string rejection, EventManager fire/fireModel empty validation, test file count accuracy (148 test files: 146 Pest + 2 standalone).
+
+### Added
+- EventManager public methods table in README architecture section.
+
+### Fixed
+- README test file count corrected to 148 (146 Pest-registered + 2 standalone + 5 support files).
+
+### Changed
+- Version bumped to 4.2.0.
+- Pest.php updated with EventsPhase74ProductionTest.php registration.
+
+---
+
+## [4.1.0] — 2026-08-11
+
+### Changed
+- `phpstan.neon.dist` — upgraded PHPStan level from `8` to `9` for maximum static analysis strictness.
+- README PHPStan badge updated from Level 8 to Level 9.
+
+### Added
+- `EventsPhase73ProductionTest.php` — 9 new tests covering: phpstan.neon.dist level 9 verification, src path scanning, treatPhpDocTypesAsCertain false, reportUnmatchedIgnoredErrors true, checkUninitializedProperties false, CI workflow phpstan.neon.dist reference, CI PHP 8.5 version, composer.json PHP ^8.5 requirement, composer.json phpstan ^2.2 requirement.
+
+### Changed
+- Test file count updated to 146 (144 Pest + 2 standalone).
+
+---
+
 ## [4.0.0] — 2026-08-11
 
 ### Changed
