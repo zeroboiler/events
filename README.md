@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.6.0-blue)]()|
+|[![Latest Version](https://img.shields.io/badge/version-4.7.0-blue)]()|
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -409,7 +409,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 155+ test files (Pest + support)
+└── tests/                      # 157+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -665,7 +665,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (155+ test files)
+composer test        # Run Pest test suite (157+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -686,6 +686,13 @@ Test coverage spans:
 - Service provider bindings, config completeness, migrations, factories
 
 ## Changelog
+
+### v4.7.0
+
+- Fixed: PHPStan 9 suppression for `wildcardToLike` broadened to cover all trait users (not just Subscription)
+- Fixed: PHPStan 9 suppressions added for `preg_quote`/`preg_match` nullable pattern parameters
+- Added: `EventsPhase80ProductionAuditTest.php` — comprehensive Phase 80 production audit (42 test cases)
+- Updated: README test file count to 157+
 
 ### v4.6.0
 
