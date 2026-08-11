@@ -127,6 +127,24 @@ return [
 ];
 ```
 
+### Environment Variables
+
+All configuration values can be overridden via environment variables:
+
+| Variable | Default | Description |
+|---|---|---|
+| `EVENTS_QUEUE_CONNECTION` | `queue.default` config | Queue connection for async trigger dispatch |
+| `EVENTS_QUEUE` | `default` | Queue name for async trigger dispatch |
+| `EVENTS_RETRY_TRIES` | `3` | Number of retry attempts for failed jobs |
+| `EVENTS_RETRY_BACKOFF` | `60,300,900` | Comma-separated backoff intervals (seconds) |
+| `EVENTS_LOG_RETENTION_DAYS` | `30` | Days before event logs become eligible for purge |
+| `EVENTS_LOG_PURGE_PENDING` | `false` | Include pending/dispatched logs in purge |
+| `EVENTS_SUB_MAX_FAILURES` | `10` | Auto-deactivate subscription after this many consecutive failures |
+| `EVENTS_SUB_TIMEOUT` | `30` | HTTP timeout for webhook delivery (seconds) |
+| `EVENTS_SUB_SIGNATURE_ALGORITHM` | `sha256` | HMAC algorithm for webhook payload signing |
+| `EVENTS_DISABLED` | `false` | Set `true` to globally disable the entire event system |
+| `EVENTS_WILDCARD_CACHE_TTL` | `300` | Cache TTL (seconds) for enabled wildcard triggers; set to `0` to disable |
+
 ## Usage
 
 ### Registering Triggers
