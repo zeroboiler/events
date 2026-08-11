@@ -28,3 +28,4 @@ parameters:
         # Eloquent Collection::push() mutator — resolved at runtime
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection::push\(\)#'
     bootstrapFiles: []
+    baselineFile: phpstan-baseline.neon
