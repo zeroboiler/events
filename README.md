@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.12.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.13.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -409,7 +409,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 162+ test files (Pest + support)
+└── tests/                      # 169+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -665,7 +665,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (168+ test files)
+composer test        # Run Pest test suite (169+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -686,6 +686,13 @@ Test coverage spans:
 - Service provider bindings, config completeness, migrations, factories
 
 ## Changelog
+
+### v4.13.0
+
+- Fixed: Duplicate `ConditionEngine` import in `EventsPhase85ProductionAuditTest.php` — removed duplicate and unused imports (`Triggerable`, `SubscriptionBuilder`)
+- Added: `EventsPhase86ProductionAuditTest.php` — 35+ comprehensive edge-case tests covering: `fireModel()` with plain stdClass/toArray-only objects, `ConditionEngine::strictEquals()` type safety (array vs string, bool vs int), `safeRegexMatch()` catastrophic pattern rejection and max-length enforcement, `WildcardMatcher::matches()` exact patterns/empty string/single-char events, `WildcardMatcher::findMatchingPatterns()` no-match and multi-match scenarios, `SubscriptionBuilder` validation for empty event/URL and non-HTTP schemes (ftp, file), `EventManager` CRUD edge cases (nonexistent getTrigger, empty-string listTriggers filter), `isDisabled()`/`setEnabled()` toggle and silent fire return, `DomainEvent` readonly property verification and round-trip fidelity, `EventLog` status constant consistency, `DispatchTriggerJob` config handling (zero/negative tries, empty queue/connection), config file structure completeness verification
+- Updated: Test file count to 169+
+- Updated: Pest.php registration for Phase 86 test
 
 ### v4.12.0
 
