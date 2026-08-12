@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Throwable;
+use ZeroBoiler\Events\Concerns\GetsWebhookTimeout;
 use ZeroBoiler\Events\Contracts\Triggerable;
 use ZeroBoiler\Events\Models\Subscription;
 
@@ -26,15 +27,7 @@ use ZeroBoiler\Events\Models\Subscription;
  */
 final class WebhookAction implements Triggerable
 {
-    /**
-     * Get the webhook timeout from config.
-     */
-    private function getTimeout(): int
-    {
-        $timeout = Config::get('events.subscriptions.timeout', 30);
-
-        return is_int($timeout) && $timeout > 0 ? $timeout : 30;
-    }
+    use GetsWebhookTimeout;
 
     /**
      * Get the max failures from config.
@@ -101,7 +94,7 @@ final class WebhookAction implements Triggerable
 
         try {
             $response = Http::withHeaders($headers)
-                ->timeout($this->getTimeout())
+                ->timeout($this->getWebhookTimeout())
                 ->post($url, $body);
 
             if (! $response->successful()) {

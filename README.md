@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.22.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.23.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -415,6 +415,7 @@ events/
 │   │   └── Triggerable.php
 │   ├── Concerns/
 │   │   ├── EscapesWildcardLike.php
+│   │   ├── GetsWebhookTimeout.php
 │   │   ├── ManagesHistory.php
 │   │   └── ManagesSubscriptions.php
 │   ├── Domain/
@@ -435,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 179+ test files (Pest + support)
+└── tests/                      # 180+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -720,6 +721,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.23.0
+
+- Refactored: Extracted `GetsWebhookTimeout` trait from `WebhookAction` and `EventsRedeliverCommand` to eliminate duplicated config-reading logic (DRY)
+- Added: `EventsFullLifecycleIntegrationTest.php` — comprehensive integration tests covering: full register→fire→execute→log→history→stats pipeline, condition matching, wildcard triggers, priority ordering, disable/enable/delete, global disable toggle, cache invalidation on create/enable/disable/delete, fireModel with attribute flattening and validation, DomainEvent roundtrip and readonly properties, subscription create/unsubscribe/list/filter, subscribe URL scheme enforcement, log purging, and ServiceProvider contract binding verification (singleton/transient resolution)
+- Updated: README — added `GetsWebhookTimeout` to package structure, updated test file count to 180+
+- Updated: Version to 4.23.0
 
 ### v4.22.0
 
