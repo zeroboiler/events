@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.21.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.22.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -435,7 +435,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 178+ test files (Pest + support)
+└── tests/                      # 179+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -698,7 +698,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (178+ test files)
+composer test        # Run Pest test suite (179+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -720,6 +720,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.22.0
+
+- Added: `EventsPhase94ProductionAuditTest.php` — Phase 94 production readiness audit (40+ tests) covering: fireModel edge cases (empty class/action validation, correct event name construction, attribute flattening, toArray-only objects), ConditionEngine type safety (null operands, strictEquals cross-type comparison, vacuous truth, empty operator array), WildcardMatcher borderline cases (catch-all * vs **, single vs cross-segment, escaped regex chars), DomainEvent immutability and identity (readonly property verification, roundtrip fidelity, extra field handling, unique eventId), SubscriptionBuilder validation (empty event/URL, non-HTTP scheme enforcement, HTTP/HTTPS acceptance), DispatchTriggerJob config handling (array backoff, empty string backoff, single-value backoff, empty connection default, null eventLogId in failed()), EventLog status constants consistency, EventManager cache invalidation, ServiceProvider completeness (composer.json extra section verification, autoload mapping, facade accessor), Facade delegation (registerScheduler proxy), config key consistency (phpstan.neon.dist targets, treatPhpDocTypesAsCertain), ActionResolver error handling (non-existent class, non-Triggerable class), all source files strict_types=1 verification
+- Updated: Test file count to 179+
+- Updated: Version to 4.22.0
 
 ### v4.21.0
 
