@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.13.0-blue)]()
-|[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
-|[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
-|[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
-|[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
+[![Latest Version](https://img.shields.io/badge/version-4.14.0-blue)]()
+[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
+[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
+[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
+[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
 
@@ -686,6 +686,14 @@ Test coverage spans:
 - Service provider bindings, config completeness, migrations, factories
 
 ## Changelog
+
+### v4.14.0
+
+- Fixed: `EventsPhase85ProductionAuditTest.php` missing from `Pest.php` registration — test was not running with `composer test`
+- Fixed: README badge alignment (misaligned `|` pipe characters on PHP/Laravel/PHPStan/CI badges)
+- Added: `EventsPhase87ProductionAuditTest.php` — 30+ comprehensive edge-case tests covering: `EventManager::getMatchingTriggers` empty Collection from cache, `TriggerBuilder` action string generation (single action with params, multiple actions with params), `ConditionEngine::strictEquals` type safety (int vs string, float vs int), empty payload with non-empty conditions, between operator with non-numeric actual, `WildcardMatcher` catch-all with empty event, exact match, single-char events, empty `findMatchingPatterns`, `extractWildcards` with no wildcards, `DomainEvent::fromArray` extra fields preservation and empty eventType throw, `EventManager::fireModel` with object having only `toArray`, `Subscription::signPayload` empty secret, `Subscription::hasExceededFailures` with explicit override, `EventLog` status constants consistency, `DispatchTriggerJob` property initialization from config, `EventsServiceProvider::provides()` completeness, builder validation for empty event/URL/action, `listTriggers`/`listSubscriptions` with empty/null filters, `getStats` return structure, `EventLog::scopeStalePending`, model scopes, config key completeness, `phpstan.neon.dist` level and checks, strict types across all source files, `composer.json` extra section correctness
+- Updated: Version to 4.14.0
+- Updated: Test file count to 170+
 
 ### v4.13.0
 
