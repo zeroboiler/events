@@ -41,6 +41,7 @@ final class ConditionEngine implements ConditionEngineContract
      * @param  array<string, mixed>  $payload
      * @return bool True if the condition matches, false otherwise
      */
+    #[\Pure]
     protected function evaluateCondition(string $field, mixed $expected, array $payload): bool
     {
         $actual = $this->getNestedValue($payload, $field);
@@ -114,6 +115,8 @@ final class ConditionEngine implements ConditionEngineContract
      * - Limiting PCRE backtrack limit to 1000
      * - Rejecting common catastrophic backtracking patterns (nested quantifiers)
      * - Returning false on any error
+     *
+     * Note: Not #[\Pure] — temporarily modifies pcre.backtrack_limit via ini_set.
      */
     protected function safeRegexMatch(string $pattern, string $subject): bool
     {
@@ -145,6 +148,7 @@ final class ConditionEngine implements ConditionEngineContract
      *
      * @param  array<string, mixed>  $data
      */
+    #[\Pure]
     protected function getNestedValue(array $data, string $key): mixed
     {
         $keys = explode('.', $key);
@@ -164,6 +168,7 @@ final class ConditionEngine implements ConditionEngineContract
     /**
      * Check if actual contains value (for strings and arrays).
      */
+    #[\Pure]
     protected function contains(mixed $actual, mixed $value): bool
     {
         if (is_array($actual)) {
@@ -183,6 +188,7 @@ final class ConditionEngine implements ConditionEngineContract
      * Auto-normalizes inverted ranges (e.g., [100, 50] → [50, 100]).
      * Both range values and actual must be numeric.
      */
+    #[\Pure]
     protected function between(mixed $actual, mixed $value): bool
     {
         if (! is_array($value) || count($value) !== 2) {

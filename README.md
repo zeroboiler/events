@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.27.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.28.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -699,7 +699,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (183+ test files)
+composer test        # Run Pest test suite (184+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -721,6 +721,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.28.0
+
+- Added: `#[\Pure]` attributes on `ConditionEngine::evaluateCondition()`, `strictEquals()`, `getNestedValue()`, `contains()`, and `between()` for improved static analysis accuracy
+- Added: Explicit documentation note on `safeRegexMatch()` explaining why it is NOT `#[\Pure]` (temporarily modifies `pcre.backtrack_limit` via `ini_set`)
+- Added: `EventsPhase101ProductionReadinessTest.php` — Phase 101 production readiness audit covering: ConditionEngine `#[\Pure]` attribute presence verification, numeric type handling (float between, zero boundary, string-as-number), EventManager fire with empty payload, DomainEvent type preservation through roundtrip, WildcardMatcher edge cases (empty event, catch-all, empty patterns), all source files strict_types=1, config key completeness (7 top-level, table_names, subscriptions, retention), ServiceProvider DI lifetime verification, migration config-driven table names, Facade accessor consistency, WebhookAction Triggerable interface compliance, EventLog status constants, PHPStan config validation, composer.json correctness, model table name config override
+- Updated: Version to 4.28.0
+- Updated: Test file count to 184+
 
 ### v4.27.0
 
