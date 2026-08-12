@@ -6,17 +6,11 @@
 
 declare(strict_types=1);
 
-use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\ConditionEngine;
-use ZeroBoiler\Events\ActionResolver;
 use ZeroBoiler\Events\SubscriptionBuilder;
 use ZeroBoiler\Events\TriggerBuilder;
-use ZeroBoiler\Events\EventScheduler;
 use ZeroBoiler\Events\WildcardMatcher;
 use ZeroBoiler\Events\Domain\DomainEvent;
-use ZeroBoiler\Events\Models\Trigger;
-use ZeroBoiler\Events\Models\EventLog;
-use ZeroBoiler\Events\Models\Subscription;
 
 /**
  * Phase 105 — Production audit: README Quick Start verification, DomainEvent immutability,
