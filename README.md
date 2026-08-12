@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.16.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.17.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -435,7 +435,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 172+ test files (Pest + support)
+└── tests/                      # 173+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -698,7 +698,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (172+ test files)
+composer test        # Run Pest test suite (173+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -720,6 +720,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.17.0
+
+- Fixed: `EventManager::getTriggerCacheTtl()` — now correctly handles TTL=0 as "disable caching" (previously, TTL=0 was treated as invalid and silently replaced with default 300s)
+- Fixed: `EventManager::fire()` — replaced inline config read with `isDisabled()` call for DRY consistency (same behavior, cleaner code)
+- Fixed: `config/events.php` — corrected wildcard cache documentation from "set to null to disable" to "set to 0 to disable" (matching actual behavior)
+- Added: `EventsPhase89ProductionAuditTest.php` — 25+ production audit tests covering TTL=0 disable, isDisabled() DRY refactoring, final class verification, strict types enforcement, config doc consistency, facade accessor, ServiceProvider provides() completeness, DomainEvent readonly properties, PHPStan config verification, and composer.json correctness
+- Updated: Test file count to 173+
 
 ### v4.16.0
 

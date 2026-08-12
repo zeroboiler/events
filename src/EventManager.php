@@ -62,10 +62,19 @@ final class EventManager
 
     /**
      * Get the wildcard trigger cache TTL from config or use default.
+     *
+     * Returns 0 when `events.wildcard_cache_ttl` is explicitly set to 0,
+     * which disables caching (each fire() call queries the DB).
+     * Returns the default TTL (300s) for any non-integer, null, or
+     * negative value.
      */
     protected function getTriggerCacheTtl(): int
     {
         $ttl = $this->getConfig()->get('events.wildcard_cache_ttl', self::DEFAULT_TRIGGER_CACHE_TTL);
+
+        if ($ttl === 0) {
+            return 0;
+        }
 
         return is_int($ttl) && $ttl > 0 ? $ttl : self::DEFAULT_TRIGGER_CACHE_TTL;
     }
@@ -240,8 +249,7 @@ final class EventManager
         }
 
         // Global disable check — allows maintenance-mode-like suppression
-        $disabled = $this->getConfig()->get('events.disabled', false);
-        if ($disabled === true) {
+        if ($this->isDisabled()) {
             return;
         }
 
