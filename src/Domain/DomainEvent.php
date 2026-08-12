@@ -23,10 +23,21 @@ final class DomainEvent
 {
     public readonly UuidInterface $eventId;
 
+    /**
+     * Timestamp when the event occurred.
+     *
+     * Cannot be a promoted constructor property because the fallback
+     * value depends on a `new DateTimeImmutable()` call, which is not
+     * a simple literal default.
+     */
     public readonly DateTimeImmutable $occurredAt;
 
     /**
-     * @param  array<string, mixed>  $payload
+     * Create a new domain event.
+     *
+     * @param  array<string, mixed>  $payload  Arbitrary event data
+     * @param  UuidInterface|null  $eventId  Pre-existing UUID for replay/reconstruction; generates a fresh v4 if null
+     * @param  DateTimeImmutable|null  $occurredAt  Pre-existing timestamp for replay/reconstruction; defaults to now()
      */
     public function __construct(
         public readonly string $eventType,

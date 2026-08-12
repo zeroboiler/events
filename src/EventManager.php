@@ -510,37 +510,33 @@ final class EventManager
      *
      * Each entry is either:
      * - A class name string (simple format):  ["App\\Actions\\Foo"]
-     * - An array with 'class' and 'params':  [["class" => "...", "params" => [...]]]
+     * - An array with 'class' and optional 'params':  [["class" => "...", "params" => [...]]]
      *
-     * Supports:
-     * - Single class name string:  "App\\Actions\\Foo"
-     * - JSON array of class names:  ["App\\Actions\\Foo", "App\\Actions\\Bar"]
-     * - JSON object with class + params:  {"class": "...", "params": {...}}
-     * - JSON object with classes + params:  {"classes": [...], "params": {...}}
-     * - JSON array of objects:  [{"class": "...", "params": {...}}, ...]
+     * Supports multiple input formats:
+     * - Single class name string:  `"App\\Actions\\Foo"`
+     * - JSON array of class names:  `["App\\Actions\\Foo", "App\\Actions\\Bar"]`
+     * - JSON object with class + params:  `{"class": "...", "params": {...}}`
+     * - JSON object with classes + params:  `{"classes": [...], "params": {...}}`
+     * - JSON array of objects:  `[{"class": "...", "params": {...}}, ...]`
      *
      * @return list<string|array{class: string, params?: array<string, mixed>}>
-     *
-     * @phpstan-return list<string|array{class: string, params?: array<string, mixed>}>
      */
     protected function parseActions(string $action): array
     {
-        // Empty or whitespace-only action string — return empty list
         $trimmed = trim($action);
         if ($trimmed === '' || $trimmed === '0') {
             return [];
         }
 
-        // Try to decode as JSON first
         $decoded = json_decode($trimmed, true);
 
         if (is_array($decoded)) {
-            // Handle {"classes": [...], "params": {...}} — multiple actions with shared params
+            // {"classes": [...], "params": {...}} — multiple actions with shared params
             if (isset($decoded['classes']) && is_array($decoded['classes'])) {
                 $params = is_array($decoded['params'] ?? null) ? $decoded['params'] : [];
 
                 return array_map(
-                    fn (mixed $cls): array => [
+                    static fn (mixed $cls): array => [
                         'class' => is_string($cls) ? $cls : '',
                         'params' => $params,
                     ],
@@ -550,11 +546,8 @@ final class EventManager
 
             // Sequential list → normalise each entry
             if (array_is_list($decoded)) {
-                // List of entries — normalise each one.
-                // When an entry is an array, it should already be in the
-                // {class: string, params?: array} format from JSON decode.
                 return array_map(
-                    fn (mixed $entry): string|array => is_string($entry)
+                    static fn (mixed $entry): string|array => is_string($entry)
                         ? $entry
                         : (is_array($entry) ? $entry : (string) $entry),
                     $decoded,

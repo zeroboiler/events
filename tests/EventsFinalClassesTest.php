@@ -155,6 +155,7 @@ test('All console commands are final', function (): void {
         \ZeroBoiler\Events\Console\EventsSubscribeCommand::class,
         \ZeroBoiler\Events\Console\EventsUnsubscribeCommand::class,
         \ZeroBoiler\Events\Console\EventsSubscriptionsCommand::class,
+        \ZeroBoiler\Events\Console\EventsHealthCommand::class,
     ];
 
     foreach ($commands as $command) {

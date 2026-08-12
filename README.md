@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.32.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.33.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 185+ test files (Pest + support)
+└── tests/                      # 186+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (185+ test files)
+composer test        # Run Pest test suite (186+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,15 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.33.0
+
+- Fixed: `EventsFinalClassesTest.php` — added missing `EventsHealthCommand` to the console commands final class verification (was checking 11 commands instead of 12)
+- Improved: `EventManager::parseActions()` — converted closures to `static fn` for cleaner closure semantics, removed redundant `@phpstan-return` annotation (PHPDoc type is sufficient), improved docblock formatting with backtick code formatting
+- Improved: `DomainEvent` — added comprehensive docblocks to the `$occurredAt` property and constructor explaining why it's not a promoted property, documented all constructor parameter purposes
+- Added: `EventsPhase107ProductionAuditTest.php` — comprehensive Phase 107 production audit (27 tests) covering: strict_types across all 21 source files, EventScheduler constructor injection verification (no global helpers), EventManager constructor promoted readonly parameters, DomainEvent readonly property count (4), ConditionEngine matches() #[Override] attribute, WildcardMatcher readonly/final/static-only verification, parseActions static closures, EventLog nullable error cast, Subscription empty secret signing, TriggerBuilder cache invalidation on save, SubscriptionBuilder URL scheme rejection (data:, javascript:), WebhookAction URL validation, phpstan.neon.dist level 9 + migrations/factories paths, composer.json PHP 8.5 + Laravel 13 targets, ServiceProvider provides() completeness (7 services), Facade accessor consistency, config top-level keys (7), table_names completeness, subscriptions config keys, EventManager isDisabled/setEnabled toggle, fire() silent return when disabled, EventsHealthCommand in final classes test
+- Updated: Test file count to 186+
+- Updated: Version to 4.33.0
 
 ### v4.32.0
 
