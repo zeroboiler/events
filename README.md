@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.26.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.27.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 180+ test files (Pest + support)
+└── tests/                      # 183+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -699,7 +699,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (182+ test files)
+composer test        # Run Pest test suite (183+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -721,6 +721,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.27.0
+
+- Added: `EventsPhase100ProductionAuditTest.php` — Phase 100 comprehensive production audit covering: deep nested dot-notation (4-5 levels), partial condition matching across multiple triggers, EventManager::deleteTrigger() edge cases (non-existent + existing), DispatchTriggerJob disabled/deleted trigger handling, ConditionEngine operator edge cases (not_empty, not_contains, inverted between, non-array between), DomainEvent reconstruction fidelity (invalid UUID/date, missing eventType throw), WildcardMatcher comprehensive patterns (exact, catch-all, single/double wildcard, extraction, findMatchingPatterns, regex-special chars), Subscription model edge cases (null/empty secret signing, hasExceededFailures with config default and explicit override), EventLog status constants consistency, TriggerBuilder action merging and deduplication (single+multiple, dedup, JSON generation with params), config completeness verification (7 top-level keys, table_names, subscriptions, retention), ServiceProvider provides() completeness (7 services), Facade accessor verification, all source files strict_types=1 compliance, all non-trait/non-interface classes final, PHPStan config validation (level 9, paths, reportUnmatchedIgnoredErrors), composer.json correctness (PHP requirement, service provider, facade alias, autoload PSR-4), migration config-driven table names verification
+- Updated: Version to 4.27.0
+
+- Updated: Test file count to 183+
 
 ### v4.26.0
 

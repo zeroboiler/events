@@ -195,6 +195,7 @@ uses(TestCase::class)->in(
     'EventsPhase97ProductionAuditTest.php',
     'EventsPhase98ProductionAuditTest.php',
     'EventsPhase99FinalProductionAuditTest.php',
+    'EventsPhase100ProductionAuditTest.php',
 );
 
 // WildcardMatcherTest and EscapesWildcardLikeTest run without TestCase (plain PHP tests)
