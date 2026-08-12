@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\ConditionEngine;
-use ZeroBoiler\Events\ConditionEngineContract;
 use ZeroBoiler\Events\ActionResolver;
 use ZeroBoiler\Events\SubscriptionBuilder;
 use ZeroBoiler\Events\TriggerBuilder;
