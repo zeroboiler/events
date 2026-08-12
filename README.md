@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.30.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.31.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 183+ test files (Pest + support)
+└── tests/                      # 184+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (183+ test files)
+composer test        # Run Pest test suite (184+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.31.0
+
+- Added: `EventsPhase104ProductionAuditTest.php` — Phase 104 comprehensive production audit covering: all 12 console commands handle() return type and final class verification, WebhookAction Triggerable (not ShouldQueue) compliance, DispatchTriggerJob ShouldQueue compliance, EventManager @throws docblock verification, Trigger scope return type verification, EventLog status constants uniqueness, Subscription signPayload signature verification, EventScheduler/TriggerBuilder/SubscriptionBuilder constructor injection verification, ConditionEngine interface binding and #[Override] verification, EscapesWildcardLike and GetsWebhookTimeout trait method signatures, Facade @method completeness (25 methods), config key completeness (18 keys), license header presence on all source files, factory definition() return type verification, DomainEvent readonly property count (4), ManagesHistory/ManagesSubscriptions trait method return types, model casts verification (EventLog, Trigger, Subscription), ServiceProvider binding count and provides() completeness (7 services), WildcardMatcher static-only and readonly/final verification, trait usage verification (EventManager uses 3, Subscription uses 1), PHPStan config level 9 validation, Rector config Laravel 13 target verification
+- Updated: Test file count to 184+
+- Updated: Version to 4.31.0
 
 ### v4.30.0
 
