@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use ZeroBoiler\Events\Models\EventLog;
@@ -90,8 +91,8 @@ final class EventsHealthCommand extends Command
 
         // 5. Recent event log status
         try {
-            $recentFailed = EventLog::failed()->where('created_at', '>=', now()->subHours(24))->count();
-            $recentCompleted = EventLog::completed()->where('created_at', '>=', now()->subHours(24))->count();
+            $recentFailed = EventLog::failed()->where('created_at', '>=', Carbon::now()->subHours(24))->count();
+            $recentCompleted = EventLog::completed()->where('created_at', '>=', Carbon::now()->subHours(24))->count();
             $results['recent_events_24h'] = [
                 'status' => $recentFailed > 10 ? 'WARNING' : 'OK',
                 'message' => "Last 24h: {$recentCompleted} completed, {$recentFailed} failed.",
@@ -106,7 +107,7 @@ final class EventsHealthCommand extends Command
         }
 
         // 6. Queue configuration
-        $queueConnection = Config::get('events.queue.connection', config('queue.default', 'default'));
+        $queueConnection = Config::get('events.queue.connection', 'default');
         $queueName = Config::get('events.queue.queue', 'default');
         $retryTries = Config::get('events.retry.tries', 3);
         $results['queue_config'] = [

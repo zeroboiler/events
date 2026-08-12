@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.20.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.21.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -435,7 +435,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 177+ test files (Pest + support)
+└── tests/                      # 178+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -698,7 +698,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (175+ test files)
+composer test        # Run Pest test suite (178+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -720,6 +720,15 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.21.0
+
+- Fixed: `EventsHealthCommand` now uses `Carbon::now()` consistently instead of global `now()` helper (PHPStan 9 compliance)
+- Fixed: `EventsHealthCommand` queue connection default simplified to avoid nested `config()` helper call
+- Fixed: `phpstan.neon.dist` — added `app()` to undefined function suppressions (used in `EventScheduler`)
+- Added: `EventsPhase93ProductionAuditTest.php` — Phase 93 production readiness audit covering: EventsHealthCommand consistency checks (Carbon::now, Config facade, no nested config()), EventManager parseActions edge cases (classes+params JSON, empty classes, whitespace-only string, sequential objects), PHPStan config completeness (level 9, all strict checks, app() suppression), WildcardMatcher comprehensive edge cases (empty pattern/event, multiple extraction, exact match no-wildcard), ConditionEngine operator coverage (not_contains, not_empty, inverted between, nested dot notation, malformed regex rejection), DomainEvent reconstruction edge cases (invalid UUID, invalid date, empty eventType throw), TriggerBuilder action merging deduplication, actionParams JSON generation for single/multiple actions, EventScheduler config-driven behavior (null/zero retention skip, task name verification), ServiceProvider register/boot completeness (singleton/transient verification, provides() listing, contract binding), model table name config-driven with dynamic override, factory state method coverage for all three factories, all console commands final verification
+- Updated: Version to 4.21.0
+- Updated: Test file count to 178+
 
 ### v4.20.0
 
