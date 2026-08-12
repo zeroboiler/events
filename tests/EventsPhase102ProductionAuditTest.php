@@ -492,7 +492,6 @@ test('event manager cache ttl 0 disables caching', function (): void {
 
     // Set TTL to 0 via reflection to test the behavior
     $reflection = new \ReflectionMethod($em, 'getTriggerCacheTtl');
-    $reflection->setAccessible(true);
 
     // Temporarily set config
     config(['events.wildcard_cache_ttl' => 0]);
@@ -508,7 +507,6 @@ test('event manager cache ttl handles negative values with default fallback', fu
     $em = app(EventManager::class);
 
     $reflection = new \ReflectionMethod($em, 'getTriggerCacheTtl');
-    $reflection->setAccessible(true);
 
     config(['events.wildcard_cache_ttl' => -5]);
 

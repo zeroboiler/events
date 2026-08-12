@@ -518,7 +518,6 @@ describe('Phase 65 — Final production readiness audit', function (): void {
 
         // We use reflection to test the protected method
         $ref = new ReflectionMethod($manager, 'wildcardToLike');
-        $ref->setAccessible(true);
 
         expect($ref->invoke($manager, 'order.*'))->toBe('order.%');
         expect($ref->invoke($manager, 'order.**'))->toBe('order.%%');
@@ -529,7 +528,6 @@ describe('Phase 65 — Final production readiness audit', function (): void {
         $manager = app(EventManager::class);
 
         $ref = new ReflectionMethod($manager, 'wildcardToLike');
-        $ref->setAccessible(true);
 
         expect($ref->invoke($manager, 'test.%'))->toBe('test.\\%');
         expect($ref->invoke($manager, 'test._*'))->toBe('test.\\_%');

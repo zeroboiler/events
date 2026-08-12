@@ -678,7 +678,6 @@ test('EscapesWildcardLike::wildcardToLike with no wildcards returns null', funct
 
     // Access protected method via reflection
     $ref = new ReflectionMethod($manager, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($manager, 'order.placed'))->toBeNull();
 });
@@ -687,7 +686,6 @@ test('EscapesWildcardLike::wildcardToLike with single wildcard converts to %', f
     $manager = app(EventManager::class);
 
     $ref = new ReflectionMethod($manager, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($manager, 'order.*'))->toBe('order.%');
 });
@@ -696,7 +694,6 @@ test('EscapesWildcardLike::wildcardToLike escapes SQL special chars', function (
     $manager = app(EventManager::class);
 
     $ref = new ReflectionMethod($manager, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($manager, 'user_%*'))->toBe('user\\_\\%%');
 });
@@ -951,7 +948,6 @@ test('SubscriptionBuilder is transient', function (): void {
 
 test('Facade accessor returns EventManager class name', function (): void {
     $ref = new ReflectionMethod(\ZeroBoiler\Events\Facades\EventManager::class, 'getFacadeAccessor');
-    $ref->setAccessible(true);
 
     expect($ref->invoke(null))->toBe(EventManager::class);
 });

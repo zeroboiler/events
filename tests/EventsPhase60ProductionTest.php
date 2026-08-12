@@ -329,7 +329,6 @@ final class EventsPhase60ProductionTest extends TestCase
     {
         $facade = new \ZeroBoiler\Events\Facades\EventManager;
         $ref = new ReflectionMethod($facade, 'getFacadeAccessor');
-        $ref->setAccessible(true);
         $result = $ref->invoke($facade);
         $this->assertSame(\ZeroBoiler\Events\EventManager::class, $result);
     }
@@ -557,7 +556,6 @@ final class EventsPhase60ProductionTest extends TestCase
         // Test directly via the trait method on a concrete class
         $engine = new ConditionEngine();
         $ref = new ReflectionMethod($engine, 'wildcardToLike');
-        $ref->setAccessible(true);
 
         $this->assertNull($ref->invoke($engine, 'order.placed'));
         $this->assertSame('%order.%', $ref->invoke($engine, 'order.*'));

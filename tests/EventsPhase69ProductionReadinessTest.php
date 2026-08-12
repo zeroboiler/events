@@ -701,7 +701,6 @@ describe('Facade Accessor', function (): void {
     test('facade accessor returns correct class name', function (): void {
         $reflection = new ReflectionClass(EventManagerFacade::class);
         $method = $reflection->getMethod('getFacadeAccessor');
-        $method->setAccessible(true);
         $result = $method->invoke(null);
 
         expect($result)->toBe(EventManager::class);

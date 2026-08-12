@@ -24,7 +24,6 @@ describe('Phase 98 — Production Audit', function (): void {
 
             // Verify the container is stored
             $reflection = new ReflectionProperty(EventScheduler::class, 'app');
-            $reflection->setAccessible(true);
 
             expect($reflection->getValue($scheduler))->toBe($app);
         });
@@ -64,7 +63,6 @@ describe('Phase 98 — Production Audit', function (): void {
             $scheduler = new EventScheduler($app);
 
             $method = new ReflectionMethod(EventScheduler::class, 'resolveEventManager');
-            $method->setAccessible(true);
             $result = $method->invoke($scheduler);
 
             expect($result)->toBeInstanceOf(EventManager::class);

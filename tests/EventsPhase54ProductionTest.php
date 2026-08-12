@@ -141,7 +141,6 @@ it('SubscriptionBuilder is registered as transient', function (): void {
 // ─── Facade Accessor ────────────────────────────────────────────────────
 it('Facade accessor returns correct class name', function (): void {
     $ref = new ReflectionMethod(EventManagerFacade::class, 'getFacadeAccessor');
-    $ref->setAccessible(true);
     expect($ref->invoke(null))->toBe(EventManager::class);
 });
 
@@ -300,7 +299,6 @@ it('ConditionEngine evaluates all operators correctly', function (): void {
 it('EscapesWildcardLike returns null for non-wildcard patterns', function (): void {
     $manager = app(EventManager::class);
     $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     $result = $ref->invoke($manager, 'order.placed');
     expect($result)->toBeNull();
@@ -309,7 +307,6 @@ it('EscapesWildcardLike returns null for non-wildcard patterns', function (): vo
 it('EscapesWildcardLike converts wildcards to SQL LIKE', function (): void {
     $manager = app(EventManager::class);
     $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     $result = $ref->invoke($manager, 'order.*');
     expect($result)->toBe('order.%');
@@ -324,7 +321,6 @@ it('EscapesWildcardLike converts wildcards to SQL LIKE', function (): void {
 it('EscapesWildcardLike escapes SQL special chars', function (): void {
     $manager = app(EventManager::class);
     $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     $result = $ref->invoke($manager, 'user_%');
     expect($result)->toBe('user\_\%');
@@ -394,7 +390,6 @@ it('all console commands use zeroboiler:events: prefix', function (): void {
     foreach ($commands as $cmd) {
         $ref = new ReflectionClass($cmd);
         $prop = $ref->getProperty('signature');
-        $prop->setAccessible(true);
         $sig = $prop->getValue(new $cmd);
         expect(str_starts_with($sig, 'zeroboiler:events:'))
             ->toBeTrue("{$cmd} signature must start with zeroboiler:events:");

@@ -25,7 +25,6 @@ test('TriggerBuilder resolveActions deduplicates preserving order', function ():
     ]);
 
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
-    $resolveReflection->setAccessible(true);
     $result = $resolveReflection->invoke($builder);
 
     // resolveActions: all = actions() first, then prepend action() if not in list.
@@ -46,7 +45,6 @@ test('TriggerBuilder resolveActions handles empty action with actions array', fu
     ]);
 
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
-    $resolveReflection->setAccessible(true);
     $result = $resolveReflection->invoke($builder);
 
     expect($result)->toBe([
@@ -60,7 +58,6 @@ test('TriggerBuilder resolveActions handles single action only', function (): vo
     $builder->action('App\\Actions\\Single');
 
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
-    $resolveReflection->setAccessible(true);
     $result = $resolveReflection->invoke($builder);
 
     expect($result)->toBe(['App\\Actions\\Single']);
@@ -75,7 +72,6 @@ test('TriggerBuilder resolveActions deduplicates all-same entries', function ():
     ]);
 
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
-    $resolveReflection->setAccessible(true);
     $result = $resolveReflection->invoke($builder);
 
     expect($result)->toBe(['App\\Actions\\Same']);
@@ -275,7 +271,6 @@ test('DomainEvent is immutable after construction', function (): void {
 test('EventManager facade accessor resolves to correct class', function (): void {
     $facade = new ReflectionClass(\ZeroBoiler\Events\Facades\EventManager::class);
     $method = $facade->getMethod('getFacadeAccessor');
-    $method->setAccessible(true);
 
     expect($method->invoke(null))->toBe(\ZeroBoiler\Events\EventManager::class);
 });
@@ -394,7 +389,6 @@ test('EventLog status constants are consistent', function (): void {
 test('parseActions returns empty array for empty string', function (): void {
     $manager = app(\ZeroBoiler\Events\EventManager::class);
     $reflection = new ReflectionMethod($manager, 'parseActions');
-    $reflection->setAccessible(true);
 
     expect($reflection->invoke($manager, ''))->toBe([]);
     expect($reflection->invoke($manager, '0'))->toBe([]);
@@ -403,7 +397,6 @@ test('parseActions returns empty array for empty string', function (): void {
 test('parseActions handles simple class name', function (): void {
     $manager = app(\ZeroBoiler\Events\EventManager::class);
     $reflection = new ReflectionMethod($manager, 'parseActions');
-    $reflection->setAccessible(true);
 
     $result = $reflection->invoke($manager, 'App\\Actions\\Foo');
 
@@ -413,7 +406,6 @@ test('parseActions handles simple class name', function (): void {
 test('parseActions handles JSON array of classes', function (): void {
     $manager = app(\ZeroBoiler\Events\EventManager::class);
     $reflection = new ReflectionMethod($manager, 'parseActions');
-    $reflection->setAccessible(true);
 
     $result = $reflection->invoke($manager, '["App\\\\Actions\\\\Foo","App\\\\Actions\\\\Bar"]');
 
@@ -426,7 +418,6 @@ test('parseActions handles JSON array of classes', function (): void {
 test('parseActions handles JSON object with class + params', function (): void {
     $manager = app(\ZeroBoiler\Events\EventManager::class);
     $reflection = new ReflectionMethod($manager, 'parseActions');
-    $reflection->setAccessible(true);
 
     $json = '{"class":"App\\\\Actions\\\\Webhook","params":{"url":"https://example.com"}}';
     $result = $reflection->invoke($manager, $json);
@@ -442,7 +433,6 @@ test('parseActions handles JSON object with class + params', function (): void {
 test('parseActions handles classes key with shared params', function (): void {
     $manager = app(\ZeroBoiler\Events\EventManager::class);
     $reflection = new ReflectionMethod($manager, 'parseActions');
-    $reflection->setAccessible(true);
 
     $json = '{"classes":["Foo","Bar"],"params":{"url":"https://x.com"}}';
     $result = $reflection->invoke($manager, $json);
@@ -495,7 +485,6 @@ test('EscapesWildcardLike trait behavior', function (): void {
     };
 
     $reflection = new ReflectionMethod($trait, 'wildcardToLike');
-    $reflection->setAccessible(true);
 
     // No wildcard → null
     expect($reflection->invoke($trait, 'order.placed'))->toBeNull();
@@ -560,7 +549,6 @@ test('WebhookAction getTimeout reads from config', function (): void {
     $action = new \ZeroBoiler\Events\Actions\WebhookAction;
 
     $reflection = new ReflectionMethod($action, 'getTimeout');
-    $reflection->setAccessible(true);
     expect($reflection->invoke($action))->toBe(60);
 });
 
@@ -569,6 +557,5 @@ test('WebhookAction getMaxFailures reads from config', function (): void {
     $action = new \ZeroBoiler\Events\Actions\WebhookAction;
 
     $reflection = new ReflectionMethod($action, 'getMaxFailures');
-    $reflection->setAccessible(true);
     expect($reflection->invoke($action))->toBe(5);
 });

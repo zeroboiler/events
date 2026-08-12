@@ -522,7 +522,6 @@ describe('Events production edge cases', function (): void {
         // Use a concrete class that uses the trait to test
         $ref = new ReflectionClass(\ZeroBoiler\Events\EventManager::class);
         $method = $ref->getMethod('wildcardToLike');
-        $method->setAccessible(true);
 
         $manager = app(\ZeroBoiler\Events\EventManager::class);
 

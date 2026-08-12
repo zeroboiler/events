@@ -570,7 +570,6 @@ describe('WebhookAction config-driven settings', function (): void {
             public function exposeGetTimeout(): int
             {
                 $reflection = new ReflectionMethod(parent::class, 'getTimeout');
-                $reflection->setAccessible(true);
 
                 return $reflection->invoke($this);
             }

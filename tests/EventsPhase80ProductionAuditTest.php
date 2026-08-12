@@ -207,7 +207,6 @@ test('EventManager parseActions handles all JSON formats', function (): void {
     expect($method)->not->BeNull();
 
     // Make the method accessible for testing
-    $method->setAccessible(true);
 
     $app = $this->app ?? app();
     $engine = $app->make(\ZeroBoiler\Events\ConditionEngine::class);
@@ -252,7 +251,6 @@ test('EventManager parseActions handles all JSON formats', function (): void {
 test('TriggerBuilder resolveActions deduplicates correctly', function (): void {
     $ref = new ReflectionClass(\ZeroBoiler\Events\TriggerBuilder::class);
     $method = $ref->getMethod('resolveActions');
-    $method->setAccessible(true);
 
     $app = $this->app ?? app();
     $engine = $app->make(\ZeroBoiler\Events\ConditionEngine::class);

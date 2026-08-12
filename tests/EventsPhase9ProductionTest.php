@@ -36,7 +36,6 @@ test('redeliver buildRedeliverBody strips url from data payload', function (): v
     $command = new EventsRedeliverCommand;
 
     $reflection = new ReflectionMethod(EventsRedeliverCommand::class, 'buildRedeliverBody');
-    $reflection->setAccessible(true);
     $body = $reflection->invoke($command, $log);
 
     expect($body['event'])->toBe('order.placed')
@@ -69,7 +68,6 @@ test('redeliver buildRedeliverBody strips all internal keys including subscripti
     $command = new EventsRedeliverCommand;
 
     $reflection = new ReflectionMethod(EventsRedeliverCommand::class, 'buildRedeliverBody');
-    $reflection->setAccessible(true);
     $body = $reflection->invoke($command, $log);
 
     expect($body['data'])->toHaveKey('user_email')
@@ -92,7 +90,6 @@ test('redeliver buildRedeliverBody preserves timestamp and redelivered flag', fu
     $command = new EventsRedeliverCommand;
 
     $reflection = new ReflectionMethod(EventsRedeliverCommand::class, 'buildRedeliverBody');
-    $reflection->setAccessible(true);
     $body = $reflection->invoke($command, $log);
 
     expect($body)->toHaveKey('timestamp')
@@ -114,7 +111,6 @@ test('redeliver buildRedeliverBody handles non-array payload gracefully', functi
     $command = new EventsRedeliverCommand;
 
     $reflection = new ReflectionMethod(EventsRedeliverCommand::class, 'buildRedeliverBody');
-    $reflection->setAccessible(true);
     $body = $reflection->invoke($command, $log);
 
     // Should not throw, data should be empty
@@ -130,7 +126,6 @@ test('redeliver getTimeout reads from config', function (): void {
     $command = new EventsRedeliverCommand;
 
     $reflection = new ReflectionMethod(EventsRedeliverCommand::class, 'getTimeout');
-    $reflection->setAccessible(true);
     $timeout = $reflection->invoke($command);
 
     expect($timeout)->toBe(60);
@@ -142,7 +137,6 @@ test('redeliver getTimeout defaults to 30 when config is null', function (): voi
     $command = new EventsRedeliverCommand;
 
     $reflection = new ReflectionMethod(EventsRedeliverCommand::class, 'getTimeout');
-    $reflection->setAccessible(true);
     $timeout = $reflection->invoke($command);
 
     expect($timeout)->toBe(30);
@@ -154,7 +148,6 @@ test('redeliver getTimeout defaults to 30 when config is zero', function (): voi
     $command = new EventsRedeliverCommand;
 
     $reflection = new ReflectionMethod(EventsRedeliverCommand::class, 'getTimeout');
-    $reflection->setAccessible(true);
     $timeout = $reflection->invoke($command);
 
     expect($timeout)->toBe(30);

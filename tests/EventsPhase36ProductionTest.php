@@ -106,7 +106,6 @@ describe('Events Phase 36 Production', function () {
             $engine = app()->make(ConditionEngine::class);
             $ref = new ReflectionClass($engine);
             $method = $ref->getMethod('getNestedValue');
-            $method->setAccessible(true);
 
             $result = $method->invoke($engine, ['foo' => 'bar'], 'foo.baz');
             expect($result)->toBeNull();
@@ -116,7 +115,6 @@ describe('Events Phase 36 Production', function () {
             $engine = app()->make(ConditionEngine::class);
             $ref = new ReflectionClass($engine);
             $method = $ref->getMethod('getNestedValue');
-            $method->setAccessible(true);
 
             $result = $method->invoke($engine, ['foo' => 'string'], 'foo.bar.baz');
             expect($result)->toBeNull();
@@ -126,7 +124,6 @@ describe('Events Phase 36 Production', function () {
             $engine = app()->make(ConditionEngine::class);
             $ref = new ReflectionClass($engine);
             $method = $ref->getMethod('getNestedValue');
-            $method->setAccessible(true);
 
             $result = $method->invoke($engine, ['status' => 'active'], 'status');
             expect($result)->toBe('active');
@@ -136,7 +133,6 @@ describe('Events Phase 36 Production', function () {
             $engine = app()->make(ConditionEngine::class);
             $ref = new ReflectionClass($engine);
             $method = $ref->getMethod('getNestedValue');
-            $method->setAccessible(true);
 
             $data = ['a' => ['b' => ['c' => 'deep']]];
             $result = $method->invoke($engine, $data, 'a.b.c');
@@ -536,7 +532,6 @@ describe('Events Phase 36 Production', function () {
             // Verify the conditions property is initially empty array
             $ref = new ReflectionClass($builder);
             $prop = $ref->getProperty('conditions');
-            $prop->setAccessible(true);
             $conditions = $prop->getValue($builder);
 
             expect($conditions)->toBe([]);
@@ -852,7 +847,6 @@ describe('Events Phase 36 Production', function () {
             $manager = app()->make(\ZeroBoiler\Events\EventManager::class);
             $ref = new ReflectionClass($manager);
             $method = $ref->getMethod('getTriggerCacheTtl');
-            $method->setAccessible(true);
 
             // Current config has integer 300, verify it returns a valid int
             $ttl = $method->invoke($manager);
@@ -901,16 +895,13 @@ describe('Events Phase 36 Production', function () {
 
             // Set actions array via reflection
             $actionsProp = $ref->getProperty('actions');
-            $actionsProp->setAccessible(true);
             $actionsProp->setValue($builder, ['ActionA', 'ActionB', 'ActionA']);
 
             // Set action to empty string (no single action)
             $actionProp = $ref->getProperty('action');
-            $actionProp->setAccessible(true);
             $actionProp->setValue($builder, '');
 
             $method = $ref->getMethod('resolveActions');
-            $method->setAccessible(true);
 
             $result = $method->invoke($builder);
 
@@ -924,15 +915,12 @@ describe('Events Phase 36 Production', function () {
             $ref = new ReflectionClass($builder);
 
             $actionsProp = $ref->getProperty('actions');
-            $actionsProp->setAccessible(true);
             $actionsProp->setValue($builder, ['ActionB']);
 
             $actionProp = $ref->getProperty('action');
-            $actionProp->setAccessible(true);
             $actionProp->setValue($builder, 'ActionA');
 
             $method = $ref->getMethod('resolveActions');
-            $method->setAccessible(true);
 
             $result = $method->invoke($builder);
 

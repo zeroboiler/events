@@ -69,7 +69,6 @@ describe('EventManager direct EscapesWildcardLike trait usage', function (): voi
         // Use reflection to access the protected method
         $reflection = new ReflectionClass($manager);
         $method = $reflection->getMethod('wildcardToLike');
-        $method->setAccessible(true);
 
         expect($method->invoke($manager, 'order.placed'))->toBeNull();
         expect($method->invoke($manager, 'payment.received'))->toBeNull();
@@ -80,7 +79,6 @@ describe('EventManager direct EscapesWildcardLike trait usage', function (): voi
 
         $reflection = new ReflectionClass($manager);
         $method = $reflection->getMethod('wildcardToLike');
-        $method->setAccessible(true);
 
         expect($method->invoke($manager, 'order.*'))->toBe('order.%');
         expect($method->invoke($manager, '*.order.*'))->toBe('%.order.%');
@@ -91,7 +89,6 @@ describe('EventManager direct EscapesWildcardLike trait usage', function (): voi
 
         $reflection = new ReflectionClass($manager);
         $method = $reflection->getMethod('wildcardToLike');
-        $method->setAccessible(true);
 
         // Percent signs and underscores should be escaped
         expect($method->invoke($manager, 'user_%'))

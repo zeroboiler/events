@@ -508,7 +508,6 @@ describe('EscapesWildcardLike trait', function (): void {
 
         // Access protected method via reflection
         $ref = new ReflectionMethod($matcher, 'wildcardToLike');
-        $ref->setAccessible(true);
 
         expect($ref->invoke($matcher, 'order.placed'))->toBeNull();
     });
@@ -520,7 +519,6 @@ describe('EscapesWildcardLike trait', function (): void {
         };
 
         $ref = new ReflectionMethod($matcher, 'wildcardToLike');
-        $ref->setAccessible(true);
 
         expect($ref->invoke($matcher, 'order.*'))->toBe('order.%');
     });
@@ -532,7 +530,6 @@ describe('EscapesWildcardLike trait', function (): void {
         };
 
         $ref = new ReflectionMethod($matcher, 'wildcardToLike');
-        $ref->setAccessible(true);
 
         // Percent sign should be escaped
         expect($ref->invoke($matcher, 'order.%*'))->toBe('order.\\%%');

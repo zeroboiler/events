@@ -54,7 +54,6 @@ test('TriggerBuilder save with action() and actions() overlapping produces corre
 
     // Access the save logic without actually saving
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
-    $resolveReflection->setAccessible(true);
     $resolved = $resolveReflection->invoke($builder);
 
     // NotifyAction should appear only once (first occurrence preserved)
@@ -71,7 +70,6 @@ test('TriggerBuilder save with action() not in actions() prepends correctly', fu
     $builder->actions(['App\\Actions\\SecondAction', 'App\\Actions\\ThirdAction']);
 
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
-    $resolveReflection->setAccessible(true);
     $resolved = $resolveReflection->invoke($builder);
 
     // action() should be prepended since it's not in the actions() list
@@ -169,7 +167,6 @@ test('EventManager getTriggerCacheTtl with non-integer config', function (): voi
 
     $manager = app(\ZeroBoiler\Events\EventManager::class);
     $reflection = new ReflectionMethod($manager, 'getTriggerCacheTtl');
-    $reflection->setAccessible(true);
 
     // Should fall back to default
     expect($reflection->invoke($manager))->toBe(300);
@@ -180,7 +177,6 @@ test('EventManager getTriggerCacheTtl with negative value', function (): void {
 
     $manager = app(\ZeroBoiler\Events\EventManager::class);
     $reflection = new ReflectionMethod($manager, 'getTriggerCacheTtl');
-    $reflection->setAccessible(true);
 
     // Should fall back to default (negative is not > 0)
     expect($reflection->invoke($manager))->toBe(300);
@@ -191,7 +187,6 @@ test('EventManager getTriggerCacheTtl with zero value', function (): void {
 
     $manager = app(\ZeroBoiler\Events\EventManager::class);
     $reflection = new ReflectionMethod($manager, 'getTriggerCacheTtl');
-    $reflection->setAccessible(true);
 
     // Should fall back to default (zero is not > 0)
     expect($reflection->invoke($manager))->toBe(300);
@@ -202,7 +197,6 @@ test('EventManager getTriggerCacheTtl with valid custom value', function (): voi
 
     $manager = app(\ZeroBoiler\Events\EventManager::class);
     $reflection = new ReflectionMethod($manager, 'getTriggerCacheTtl');
-    $reflection->setAccessible(true);
 
     expect($reflection->invoke($manager))->toBe(600);
 });

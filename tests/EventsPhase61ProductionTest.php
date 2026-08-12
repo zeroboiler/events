@@ -279,7 +279,6 @@ describe('Phase 61 — Production Readiness Deep Audit', function (): void {
         $engine = app()->make(ConditionEngine::class);
         // Access wildcardToLike via EventManager which uses the trait
         $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-        $ref->setAccessible(true);
         $em = app()->make(EventManager::class);
 
         expect($ref->invoke($em, 'order.placed'))->toBeNull();
@@ -288,7 +287,6 @@ describe('Phase 61 — Production Readiness Deep Audit', function (): void {
 
     test('EscapesWildcardLike converts asterisks to percent', function (): void {
         $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-        $ref->setAccessible(true);
         $em = app()->make(EventManager::class);
 
         expect($ref->invoke($em, 'order.*'))->toBe('order.%');

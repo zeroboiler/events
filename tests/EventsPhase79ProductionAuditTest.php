@@ -115,7 +115,6 @@ test('all console commands are registered in ServiceProvider boot', function ():
     // Get the commands via reflection
     $ref = new ReflectionClass($provider);
     $method = $ref->getMethod('boot');
-    $method->setAccessible(true);
 
     // Instead of calling boot (which publishes etc.), verify command list
     $commandFiles = glob(__DIR__.'/../src/Console/*.php');

@@ -219,7 +219,6 @@ test('SubscriptionBuilder is transient (fresh instance per resolution)', functio
 test('Facade accessor returns EventManager class name', function (): void {
     $ref = new ReflectionClass(EventManagerFacade::class);
     $method = $ref->getMethod('getFacadeAccessor');
-    $method->setAccessible(true);
     expect($method->invoke(null))->toBe(EventManager::class);
 });
 
@@ -351,7 +350,6 @@ test('WildcardMatcher public methods have #[Pure] attribute', function (): void 
 
 test('EscapesWildcardLike returns null for non-wildcard pattern', function (): void {
     $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-    $ref->setAccessible(true);
     $manager = $this->app->make(EventManager::class);
 
     expect($ref->invoke($manager, 'order.placed'))->toBeNull();
@@ -359,7 +357,6 @@ test('EscapesWildcardLike returns null for non-wildcard pattern', function (): v
 
 test('EscapesWildcardLike converts * to % for SQL LIKE', function (): void {
     $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-    $ref->setAccessible(true);
     $manager = $this->app->make(EventManager::class);
 
     expect($ref->invoke($manager, 'order.*'))->toBe('order.%');
@@ -705,7 +702,6 @@ test('all console commands use zeroboiler:events: prefix', function (): void {
     foreach ($commands as $class) {
         $ref = new ReflectionClass($class);
         $prop = $ref->getProperty('signature');
-        $prop->setAccessible(true);
         $sig = $prop->getValue(new ($class)($this->app, []));
 
         expect(str_starts_with($sig, 'zeroboiler:events:'))->toBeTrue(
@@ -929,7 +925,6 @@ test('EventLog markAsFailed updates status and error', function (): void {
 
 test('parseActions handles empty string', function (): void {
     $ref = new ReflectionMethod(EventManager::class, 'parseActions');
-    $ref->setAccessible(true);
     $manager = $this->app->make(EventManager::class);
 
     expect($ref->invoke($manager, ''))->toBe([]);
@@ -938,7 +933,6 @@ test('parseActions handles empty string', function (): void {
 
 test('parseActions handles single class name', function (): void {
     $ref = new ReflectionMethod(EventManager::class, 'parseActions');
-    $ref->setAccessible(true);
     $manager = $this->app->make(EventManager::class);
 
     $result = $ref->invoke($manager, 'App\\Actions\\TestAction');
@@ -947,7 +941,6 @@ test('parseActions handles single class name', function (): void {
 
 test('parseActions handles JSON array of classes', function (): void {
     $ref = new ReflectionMethod(EventManager::class, 'parseActions');
-    $ref->setAccessible(true);
     $manager = $this->app->make(EventManager::class);
 
     $result = $ref->invoke($manager, json_encode(['App\\A', 'App\\B']));
@@ -956,7 +949,6 @@ test('parseActions handles JSON array of classes', function (): void {
 
 test('parseActions handles JSON object with class + params', function (): void {
     $ref = new ReflectionMethod(EventManager::class, 'parseActions');
-    $ref->setAccessible(true);
     $manager = $this->app->make(EventManager::class);
 
     $result = $ref->invoke($manager, json_encode([
@@ -971,7 +963,6 @@ test('parseActions handles JSON object with class + params', function (): void {
 
 test('parseActions handles classes key format', function (): void {
     $ref = new ReflectionMethod(EventManager::class, 'parseActions');
-    $ref->setAccessible(true);
     $manager = $this->app->make(EventManager::class);
 
     $result = $ref->invoke($manager, json_encode([

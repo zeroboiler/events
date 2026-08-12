@@ -34,7 +34,6 @@ test('parseActions returns empty array for whitespace-only action string', funct
     $manager = app(EventManager::class);
 
     $method = new ReflectionMethod($manager, 'parseActions');
-    $method->setAccessible(true);
 
     // Pure whitespace
     $result = $method->invoke($manager, '   ');
@@ -53,7 +52,6 @@ test('parseActions trims whitespace before JSON decode', function () {
     $manager = app(EventManager::class);
 
     $method = new ReflectionMethod($manager, 'parseActions');
-    $method->setAccessible(true);
 
     // JSON with surrounding whitespace
     $result = $method->invoke($manager, '  ["App\\\\Actions\\\\Foo"]  ');
@@ -68,7 +66,6 @@ test('parseActions still handles empty string and zero string correctly', functi
     $manager = app(EventManager::class);
 
     $method = new ReflectionMethod($manager, 'parseActions');
-    $method->setAccessible(true);
 
     expect($method->invoke($manager, ''))->toBe([]);
     expect($method->invoke($manager, '0'))->toBe([]);
@@ -78,7 +75,6 @@ test('parseActions handles plain class name with surrounding whitespace', functi
     $manager = app(EventManager::class);
 
     $method = new ReflectionMethod($manager, 'parseActions');
-    $method->setAccessible(true);
 
     // Whitespace around plain class name should be trimmed
     $result = $method->invoke($manager, '  App\\Actions\\TestAction  ');
@@ -333,7 +329,6 @@ test('ConditionEngineContract resolves to ConditionEngine', function () {
 // ---------------------------------------------------------------------------
 test('Facade getFacadeAccessor returns correct class', function () {
     $method = new ReflectionMethod(EventManagerFacade::class, 'getFacadeAccessor');
-    $method->setAccessible(true);
     $result = $method->invoke(null);
     expect($result)->toBe(EventManager::class);
 });
@@ -366,7 +361,6 @@ test('DomainEvent roundtrip preserves all fields', function () {
 test('EscapesWildcardLike returns null for non-wildcard pattern', function () {
     $manager = app(EventManager::class);
     $method = new ReflectionMethod($manager, 'wildcardToLike');
-    $method->setAccessible(true);
 
     expect($method->invoke($manager, 'order.placed'))->toBeNull();
 });
@@ -374,7 +368,6 @@ test('EscapesWildcardLike returns null for non-wildcard pattern', function () {
 test('EscapesWildcardLike converts asterisk to percent', function () {
     $manager = app(EventManager::class);
     $method = new ReflectionMethod($manager, 'wildcardToLike');
-    $method->setAccessible(true);
 
     $result = $method->invoke($manager, 'order.*');
     expect($result)->toBe('order.%');

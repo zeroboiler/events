@@ -444,7 +444,6 @@ test('all core classes are final', function () {
 test('wildcardToLike returns null for non-wildcard', function () {
     $command = new \ZeroBoiler\Events\Console\EventsListCommand;
     $ref = new ReflectionMethod($command, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($command, 'order.placed'))->toBeNull();
 });
@@ -452,7 +451,6 @@ test('wildcardToLike returns null for non-wildcard', function () {
 test('wildcardToLike converts asterisk to percent', function () {
     $command = new \ZeroBoiler\Events\Console\EventsListCommand;
     $ref = new ReflectionMethod($command, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($command, 'order.*'))->toBe('order.%');
     expect($ref->invoke($command, '*.created'))->toBe('%.created');
@@ -461,7 +459,6 @@ test('wildcardToLike converts asterisk to percent', function () {
 test('wildcardToLike escapes special chars', function () {
     $command = new \ZeroBoiler\Events\Console\EventsListCommand;
     $ref = new ReflectionMethod($command, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($command, 'order.%'))->toBeNull(); // No wildcard
     expect($ref->invoke($command, 'order.*%test*'))->toBe('order.%\\%test%');

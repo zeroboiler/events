@@ -59,7 +59,6 @@ test('parseActions returns list type for all formats', function (): void {
     $mgr = createEventManager($app);
 
     $r = new ReflectionMethod($mgr, 'parseActions');
-    $r->setAccessible(true);
 
     // Single class string
     $result = $r->invoke($mgr, 'App\\Actions\\Foo');
@@ -150,7 +149,6 @@ test('subscription builder auto-generated secret starts with whsec_', function (
     $builder = new SubscriptionBuilder($mgr);
 
     $r = new ReflectionProperty($builder, 'secret');
-    $r->setAccessible(true);
 
     // Before save, secret is null
     expect($r->getValue($builder))->toBeNull();
@@ -173,19 +171,15 @@ test('dispatch trigger job normalizes backoff from string config', function (): 
     $job = new DispatchTriggerJob('trigger-123', 'order.placed', ['key' => 'val']);
 
     $r = new ReflectionProperty($job, 'backoff');
-    $r->setAccessible(true);
     expect($r->getValue($job))->toBe([30, 120, 300]);
 
     $r = new ReflectionProperty($job, 'tries');
-    $r->setAccessible(true);
     expect($r->getValue($job))->toBe(5);
 
     $r = new ReflectionProperty($job, 'queue');
-    $r->setAccessible(true);
     expect($r->getValue($job))->toBe('custom-queue');
 
     $r = new ReflectionProperty($job, 'connection');
-    $r->setAccessible(true);
     expect($r->getValue($job))->toBe('redis');
 });
 
@@ -198,7 +192,6 @@ test('dispatch trigger job normalizes backoff from array config', function (): v
     $job = new DispatchTriggerJob('trigger-123', 'order.placed', []);
 
     $r = new ReflectionProperty($job, 'backoff');
-    $r->setAccessible(true);
     expect($r->getValue($job))->toBe([10, 20, 30]);
 });
 
@@ -211,11 +204,9 @@ test('dispatch trigger job uses defaults for invalid config', function (): void 
     $job = new DispatchTriggerJob('trigger-123', 'test.event', []);
 
     $r = new ReflectionProperty($job, 'tries');
-    $r->setAccessible(true);
     expect($r->getValue($job))->toBe(3); // default
 
     $r = new ReflectionProperty($job, 'queue');
-    $r->setAccessible(true);
     expect($r->getValue($job))->toBe('default'); // fallback
 });
 
@@ -460,7 +451,6 @@ test('subscription builder all methods return self', function (): void {
 
 test('facade accessor returns correct class', function (): void {
     $ref = new ReflectionMethod(EventManagerFacade::class, 'getFacadeAccessor');
-    $ref->setAccessible(true);
     expect($ref->invoke(null))->toBe(EventManager::class);
 });
 

@@ -163,7 +163,6 @@ describe('EventManager::parseActions — return type validation', function (): v
 uses()->beforeEach(function (): void {
     $this->invokeMethod = function (object $obj, string $method, array $args = []): mixed {
         $ref = new ReflectionMethod($obj, $method);
-        $ref->setAccessible(true);
 
         return $ref->invoke($obj, ...$args);
     };

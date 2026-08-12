@@ -839,7 +839,6 @@ it('EscapesWildcardLike returns null for non-wildcard pattern', function (): voi
     // Use a concrete implementation through Trigger model which uses the trait
     $trigger = Trigger::factory()->create();
     $ref = new ReflectionMethod($trigger, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($trigger, 'order.placed'))->toBeNull();
     expect($ref->invoke($trigger, 'exact.event'))->toBeNull();
@@ -848,7 +847,6 @@ it('EscapesWildcardLike returns null for non-wildcard pattern', function (): voi
 it('EscapesWildcardLike converts asterisks to percent', function (): void {
     $trigger = Trigger::factory()->create();
     $ref = new ReflectionMethod($trigger, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($trigger, 'order.*'))->toBe('order.%');
     expect($ref->invoke($trigger, 'order.**'))->toBe('order.%.%');
@@ -857,7 +855,6 @@ it('EscapesWildcardLike converts asterisks to percent', function (): void {
 it('EscapesWildcardLike escapes SQL special characters', function (): void {
     $trigger = Trigger::factory()->create();
     $ref = new ReflectionMethod($trigger, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($trigger, 'test.%'))->toBe('test.\\%');
     expect($ref->invoke($trigger, 'test._'))->toBe('test.\\_');

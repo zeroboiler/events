@@ -53,7 +53,6 @@ describe('Phase 93 — Production Readiness Audit', function () {
     describe('EventManager parseActions Edge Cases', function () {
         test('parseActions handles classes+params JSON format with empty classes array', function () {
             $ref = new ReflectionMethod(EventManager::class, 'parseActions');
-            $ref->setAccessible(true);
 
             $manager = app(EventManager::class);
             $result = $ref->invoke($manager, json_encode(['classes' => [], 'params' => ['url' => 'https://example.com']]));
@@ -63,7 +62,6 @@ describe('Phase 93 — Production Readiness Audit', function () {
 
         test('parseActions handles single class JSON with params', function () {
             $ref = new ReflectionMethod(EventManager::class, 'parseActions');
-            $ref->setAccessible(true);
 
             $manager = app(EventManager::class);
             $result = $ref->invoke($manager, json_encode([
@@ -79,7 +77,6 @@ describe('Phase 93 — Production Readiness Audit', function () {
 
         test('parseActions handles sequential list of class+params objects', function () {
             $ref = new ReflectionMethod(EventManager::class, 'parseActions');
-            $ref->setAccessible(true);
 
             $manager = app(EventManager::class);
             $input = json_encode([
@@ -97,7 +94,6 @@ describe('Phase 93 — Production Readiness Audit', function () {
 
         test('parseActions handles whitespace-only action string', function () {
             $ref = new ReflectionMethod(EventManager::class, 'parseActions');
-            $ref->setAccessible(true);
 
             $manager = app(EventManager::class);
             $result = $ref->invoke($manager, '   ');

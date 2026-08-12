@@ -229,7 +229,6 @@ describe('Events Phase 35 Production', function () {
         it('facade accessor returns correct class', function () {
             $ref = new ReflectionClass(EventManagerFacade::class);
             $method = $ref->getMethod('getFacadeAccessor');
-            $method->setAccessible(true);
 
             expect($method->invoke(null))->toBe(EventManager::class);
         });

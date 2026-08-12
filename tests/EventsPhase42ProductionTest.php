@@ -93,7 +93,6 @@ describe('Phase 42: Final Production Hardening', function (): void {
         // Use reflection to access parseActions since it is protected
         $reflection = new ReflectionClass($manager);
         $method = $reflection->getMethod('parseActions');
-        $method->setAccessible(true);
 
         $result = $method->invoke($manager, '');
         expect($result)->toBe([]);
@@ -108,7 +107,6 @@ describe('Phase 42: Final Production Hardening', function (): void {
 
         $reflection = new ReflectionClass($manager);
         $method = $reflection->getMethod('parseActions');
-        $method->setAccessible(true);
 
         $result = $method->invoke($manager, 'App\\Actions\\SomeAction');
         expect($result)->toBe(['App\\Actions\\SomeAction']);
@@ -119,7 +117,6 @@ describe('Phase 42: Final Production Hardening', function (): void {
 
         $reflection = new ReflectionClass($manager);
         $method = $reflection->getMethod('parseActions');
-        $method->setAccessible(true);
 
         $result = $method->invoke($manager, '{"classes": [], "params": {"url": "https://example.com"}}');
         expect($result)->toBe([]);
@@ -130,7 +127,6 @@ describe('Phase 42: Final Production Hardening', function (): void {
 
         $reflection = new ReflectionClass($manager);
         $method = $reflection->getMethod('parseActions');
-        $method->setAccessible(true);
 
         $result = $method->invoke($manager, '{"classes": ["App\\\\Actions\\\\Foo"], "params": {"url": "https://example.com"}}');
         expect($result)->toBe([
@@ -142,7 +138,6 @@ describe('Phase 42: Final Production Hardening', function (): void {
         $job = new DispatchTriggerJob('test-id', 'test.event', ['key' => 'value']);
 
         $reflection = new ReflectionProperty($job, 'eventLogId');
-        $reflection->setAccessible(true);
 
         expect($reflection->getValue($job))->toBeNull();
     });
@@ -195,7 +190,6 @@ describe('Phase 42: Final Production Hardening', function (): void {
         $builder = app(\ZeroBoiler\Events\SubscriptionBuilder::class);
 
         $reflection = new ReflectionProperty($builder, 'priority');
-        $reflection->setAccessible(true);
 
         expect($reflection->getValue($builder))->toBe(0);
     });
@@ -204,7 +198,6 @@ describe('Phase 42: Final Production Hardening', function (): void {
         $builder = app(\ZeroBoiler\Events\TriggerBuilder::class);
 
         $reflection = new ReflectionProperty($builder, 'priority');
-        $reflection->setAccessible(true);
 
         expect($reflection->getValue($builder))->toBe(0);
     });
@@ -309,7 +302,6 @@ describe('Phase 42: Final Production Hardening', function (): void {
     test('Facades EventManager getFacadeAccessor returns correct class', function (): void {
         $facade = new ReflectionClass(\ZeroBoiler\Events\Facades\EventManager::class);
         $method = $facade->getMethod('getFacadeAccessor');
-        $method->setAccessible(true);
 
         $result = $method->invoke(null);
         expect($result)->toBe(\ZeroBoiler\Events\EventManager::class);

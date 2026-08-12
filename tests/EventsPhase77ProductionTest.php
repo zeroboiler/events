@@ -484,7 +484,6 @@ test('EscapesWildcardLike SQL escaping', function (): void {
 
     // Non-wildcard should return null (use where clause instead)
     $reflection = new ReflectionMethod(Subscription::class, 'wildcardToLike');
-    $reflection->setAccessible(true);
 
     expect($reflection->invoke($sub, 'order.placed'))->toBeNull();
     expect($reflection->invoke($sub, 'order.*'))->toBe('order.%');

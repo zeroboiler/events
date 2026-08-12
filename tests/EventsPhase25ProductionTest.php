@@ -181,7 +181,6 @@ it('Facade has #[Override] on getFacadeAccessor', function (): void {
 
 it('Facade returns correct accessor string', function (): void {
     $method = new ReflectionMethod(EventManager::class, 'getFacadeAccessor');
-    $method->setAccessible(true);
     expect($method->invoke(null))->toBe(EventManagerConcrete::class);
 });
 
@@ -650,7 +649,6 @@ it('EscapesWildcardLike trait converts wildcards correctly', function (): void {
         use \ZeroBoiler\Events\Concerns\EscapesWildcardLike;
     };
     $ref = new ReflectionMethod($trait, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     // Non-wildcard returns null
     expect($ref->invoke($trait, 'order.placed'))->toBeNull();

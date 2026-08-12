@@ -242,7 +242,6 @@ it('config retention has days and include_pending', function (): void {
 
 it('Facade accessor returns correct class name', function (): void {
     $method = new ReflectionMethod(EventManagerFacade::class, 'getFacadeAccessor');
-    $method->setAccessible(true);
     $result = $method->invoke(null);
     expect($result)->toBe(EventManager::class);
 });
@@ -413,7 +412,6 @@ it('composer.json version matches README badge', function (): void {
 it('Trigger model casts includes priority and async and enabled', function (): void {
     $ref = new ReflectionClass(Trigger::class);
     $method = $ref->getMethod('casts');
-    $method->setAccessible(true);
     $result = $method->invoke($ref->newInstanceWithoutConstructor());
     expect($result)->toHaveKeys(['conditions', 'async', 'enabled', 'priority']);
 });
@@ -421,7 +419,6 @@ it('Trigger model casts includes priority and async and enabled', function (): v
 it('EventLog model casts includes payload and duration_ms', function (): void {
     $ref = new ReflectionClass(EventLog::class);
     $method = $ref->getMethod('casts');
-    $method->setAccessible(true);
     $result = $method->invoke($ref->newInstanceWithoutConstructor());
     expect($result)->toHaveKeys(['payload', 'duration_ms']);
 });
@@ -429,7 +426,6 @@ it('EventLog model casts includes payload and duration_ms', function (): void {
 it('Subscription model casts includes all expected keys', function (): void {
     $ref = new ReflectionClass(Subscription::class);
     $method = $ref->getMethod('casts');
-    $method->setAccessible(true);
     $result = $method->invoke($ref->newInstanceWithoutConstructor());
     expect($result)->toHaveKeys(['conditions', 'priority', 'active', 'failure_count', 'delivery_count', 'last_fired_at']);
 });

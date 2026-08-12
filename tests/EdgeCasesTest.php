@@ -311,7 +311,6 @@ describe('WebhookAction edge cases', function (): void {
 
         // Access getTimeout via reflection
         $reflection = new ReflectionMethod(WebhookAction::class, 'getTimeout');
-        $reflection->setAccessible(true);
 
         expect($reflection->invoke($action))->toBe(10);
     });
@@ -323,7 +322,6 @@ describe('WebhookAction edge cases', function (): void {
 
         // Access getMaxFailures via reflection
         $reflection = new ReflectionMethod(WebhookAction::class, 'getMaxFailures');
-        $reflection->setAccessible(true);
 
         expect($reflection->invoke($action))->toBe(5);
     });
@@ -334,7 +332,6 @@ describe('WebhookAction edge cases', function (): void {
         $action = new WebhookAction;
 
         $reflection = new ReflectionMethod(WebhookAction::class, 'getTimeout');
-        $reflection->setAccessible(true);
 
         expect($reflection->invoke($action))->toBe(30);
     });
@@ -345,7 +342,6 @@ describe('WebhookAction edge cases', function (): void {
         $action = new WebhookAction;
 
         $reflection = new ReflectionMethod(WebhookAction::class, 'getMaxFailures');
-        $reflection->setAccessible(true);
 
         expect($reflection->invoke($action))->toBe(10);
     });

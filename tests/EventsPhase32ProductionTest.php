@@ -98,7 +98,6 @@ test('subscription builder converts empty conditions to null', function (): void
 
     // Access the internal conditions property via reflection
     $ref = new ReflectionProperty($builder, 'conditions');
-    $ref->setAccessible();
     $conditions = $ref->getValue($builder);
 
     expect($conditions)->toBe([]);
@@ -479,7 +478,6 @@ test('composer json version matches format', function (): void {
 test('escapes wildcard like converts asterisk to percent', function (): void {
     $manager = app()->make(\ZeroBoiler\Events\EventManager::class);
     $ref = new ReflectionMethod($manager, 'wildcardToLike');
-    $ref->setAccessible();
 
     expect($ref->invoke($manager, 'order.*'))->toBe('order\\%')
         ->and($ref->invoke($manager, 'order.**'))->toBe('order\\%\\%');
@@ -488,7 +486,6 @@ test('escapes wildcard like converts asterisk to percent', function (): void {
 test('escapes wildcard like returns null for non-wildcard pattern', function (): void {
     $manager = app()->make(\ZeroBoiler\Events\EventManager::class);
     $ref = new ReflectionMethod($manager, 'wildcardToLike');
-    $ref->setAccessible();
 
     expect($ref->invoke($manager, 'order.placed'))->toBeNull();
 });

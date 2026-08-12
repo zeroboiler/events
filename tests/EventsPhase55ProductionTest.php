@@ -244,7 +244,6 @@ test('EventLog $statuses array contains all constants', function (): void {
 test('Facade accessor returns EventManager class name', function (): void {
     $ref = new ReflectionClass(\ZeroBoiler\Events\Facades\EventManager::class);
     $method = $ref->getMethod('getFacadeAccessor');
-    $method->setAccessible(true); // @phpstan-ignore method.deprecated — needed for protected method
     expect($method->invoke(null))->toBe(\ZeroBoiler\Events\EventManager::class);
 });
 

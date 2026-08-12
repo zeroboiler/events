@@ -327,7 +327,6 @@ describe('Phase 47 Production Tests', function () {
     describe('Facade accessor', function () {
         it('resolves to EventManager::class', function () {
             $accessor = (new ReflectionMethod(EventManagerFacade::class, 'getFacadeAccessor'));
-            $accessor->setAccessible(true);
             expect($accessor->invoke(null))->toBe(EventManager::class);
         });
 
@@ -695,7 +694,6 @@ describe('Phase 47 Production Tests', function () {
             $mock->secret = null;
             // Use reflection to set the property since it's fillable
             $ref = new ReflectionProperty(Subscription::class, 'secret');
-            $ref->setAccessible(true);
             $ref->setValue($mock, null);
             expect($mock->signPayload('test'))->toBe('');
         });
@@ -703,7 +701,6 @@ describe('Phase 47 Production Tests', function () {
         it('returns empty string for empty secret', function () {
             $mock = Mockery::mock(Subscription::class)->makePartial();
             $ref = new ReflectionProperty(Subscription::class, 'secret');
-            $ref->setAccessible(true);
             $ref->setValue($mock, '');
             expect($mock->signPayload('test'))->toBe('');
         });
@@ -711,7 +708,6 @@ describe('Phase 47 Production Tests', function () {
         it('produces deterministic signatures', function () {
             $mock = Mockery::mock(Subscription::class)->makePartial();
             $ref = new ReflectionProperty(Subscription::class, 'secret');
-            $ref->setAccessible(true);
             $ref->setValue($mock, 'test_secret');
 
             $sig1 = $mock->signPayload('payload1');

@@ -287,7 +287,6 @@ it('EventLog status constants match $statuses array', function (): void {
     );
 
     $statusesProperty = $reflection->getProperty('statuses');
-    $statusesProperty->setAccessible(true);
     /** @var array<int, string> $statuses */
     $statuses = $statusesProperty->getValue(null);
 

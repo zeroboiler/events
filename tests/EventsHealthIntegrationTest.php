@@ -27,7 +27,6 @@ describe('EventsHealthCommand — full integration', function (): void {
         $command->setLaravel($this->app);
 
         $reflection = new ReflectionMethod($command, 'handle');
-        $reflection->setAccessible(true);
 
         // Simulate --json option by overriding the option method via reflection on the command
         $command = $this->app->make(EventsHealthCommand::class);
@@ -82,7 +81,6 @@ describe('EventManager — getConfig() helper refactor', function (): void {
         $manager = $this->app->make(EventManager::class);
 
         $reflection = new ReflectionMethod($manager, 'getConfig');
-        $reflection->setAccessible(true);
         $config = $reflection->invoke($manager);
 
         expect($config)->toBeInstanceOf(\Illuminate\Contracts\Config\Repository::class);
@@ -93,7 +91,6 @@ describe('EventManager — getConfig() helper refactor', function (): void {
 
         // Verify all config reads produce consistent results
         $reflection = new ReflectionMethod($manager, 'getConfig');
-        $reflection->setAccessible(true);
         $config = $reflection->invoke($manager);
 
         expect($config->get('events.disabled', false))->toBe(false);

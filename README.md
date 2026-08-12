@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.29.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.30.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -500,6 +500,20 @@ events/
 - **O(1) dedup** — Trigger deduplication uses a hash set instead of O(n) linear scans.
 - **Cache invalidation** — The wildcard cache is automatically invalidated on trigger create, enable, and disable operations.
 
+### PHP 8.5 Compatibility
+
+This package targets PHP 8.5+ and leverages modern PHP features:
+
+- **`#[\Override]` attribute** — Applied to all method overrides (`register()`, `boot()`, `provides()`, `handle()`, `getTable()`, `casts()`, `newFactory()`, `boot()`, `getFacadeAccessor()`, `scopeEnabled()`, etc.) for compile-time override verification.
+- **`#[\Pure]` attribute** — Applied to side-effect-free methods in `ConditionEngine` (`evaluateCondition()`, `strictEquals()`, `getNestedValue()`, `contains()`, `between()`) and `WildcardMatcher` (`matches()`, `findMatchingPatterns()`, `extractWildcards()`) for improved static analysis and memoization safety.
+- **`readonly` classes** — `WildcardMatcher` is declared as a `readonly final class` with only static methods.
+- **`readonly` promoted properties** — `EventManager`, `ActionResolver`, `EventScheduler`, `TriggerBuilder`, `SubscriptionBuilder`, `DomainEvent`, and `DispatchTriggerJob` use constructor-promoted `readonly` properties for immutability.
+- **`final` classes** — All service classes, commands, and models are declared `final` to prevent unsafe inheritance.
+- **Typed properties** — Every class property has an explicit type declaration.
+- **Return type declarations** — Every method has an explicit return type (`void`, `bool`, `int`, `string`, `array`, `Collection`, etc.).
+- **Strict types** — All source files use `declare(strict_types=1)`.
+- **No `setAccessible()` calls** — Removed all deprecated `ReflectionMethod::setAccessible(true)` / `ReflectionProperty::setAccessible(true)` calls (deprecated in PHP 8.1, removed in PHP 8.5). All reflection-based tests use native visibility.
+
 ### Database Schema
 
 #### `triggers` Table
@@ -721,6 +735,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.30.0
+
+- Removed: All deprecated `ReflectionMethod::setAccessible(true)` and `ReflectionProperty::setAccessible(true)` calls from 43 test files (158 lines removed) — `setAccessible()` was deprecated in PHP 8.1 and removed in PHP 8.5. All reflection-based tests now rely on native visibility.
+- Added: README "PHP 8.5 Compatibility" section documenting `#[\Override]`, `#[\Pure]`, `readonly`, `final`, typed properties, return type declarations, strict types, and `setAccessible()` removal.
+- Added: `EventsPhase103ProductionAuditTest.php` — Phase 103 production audit covering: PHP 8.5 `setAccessible()` removal verification (zero occurrences in test files), `#[\Override]` attribute presence on all overridden methods, `#[\Pure]` attribute presence on all pure methods, readonly promoted constructor property verification, final class verification across all non-model/non-trait classes, README PHP 8.5 compatibility section presence, composer.json version alignment with README badge.
+- Updated: Version to 4.30.0
 
 ### v4.29.0
 

@@ -83,7 +83,6 @@ describe('Phase 38 — Production', function (): void {
 
         it('$backoff default has 3 elements', function (): void {
             $reflection = new ReflectionProperty(DispatchTriggerJob::class, 'backoff');
-            $reflection->setAccessible(true);
 
             $job = new DispatchTriggerJob('test-id', 'test.event', []);
             $backoff = $reflection->getValue($job);

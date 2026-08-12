@@ -234,7 +234,6 @@ test('phase 63: Facade getFacadeAccessor returns correct class')
     ->expect(function (): bool {
         $ref = new ReflectionClass(EventManagerFacade::class);
         $method = $ref->getMethod('getFacadeAccessor');
-        $method->setAccessible(true);
 
         return $method->invoke(null) === EventManager::class;
     })->toBeTrue();
@@ -336,7 +335,6 @@ test('phase 63: EscapesWildcardLike converts asterisks to percent')
     ->expect(function (): bool {
         // We test via Trigger model which uses the trait
         $ref = new ReflectionMethod(Trigger::class, 'wildcardToLike');
-        $ref->setAccessible(true);
         $trigger = new Trigger;
 
         $result = $ref->invoke($trigger, 'order.*');
@@ -347,7 +345,6 @@ test('phase 63: EscapesWildcardLike converts asterisks to percent')
 test('phase 63: EscapesWildcardLike returns null for non-wildcard')
     ->expect(function (): bool {
         $ref = new ReflectionMethod(Trigger::class, 'wildcardToLike');
-        $ref->setAccessible(true);
         $trigger = new Trigger;
 
         $result = $ref->invoke($trigger, 'order.placed');
@@ -618,7 +615,6 @@ test('phase 63: console commands have zeroboiler:events: prefix')
         foreach ($commands as $cmd) {
             $ref = new ReflectionClass($cmd);
             $prop = $ref->getProperty('signature');
-            $prop->setAccessible(true);
             $sig = $prop->getValue(new $cmd);
             if (! str_starts_with($sig, 'zeroboiler:events:')) {
                 return false;
@@ -683,15 +679,12 @@ test('phase 63: TriggerBuilder resolveActions deduplicates and preserves order')
     ->expect(function (): bool {
         $ref = new ReflectionClass(TriggerBuilder::class);
         $method = $ref->getMethod('resolveActions');
-        $method->setAccessible(true);
 
         $builder = app(TriggerBuilder::class);
         // Set action() and actions() to create overlap
         $actionProp = $ref->getProperty('action');
-        $actionProp->setAccessible(true);
         $actionProp->setValue($builder, 'App\\Actions\\A');
         $actionsProp = $ref->getProperty('actions');
-        $actionsProp->setAccessible(true);
         $actionsProp->setValue($builder, ['App\\Actions\\B', 'App\\Actions\\A', 'App\\Actions\\C']);
 
         $result = $method->invoke($builder);

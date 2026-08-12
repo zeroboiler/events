@@ -147,7 +147,6 @@ describe('Phase 85 Production Audit', function () {
 
             // Reflect to set eventLogId to null (it's protected)
             $ref = new ReflectionProperty($job, 'eventLogId');
-            $ref->setAccessible(true);
             $ref->setValue($job, null);
 
             // This should not throw — the failed() method handles null eventLogId
@@ -332,7 +331,6 @@ describe('Phase 85 Production Audit', function () {
 
             // Set action to whitespace via reflection since action() validates non-empty
             $ref = new ReflectionProperty($builder, 'action');
-            $ref->setAccessible(true);
             $ref->setValue($builder, '   ');
 
             expect(fn () => $builder->save())
@@ -389,7 +387,6 @@ describe('Phase 85 Production Audit', function () {
             $facade = new \ZeroBoiler\Events\Facades\EventManager();
 
             $ref = new ReflectionMethod($facade, 'getFacadeAccessor');
-            $ref->setAccessible(true);
 
             expect($ref->invoke($facade))->toBe(\ZeroBoiler\Events\EventManager::class);
         });

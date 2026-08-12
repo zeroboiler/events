@@ -40,7 +40,6 @@ it('Pest.php includes EventsPhase25ProductionTest', function (): void {
 it('EventManager parseActions returns empty array for empty string', function (): void {
     $ref = new ReflectionClass(EventManagerConcrete::class);
     $method = $ref->getMethod('parseActions');
-    $method->setAccessible(true);
 
     $manager = app()->make(EventManagerConcrete::class);
     $result = $method->invoke($manager, '');
@@ -50,7 +49,6 @@ it('EventManager parseActions returns empty array for empty string', function ()
 it('EventManager parseActions returns single class for plain string', function (): void {
     $ref = new ReflectionClass(EventManagerConcrete::class);
     $method = $ref->getMethod('parseActions');
-    $method->setAccessible(true);
 
     $manager = app()->make(EventManagerConcrete::class);
     $result = $method->invoke($manager, 'App\\Actions\\Foo');
@@ -60,7 +58,6 @@ it('EventManager parseActions returns single class for plain string', function (
 it('EventManager parseActions handles JSON array of strings', function (): void {
     $ref = new ReflectionClass(EventManagerConcrete::class);
     $method = $ref->getMethod('parseActions');
-    $method->setAccessible(true);
 
     $manager = app()->make(EventManagerConcrete::class);
     $result = $method->invoke($manager, '["App\\\\Actions\\\\Foo","App\\\\Actions\\\\Bar"]');
@@ -70,7 +67,6 @@ it('EventManager parseActions handles JSON array of strings', function (): void 
 it('EventManager parseActions handles JSON object with class+params', function (): void {
     $ref = new ReflectionClass(EventManagerConcrete::class);
     $method = $ref->getMethod('parseActions');
-    $method->setAccessible(true);
 
     $manager = app()->make(EventManagerConcrete::class);
     $result = $method->invoke($manager, '{"class":"App\\\\Actions\\\\Foo","params":{"url":"https://test.com"}}');
@@ -82,7 +78,6 @@ it('EventManager parseActions handles JSON object with class+params', function (
 it('EventManager parseActions handles JSON classes+params format', function (): void {
     $ref = new ReflectionClass(EventManagerConcrete::class);
     $method = $ref->getMethod('parseActions');
-    $method->setAccessible(true);
 
     $manager = app()->make(EventManagerConcrete::class);
     $result = $method->invoke($manager, '{"classes":["Foo","Bar"],"params":{"key":"val"}}');
@@ -443,7 +438,6 @@ it('WildcardMatcher findMatchingPatterns preserves order', function (): void {
 it('ConditionEngine getNestedValue resolves dot notation', function (): void {
     $engine = new ConditionEngine;
     $ref = new ReflectionMethod(ConditionEngine::class, 'getNestedValue');
-    $ref->setAccessible(true);
 
     $data = ['user' => ['role' => 'admin', 'settings' => ['dark_mode' => true]]];
     expect($ref->invoke($engine, $data, 'user.role'))->toBe('admin');
