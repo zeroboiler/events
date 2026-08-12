@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.28.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.29.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -699,7 +699,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (184+ test files)
+composer test        # Run Pest test suite (183+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -722,13 +722,20 @@ Test coverage spans:
 
 ## Changelog
 
+### v4.29.0
+
+- Removed: Unused composer dependencies (`vlucas/phpdotenv`, `phpoption/phpoption`, `illuminate/log`, `illuminate/config`) — facades are provided by `illuminate/support` and `illuminate/http`
+- Added: `EventsPhase102ProductionAuditTest.php` — 45+ production audit tests covering: composer dependency cleanup verification, ServiceProvider binding completeness (singleton/transient/contract), provides() listing, EventManager full public API surface (25+ methods), Facade accessor consistency, config key completeness (7 top-level + all sub-keys), model table name config-driven override, factory model property type verification, webhook URL scheme enforcement (data:, javascript:, blob:, ftp:, file:, mailto:), ConditionEngine ReDoS protection (catastrophic nested quantifiers, overly long patterns), WildcardMatcher regex special chars and extraction, DomainEvent identity preservation and immutability, TriggerBuilder validation and auto-naming, SubscriptionBuilder URL validation, DispatchTriggerJob config-driven initialization, EventLog status constants, global disable behavior, WildcardMatcher readonly/final verification, all source files strict_types compliance, README/composer version alignment, PHPStan config validation, cache TTL 0/disable and negative fallback, deep nested dot notation, delete/enable/disable non-existent triggers, list triggers with wildcard filters
+- Updated: Test file count to 183+
+- Updated: Version to 4.29.0
+
 ### v4.28.0
 
 - Added: `#[\Pure]` attributes on `ConditionEngine::evaluateCondition()`, `strictEquals()`, `getNestedValue()`, `contains()`, and `between()` for improved static analysis accuracy
 - Added: Explicit documentation note on `safeRegexMatch()` explaining why it is NOT `#[\Pure]` (temporarily modifies `pcre.backtrack_limit` via `ini_set`)
 - Added: `EventsPhase101ProductionReadinessTest.php` — Phase 101 production readiness audit covering: ConditionEngine `#[\Pure]` attribute presence verification, numeric type handling (float between, zero boundary, string-as-number), EventManager fire with empty payload, DomainEvent type preservation through roundtrip, WildcardMatcher edge cases (empty event, catch-all, empty patterns), all source files strict_types=1, config key completeness (7 top-level, table_names, subscriptions, retention), ServiceProvider DI lifetime verification, migration config-driven table names, Facade accessor consistency, WebhookAction Triggerable interface compliance, EventLog status constants, PHPStan config validation, composer.json correctness, model table name config override
 - Updated: Version to 4.28.0
-- Updated: Test file count to 184+
+- Updated: Test file count to 182+
 
 ### v4.27.0
 
