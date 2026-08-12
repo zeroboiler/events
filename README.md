@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.18.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.19.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -698,7 +698,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (174+ test files)
+composer test        # Run Pest test suite (175+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -720,6 +720,11 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.19.0
+
+- Added: `EventsPhase91ProductionAuditTest.php` — comprehensive Phase 91 production audit (45+ tests) covering: factory `readonly $model` property verification, `DomainEvent` readonly promoted property types (`UuidInterface`, `DateTimeImmutable`), `DispatchTriggerJob` public readonly properties vs mutable queue serialization properties, `EventScheduler`/`SubscriptionBuilder`/`TriggerBuilder` return type verification, Facade `getFacadeAccessor` `#[Override]` check, trait usage consistency (`EscapesWildcardLike`, `ManagesHistory`, `ManagesSubscriptions`), `ConditionEngineContract` binding verification, `WebhookAction` Triggerable compliance, `ActionResolver` error handling (non-existent class, non-Triggerable class), `EventsServiceProvider` provides/register/boot completeness verification, config key structure completeness (7 top-level keys, 3 table names, subscription keys, retention keys), `phpstan.neon.dist` configuration validation, `composer.json` requirements and extras, all source and factory files `declare(strict_types=1)`, all console command classes final verification, model typed `$keyType`/`$incrementing` properties, Trigger fillable fields, EventLog status constants count verification, migration config-driven table names, `WildcardMatcher` readonly/final/`#[Pure]` attributes, console command ServiceProvider registration (12 commands), `EventManager` constructor readonly properties, `fire()`/`executeTrigger()` `@throws` and re-throw verification, model `boot()`/`getTable()`/`newFactory()`/`casts()` `#[Override]` attribute presence
+- Updated: Test file count to 175+
 
 ### v4.18.0
 
