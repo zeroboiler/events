@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.31.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.32.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 184+ test files (Pest + support)
+└── tests/                      # 185+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -704,7 +704,7 @@ Before deploying to production, verify:
 | `between` | `['age', ['between', [18, 65]]]` | Inclusive range (auto-normalizes inverted) |
 | `null` | `['deleted_at', ['null']]` | Value is null |
 | `not_null` | `['email', ['not_null']]` | Value is not null |
-| `empty` | `['notes', ['empty']]` | Value is empty |
+| `empty` | `['notes', ['empty']]` | Value is empty (null-safe) |
 | `not_empty` | `['notes', ['not_empty']]` | Value is not empty |
 | `starts_with` | `['email', ['starts_with', 'admin@']]` | String prefix |
 | `ends_with` | `['domain', ['ends_with', '.com']]` | String suffix |
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (184+ test files)
+composer test        # Run Pest test suite (185+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.32.0
+
+- Fixed: `EventsPhase105ProductionAuditTest.php` — corrected all method calls to match actual API: `DomainEvent::create()` → `DomainEvent::occur()`, `$event->type()` → `$event->eventType`, `$event->payload()` → `$event->payload`, `$event->occurredAt()` → `$event->occurredAt`, `$event->id()` → `$event->eventId`, `$engine->evaluate()` → `$engine->matches()`, `SubscriptionBuilder::url()` → `SubscriptionBuilder::to()`
+- Fixed: `EventsPhase105ProductionAuditTest.php` was not registered in `Pest.php` — test was silently not running
+- Added: `EventsPhase106ProductionAuditTest.php` — comprehensive Phase 106 production audit (70+ tests) covering: strict types across all source files, final class verification, readonly constructor properties (EventManager, ActionResolver, EventScheduler, TriggerBuilder, SubscriptionBuilder, DispatchTriggerJob), DomainEvent readonly property count, return type declarations on all public methods, typed model properties, contract interface verification, facade accessor verification, ServiceProvider final/provides completeness, trait method verification (EscapesWildcardLike, GetsWebhookTimeout, ManagesHistory, ManagesSubscriptions), model scope return types, PHPStan config validation, composer.json correctness, migration config-driven table names, config key completeness, EventLog status constants uniqueness
+- Updated: README — `empty` operator description clarified as null-safe, test file count updated to 185+
+- Updated: Version to 4.32.0
 
 ### v4.31.0
 

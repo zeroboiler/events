@@ -25,54 +25,54 @@ test('readme contains quick start section', function (): void {
 });
 
 test('domain event is immutable', function (): void {
-    $event = DomainEvent::create('order.placed', ['order_id' => 123]);
+    $event = DomainEvent::occur('order.placed', ['order_id' => 123]);
 
-    expect($event->type())->toBe('order.placed');
-    expect($event->payload())->toBe(['order_id' => 123]);
-    expect($event->occurredAt())->toBeInstanceOf(\DateTimeImmutable::class);
-    expect($event->id())->toBeString();
+    expect($event->eventType)->toBe('order.placed');
+    expect($event->payload)->toBe(['order_id' => 123]);
+    expect($event->occurredAt)->toBeInstanceOf(\DateTimeImmutable::class);
+    expect($event->eventId)->toBeInstanceOf(\Ramsey\Uuid\UuidInterface::class);
 });
 
 test('domain event can be serialized and reconstructed', function (): void {
-    $event = DomainEvent::create('user.registered', ['email' => 'test@example.com']);
+    $event = DomainEvent::occur('user.registered', ['email' => 'test@example.com']);
     $serialized = $event->toArray();
     $reconstructed = DomainEvent::fromArray($serialized);
 
-    expect($reconstructed->type())->toBe($event->type());
-    expect($reconstructed->payload())->toBe($event->payload());
+    expect($reconstructed->eventType)->toBe($event->eventType);
+    expect($reconstructed->payload)->toBe($event->payload);
 });
 
 test('condition engine supports all operators', function (): void {
     $engine = new ConditionEngine;
 
     // Comparison operators
-    expect($engine->evaluate(['amount' => 100], ['amount', '>', 50]))->toBeTrue();
-    expect($engine->evaluate(['amount' => 100], ['amount', '>=', 100]))->toBeTrue();
-    expect($engine->evaluate(['amount' => 100], ['amount', '<', 200]))->toBeTrue();
-    expect($engine->evaluate(['status' => 'active'], ['status', '=', 'active']))->toBeTrue();
-    expect($engine->evaluate(['status' => 'active'], ['status', '!=', 'inactive']))->toBeTrue();
+    expect($engine->matches(['amount' => ['>', 50]], ['amount' => 100]))->toBeTrue();
+    expect($engine->matches(['amount' => ['>=', 100]], ['amount' => 100]))->toBeTrue();
+    expect($engine->matches(['amount' => ['<', 200]], ['amount' => 100]))->toBeTrue();
+    expect($engine->matches(['status' => 'paid'], ['status' => 'paid']))->toBeTrue();
+    expect($engine->matches(['status' => ['!=', 'inactive']], ['status' => 'active']))->toBeTrue();
 
     // In operators
-    expect($engine->evaluate(['role' => 'admin'], ['role', 'in', ['admin', 'super']]))->toBeTrue();
-    expect($engine->evaluate(['role' => 'user'], ['role', 'not_in', ['admin', 'super']]))->toBeTrue();
+    expect($engine->matches(['role' => ['in', ['admin', 'super']]], ['role' => 'admin']))->toBeTrue();
+    expect($engine->matches(['role' => ['not_in', ['admin', 'super']]], ['role' => 'user']))->toBeTrue();
 
     // Null checks
-    expect($engine->evaluate(['name' => null], ['name', 'null']))->toBeTrue();
-    expect($engine->evaluate(['name' => 'John'], ['name', 'not_null']))->toBeTrue();
+    expect($engine->matches(['name' => ['null']], ['name' => null]))->toBeTrue();
+    expect($engine->matches(['name' => ['not_null']], ['name' => 'John']))->toBeTrue();
 
     // String operators
-    expect($engine->evaluate(['bio' => 'Laravel developer'], ['bio', 'contains', 'Laravel']))->toBeTrue();
-    expect($engine->evaluate(['code' => 'ABC123'], ['code', 'starts_with', 'ABC']))->toBeTrue();
-    expect($engine->evaluate(['code' => 'ABC123'], ['code', 'ends_with', '123']))->toBeTrue();
+    expect($engine->matches(['bio' => ['contains', 'Laravel']], ['bio' => 'Laravel developer']))->toBeTrue();
+    expect($engine->matches(['code' => ['starts_with', 'ABC']], ['code' => 'ABC123']))->toBeTrue();
+    expect($engine->matches(['code' => ['ends_with', '123']], ['code' => 'ABC123']))->toBeTrue();
 
     // Between
-    expect($engine->evaluate(['age' => 25], ['age', 'between', [18, 65]]))->toBeTrue();
+    expect($engine->matches(['age' => ['between', [18, 65]]], ['age' => 25]))->toBeTrue();
 });
 
 test('wildcard matcher supports patterns', function (): void {
-    expect(WildcardMatcher::matches('order.placed', 'order.*'))->toBeTrue();
-    expect(WildcardMatcher::matches('order.item.added', 'order.**'))->toBeTrue();
-    expect(WildcardMatcher::matches('user.login', 'order.*'))->toBeFalse();
+    expect(WildcardMatcher::matches('order.*', 'order.placed'))->toBeTrue();
+    expect(WildcardMatcher::matches('order.**', 'order.item.added'))->toBeTrue();
+    expect(WildcardMatcher::matches('order.*', 'user.login'))->toBeFalse();
 });
 
 test('trigger builder creates trigger with name and event', function (): void {
@@ -87,7 +87,7 @@ test('subscription builder creates webhook subscription', function (): void {
     $app = app();
     $builder = $app->make(SubscriptionBuilder::class);
 
-    expect(method_exists($builder, 'url'))->toBeTrue('SubscriptionBuilder must have url()');
+    expect(method_exists($builder, 'to'))->toBeTrue('SubscriptionBuilder must have to()');
     expect(method_exists($builder, 'save'))->toBeTrue('SubscriptionBuilder must have save()');
 });
 
