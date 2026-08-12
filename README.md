@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.15.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.16.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -360,7 +360,7 @@ When disabled, all `fire()` calls silently return without dispatching any trigge
 | `zeroboiler:events:register` | Register a new trigger |
 | `zeroboiler:events:enable {id}` | Enable a trigger |
 | `zeroboiler:events:disable {id}` | Disable a trigger |
-| `zeroboiler:events:retry {logId}` | Retry a failed event log |
+| `zeroboiler:events:retry` | Retry failed or pending event dispatches (supports `--status`) |
 | `zeroboiler:events:redeliver {logId}` | Redeliver an event log to its webhook endpoint |
 | `zeroboiler:events:log` | View event logs (supports `--event`, `--status`, `--trigger`) |
 | `zeroboiler:events:subscribe` | Create a webhook subscription |
@@ -435,7 +435,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 171+ test files (Pest + support)
+└── tests/                      # 172+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -698,7 +698,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (171+ test files)
+composer test        # Run Pest test suite (172+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -720,6 +720,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.16.0
+
+- Fixed: Added `EventManager::registerScheduler(Schedule $schedule)` method — previously the Facade documented `@method static void registerScheduler()` but the underlying `EventManager` class had no such method, causing `BadMethodCallException` at runtime when called via facade.
+- Fixed: README CLI commands table — corrected `zeroboiler:events:retry` entry from `{logId}` (single log) to correct description (bulk retry with `--status` option).
+- Added: `EventsPhase88ProductionAuditTest.php` — 10 tests covering `registerScheduler()` method existence, type signature, container delegation, facade delegation, edge cases (missing binding, idempotency), and PHPStan compliance checks.
+- Updated: Test file count to 172+
 
 ### v4.15.0
 

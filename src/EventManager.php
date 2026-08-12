@@ -22,6 +22,7 @@ use ZeroBoiler\Events\Concerns\ManagesSubscriptions;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
+use Illuminate\Console\Scheduling\Schedule;
 
 final class EventManager
 {
@@ -299,6 +300,25 @@ final class EventManager
             'model_class' => $modelClass,
             'action' => $action,
         ]);
+    }
+
+    /**
+     * Register event-related scheduled tasks with the given scheduler.
+     *
+     * Delegates to EventScheduler::register(). This method exists as a
+     * convenience facade entry point so that consumers can call
+     * `EventManager::registerScheduler($schedule)` or
+     * `EventManagerFacade::registerScheduler($schedule)`.
+     *
+     * @param  Schedule  $schedule  The Laravel scheduler instance
+     */
+    public function registerScheduler(Schedule $schedule): void
+    {
+        $scheduler = $this->app->make(EventScheduler::class);
+
+        if ($scheduler instanceof EventScheduler) {
+            $scheduler->register($schedule);
+        }
     }
 
     /**
