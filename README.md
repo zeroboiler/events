@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.11.0-blue)]()|
+[![Latest Version](https://img.shields.io/badge/version-4.12.0-blue)]()
 |[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()|
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()|
 |[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()|
@@ -665,7 +665,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (162+ test files)
+composer test        # Run Pest test suite (168+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -686,6 +686,12 @@ Test coverage spans:
 - Service provider bindings, config completeness, migrations, factories
 
 ## Changelog
+
+### v4.12.0
+
+- Added: `EventsPhase85ProductionAuditTest.php` — comprehensive Phase 85 production audit covering: EventManager `register()` alias, `deleteTrigger()` with nonexistent ID, SubscriptionBuilder auto_generate_secret config handling, DispatchTriggerJob constructor with array/empty/single-value backoff formats, DispatchTriggerJob `failed()` with null eventLogId, ConditionEngine empty conditions and operator edge cases (`not_empty`, `empty`, `null`, `between` with null), EventManager `fire()`/`fireModel()` input validation, WildcardMatcher `extractWildcards()` consecutive patterns, DomainEvent `fromArray()` invalid UUID/date handling, TriggerBuilder empty actions validation, ActionResolver non-existent class, ServiceProvider `provides()` completeness, Facade proxy accessor, config key consistency, EventLog status constants
+- Verified: All 31 source files pass manual PHPStan 9 audit — strict types, typed properties, return type declarations, comprehensive docblocks
+- Updated: Test file count to 168+
 
 ### v4.11.0
 
