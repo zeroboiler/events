@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.23.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.24.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -699,7 +699,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (179+ test files)
+composer test        # Run Pest test suite (180+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -721,6 +721,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.24.0
+
+- Fixed: `EventsPhase96StrictAuditTest.php` was missing from `Pest.php` registration — test was not running with `composer test`
+- Fixed: `phpstan.neon.dist` — removed unnecessary `preg_quote`/`preg_match` nullable parameter suppressions (all callers have strict `string` type declarations)
+- Updated: README test count to 180+
 
 ### v4.23.0
 
