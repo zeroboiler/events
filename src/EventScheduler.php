@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Container\Container;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 
@@ -19,9 +20,16 @@ use Illuminate\Support\Facades\Config;
  * scheduled tasks (log purging, subscription cleanup). Intended to be
  * called from the host application's `schedule()` method or via the
  * `EventsServiceProvider` boot process.
+ *
+ * Uses constructor injection for the container to avoid relying on the
+ * global `app()` helper, which improves testability and PHPStan compliance.
  */
 final class EventScheduler
 {
+    public function __construct(
+        protected readonly Container $app,
+    ) {}
+
     /**
      * Register all event-related scheduled tasks with the given scheduler.
      *
@@ -31,6 +39,19 @@ final class EventScheduler
     {
         $this->registerLogPurge($schedule);
         $this->registerSubscriptionCleanup($schedule);
+    }
+
+    /**
+     * Resolve the EventManager from the container with type safety.
+     *
+     * Returns null when the binding is missing or resolved to a wrong type,
+     * allowing scheduled callbacks to silently skip execution.
+     */
+    protected function resolveEventManager(): ?EventManager
+    {
+        $resolved = $this->app->make(EventManager::class);
+
+        return $resolved instanceof EventManager ? $resolved : null;
     }
 
     /**
@@ -56,8 +77,10 @@ final class EventScheduler
 
         $includePending = Config::get('events.retention.include_pending', false);
 
-        $schedule->call(function () use ($retentionDays, $includePending): void {
-            $eventManager = app(EventManager::class);
+        $app = $this->app;
+
+        $schedule->call(function () use ($app, $retentionDays, $includePending): void {
+            $eventManager = $app->make(EventManager::class);
 
             if (! $eventManager instanceof EventManager) {
                 return;
@@ -85,8 +108,10 @@ final class EventScheduler
         $cleanupCron = Config::get('events.subscriptions.cleanup_cron', '0 3 * * *');
         $cronExpression = is_string($cleanupCron) && $cleanupCron !== '' ? $cleanupCron : '0 3 * * *';
 
-        $schedule->call(function (): void {
-            $eventManager = app(EventManager::class);
+        $app = $this->app;
+
+        $schedule->call(function () use ($app): void {
+            $eventManager = $app->make(EventManager::class);
 
             if (! $eventManager instanceof EventManager) {
                 return;

@@ -18,5 +18,5 @@ parameters:
         - '#Access to an undefined property ZeroBoiler\\Events\\Models\\(Trigger|EventLog|Subscription)::\$.*#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection::push\(\)#'
         - '#Call to an undefined method.*::wildcardToLike\(\)#'
-        - '#Call to an undefined function (now|database_path|app)\(\)#'
+        - '#Call to an undefined function (now|database_path)\(\)#'
     bootstrapFiles: []

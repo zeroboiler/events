@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.24.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.25.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -699,7 +699,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (180+ test files)
+composer test        # Run Pest test suite (181+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -721,6 +721,15 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.25.0
+
+- Refactored: `EventScheduler` now uses constructor injection for the `Container` instead of relying on the global `app()` helper — improves testability, removes PHPStan suppression, and follows DI best practices
+- Added: `EventScheduler::resolveEventManager()` protected helper for type-safe container resolution
+- Removed: `app()` from PHPStan undefined function suppressions in `phpstan.neon.dist`
+- Added: `EventsPhase98ProductionAuditTest.php` — Phase 98 production audit tests covering container injection, singleton lifetime, readonly property, resolveEventManager, app() removal verification, and registerScheduler delegation
+- Updated: Test file count to 181+
+- Updated: Version to 4.25.0
 
 ### v4.24.0
 

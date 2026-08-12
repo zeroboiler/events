@@ -57,8 +57,10 @@ final class EventsServiceProvider extends ServiceProvider
         // Register TriggerBuilder as a transient (each on()/register() gets a fresh instance)
         $this->app->bind(TriggerBuilder::class);
 
-        // Register EventScheduler as a singleton
-        $this->app->singleton(EventScheduler::class);
+        // Register EventScheduler as a singleton (injects container for PHPStan compliance)
+        $this->app->singleton(EventScheduler::class, function (Container $app): EventScheduler {
+            return new EventScheduler($app);
+        });
     }
 
     /**
