@@ -17,7 +17,7 @@ use ZeroBoiler\Events\Models\Subscription;
  */
 class SubscriptionFactory extends Factory
 {
-    protected string $model = Subscription::class;
+    protected static string $model = Subscription::class;
 
     /**
      * @return array<string, mixed>

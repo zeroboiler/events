@@ -324,9 +324,11 @@ final class EventManager
     {
         $scheduler = $this->app->make(EventScheduler::class);
 
-        if ($scheduler instanceof EventScheduler) {
-            $scheduler->register($schedule);
+        if (! $scheduler instanceof EventScheduler) {
+            throw new \RuntimeException('EventScheduler could not be resolved from the container.');
         }
+
+        $scheduler->register($schedule);
     }
 
     /**

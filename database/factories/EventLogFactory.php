@@ -18,7 +18,7 @@ use ZeroBoiler\Events\Models\Trigger;
  */
 class EventLogFactory extends Factory
 {
-    protected string $model = EventLog::class;
+    protected static string $model = EventLog::class;
 
     /**
      * @return array<string, mixed>

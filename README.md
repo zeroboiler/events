@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.25.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.26.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -699,7 +699,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (181+ test files)
+composer test        # Run Pest test suite (182+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -721,6 +721,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.26.0
+
+- Fixed: `EventManager::registerScheduler()` now throws `RuntimeException` when EventScheduler cannot be resolved — previously silently returned, masking container misconfiguration (consistent with `on()`/`subscribe()` behavior)
+- Changed: Factory `$model` properties updated from `protected string` to `protected static string` for Laravel 13+ compatibility (TriggerFactory, EventLogFactory, SubscriptionFactory)
+- Added: `phpstan.neon.dist` now includes `database/migrations` and `database/factories` in analysis paths, with additional ignore rules for Schema facade and Blueprint `$table` property
+- Added: `EventsPhase99FinalProductionAuditTest.php` — comprehensive Phase 99 production audit (factory static model verification, registerScheduler error handling, PHPStan config coverage, strict types across all source files, all classes final, DomainEvent immutability, WildcardMatcher readonly/final, EventLog status constants)
+- Updated: Test file count to 182+
 
 ### v4.25.0
 

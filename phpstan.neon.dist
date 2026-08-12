@@ -2,6 +2,8 @@ parameters:
     level: 9
     paths:
         - src
+        - database/migrations
+        - database/factories
     reportUnmatchedIgnoredErrors: true
     treatPhpDocTypesAsCertain: false
     checkMissingIterableValueType: true
@@ -12,11 +14,13 @@ parameters:
     checkPropertyHookNameCase: true
     checkEnumCaseValueNameCase: true
     ignoreErrors:
-        - '#Call to an undefined (static )?method Illuminate\\Support\\Facades\\(Config|Cache|Queue|Log|DB)::.*#'
+        - '#Call to an undefined (static )?method Illuminate\\Support\\Facades\\(Config|Cache|Queue|Log|DB|Schema)::.*#'
         - '#Call to an undefined (static )?method Illuminate\\Support\\Facades\\Http::.*#'
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$payload#'
         - '#Access to an undefined property ZeroBoiler\\Events\\Models\\(Trigger|EventLog|Subscription)::\$.*#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection::push\(\)#'
         - '#Call to an undefined method.*::wildcardToLike\(\)#'
         - '#Call to an undefined function (now|database_path)\(\)#'
+        - '#Dynamic call to static method#'
+        - '#Access to an undefined property.*\$table#'
     bootstrapFiles: []
