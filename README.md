@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.17.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.18.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -355,17 +355,17 @@ When disabled, all `fire()` calls silently return without dispatching any trigge
 
 | Command | Description |
 |---|---|
-| `zeroboiler:events:list` | List triggers with optional filtering |
-| `zeroboiler:events:fire {event}` | Manually fire an event (supports `--async`, `--json`) |
-| `zeroboiler:events:register` | Register a new trigger |
+| `zeroboiler:events:list` | List triggers with optional filtering (supports `--event`, `--enabled`, `--disabled`, `--per-page`, `--page`) |
+| `zeroboiler:events:fire {event}` | Manually fire an event (supports `--async`, `--json`, `--payload=*`) |
+| `zeroboiler:events:register` | Register a new trigger (supports `--name`, `--async`, `--priority`) |
 | `zeroboiler:events:enable {id}` | Enable a trigger |
 | `zeroboiler:events:disable {id}` | Disable a trigger |
-| `zeroboiler:events:retry` | Retry failed or pending event dispatches (supports `--status`) |
-| `zeroboiler:events:redeliver {logId}` | Redeliver an event log to its webhook endpoint |
-| `zeroboiler:events:log` | View event logs (supports `--event`, `--status`, `--trigger`) |
-| `zeroboiler:events:subscribe` | Create a webhook subscription |
+| `zeroboiler:events:retry` | Retry failed or pending event dispatches (supports `--status=failed|pending`) |
+| `zeroboiler:events:redeliver {logId}` | Redeliver a failed/completed event log to its webhook endpoint (supports `--force`) |
+| `zeroboiler:events:log` | View event logs (supports `--event`, `--status`, `--trigger`, `--limit`) |
+| `zeroboiler:events:subscribe` | Create a webhook subscription (supports `--secret`, `--filter`, `--priority`, `--async`) |
 | `zeroboiler:events:unsubscribe {id}` | Remove a webhook subscription |
-| `zeroboiler:events:subscriptions` | List webhook subscriptions |
+| `zeroboiler:events:subscriptions` | List webhook subscriptions (supports `--event`, `--active`, `--inactive`, `--per-page`, `--page`) |
 | `zeroboiler:events:health` | Diagnostic health check (supports `--json`, `--check-cache`) |
 
 ### Scheduled Tasks
@@ -435,7 +435,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 173+ test files (Pest + support)
+└── tests/                      # 174+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -698,7 +698,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (173+ test files)
+composer test        # Run Pest test suite (174+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -720,6 +720,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.18.0
+
+- Fixed: README CLI Commands table — expanded all 12 command descriptions to include their full option sets (`--per-page`, `--page`, `--payload=*`, `--filter`, `--inactive`, `--limit`, `--force`, `--status=failed|pending`) for accurate documentation
+- Added: `EventsPhase90ProductionAuditTest.php` — comprehensive Phase 90 production audit covering: all 32 source files strict_types verification, final classes, readonly properties, `#[Override]`/`#[Pure]` attributes, all public methods return-type declarations, typed properties, PHPStan 9 config validation, ServiceProvider register/boot/provides completeness, Facade `@method` count verification, all config keys cross-referenced with source code, migration config-driven table names, factory state methods coverage, CLI command signatures verified, condition engine operator coverage, wildcard matcher edge cases, domain event serialization roundtrip, webhook action HMAC signing, action resolver class validation, trigger builder action merging, subscription builder URL scheme validation, all models scopes verified, EventLog status constants, test count updated to 174+
+- Updated: Test file count to 174+
 
 ### v4.17.0
 
