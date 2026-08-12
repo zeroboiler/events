@@ -34,6 +34,8 @@ final class EventsRedeliverCommand extends Command
      * headers, and subscription_id before sending.
      *
      * @return array<string, mixed>
+     *
+     * @internal Not part of the public API.
      */
     private function buildRedeliverBody(EventLog $log): array
     {

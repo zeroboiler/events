@@ -48,6 +48,8 @@ final class EventManager
 
     /**
      * Get the config repository from the container with type narrowing.
+     *
+     * @internal Not part of the public API.
      */
     protected function getConfig(): ConfigRepository
     {
@@ -67,6 +69,8 @@ final class EventManager
      * which disables caching (each fire() call queries the DB).
      * Returns the default TTL (300s) for any non-integer, null, or
      * negative value.
+     *
+     * @internal Not part of the public API.
      */
     protected function getTriggerCacheTtl(): int
     {
@@ -342,6 +346,8 @@ final class EventManager
      * deduplicated using an O(1) id set instead of O(n) firstWhere.
      *
      * @return Collection<int, Trigger>
+     *
+     * @internal Not part of the public API. Use fire() to trigger dispatch.
      */
     protected function getMatchingTriggers(string $event): Collection
     {
@@ -388,6 +394,8 @@ final class EventManager
      * Results are cached with a TTL and invalidated on register / enable / disable.
      *
      * @return Collection<int, Trigger>
+     *
+     * @internal Not part of the public API.
      */
     protected function getEnabledWildcardTriggers(): Collection
     {
@@ -411,6 +419,8 @@ final class EventManager
      * Check if a trigger should be dispatched based on conditions.
      *
      * @param  array<string, mixed>  $payload
+     *
+     * @internal Not part of the public API.
      */
     protected function shouldDispatch(Trigger $trigger, array $payload): bool
     {
@@ -426,6 +436,8 @@ final class EventManager
      *
      * @param  array<string, mixed>  $payload
      * @param  bool  $forceAsync  When true, forces async dispatch regardless of the trigger's async setting.
+     *
+     * @internal Not part of the public API. Use fire() or executeTrigger() instead.
      */
     protected function dispatchTrigger(Trigger $trigger, string $event, array $payload, bool $forceAsync = false): void
     {
@@ -509,8 +521,8 @@ final class EventManager
      * Parse action string into normalised array of action entries.
      *
      * Each entry is either:
-     * - A class name string (simple format):  ["App\\Actions\\Foo"]
-     * - An array with 'class' and optional 'params':  [["class" => "...", "params" => [...]]]
+     * - A class name string (simple format):  `["App\\Actions\\Foo"]`
+     * - An array with 'class' and optional 'params':  `[["class" => "...", "params" => [...]]]`
      *
      * Supports multiple input formats:
      * - Single class name string:  `"App\\Actions\\Foo"`
@@ -520,6 +532,8 @@ final class EventManager
      * - JSON array of objects:  `[{"class": "...", "params": {...}}, ...]`
      *
      * @return list<string|array{class: string, params?: array<string, mixed>}>
+     *
+     * @internal Not part of the public API.
      */
     protected function parseActions(string $action): array
     {

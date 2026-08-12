@@ -46,6 +46,8 @@ final class EventScheduler
      *
      * Returns null when the binding is missing or resolved to a wrong type,
      * allowing scheduled callbacks to silently skip execution.
+     *
+     * @internal Not part of the public API.
      */
     protected function resolveEventManager(): ?EventManager
     {
@@ -62,6 +64,8 @@ final class EventScheduler
      *
      * The schedule frequency defaults to daily at 02:00 UTC and can be
      * overridden via `events.retention.schedule_cron`.
+     *
+     * @internal Not part of the public API. Called automatically by register().
      */
     protected function registerLogPurge(Schedule $schedule): void
     {
@@ -102,6 +106,8 @@ final class EventScheduler
      *
      * Runs daily at 03:00 UTC by default. Override via
      * `events.subscriptions.cleanup_cron`.
+     *
+     * @internal Not part of the public API. Called automatically by register().
      */
     protected function registerSubscriptionCleanup(Schedule $schedule): void
     {

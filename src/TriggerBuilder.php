@@ -108,7 +108,7 @@ final class TriggerBuilder
      *
      * @return list<string> Resolved action class FQNs (plain strings only; no array entries)
      *
-     * @phpstan-return list<string>
+     * @internal Not part of the public API.
      */
     private function resolveActions(): array
     {

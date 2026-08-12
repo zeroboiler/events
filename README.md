@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.33.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.34.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 186+ test files (Pest + support)
+└── tests/                      # 187+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (186+ test files)
+composer test        # Run Pest test suite (187+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,16 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.34.0
+
+- Improved: Added `@internal` annotations to all protected/private methods in `EventManager` (`getConfig`, `getTriggerCacheTtl`, `getMatchingTriggers`, `getEnabledWildcardTriggers`, `shouldDispatch`, `dispatchTrigger`, `parseActions`), `EventScheduler` (`resolveEventManager`, `registerLogPurge`, `registerSubscriptionCleanup`), `WebhookAction` (`getMaxFailures`), `EventsRedeliverCommand` (`buildRedeliverBody`), and `TriggerBuilder` (`resolveActions`) — clarifying public API surface for consumers.
+- Improved: Added class-level docblock and `@see` reference on `EventManager` facade for better IDE autocomplete and documentation generation.
+- Improved: Fixed docblock formatting in `EventManager::parseActions()` (proper backtick code formatting).
+- Removed: Redundant `@phpstan-return` annotation from `TriggerBuilder::resolveActions()` (PHPDoc `@return` type is sufficient for PHPStan 9).
+- Added: `EventsPhase108ProductionAuditTest.php` — comprehensive Phase 108 production audit (50+ tests) covering: strict_types across all source files, final class verification (11 classes + facade + 12 commands), readonly constructor properties (EventManager, ActionResolver, EventScheduler), interface compliance, WildcardMatcher static-only verification, return type declarations on all public methods, `#[Override]` and `#[Pure]` attribute verification, model casts correctness, EventLog status constants uniqueness, DomainEvent readonly property count, ServiceProvider provides() completeness (7 services), config key completeness (7 top-level + sub-keys), PHPStan config validation, composer.json correctness, `@internal` annotation presence on protected methods, facade `@see` reference, license headers on all source files, console commands (12 final classes, return type int), migration config-driven table names, factory definitions and strict types.
+- Updated: Test file count to 187+
+- Updated: Version to 4.34.0
 
 ### v4.33.0
 

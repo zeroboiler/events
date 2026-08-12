@@ -11,6 +11,13 @@ namespace ZeroBoiler\Events\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
+ * Facade for the ZeroBoiler Events system.
+ *
+ * Provides static access to the EventManager singleton for registering
+ * triggers, firing events, managing subscriptions, and querying event history.
+ *
+ * @see \ZeroBoiler\Events\EventManager
+ *
  * @method static \ZeroBoiler\Events\TriggerBuilder on(string $event)
  * @method static \ZeroBoiler\Events\TriggerBuilder register(string $event)
  * @method static void fire(string $event, array<string, mixed> $payload = [], bool $async = false)

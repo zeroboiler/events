@@ -31,6 +31,8 @@ final class WebhookAction implements Triggerable
 
     /**
      * Get the max failures from config.
+     *
+     * @internal Not part of the public API.
      */
     private function getMaxFailures(): int
     {
