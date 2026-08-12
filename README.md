@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.14.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.15.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -116,6 +116,7 @@ return [
     'retention' => [
         'days' => env('EVENTS_LOG_RETENTION_DAYS', 30),
         'include_pending' => env('EVENTS_LOG_PURGE_PENDING', false),
+        'schedule_cron' => env('EVENTS_RETENTION_CRON', '0 2 * * *'),
     ],
 
     'subscriptions' => [
@@ -123,6 +124,7 @@ return [
         'max_failures' => env('EVENTS_SUB_MAX_FAILURES', 10),
         'timeout' => env('EVENTS_SUB_TIMEOUT', 30),
         'signature_algorithm' => 'sha256',
+        'cleanup_cron' => env('EVENTS_SUB_CLEANUP_CRON', '0 3 * * *'),
     ],
 
     'disabled' => env('EVENTS_DISABLED', false),
@@ -141,9 +143,11 @@ return [
 | `EVENTS_RETRY_BACKOFF` | `60,300,900` | Comma-separated backoff intervals (seconds) |
 | `EVENTS_LOG_RETENTION_DAYS` | `30` | Days before event logs become eligible for purge |
 | `EVENTS_LOG_PURGE_PENDING` | `false` | Include pending/dispatched logs in purge |
+| `EVENTS_RETENTION_CRON` | `0 2 * * *` | Cron expression for automatic log purge schedule |
 | `EVENTS_SUB_MAX_FAILURES` | `10` | Auto-deactivate subscription after this many consecutive failures |
 | `EVENTS_SUB_TIMEOUT` | `30` | HTTP timeout for webhook delivery (seconds) |
 | `EVENTS_SUB_SIGNATURE_ALGORITHM` | `sha256` | HMAC algorithm for webhook payload signing |
+| `EVENTS_SUB_CLEANUP_CRON` | `0 3 * * *` | Cron expression for automatic subscription cleanup schedule |
 | `EVENTS_DISABLED` | `false` | Set `true` to globally disable the entire event system |
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Cache TTL (seconds) for enabled wildcard triggers; set to `0` to disable |
 
@@ -364,6 +368,27 @@ When disabled, all `fire()` calls silently return without dispatching any trigge
 | `zeroboiler:events:subscriptions` | List webhook subscriptions |
 | `zeroboiler:events:health` | Diagnostic health check (supports `--json`, `--check-cache`) |
 
+### Scheduled Tasks
+
+The package provides an `EventScheduler` that registers automated maintenance tasks. To enable scheduled tasks, register the scheduler in your application's `Kernel::schedule()` method:
+
+```php
+// app/Console/Kernel.php
+use ZeroBoiler\Events\Facades\EventManager;
+
+protected function schedule(Schedule $schedule): void
+{
+    EventManager::registerScheduler($schedule);
+}
+```
+
+| Task | Default Schedule | Config Key |
+|---|---|---|
+| Log retention purge | Daily at 02:00 UTC | `events.retention.schedule_cron` |
+| Subscription cleanup | Daily at 03:00 UTC | `events.subscriptions.cleanup_cron` |
+
+Both tasks use `withoutOverlapping()` and `onOneServer()` to prevent duplicate execution in multi-worker deployments.
+
 ## Architecture
 
 ### Package Structure
@@ -405,11 +430,12 @@ events/
 │   ├── ActionResolver.php
 │   ├── ConditionEngine.php
 │   ├── EventManager.php        # Central orchestrator
+│   ├── EventScheduler.php      # Automated log purge & subscription cleanup
 │   ├── EventsServiceProvider.php
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 169+ test files (Pest + support)
+└── tests/                      # 171+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -462,6 +488,7 @@ events/
 | `ActionResolver` | Singleton | Shared across app |
 | `TriggerBuilder` | Transient | Fresh instance per resolution |
 | `SubscriptionBuilder` | Transient | Fresh instance per resolution |
+| `EventScheduler` | Singleton | Registers scheduled tasks for log purge & subscription cleanup |
 | `EventManager` (Facade) | `getFacadeAccessor()` → `EventManager::class` | Resolved from container |
 
 ### Performance Optimizations
@@ -634,6 +661,12 @@ Before deploying to production, verify:
 | `async(bool $async)` | `self` | Set async delivery mode |
 | `save()` | `Subscription` | Persist subscription and register internal trigger |
 
+### EventScheduler
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `register(Schedule $schedule)` | `void` | Register all scheduled tasks (log purge + subscription cleanup) |
+
 ### DomainEvent
 
 | Method | Returns | Description |
@@ -665,7 +698,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (169+ test files)
+composer test        # Run Pest test suite (171+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -684,8 +717,21 @@ Test coverage spans:
 - Event history, statistics, and log purging
 - All 12 console commands
 - Service provider bindings, config completeness, migrations, factories
+- EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.15.0
+
+- Added: `EventScheduler` — automated scheduled tasks for log retention purging and subscription cleanup, registerable via `EventManager::registerScheduler($schedule)`
+- Added: `EventSchedulerTest.php` — 7 tests covering scheduler registration, custom cron expressions, skip conditions, and class finality
+- Added: `events.retention.schedule_cron` config option (default: `0 2 * * *`) for controlling automatic log purge schedule
+- Added: `events.subscriptions.cleanup_cron` config option (default: `0 3 * * *`) for controlling automatic subscription cleanup schedule
+- Added: `EVENTS_RETENTION_CRON` and `EVENTS_SUB_CLEANUP_CRON` environment variables
+- Updated: `EventsServiceProvider` registers `EventScheduler` as a singleton, added to `provides()`
+- Updated: README — added Scheduled Tasks section, updated environment variables table, config examples, architecture diagram, service container bindings table, API reference
+- Updated: Test file count to 171+
+- Updated: Version to 4.15.0
 
 ### v4.14.0
 
@@ -800,4 +846,4 @@ This is a private package. Contribution guidelines:
 
 ## License
 
-Proprietary — see license file for details.
+Proprietary — see LICENSE file for details.

@@ -47,6 +47,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Database\Eloquent\Collection<int, \ZeroBoiler\Events\Models\EventLog> getStalePendingLogs(\Illuminate\Support\Carbon $before, int $limit = 100)
  * @method static int deactivateExceededSubscriptions()
  * @method static void executeTrigger(\ZeroBoiler\Events\Models\Trigger $trigger, \ZeroBoiler\Events\Models\EventLog $log)
+ * @method static void registerScheduler(\Illuminate\Console\Scheduling\Schedule $schedule)
  *
  * @see \ZeroBoiler\Events\EventManager
  */

@@ -115,12 +115,14 @@ trait CreatesApplication
                 'retention' => [
                     'days' => 30,
                     'include_pending' => false,
+                    'schedule_cron' => '0 2 * * *',
                 ],
                 'subscriptions' => [
                     'auto_generate_secret' => true,
                     'max_failures' => 10,
                     'timeout' => 30,
                     'signature_algorithm' => 'sha256',
+                    'cleanup_cron' => '0 3 * * *',
                 ],
                 'wildcard_cache_ttl' => 300,
                 'disabled' => false,

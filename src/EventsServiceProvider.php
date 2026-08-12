@@ -24,6 +24,7 @@ use ZeroBoiler\Events\Console\EventsSubscriptionsCommand;
 use ZeroBoiler\Events\Console\EventsUnsubscribeCommand;
 use ZeroBoiler\Events\Contracts\ConditionEngineContract;
 use ZeroBoiler\Events\SubscriptionBuilder;
+use ZeroBoiler\Events\EventScheduler;
 use ZeroBoiler\Events\TriggerBuilder;
 
 final class EventsServiceProvider extends ServiceProvider
@@ -55,6 +56,9 @@ final class EventsServiceProvider extends ServiceProvider
 
         // Register TriggerBuilder as a transient (each on()/register() gets a fresh instance)
         $this->app->bind(TriggerBuilder::class);
+
+        // Register EventScheduler as a singleton
+        $this->app->singleton(EventScheduler::class);
     }
 
     /**
@@ -111,6 +115,7 @@ final class EventsServiceProvider extends ServiceProvider
             ActionResolver::class,
             TriggerBuilder::class,
             SubscriptionBuilder::class,
+            EventScheduler::class,
         ];
     }
 }

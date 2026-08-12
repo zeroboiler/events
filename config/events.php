@@ -46,6 +46,8 @@ return [
         'days' => env('EVENTS_LOG_RETENTION_DAYS', 30),
         // When purging, also delete pending/dispatched logs that are stuck
         'include_pending' => env('EVENTS_LOG_PURGE_PENDING', false),
+        // Cron expression for automatic log purge schedule (default: daily at 02:00 UTC)
+        'schedule_cron' => env('EVENTS_RETENTION_CRON', '0 2 * * *'),
     ],
 
     /*
@@ -69,6 +71,9 @@ return [
 
         // Signature algorithm for HMAC payload signing
         'signature_algorithm' => env('EVENTS_SUB_SIGNATURE_ALGORITHM', 'sha256'),
+
+        // Cron expression for automatic subscription cleanup (default: daily at 03:00 UTC)
+        'cleanup_cron' => env('EVENTS_SUB_CLEANUP_CRON', '0 3 * * *'),
     ],
 
     /*
