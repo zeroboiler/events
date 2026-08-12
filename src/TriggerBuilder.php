@@ -11,6 +11,20 @@ namespace ZeroBoiler\Events;
 use Illuminate\Support\Str;
 use ZeroBoiler\Events\Models\Trigger;
 
+/**
+ * Fluent builder for creating event triggers.
+ *
+ * Usage:
+ * ```php
+ * EventManager::on('order.placed')
+ *     ->name('Send Notification')
+ *     ->action(SendNotification::class)
+ *     ->when(['amount' => ['>', 100]])
+ *     ->async()
+ *     ->priority(10)
+ *     ->save();
+ * ```
+ */
 final class TriggerBuilder
 {
     protected string $name = '';

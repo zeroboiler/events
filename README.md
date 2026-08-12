@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.19.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.20.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -435,7 +435,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 174+ test files (Pest + support)
+└── tests/                      # 177+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -720,6 +720,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.20.0
+
+- Added: `EventsPhase92ProductionAuditTest.php` — Phase 92 production readiness audit covering: class hierarchy (final, readonly, interface compliance), constructor DI validation, full event lifecycle integration (fire → match → dispatch → execute → log), wildcard matching integration with cache invalidation, action resolution error handling (non-existent class, non-Triggerable class), global disable integration, event history and stats integration, fireModel attribute flattening, config key consistency verification, strict types compliance across all source files, DomainEvent immutability and roundtrip fidelity, EventManager public API completeness and return type declarations
+- Added: `EventsPhase92EdgeCaseTest.php` — comprehensive edge case tests covering: fire() empty/zero-string rejection, single-char event names, fireModel() validation, TriggerBuilder empty event/action rejection, SubscriptionBuilder URL scheme enforcement (ftp, file, empty, invalid), wildcard cache TTL=0 disable, negative TTL fallback, ConditionEngine boundary tests (inverted between range, non-numeric between, regex length rejection, empty conditions, empty operator array), EventLog status transitions, Trigger CRUD edge cases (non-existent get/delete/enable/disable)
+- Added: `TriggerBuilder` class-level docblock with usage example
+- Updated: Version to 4.20.0
+- Updated: Test file count to 177+
 
 ### v4.19.0
 
