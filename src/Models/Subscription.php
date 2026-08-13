@@ -41,7 +41,7 @@ use ZeroBoiler\Events\WildcardMatcher;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder<Subscription>
  */
-class Subscription extends Model
+final class Subscription extends Model
 {
     use EscapesWildcardLike;
     /** @use HasFactory<SubscriptionFactory> */

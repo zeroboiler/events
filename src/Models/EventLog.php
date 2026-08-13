@@ -31,7 +31,7 @@ use ZeroBoiler\Events\Database\Factories\EventLogFactory;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder<EventLog>
  */
-class EventLog extends Model
+final class EventLog extends Model
 {
     /** @use HasFactory<EventLogFactory> */
     use HasFactory;

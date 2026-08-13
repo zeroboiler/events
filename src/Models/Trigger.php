@@ -33,7 +33,7 @@ use ZeroBoiler\Events\Database\Factories\TriggerFactory;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder<Trigger>
  */
-class Trigger extends Model
+final class Trigger extends Model
 {
     /** @use HasFactory<TriggerFactory> */
     use HasFactory;

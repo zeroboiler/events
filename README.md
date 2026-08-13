@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.34.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.35.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 187+ test files (Pest + support)
+└── tests/                      # 191+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (187+ test files)
+composer test        # Run Pest test suite (191+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.35.0
+
+- Fixed: All three Eloquent models (`Trigger`, `EventLog`, `Subscription`) now declared `final` — matching README documentation and enforcing immutability of the model layer.
+- Fixed: Removed duplicate `@see` annotation from `EventManager` facade docblock (was referenced twice — once at top, once before class declaration).
+- Added: `EventsPhase109ProductionAuditTest.php` — Phase 109 production audit (25+ tests) covering: models final class verification (Trigger, EventLog, Subscription), facade docblock deduplication, config env variable wiring (`EVENTS_SUB_SIGNATURE_ALGORITHM`), strict_types across all source files, console command return type declarations, ConditionEngine operator completeness, DomainEvent identity preservation through roundtrip, ServiceProvider provides() completeness (7 services), WebhookAction Triggerable compliance and `#[Override]` verification, DispatchTriggerJob `#[Override]` verification, WildcardMatcher readonly/final/static-only verification, EventManager constructor readonly properties, EventLog status constants uniqueness and completeness, version alignment (composer.json ↔ README badge), PHPStan config validation (level 9, paths, checks), composer autoload PSR-4 consistency.
+- Updated: Test file count to 191+
+- Updated: Version to 4.35.0
 
 ### v4.34.0
 

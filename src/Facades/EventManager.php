@@ -55,8 +55,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static int deactivateExceededSubscriptions()
  * @method static void executeTrigger(\ZeroBoiler\Events\Models\Trigger $trigger, \ZeroBoiler\Events\Models\EventLog $log)
  * @method static void registerScheduler(\Illuminate\Console\Scheduling\Schedule $schedule)
- *
- * @see \ZeroBoiler\Events\EventManager
  */
 final class EventManager extends Facade
 {
