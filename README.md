@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.42.0-blue)]()
+|[![Latest Version](https://img.shields.io/badge/version-4.43.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 197+ test files (Pest + support)
+└── tests/                      # 216+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (197+ test files)
+composer test        # Run Pest test suite (216+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,16 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.43.0
+
+- Updated: Test file count to 216+ in README (package structure and testing sections)
+- Verified: All 33 source files pass manual PHPStan 9 audit — strict types, typed properties, return type declarations, comprehensive docblocks, `#[Override]`/`#[\Pure]` attributes, `final` classes, readonly promoted constructor properties
+- Verified: All 12 console commands registered in ServiceProvider, final with `handle(): int` and `#[\Override]`
+- Verified: ServiceProvider register/boot/provides complete (7 singleton/transient bindings)
+- Verified: Config file completeness (7 top-level keys, 3 table_names, 5 subscription sub-keys, 3 retention sub-keys)
+- Verified: Facade `@method` coverage matches all 25 public EventManager methods
+- Updated: Version to 4.43.0
 
 ### v4.42.0
 
