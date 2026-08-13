@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.50.0-blue)]()|
+|[![Latest Version](https://img.shields.io/badge/version-4.51.0-blue)]()|
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
@@ -18,6 +18,11 @@ Database-driven dynamic event manager for Laravel — register, manage, and fire
 - [Usage](#usage)
 - [CLI Commands](#cli-commands)
 - [Architecture](#architecture)
+- [Advanced Topics](#advanced-topics)
+  - [Event Sourcing with DomainEvent](#event-sourcing-with-domainevent)
+  - [Custom Triggerable Actions](#custom-triggerable-actions)
+  - [Testing Strategies](#testing-strategies)
+  - [Performance Considerations](#performance-considerations)
 - [Security Considerations](#security-considerations)
 - [Troubleshooting](#troubleshooting)
 - [Production Deployment Checklist](#production-deployment-checklist)
@@ -436,7 +441,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 203 test files (Pest + support)
+└── tests/                      # 204 test files (Pest + support)
 ```
 
 ### How It Works
@@ -567,6 +572,129 @@ This package targets PHP 8.5+ and leverages modern PHP features:
 | `deleted_at` | timestamp (nullable) | Soft delete |
 
 **Indexes:** `(event, active)`, `url`
+
+## Advanced Topics
+
+### Event Sourcing with DomainEvent
+
+The `DomainEvent` class enables event sourcing patterns. Each event is an immutable value object with a UUID, timestamp, type, and payload:
+
+```php
+use ZeroBoiler\Events\Domain\DomainEvent;
+
+// Record a domain event
+$event = DomainEvent::occur('order.created', [
+    'order_id' => 'uuid-123',
+    'customer_id' => 'uuid-456',
+    'total' => 99.99,
+]);
+
+// Persist the event (e.g., to an event store table)
+DB::table('event_store')->insert($event->toArray());
+
+// Replay events — preserves original UUID and timestamp
+$stored = DB::table('event_store')->where('event_id', $event->eventId->toString())->first();
+$reconstructed = DomainEvent::fromArray((array) $stored);
+// $reconstructed->eventId === $event->eventId (same UUID)
+// $reconstructed->occurredAt === $event->occurredAt (same timestamp)
+```
+
+**Key design decisions:**
+- `eventId` and `occurredAt` are preserved during reconstruction to maintain event identity across replays
+- Invalid UUIDs or dates in `fromArray()` silently fall back to fresh values (non-throwing for resilience)
+- `eventType` is required — `fromArray()` throws `InvalidArgumentException` if missing
+
+### Custom Triggerable Actions
+
+Create custom action handlers by implementing the `Triggerable` interface:
+
+```php
+use ZeroBoiler\Events\Contracts\Triggerable;
+
+final class SendSlackNotification implements Triggerable
+{
+    public function __construct(
+        private readonly SlackClient $client,
+    ) {}
+
+    public function handle(array $payload): void
+    {
+        $channel = $payload['channel'] ?? '#general';
+        $message = $payload['message'] ?? 'No message';
+
+        $this->client->sendMessage($channel, $message);
+    }
+}
+```
+
+Register the action:
+
+```php
+EventManager::on('alert.critical')
+    ->action(SendSlackNotification::class)
+    ->when(['severity' => ['>=', 8]])
+    ->async()
+    ->save();
+```
+
+### Testing Strategies
+
+#### Unit Testing Trigger Conditions
+
+```php
+use ZeroBoiler\Events\ConditionEngine;
+
+$engine = new ConditionEngine();
+
+// Test complex conditions
+$payload = ['amount' => 150, 'status' => 'active', 'tags' => ['urgent', 'billing']];
+$conditions = [
+    'amount' => ['>', 100],
+    'status' => 'in', ['active', 'pending'],
+    'tags' => ['contains', 'urgent'],
+];
+
+expect($engine->matches($conditions, $payload))->toBeTrue();
+```
+
+#### Testing with Fakes
+
+```php
+use ZeroBoiler\Events\Facades\EventManager;
+
+EventManager::fake(); // Prevents actual dispatch
+
+EventManager::fire('order.placed', ['order_id' => 123]);
+// Assert triggers were matched (custom implementation needed)
+```
+
+#### Integration Testing with SQLite
+
+```php
+// phpunit.xml — use :memory: for fast tests
+<env name="DB_CONNECTION" value="sqlite"/>
+<env name="DB_DATABASE" value=":memory:"/>
+
+// In your test
+EventManager::on('test.event')
+    ->action(TestAction::class)
+    ->save();
+
+EventManager::fire('test.event', ['key' => 'value']);
+
+$this->assertDatabaseHas('event_logs', [
+    'event' => 'test.event',
+    'status' => 'completed',
+]);
+```
+
+### Performance Considerations
+
+- **Wildcard caching**: Enabled wildcard triggers are cached for `events.wildcard_cache_ttl` seconds (default: 300s). Set to `0` to disable.
+- **Cache invalidation**: Automatically triggered on trigger create, enable, and disable operations. Call `invalidateTriggerCache()` manually after direct DB edits.
+- **Queue tuning**: Set `EVENTS_QUEUE_CONNECTION` to a dedicated Redis connection for high-throughput scenarios.
+- **Index usage**: The `triggers` table has a composite index on `(event, enabled)` for fast exact-match lookups.
+- **No orphaned logs**: Async jobs create `EventLog` entries inside the job handler, preventing orphaned records if the queue fails.
 
 ## Security Considerations
 
@@ -713,7 +841,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (203 test files)
+composer test        # Run Pest test suite (204 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades

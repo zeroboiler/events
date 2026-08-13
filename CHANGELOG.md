@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.51.0] — 2026-08-13
+
+### Added
+- **Advanced Topics** section in README — comprehensive guides for event sourcing with DomainEvent, custom Triggerable actions, testing strategies (unit, fake, integration with SQLite), and performance considerations (wildcard caching, cache invalidation, queue tuning, index usage, orphaned log prevention)
+- **Table of Contents** updated with Advanced Topics sub-headings (Event Sourcing, Custom Actions, Testing Strategies, Performance)
+- `EventsPhase124ProductionAuditTest.php` — Phase 124 comprehensive production audit covering: README Advanced Topics section presence, Table of Contents sub-heading count, phpstan-baseline.neon includes directive, composer.json v4.51.0 alignment, README badge version alignment, ConditionEngine safeRegexMatch ReDoS protection (nested quantifier patterns, max length enforcement), EventManager fire() empty-string and zero-string rejection, TriggerBuilder save() validation (empty event/action rejection with descriptive messages), SubscriptionBuilder save() validation (empty event/URL rejection, non-HTTP scheme enforcement), DomainEvent fromArray() resilience (invalid UUID/date fallback, empty eventType throw), WebhookAction payload key stripping (url/event/headers/subscription_id removal), DispatchTriggerJob config-driven retry/backoff/queue, EventScheduler constructor injection verification, ManagesHistory getStats() return structure completeness, all 12 console commands registered in ServiceProvider, strict_types across all source files
+
+### Changed
+- Version bumped to 4.51.0
+- `phpstan-baseline.neon` — added `includes:` directive pointing to `phpstan.neon.dist` (was missing, could confuse IDE integration)
+
 ## [4.50.0] — 2026-08-13
 
 ### Added
