@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.54.0-blue)]()
+| ![Latest Version](https://img.shields.io/badge/version-4.55.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
@@ -441,7 +441,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 206 test files (Pest + support)
+└── tests/                      # 215 test files (Pest + support)
 ```
 
 ### How It Works
@@ -851,7 +851,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (214 test files)
+composer test        # Run Pest test suite (215 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -873,6 +873,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.55.0
+
+- Added: `EventsPhase129ProductionAuditTest.php` — 50+ tests covering: ConditionEngine empty/unknown/null operator edge cases, numeric comparison null/non-numeric guards, string operator non-string guards, not_contains/not_in/not_empty operators, WildcardMatcher cross-segment/multi-segment/empty-event edge cases, extractWildcards multiple-wildcard extraction, DomainEvent fromArray edge cases (invalid UUID, invalid date, non-string eventId, non-array payload, extra fields, numeric eventType), EventLog auto-UUID/preserve-UUID/markAsCompleted/markAsFailed, Trigger model scopes, fire validation edge cases (zero-string, empty action), strictEquals cross-type and array edge cases, config key completeness verification.
+- Updated: README test file count to 215.
+- Bumped: Version 4.55.0.
 
 ### v4.54.0
 
