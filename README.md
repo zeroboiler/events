@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.43.0-blue)]()
+|[![Latest Version](https://img.shields.io/badge/version-4.44.0-blue)]()|
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 216+ test files (Pest + support)
+└── tests/                      # 217+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -505,7 +505,7 @@ events/
 This package targets PHP 8.5+ and leverages modern PHP features:
 
 - **`#[\Override]` attribute** — Applied to all method overrides (`register()`, `boot()`, `provides()`, `handle()`, `getTable()`, `casts()`, `newFactory()`, `boot()`, `getFacadeAccessor()`, `scopeEnabled()`, etc.) for compile-time override verification.
-- **`#[\Pure]` attribute** — Applied to side-effect-free methods in `ConditionEngine` (`evaluateCondition()`, `strictEquals()`, `getNestedValue()`, `contains()`, `between()`) and `WildcardMatcher` (`matches()`, `findMatchingPatterns()`, `extractWildcards()`) for improved static analysis and memoization safety.
+- **`#[\Pure]` attribute** — Applied to side-effect-free methods in `ConditionEngine` (`strictEquals()`, `getNestedValue()`, `contains()`, `between()`) and `WildcardMatcher` (`matches()`, `findMatchingPatterns()`, `extractWildcards()`) for improved static analysis and memoization safety. Note: `evaluateCondition()` is intentionally not `#[\Pure]` because it may call `safeRegexMatch()` which temporarily modifies `pcre.backtrack_limit`.
 - **`readonly` classes** — `WildcardMatcher` is declared as a `readonly final class` with only static methods.
 - **`readonly` promoted properties** — `EventManager`, `ActionResolver`, `EventScheduler`, `TriggerBuilder`, `SubscriptionBuilder`, `DomainEvent`, and `DispatchTriggerJob` use constructor-promoted `readonly` properties for immutability.
 - **`final` classes** — All service classes, commands, and models are declared `final` to prevent unsafe inheritance.
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (216+ test files)
+composer test        # Run Pest test suite (217+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.44.0
+
+- Fixed: Removed `#[\Pure]` attribute from `ConditionEngine::evaluateCondition()` — the method may call `safeRegexMatch()` which temporarily modifies `pcre.backtrack_limit` via `ini_set()`, making it impure. This corrects a PHPStan 9 violation where `#[\Pure]` methods must not have observable side effects.
+- Fixed: `EventsServiceProviderBindingsTest` — added missing `EventScheduler::class` to the `provides()` verification test.
+- Added: `EventsPhase117ProductionAuditTest.php` — 37 comprehensive production audit tests covering: `#[\Pure]` attribute correctness on all ConditionEngine and WildcardMatcher methods (4 pure verified, 2 not-pure verified), `EventScheduler` in `provides()`, config completeness for `retention.schedule_cron` and `subscriptions.cleanup_cron`, all 7 top-level config keys, all 5 subscription config keys, all 3 retention config keys, `EventManager::registerScheduler()` method existence and return type, public method return type verification (`on`, `subscribe`, `fire`, `fireModel`, `setEnabled`, `invalidateTriggerCache`), class finality verification (EventManager, ConditionEngine, ActionResolver, EventScheduler), WildcardMatcher readonly+final, ConditionEngineContract implementation, EventsServiceProvider `#[\Override]` on all 3 methods, Facade `#[\Override]` and accessor correctness, `declare(strict_types=1)` across all source, factory, and migration files.
+- Updated: README PHP 8.5 compatibility section — corrected `#[\Pure]` documentation to reflect `evaluateCondition()` is intentionally not pure.
+- Updated: Version to 4.44.0
 
 ### v4.43.0
 

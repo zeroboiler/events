@@ -89,6 +89,7 @@ describe('ServiceProvider Container Bindings', function (): void {
             ActionResolver::class,
             TriggerBuilder::class,
             SubscriptionBuilder::class,
+            \ZeroBoiler\Events\EventScheduler::class,
         );
     });
 

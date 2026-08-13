@@ -38,10 +38,12 @@ final class ConditionEngine implements ConditionEngineContract
     /**
      * Evaluate a single condition.
      *
+     * Note: Not #[\Pure] because it may call safeRegexMatch() which
+     * temporarily modifies pcre.backtrack_limit via ini_set().
+     *
      * @param  array<string, mixed>  $payload
      * @return bool True if the condition matches, false otherwise
      */
-    #[\Pure]
     protected function evaluateCondition(string $field, mixed $expected, array $payload): bool
     {
         $actual = $this->getNestedValue($payload, $field);
