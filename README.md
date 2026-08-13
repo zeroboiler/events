@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.46.0-blue)]()|
+|[![Latest Version](https://img.shields.io/badge/version-4.47.0-blue)]()|
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 202 test files (Pest + support)
+└── tests/                      # 200 test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (202 test files)
+composer test        # Run Pest test suite (200 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,19 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.47.0
+
+- Fixed: README test file count corrected from "202" to "200" (accurate count of `*Test.php` files on disk: 198 registered in Pest.php + 3 intentionally unregistered + 1 new Phase 120 test)
+- Added: `EventsPhase120ProductionAuditTest.php` — Phase 120 comprehensive production audit (70+ tests) covering: source file structure and count, strict_types across all source files, license headers, no setAccessible() calls, class finality (12 core classes + 3 models), constructor readonly properties (EventManager, ActionResolver, EventScheduler, DomainEvent, DispatchTriggerJob), return type declarations on all public methods, interface compliance (ConditionEngineContract, Triggerable), ServiceProvider provides() (7 services), container resolution verification (6 bindings), config completeness (7 top-level + sub-keys), facade @method annotations (25+) and accessor, model config-driven table names, EventLog status constants (4 unique), WildcardMatcher static-only/readonly/final, ConditionEngine 19 operators, DomainEvent immutability (roundtrip fidelity, empty eventType rejection), console commands (12 final classes, handle(): int return type), PHPStan config validation (level 9, paths, checks), composer.json correctness (PHP ^8.5, Laravel ^13.0, provider/alias, autoload), test file registration consistency (198 registered, 3 unregistered), database migrations (strict types, license headers, config-driven table names), factory compliance (static model property, definition(): array return type)
+- Verified: All 33 source files pass manual PHPStan 9 audit — strict types, typed properties, return type declarations on all 100 methods, `#[Override]`/`#[Pure]` attributes, `final` classes, readonly promoted constructor properties, no `setAccessible()` calls
+- Verified: All 12 console commands final with `handle(): int` and `#[Override]`
+- Verified: ServiceProvider register/boot/provides complete (7 bindings + 12 commands)
+- Verified: Config file completeness (7 top-level keys, 3 table_names, 5 subscription sub-keys, 3 retention sub-keys)
+- Verified: Facade `@method` coverage matches all 25 public EventManager methods + registerScheduler
+- Verified: All 3 database migrations config-driven with strict types and license headers
+- Verified: All 3 factories with `static string $model` property, `definition(): array`, and strict types
+- Updated: Version to 4.47.0
 
 ### v4.46.0
 
