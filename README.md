@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.40.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.41.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 199+ test files (Pest + support)
+└── tests/                      # 196+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (199+ test files)
+composer test        # Run Pest test suite (196+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -736,11 +736,18 @@ Test coverage spans:
 
 ## Changelog
 
+### v4.41.0
+
+- Fixed: `EventsPhase113ProductionAuditTest.php` was missing from `Pest.php` registration — test was silently not running
+- Added: `EventsPhase115ProductionAuditTest.php` — Phase 115 production audit covering: Pest.php registration completeness (Phase113/114/115 verification, all registered files exist on disk), facade @method count verification, strict types across all source/factory/migration files, final class verification (14 core classes + 12 console commands), return type declarations on all EventManager public methods, interface compliance (ConditionEngineContract, Triggerable, WildcardMatcher readonly/final), PHPStan config compliance (level 9, 4 strict checks, 3 paths), composer.json correctness (PHP ^8.5, Laravel ^13.0, provider/alias registration), config file completeness (7 top-level keys, 3 table names, 5 subscription sub-keys), model config-driven getTable() with #[Override], EventLog status constants (4 statuses, uniqueness, $statuses array), DomainEvent immutability (final, 4 readonly props, roundtrip fidelity), ConditionEngine #[Override]/#[Pure] attribute verification (5 pure + safeRegexMatch NOT pure), WildcardMatcher #[Pure] on all 3 methods, ServiceProvider provides() completeness (7 services), license headers across all source files, setAccessible() removal verification
+- Updated: Test file count to 196+
+- Updated: Version to 4.41.0
+
 ### v4.40.0
 
 - Added: `EventsPhase114ProductionAuditTest.php` — Phase 114 comprehensive production audit (20 tests) covering: facade @method count parity (24 @method entries matching 24 public methods), config env() variable completeness (13 variables), global app() helper absence in source files, EventManager trait count verification (3 traits: EscapesWildcardLike, ManagesHistory, ManagesSubscriptions), WebhookAction Triggerable interface compliance (not ShouldQueue), DispatchTriggerJob ShouldQueue with Queueable/InteractsWithQueue traits, model config-driven getTable() with #[Override], EventLog status constants uniqueness and completeness (4 statuses matching migration enum), WildcardMatcher readonly/final/static-only verification, DomainEvent constructor replay parameter support (optional eventId/occurredAt), ConditionEngine #[Override]/#[Pure] attribute verification (5 pure methods), PHPStan config validation (level 9, 4 required check flags), composer.json requirement verification (PHP ^8.5, Laravel ^13.0, provider/alias config), facade getFacadeAccessor #[Override] and return value verification, strict_types and license header across all source files, setAccessible() removal verification, Subscription EscapesWildcardLike trait usage, ServiceProvider provides() completeness (7 services), all 12 console commands final class with handle(): int and #[Override]
 - Added: `.editorconfig` for cross-editor consistency (4-space indent, LF line endings)
-- Updated: Test file count to 199+
+- Updated: Test file count to 196+
 - Updated: Version to 4.40.0
 
 ### v4.39.0
