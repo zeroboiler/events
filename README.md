@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.44.0-blue)]()|
+|[![Latest Version](https://img.shields.io/badge/version-4.45.0-blue)]()|
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 217+ test files (Pest + support)
+└── tests/                      # 197 test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (217+ test files)
+composer test        # Run Pest test suite (197 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,11 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.45.0
+
+- Fixed: `EventManager::getMatchingTriggers()` — replaced deprecated Carbon `$created_at->timestamp` property access with `$created_at->getTimestamp()` method call for PHP 8.5 / PHPStan 9 compliance.
+- Fixed: README test file count corrected from "217+" to "197" (accurate count of test files on disk: 195 registered in Pest.php + 3 intentionally unregistered + 5 support files).
 
 ### v4.44.0
 
