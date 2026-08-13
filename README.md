@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.53.1-blue)]()
+| ![Latest Version](https://img.shields.io/badge/version-4.54.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
@@ -659,13 +659,23 @@ expect($engine->matches($conditions, $payload))->toBeTrue();
 
 #### Testing with Fakes
 
+The package does not include a built-in `fake()` method. To prevent actual dispatch during tests, use one of these strategies:
+
 ```php
-use ZeroBoiler\Events\Facades\EventManager;
+// Strategy 1: Disable the event system globally in tests
+EventManager::setEnabled(false);
 
-EventManager::fake(); // Prevents actual dispatch
+// Strategy 2: Use SQLite :memory: and assert on event_logs
+EventManager::fire('test.event', ['key' => 'value']);
+$this->assertDatabaseHas('event_logs', [
+    'event' => 'test.event',
+    'status' => 'completed',
+]);
 
-EventManager::fire('order.placed', ['order_id' => 123]);
-// Assert triggers were matched (custom implementation needed)
+// Strategy 3: Mock the ActionResolver to intercept dispatch
+$mockResolver = Mockery::mock(ActionResolver::class);
+$mockResolver->shouldReceive('resolve')->andReturn(new NullAction());
+$this->app->instance(ActionResolver::class, $mockResolver);
 ```
 
 #### Integration Testing with SQLite
@@ -841,7 +851,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (206 test files)
+composer test        # Run Pest test suite (214 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -863,6 +873,11 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.54.0
+
+- Refactored: `EventScheduler` now uses `resolveEventManager()` consistently in both `registerLogPurge()` and `registerSubscriptionCleanup()`, eliminating duplicated container resolution logic.
+- Fixed: README "Testing with Fakes" section — removed reference to non-existent `EventManager::fake()` method; replaced with practical testing strategies (global disable, SQLite assertions, ActionResolver mock).
 
 ### v4.53.0
 

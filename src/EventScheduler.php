@@ -80,13 +80,12 @@ final class EventScheduler
         $cronExpression = is_string($cron) && $cron !== '' ? $cron : '0 2 * * *';
 
         $includePending = Config::get('events.retention.include_pending', false);
+        $scheduler = $this;
 
-        $app = $this->app;
+        $schedule->call(function () use ($scheduler, $retentionDays, $includePending): void {
+            $eventManager = $scheduler->resolveEventManager();
 
-        $schedule->call(function () use ($app, $retentionDays, $includePending): void {
-            $eventManager = $app->make(EventManager::class);
-
-            if (! $eventManager instanceof EventManager) {
+            if ($eventManager === null) {
                 return;
             }
 
@@ -114,12 +113,12 @@ final class EventScheduler
         $cleanupCron = Config::get('events.subscriptions.cleanup_cron', '0 3 * * *');
         $cronExpression = is_string($cleanupCron) && $cleanupCron !== '' ? $cleanupCron : '0 3 * * *';
 
-        $app = $this->app;
+        $scheduler = $this;
 
-        $schedule->call(function () use ($app): void {
-            $eventManager = $app->make(EventManager::class);
+        $schedule->call(function () use ($scheduler): void {
+            $eventManager = $scheduler->resolveEventManager();
 
-            if (! $eventManager instanceof EventManager) {
+            if ($eventManager === null) {
                 return;
             }
 
