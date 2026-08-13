@@ -1,0 +1,9 @@
+# PHPStan baseline — tracks known errors that are acceptable.
+# To regenerate: vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --generate-baseline=phpstan-baseline.neon
+#
+# This file is intentionally empty because phpstan.neon.dist has
+# blanket Eloquent/Facade ignore rules that suppress all common errors.
+# If PHPStan reports new errors after upgrading, either:
+#   1. Fix the code, or
+#   2. Add the error pattern to phpstan.neon.dist ignoreErrors, or
+#   3. Regenerate this baseline with the command above.

@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.52.0] — 2026-08-13
+
+### Fixed
+- `EventManager::getMatchingTriggers()` — replaced Laravel 11 named `descending: false` argument in `sortBy()` with PHPStan 2.x compatible positional argument form (2-arg `sortBy(fn, flags)`)
+- `config/events.php` — changed `queue.connection` from `env() ?: config()` to `env($key, config())` for consistent default handling (no null coalescing bypass)
+- `phpstan-baseline.neon` — removed incorrect `includes: - phpstan.neon.dist` directive (baselines should not use includes; this was an IDE-only config file, not a proper baseline)
+- `phpstan.neon.dist` — removed empty `bootstrapFiles: []`, added `tests/` to analysis paths for comprehensive test code analysis, added suppressions for `Collection::sortBy` dynamic call and PHPUnit `shouldHaveReceived`/`shouldNotHaveReceived` mock assertions
+
+### Added
+- `EventsPhase125ProductionAuditTest.php` — Phase 125 comprehensive production audit (60+ tests) covering: PHPStan config level 8 + PHPStan 2.x compatibility, tests path in analysis, sortBy Collection suppression, baseline format correctness, EventManager sortBy compatibility (positional args), config queue.connection env() format, all 7 top-level config keys, 5 subscription sub-keys, 3 retention sub-keys, ServiceProvider provides() completeness (7 services), 12 console commands existence + finality, trait consistency (EventManager 3 traits, Subscription 1, ManagesHistory 1, ManagesSubscriptions 1, WebhookAction 1), EventManager + ConditionEngine return type completeness, ActionResolver::resolve() return type, ConditionEngine 20 operators (===, !==, not_in, not_empty, ends_with), WildcardMatcher #[Pure] on all 3 methods + readonly final, DomainEvent 4 readonly properties + roundtrip fidelity + empty eventType rejection, DispatchTriggerJob 3 constructor readonly properties + ShouldQueue + #[Override] on handle/failed, Facade @method for registerScheduler/subscribe/unsubscribe + accessor, model config-driven getTable(), EventLog 4 status constants, strict_types across all source/factory/migration files, zero setAccessible in source files
+
+### Changed
+- Version bumped to 4.52.0
+- README badge version updated to 4.52.0
+- README test file count updated to 205 (204 + Phase 125)
+- README PHPStan section updated to note PHPStan 2.x compatibility
+
 ## [4.51.0] — 2026-08-13
 
 ### Added

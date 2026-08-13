@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.51.0-blue)]()|
+|[![Latest Version](https://img.shields.io/badge/version-4.52.0-blue)]()|
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
@@ -441,7 +441,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 204 test files (Pest + support)
+└── tests/                      # 205 test files (Pest + support)
 ```
 
 ### How It Works
@@ -841,8 +841,8 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (204 test files)
-composer analyse     # PHPStan level 8 (uses phpstan.neon.dist)
+composer test        # Run Pest test suite (205 test files)
+composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
 composer ci          # All checks (lint → analyse → rector → test)
