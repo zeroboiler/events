@@ -204,7 +204,7 @@ test('EventsServiceProvider is final', function () {
 
 test('Facade getFacadeAccessor returns EventManager FQN', function () {
     $reflection = new ReflectionMethod(EventManagerFacade::class, 'getFacadeAccessor');
-    $reflection->setAccessible(true);
+    // PHP 8.5: setAccessible() removed — reflection methods are directly accessible
     $result = $reflection->invoke(null);
 
     expect($result)->toBe(\ZeroBoiler\Events\EventManager::class);

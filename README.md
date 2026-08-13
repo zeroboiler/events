@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.41.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.42.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 196+ test files (Pest + support)
+└── tests/                      # 197+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (196+ test files)
+composer test        # Run Pest test suite (197+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.42.0
+
+- Fixed: `EventsPhase112ProductionAuditTest.php` — removed last actual `setAccessible(true)` call on line 207 (PHP 8.5 incompatible). Replaced with comment noting PHP 8.5 direct reflection access.
+- Added: `EventsPhase116ProductionAuditTest.php` — Phase 116 comprehensive production audit (30+ tests) covering: setAccessible removal verification across ALL source and test files (stripping comments before checking), config key completeness (7 top-level + 3 table_names + 5 subscription sub-keys), ServiceProvider binding verification (7 bindings, singleton check, contract resolution), Facade @method count parity (24+ entries), Facade getFacadeAccessor PHP 8.5 invocation (no setAccessible), EventManager public method count (25 methods with return types), ConditionEngine all 19 operators, WildcardMatcher readonly/final/static-only with #[Pure], DomainEvent final + 4 readonly properties + identity preservation, trait usage verification (EventManager 3 traits, Subscription EscapesWildcardLike, WebhookAction GetsWebhookTimeout), all 12 console commands registered, PHPStan config level 9 verification, composer.json PHP/Laravel requirements, strict_types + license header across all source files, EventLog status constants uniqueness (4 statuses), Pest.php registration completeness
+- Updated: Test file count to 197+
+- Updated: Version to 4.42.0
 
 ### v4.41.0
 
