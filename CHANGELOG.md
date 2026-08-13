@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.50.0] — 2026-08-13
+
+### Added
+- `LICENSE` file — proprietary license for the package
+- `EventsPhase123ProductionAuditTest.php` — Phase 123 comprehensive production audit (40+ tests) covering: source file strict_types and license headers, LICENSE file existence, composer.json version alignment v4.50.0, PHP ^8.5 and Laravel ^13.0 requirements, provider/alias registration, phpstan.neon.dist level 8 validation (no level 9), analysis paths verification, ServiceProvider provides() completeness (7 services), ConditionEngineContract singleton binding, Facade accessor correctness, database migration config-driven table names and strict_types, factory static model properties, EventLog 4 unique status constants, WildcardMatcher readonly/final/static-only, DomainEvent immutability and roundtrip fidelity, empty eventType rejection, EventManager public method return type declarations (25+ methods), readonly constructor properties, TriggerBuilder/SubscriptionBuilder validation (empty event/action/URL rejection), non-HTTP URL scheme rejection, global disable toggle, console command registration (12 commands), final class verification, handle(): int return type, setAccessible() removal verification, Trigger model config-driven getTable with #[Override], rector.php Laravel 13 target, .editorconfig correctness, config file completeness (7 top-level keys + all sub-keys), ConditionEngine 19 operator coverage, ReDoS protection (nested quantifiers + length limit), WildcardMatcher catch-all patterns
+
+### Changed
+- Version bumped to 4.50.0
+- README test file count updated to 203
+
 ## [4.39.0] — 2026-08-13
 
 ### Improved
