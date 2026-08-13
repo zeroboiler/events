@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.60.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.61.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 215 test files (Pest + support)
+└── tests/                      # 216 test files (Pest + support)
 ```
 
 ### How It Works
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (215 test files)
+composer test        # Run Pest test suite (216 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -875,6 +875,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.61.0
+
+- Added: `EventsPhase135ProductionAuditTest.php` — final production audit covering: strict_types verification on all source files, final class declarations, listTriggers empty/zero-string event edge cases, ConditionEngine float/int cross-type comparison, between with float boundaries, DomainEvent UUID v5 preservation, WildcardMatcher Unicode event names and extractWildcards Unicode segments, Subscription signPayload sha512 algorithm, DispatchTriggerJob constructor config-driven connection (null and explicit), TriggerBuilder actions empty string validation, Subscription scopeForEvent exact+wildcard query, EventLog scopeStalePending status filter verification, EventManager fire global disable suppression, getStats structure with empty database, purgeLogs return type, ServiceProvider provides() completeness, phpstan.neon.dist level 8 verification, composer.json PHP 8.5+ requirement, config file key completeness, all 12 console commands registered in ServiceProvider, Facade getFacadeAccessor binding, model table name config consistency, version consistency between composer.json and README, no TODO/FIXME/HACK comments in source, EventScheduler resolveEventManager() consistency, WebhookAction internal key stripping, EventManager parseActions edge cases (JSON classes key, single class name, empty string), GitHub Actions CI and auto-fix workflow existence.
+- Updated: README test count 215 → 216.
+- Bumped: Version 4.61.0.
 
 ### v4.60.0
 
