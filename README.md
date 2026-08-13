@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.39.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.40.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 198+ test files (Pest + support)
+└── tests/                      # 199+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (198+ test files)
+composer test        # Run Pest test suite (199+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.40.0
+
+- Added: `EventsPhase114ProductionAuditTest.php` — Phase 114 comprehensive production audit (20 tests) covering: facade @method count parity (24 @method entries matching 24 public methods), config env() variable completeness (13 variables), global app() helper absence in source files, EventManager trait count verification (3 traits: EscapesWildcardLike, ManagesHistory, ManagesSubscriptions), WebhookAction Triggerable interface compliance (not ShouldQueue), DispatchTriggerJob ShouldQueue with Queueable/InteractsWithQueue traits, model config-driven getTable() with #[Override], EventLog status constants uniqueness and completeness (4 statuses matching migration enum), WildcardMatcher readonly/final/static-only verification, DomainEvent constructor replay parameter support (optional eventId/occurredAt), ConditionEngine #[Override]/#[Pure] attribute verification (5 pure methods), PHPStan config validation (level 9, 4 required check flags), composer.json requirement verification (PHP ^8.5, Laravel ^13.0, provider/alias config), facade getFacadeAccessor #[Override] and return value verification, strict_types and license header across all source files, setAccessible() removal verification, Subscription EscapesWildcardLike trait usage, ServiceProvider provides() completeness (7 services), all 12 console commands final class with handle(): int and #[Override]
+- Added: `.editorconfig` for cross-editor consistency (4-space indent, LF line endings)
+- Updated: Test file count to 199+
+- Updated: Version to 4.40.0
 
 ### v4.39.0
 
