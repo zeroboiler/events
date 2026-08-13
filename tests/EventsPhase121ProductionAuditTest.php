@@ -263,9 +263,8 @@ test('Facade accessor returns EventManager::class', function (): void {
     $getAccessor = $ref->getMethod('getFacadeAccessor');
     expect($getAccessor->getReturnType()->getName())->toBe('string');
 
-    // Invoke the method via reflection on the Facade subclass
+    // PHP 8.5+: setAccessible() removed — invoke directly
     $method = $ref->getMethod('getFacadeAccessor');
-    $method->setAccessible(true);
     $result = $method->invoke(null);
     expect($result)->toBe(\ZeroBoiler\Events\EventManager::class);
 });

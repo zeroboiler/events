@@ -295,7 +295,7 @@ describe('Phase 117 Production Audit', function (): void {
     test('Facade getFacadeAccessor returns EventManager class string', function (): void {
         $facade = new \ReflectionClass(\ZeroBoiler\Events\Facades\EventManager::class);
         $method = $facade->getMethod('getFacadeAccessor');
-        $method->setAccessible(true);
+        // PHP 8.5+: setAccessible() removed — invoke directly
         $result = $method->invoke(null);
 
         expect($result)->toBe(EventManager::class);

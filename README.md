@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.59.0-blue)]()
+| ![Latest Version](https://img.shields.io/badge/version-4.60.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
@@ -875,6 +875,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.60.0
+
+- Fixed: Removed deprecated `setAccessible(true)` calls from 3 test files (`EventsPhase117`, `EventsPhase121`, `EventsPhase125`) for PHP 8.5 compatibility.
+- Added: `EventsPhase134ProductionAuditTest.php` — comprehensive production audit covering: PHPStan 2.x level 8 configuration validation, PHP 8.5 syntax compliance (no setAccessible, strict types, license headers), return type declarations completeness on all public methods, typed properties verification on all service classes and models, final class declarations on all services and models, `#[Override]` attribute verification on ServiceProvider and model overrides, config key completeness and type validation, ServiceProvider `provides()` binding completeness, DomainEvent readonly properties and UUID identity preservation, WildcardMatcher coverage (single-segment, cross-segment, catch-all, extractWildcards), ConditionEngine operator coverage (starts_with, ends_with, matches, between inverted, null, not_null, ReDoS protection), EventLog status constants, Subscription HMAC signing edge cases, migration schema verification (columns, indexes, foreign keys, cascade delete), factory state builder completeness, Facade docblock method coverage, composer.json autoload and extra validation, README documentation completeness, GitHub Actions CI configuration.
+- Bumped: Version 4.60.0.
 
 ### v4.59.0
 
