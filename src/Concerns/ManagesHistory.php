@@ -22,6 +22,8 @@ use ZeroBoiler\Events\Models\Trigger;
  * single-responsibility. Must be used inside the EventManager class
  * which provides the `$app` container property.
  *
+ * @see \ZeroBoiler\Events\EventManager
+ *
  * @property-read \Illuminate\Container\Container $app
  */
 trait ManagesHistory

@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.55.0-blue)]()
+| ![Latest Version](https://img.shields.io/badge/version-4.56.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
@@ -145,7 +145,7 @@ return [
 | `EVENTS_QUEUE_CONNECTION` | `queue.default` config | Queue connection for async trigger dispatch |
 | `EVENTS_QUEUE` | `default` | Queue name for async trigger dispatch |
 | `EVENTS_RETRY_TRIES` | `3` | Number of retry attempts for failed jobs |
-| `EVENTS_RETRY_BACKOFF` | `60,300,900` | Comma-separated backoff intervals (seconds) |
+| `EVENTS_RETRY_BACKOFF` | `60,300,900` | Comma-separated backoff intervals (seconds), or a JSON array (`[60,300,900]`) |
 | `EVENTS_LOG_RETENTION_DAYS` | `30` | Days before event logs become eligible for purge |
 | `EVENTS_LOG_PURGE_PENDING` | `false` | Include pending/dispatched logs in purge |
 | `EVENTS_RETENTION_CRON` | `0 2 * * *` | Cron expression for automatic log purge schedule |
@@ -411,6 +411,8 @@ events/
 │       ├── 2024_01_01_000001_create_triggers_table.php
 │       ├── 2024_01_01_000002_create_event_logs_table.php
 │       └── 2025_06_28_000001_create_event_subscriptions_table.php
+├── rector.php                    # Rector code upgrade configuration (Laravel 13)
+├── phpstan.neon.dist            # PHPStan level 8 configuration
 ├── src/
 │   ├── Actions/
 │   │   └── WebhookAction.php   # Triggerable: HTTP POST webhook dispatch
@@ -441,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 215 test files (Pest + support)
+└── tests/                      # 211 test files (Pest + support)
 ```
 
 ### How It Works
@@ -780,7 +782,7 @@ Before deploying to production, verify:
 | `unsubscribe(string $subscriptionId)` | `bool` | Remove a subscription by ID |
 | `listSubscriptions(?string $event, bool $activeOnly)` | `Collection` | List subscriptions with optional filtering |
 | `getSubscription(string $id)` | `Subscription\|null` | Get a subscription by ID |
-| `subscribeWebhook(string $event, string $url, array $conditions, int $priority)` | `string` | Quick-create a webhook subscription |
+| `subscribeWebhook(string $event, string $url, array $conditions, int $priority)` | `string` | Quick-create a trigger that dispatches a WebhookAction (no Subscription record — use `subscribe()` for full webhook subscriptions with HMAC signing) |
 | `getEventHistory(?string $event, ?string $status, ?string $triggerId, int $limit)` | `Collection` | Query event log history |
 | `getStats(?Carbon $since)` | `array` | Get aggregate statistics |
 | `purgeLogs(Carbon $before, bool $includePending)` | `int` | Purge old event logs |
@@ -851,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (215 test files)
+composer test        # Run Pest test suite (211 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -873,6 +875,18 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.56.0
+
+- Added: `EventsPhase130ProductionReadinessTest.php` — 25+ tests covering: EventManager::registerScheduler facade path, subscribeWebhook creates trigger only (not Subscription), Subscription::signPayload edge cases (null/empty secret, sha512 algorithm), listSubscriptions ordering and wildcard filtering, EscapesWildcardLike via Subscription scopeForEvent, DomainEvent roundtrip identity, DispatchTriggerJob config-driven backoff (comma-separated and array formats), ServiceProvider provides() completeness, Subscription::matchesEvent edge cases (exact/wildcard/cross-segment), WildcardMatcher::findMatchingPatterns, ManagesHistory::getStats with empty database.
+- Fixed: README test file count corrected from 215 to 211.
+- Fixed: README package structure tree — added `rector.php` and `phpstan.neon.dist` entries.
+- Fixed: README `subscribeWebhook` API reference clarified — creates a trigger only, not a Subscription record.
+- Fixed: README `EVENTS_RETRY_BACKOFF` env var documentation — added JSON array format support.
+- Improved: Added `@property-read` annotation for `$app` on EventManager class-level docblock.
+- Improved: Added `@see` annotations on ManagesHistory and ManagesSubscriptions traits linking to EventManager.
+- Improved: DispatchTriggerJob public property docblocks enhanced with config key references.
+- Bumped: Version 4.56.0.
 
 ### v4.55.0
 

@@ -24,12 +24,13 @@ final class DispatchTriggerJob implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
 
-    /** @var list<int> Backoff intervals in seconds between retry attempts */
+    /** @var list<int> Backoff intervals in seconds between retry attempts. Read from `events.retry.backoff` config. */
     public array $backoff = [60, 300, 900];
 
+    /** @var string Queue name. Read from `events.queue.queue` config. */
     public string $queue = 'default';
 
-    /** @var int Number of times the job may be attempted (read from events.retry.tries config) */
+    /** @var int Number of times the job may be attempted. Read from `events.retry.tries` config. */
     public int $tries = 3;
 
     /** @var string|null Queue connection name (read from events.queue.connection config) */

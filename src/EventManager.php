@@ -34,6 +34,8 @@ use Illuminate\Console\Scheduling\Schedule;
  * Resolved as a singleton from the service container. Accessible via
  * the `EventManager` facade or direct injection.
  *
+ * @property-read \Illuminate\Container\Container $app
+ *
  * @see \ZeroBoiler\Events\Facades\EventManager
  */
 final class EventManager

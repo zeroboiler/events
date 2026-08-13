@@ -20,6 +20,8 @@ use ZeroBoiler\Events\SubscriptionBuilder;
  * single-responsibility. Must be used inside the EventManager class
  * which provides the `$app` container property and `register()` method.
  *
+ * @see \ZeroBoiler\Events\EventManager
+ *
  * @property-read \Illuminate\Container\Container $app
  */
 trait ManagesSubscriptions
