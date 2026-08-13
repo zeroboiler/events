@@ -47,6 +47,62 @@ describe('EventsFireCommand', function (): void {
         expect($definition->hasArgument('event'))->toBeTrue();
         expect($definition->hasOption('payload'))->toBeTrue();
         expect($definition->hasOption('json'))->toBeTrue();
+        expect($definition->hasOption('async'))->toBeTrue();
+    });
+
+    it('has --async option defined', function (): void {
+        $command = new EventsFireCommand;
+        $definition = $command->getDefinition();
+
+        expect($definition->hasOption('async'))->toBeTrue();
+        expect($definition->getOption('async')->isBool())->toBeTrue();
+    });
+
+    it('rejects event name "0" as empty', function (): void {
+        $this->artisan('zeroboiler:events:fire', ['event' => '0'])
+            ->assertFailed();
+    });
+
+    it('fires event with payload key=value pairs', function (): void {
+        EventManager::shouldReceive('fire')
+            ->once()
+            ->with('test.event', ['key' => 'value', 'order_id' => '42'], false);
+
+        $this->artisan('zeroboiler:events:fire', [
+            'event' => 'test.event',
+            '--payload' => ['key=value', 'order_id=42'],
+        ])->assertSuccessful();
+    });
+
+    it('fires event with async flag passes true', function (): void {
+        EventManager::shouldReceive('fire')
+            ->once()
+            ->with('test.event', expect(function (array $payload): bool {
+                return true;
+            }), true);
+
+        $this->artisan('zeroboiler:events:fire', [
+            'event' => 'test.event',
+            '--async' => true,
+        ])->assertSuccessful();
+    });
+
+    it('fires event with JSON payload', function (): void {
+        EventManager::shouldReceive('fire')
+            ->once()
+            ->with('test.event', ['nested' => ['key' => 'value']], false);
+
+        $this->artisan('zeroboiler:events:fire', [
+            'event' => 'test.event',
+            '--json' => '{"nested":{"key":"value"}}',
+        ])->assertSuccessful();
+    });
+
+    it('fails with invalid JSON payload', function (): void {
+        $this->artisan('zeroboiler:events:fire', [
+            'event' => 'test.event',
+            '--json' => '{invalid}',
+        ])->assertFailed();
     });
 });
 

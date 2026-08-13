@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.37.0] — 2026-08-13
+
+### Fixed
+- **CRITICAL** `EventsPhase107ProductionAuditTest.php` — removed `setAccessible(true)` call on `ReflectionMethod` (method removed in PHP 8.5). This was the last remaining `setAccessible()` call in the test suite.
+
+### Added
+- `EventsFireCommandTest.php` — 6 new tests: `--async` option verification, `--json` payload, `--payload` key=value pairs, invalid JSON rejection, `"0"` event name rejection, `--async` in signature definition.
+- `EventsPhase111ProductionAuditTest.php` — 17 comprehensive production audit tests: setAccessible removal verification across all test files, EventsFireCommand `--async` option, handle() int return type, parseJsonOption nullable array return type, EventsFireCommand final class, README version-composer.json alignment, all 12 console commands registered in ServiceProvider, ConditionEngine 19 operator coverage, DomainEvent identity preservation, model casts correctness (Trigger/EventLog/Subscription), config key completeness, facade `@method` proxy coverage, WildcardMatcher readonly/final verification.
+
+### Changed
+- Version bumped to 4.37.0.
+
+---
+
 ## [4.6.0] — 2026-08-11
 
 ### Fixed

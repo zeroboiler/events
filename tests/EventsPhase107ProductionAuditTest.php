@@ -205,7 +205,7 @@ test('Phase 107: ServiceProvider provides all 7 services', function (): void {
 
 test('Phase 107: Facade getFacadeAccessor returns EventManager::class', function (): void {
     $method = new ReflectionMethod(\ZeroBoiler\Events\Facades\EventManager::class, 'getFacadeAccessor');
-    $method->setAccessible(true);
+    // PHP 8.5+: setAccessible() was removed — public methods are always accessible
     $result = $method->invoke(null);
     expect($result)->toBe(\ZeroBoiler\Events\EventManager::class);
 });
