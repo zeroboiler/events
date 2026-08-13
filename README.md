@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.58.0-blue)]()
+| ![Latest Version](https://img.shields.io/badge/version-4.59.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
@@ -426,7 +426,7 @@ events/
 │   │   ├── ManagesHistory.php
 │   │   └── ManagesSubscriptions.php
 │   ├── Domain/
-│   │   └── DomainEvent.php      # Event sourcing value object
+│   │   └── DomainEvent.php      # Immutable event sourcing value object
 │   ├── Facades/
 │   │   └── EventManager.php    # Laravel facade
 │   ├── Jobs/
@@ -437,15 +437,13 @@ events/
 │   │   └── Trigger.php
 │   ├── ActionResolver.php
 │   ├── ConditionEngine.php
-│   ├── Domain/
-│   │   └── DomainEvent.php    # Immutable event sourcing value object
 │   ├── EventManager.php        # Central orchestrator
 │   ├── EventScheduler.php      # Automated log purge & subscription cleanup
 │   ├── EventsServiceProvider.php
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 213 test files (Pest + support)
+└── tests/                      # 215 test files (Pest + support)
 ```
 
 ### How It Works
@@ -855,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (213 test files)
+composer test        # Run Pest test suite (215 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -877,6 +875,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.59.0
+
+- Fixed: README package tree — removed duplicate `Domain/DomainEvent.php` entry, restored `Actions/` and `Console/` folder entries.
+- Fixed: README test file count updated from 213 to 215 (reflects current file count on disk).
+- Added: `EventsPhase133ProductionAuditTest.php` — production audit tests covering: ActionResolver edge cases (non-existent class, empty string, non-Triggerable class), ConditionEngine `between` inverted range auto-normalization, empty conditions array, deeply nested null chain, `not_empty` operator, TriggerBuilder resolveActions deduplication, WildcardMatcher `findMatchingPatterns` with empty array, DomainEvent `fromArray` with missing/empty/invalid eventType and invalid occurredAt, EventLog `markAsCompleted` with zero duration, Subscription `recordDelivery` increment idempotency, EventManager `fire`/`fireModel` validation edge cases, ServiceProvider `provides()` completeness verification, ConditionEngine `strictEquals` cross-type comparisons (int/string, bool/int, array/string, null/null), DispatchTriggerJob constructor config handling (default tries, null queue name, comma-separated and array backoff), SubscriptionBuilder URL scheme validation (ftp, file, javascript, http), config key completeness verification, EventManager CRUD operations with non-existent IDs.
+- Improved: README version badge updated to 4.59.0.
+- Bumped: Version 4.59.0.
 
 ### v4.58.0
 
