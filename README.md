@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-[![Latest Version](https://img.shields.io/badge/version-4.35.0-blue)]()
+[![Latest Version](https://img.shields.io/badge/version-4.36.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
@@ -402,7 +402,7 @@ events/
 │   │   ├── EventLogFactory.php
 │   │   ├── SubscriptionFactory.php
 │   │   └── TriggerFactory.php
-│   └── migrations/
+├── migrations/
 │       ├── 2024_01_01_000001_create_triggers_table.php
 │       ├── 2024_01_01_000002_create_event_logs_table.php
 │       └── 2025_06_28_000001_create_event_subscriptions_table.php
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 191+ test files (Pest + support)
+└── tests/                      # 192+ test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,7 +713,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (191+ test files)
+composer test        # Run Pest test suite (192+ test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -735,6 +735,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.36.0
+
+- Added: `EventsPhase110ProductionAuditTest.php` — Phase 110 comprehensive production audit (60+ tests) covering: source file strict types and license headers across all 33 source files, database migration strict types (3 files), factory static model property verification, EventLog status constants uniqueness and completeness, WildcardMatcher readonly/final/static-only verification, all 14 service classes final verification, DomainEvent 4 readonly properties and identity preservation, DomainEvent empty eventType rejection, ConditionEngine #[Override] and #[Pure] attribute verification (5 pure methods + safeRegexMatch NOT pure), WildcardMatcher #[Pure] attribute verification (3 methods), EventManager trait usage verification (EscapesWildcardLike, ManagesHistory, ManagesSubscriptions), Subscription and WebhookAction trait usage verification, WebhookAction Triggerable interface compliance, ServiceProvider provides() completeness (7 services), ConditionEngineContract binding verification, EventManager singleton binding, TriggerBuilder/SubscriptionBuilder transient binding, config file completeness (7 top-level keys, 3 table names, 5 subscription sub-keys, 3 retention sub-keys), Facade accessor correctness and #[Override], Facade @see reference, EventManager 25+ public method count and return type declarations, model casts correctness (Trigger/EventLog/Subscription), config-driven model table names, phpstan.neon.dist configuration validation (level 9, paths, checks), composer.json version-README badge alignment, PHP 8.5 requirement, service provider and facade alias configuration, EventManager fire/fireModel input validation, global disable toggle, TriggerBuilder empty event/action rejection, SubscriptionBuilder non-HTTP URL scheme enforcement (ftp, file, javascript), ActionResolver class resolution error handling (non-existent and non-Triggerable), cache invalidation verification, 12 console commands final class and int return type verification, registerScheduler missing binding error handling, Subscription null secret signing, hasExceededFailures with explicit override, WildcardMatcher exact/catch-all/single-cross segment patterns, empty event rejection, ConditionEngine between auto-normalization and inverted ranges, null-safe comparison operators, matches operator max length rejection, empty conditions and operator arrays, DispatchTriggerJob readonly properties, version constant alignment (composer.json ↔ README badge ↔ changelog), Trigger/EventLog/Subscription scope return types, ManagesHistory trait method completeness (5 methods), ManagesSubscriptions trait method completeness (5 methods), EscapesWildcardLike/GetsWebhookTimeout trait method signatures, factory state method coverage (Trigger: 9, EventLog: 8, Subscription: 11).
+- Updated: Test file count to 192+
+- Updated: Version to 4.36.0
 
 ### v4.35.0
 
