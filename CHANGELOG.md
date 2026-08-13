@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.39.0] — 2026-08-13
+
+### Improved
+- Added class-level docblock to `EventManager` — documents its role as central orchestrator, singleton lifetime, and facade reference (`@see`).
+
+### Added
+- `EventManagerClassDocblockTest.php` — 2 tests verifying `EventManager` class-level docblock presence and facade `@see` reference.
+
+### Changed
+- Test file count updated from 194+ to 199+ in README (package structure and testing sections).
+- Version bumped to 4.39.0.
+
+---
+
 ## [4.37.0] — 2026-08-13
 
 ### Fixed

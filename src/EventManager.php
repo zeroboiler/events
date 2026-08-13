@@ -24,6 +24,18 @@ use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 use Illuminate\Console\Scheduling\Schedule;
 
+/**
+ * Central event orchestrator for the ZeroBoiler Events system.
+ *
+ * Manages trigger registration, event firing, condition evaluation,
+ * action dispatch (sync/async), wildcard matching with caching, webhook
+ * subscription lifecycle, event history, and statistics.
+ *
+ * Resolved as a singleton from the service container. Accessible via
+ * the `EventManager` facade or direct injection.
+ *
+ * @see \ZeroBoiler\Events\Facades\EventManager
+ */
 final class EventManager
 {
     use EscapesWildcardLike;
