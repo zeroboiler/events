@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.57.0-blue)]()
+| ![Latest Version](https://img.shields.io/badge/version-4.58.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
@@ -437,13 +437,15 @@ events/
 │   │   └── Trigger.php
 │   ├── ActionResolver.php
 │   ├── ConditionEngine.php
+│   ├── Domain/
+│   │   └── DomainEvent.php    # Immutable event sourcing value object
 │   ├── EventManager.php        # Central orchestrator
 │   ├── EventScheduler.php      # Automated log purge & subscription cleanup
 │   ├── EventsServiceProvider.php
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 212 test files (Pest + support)
+└── tests/                      # 213 test files (Pest + support)
 ```
 
 ### How It Works
@@ -853,7 +855,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (212 test files)
+composer test        # Run Pest test suite (213 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -875,6 +877,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.58.0
+
+- Fixed: README package tree — added missing `Domain/DomainEvent.php` entry.
+- Fixed: README test file count updated from 212 to 213 (reflects new test file).
+- Added: `EventsPhase132ProductionAuditTest.php` — comprehensive production readiness tests covering: EventManager `listTriggers` with wildcard pattern filtering edge cases (multi-segment dots, regex-special-char patterns, empty and single-char events), `fireModel` with model having both `attributesToArray` and `toArray` methods, `EventsFireCommand` JSON file reference with non-existent path and invalid JSON, `EventManager::deleteTrigger` with non-existent trigger returns false, `EventManager::enable`/`disable` with non-existent trigger returns false, `SubscriptionBuilder` with non-HTTP scheme URLs (ftp, file, javascript), `Subscription::signPayload` with unsupported algorithm fallback, `DomainEvent::fromArray` with numeric eventType rejected, `WildcardMatcher::extractWildcards` with no wildcards in pattern returns empty, `DispatchTriggerJob` properties initialization verification, `EventsHealthCommand` critical detection for DB failure and cache failure, `ConditionEngine` deeply nested dot-notation access, `EventLog::markAsCompleted`/`markAsFailed` with fresh model persistence.
+- Bumped: Version 4.58.0.
 
 ### v4.57.0
 
