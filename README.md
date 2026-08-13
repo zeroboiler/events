@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.56.0-blue)]()
+| ![Latest Version](https://img.shields.io/badge/version-4.57.0-blue)]()
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 216 test files (Pest + support)
+└── tests/                      # 212 test files (Pest + support)
 ```
 
 ### How It Works
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (216 test files)
+composer test        # Run Pest test suite (212 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -875,6 +875,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.57.0
+
+- Fixed: README test file count corrected from 216 to 212 (211 existing + 1 new test file).
+- Fixed: Added `EventsPhase130ProductionReadinessTest.php` to `tests/Pest.php` (was missing from the test runner registration).
+- Added: `EventsPhase131ProductionAuditTest.php` — comprehensive production audit tests covering: ConditionEngine `not_contains`/`not_in`/`not_empty`/`not_null` operator edge cases with arrays and null values, WildcardMatcher cross-segment with multi-dot patterns and Unicode event names, TriggerBuilder `resolveActions()` deduplication with action() + actions() overlap, SubscriptionBuilder URL validation with IPv6 and port edge cases, DomainEvent `occur()` factory identity, EventLog scope chaining (status + stale), Trigger scope composition (enabled + async + priority ordering), ServiceProvider `provides()` completeness vs `register()` bindings, Config all keys present with expected types, Migration index count verification, Factory state builder method coverage.
+- Bumped: Version 4.57.0.
 
 ### v4.56.0
 
