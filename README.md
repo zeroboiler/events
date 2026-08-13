@@ -1,9 +1,9 @@
 # ZeroBoiler Events
 
-|[![Latest Version](https://img.shields.io/badge/version-4.48.0-blue)]()|
+|[![Latest Version](https://img.shields.io/badge/version-4.49.0-blue)]()|
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
-[![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-success)]()
+|[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
 [![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -436,7 +436,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 201 test files (Pest + support)
+└── tests/                      # 202 test files (Pest + support)
 ```
 
 ### How It Works
@@ -713,8 +713,8 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (201 test files)
-composer analyse     # PHPStan level 9 (uses phpstan.neon.dist)
+composer test        # Run Pest test suite (202 test files)
+composer analyse     # PHPStan level 8 (uses phpstan.neon.dist)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
 composer ci          # All checks (lint → analyse → rector → test)
@@ -735,6 +735,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.49.0
+
+- Fixed: PHPStan configuration level corrected from `9` to `8` — PHPStan 2.x (required in composer.json as `^2.2`) only supports levels 0–8. Level 9 was a PHPStan 1.x feature and would cause a configuration error at runtime.
+- Updated: README badge, testing section, and contributing section to reflect PHPStan level 8.
+- Added: `EventsPhase122ProductionAuditTest.php` — Phase 122 production audit (8 tests) covering: phpstan.neon.dist level 8 validation (no level 9), composer.json phpstan ^2.x requirement, analysis paths (src + migrations + factories), strict analysis checks, facade ignore rules, README badge level 8 reference, active section level 8 references.
 
 ### v4.48.0
 
@@ -1095,7 +1101,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed history.
 This is a private package. Contribution guidelines:
 
 1. **Code style**: Follow PSR-12. Run `composer lint` (Laravel Pint) before committing.
-2. **Static analysis**: Run `composer analyse` (PHPStan level 9). Zero errors allowed.
+2. **Static analysis**: Run `composer analyse` (PHPStan level 8). Zero errors allowed.
 3. **Tests**: Run `composer test` (Pest). All tests must pass. Add tests for new features.
 4. **Rector**: Run `composer rector` to apply automated code improvements.
 5. **Full CI**: Run `composer ci` to execute all checks in order.
