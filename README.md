@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.74.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.75.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 230 PHP files (227 test files + 3 support)
+└── tests/                      # 231 PHP files (226 test files + 5 support)
 ```
 
 ### How It Works
@@ -652,7 +652,7 @@ $engine = new ConditionEngine();
 $payload = ['amount' => 150, 'status' => 'active', 'tags' => ['urgent', 'billing']];
 $conditions = [
     'amount' => ['>', 100],
-    'status' => 'in', ['active', 'pending'],
+    'status' => ['in', ['active', 'pending']],
     'tags' => ['contains', 'urgent'],
 ];
 
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (227 test files)
+composer test        # Run Pest test suite (226 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -875,6 +875,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.75.0
+
+- Fixed: README Testing Strategies section — corrected `in` operator syntax example from `['status' => 'in', ['active', 'pending']]` to `['status' => ['in', ['active', 'pending']]]`.
+- Fixed: README test file count corrected — 226 test files + 5 support files (231 total PHP files), previously claimed 227+3.
+- Added: `EventsPhase146ProductionAuditTest.php` — Phase 146 production audit covering README accuracy (version badge, test counts, syntax examples), PHP 8.5 compliance (strict_types, license headers, final classes, readonly, typed properties, return types, #[Override], #[Pure]), ConditionEngine 21 operators, ServiceProvider register/boot/provides consistency, Facade method coverage, config completeness, Pest.php registration.
+- Updated: README test file count to 226 test files + 5 support files (231 total PHP files).
+- Bumped: Version 4.75.0.
 
 ### v4.74.0
 
