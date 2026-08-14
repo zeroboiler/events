@@ -148,7 +148,9 @@ final class SubscriptionBuilder
         // Generate a secret if none was provided and auto_generate_secret is enabled
         $autoGenerate = Config::get('events.subscriptions.auto_generate_secret', true);
         if ($this->secret === null && $autoGenerate !== false) {
-            $this->secret = 'whsec_'.Str::random(32);
+            $secretLength = Config::get('events.subscriptions.secret_length', 32);
+            $length = is_int($secretLength) && $secretLength >= 16 ? $secretLength : 32;
+            $this->secret = 'whsec_'.Str::random($length);
         }
 
         return DB::transaction(function (): Subscription {

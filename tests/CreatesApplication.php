@@ -119,6 +119,7 @@ trait CreatesApplication
                 ],
                 'subscriptions' => [
                     'auto_generate_secret' => true,
+                    'secret_length' => 32,
                     'max_failures' => 10,
                     'timeout' => 30,
                     'signature_algorithm' => 'sha256',

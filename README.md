@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.2.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.3.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208%20(2.x)-success)() |
@@ -128,6 +128,7 @@ return [
 
     'subscriptions' => [
         'auto_generate_secret' => true,
+        'secret_length' => env('EVENTS_SUB_SECRET_LENGTH', 32),
         'max_failures' => env('EVENTS_SUB_MAX_FAILURES', 10),
         'timeout' => env('EVENTS_SUB_TIMEOUT', 30),
         'signature_algorithm' => 'sha256',
@@ -154,6 +155,7 @@ return [
 | `EVENTS_SUB_MAX_FAILURES` | `10` | Auto-deactivate subscription after this many consecutive failures |
 | `EVENTS_SUB_TIMEOUT` | `30` | HTTP timeout for webhook delivery (seconds) |
 | `EVENTS_SUB_SIGNATURE_ALGORITHM` | `sha256` | HMAC algorithm for webhook payload signing |
+| `EVENTS_SUB_SECRET_LENGTH` | `32` | Length of auto-generated webhook secrets (minimum 16) |
 | `EVENTS_SUB_CLEANUP_CRON` | `0 3 * * *` | Cron expression for automatic subscription cleanup schedule |
 | `EVENTS_DISABLED` | `false` | Set `true` to globally disable the entire event system |
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Cache TTL (seconds) for enabled wildcard triggers; set to `0` to disable |
@@ -455,14 +457,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 256 test files + 5 support files
+├── tests/                      # 259 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (256 test files)
-└── Total: 302 PHP files (33 src + 3 factories + 3 migrations + 256 tests + 5 support + 1 rector.php + 1 config)
+│   └── ... (259 test files)
+└── Total: 305 PHP files (33 src + 259 tests + 5 support + 1 rector.php + 1 config + 6 factories/migrations)
 ```
 
 ### How It Works
@@ -908,7 +910,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (256 test files)
+composer test        # Run Pest test suite (259 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -930,6 +932,18 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.3.0
+
+- Added: `events.subscriptions.secret_length` config option — controls auto-generated webhook secret length (minimum 16, default 32).
+- Added: `EVENTS_SUB_SECRET_LENGTH` environment variable for secret length configuration.
+- Updated: `SubscriptionBuilder::save()` reads `secret_length` from config with safety clamp (minimum 16, falls back to 32 for invalid values).
+- Updated: `phpstan.neon.dist` — added `checkAlwaysTrueInstanceof: true` for PHPStan 9 forward-compatibility.
+- Updated: `CreatesApplication.php` test helper — includes `secret_length` in default config.
+- Added: `SubscriptionSecretLengthConfigTest` — 6 tests for configurable secret length (default, custom, explicit secret, too small, non-integer, uniqueness).
+- Added: `WildcardMatcherEdgeCasesPhase2Test` — 30 edge case tests covering empty patterns, regex special chars in event names, consecutive wildcards, deep nesting, findMatchingPatterns, extractWildcards, numeric segments, and boundary conditions.
+- Added: `EventManagerFullLifecycleTest` — 8 integration tests covering full trigger lifecycle (register→fire→log→delete), enable/disable, global disable/enable, wildcard matching with cache invalidation, condition filtering, subscription lifecycle, event history/statistics, and register alias.
+- Bumped: Version 5.3.0, total 305 PHP files (33 src + 259 tests).
 
 ### v5.2.0
 

@@ -63,6 +63,9 @@ return [
         // Auto-generate HMAC signing secrets when none is provided
         'auto_generate_secret' => true,
 
+        // Length of auto-generated secrets (in characters, before the 'whsec_' prefix)
+        'secret_length' => env('EVENTS_SUB_SECRET_LENGTH', 32),
+
         // Auto-deactivate subscriptions after this many consecutive failures
         'max_failures' => env('EVENTS_SUB_MAX_FAILURES', 10),
 
