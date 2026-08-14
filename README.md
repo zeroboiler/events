@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.95.1-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.96.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Max](https://img.shields.io/badge/PHPStan-Max%20(2.x)-success)() |
@@ -455,10 +455,10 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 246 test files + 5 support files
-│   ├── ... (246 test files)
+├── tests/                      # 247 test files + 5 support files
+│   ├── ... (247 test files)
 │   └── ...
-└── Total: 293 PHP files (33 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 246 tests + 5 support + 1 rector.php + 1 config)
+└── Total: 293 PHP files (33 src + 3 factories + 3 migrations + 247 tests + 5 support + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -904,7 +904,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (246 test files)
+composer test        # Run Pest test suite (247 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -926,6 +926,15 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.96.0
+
+- Fixed: README total PHP file count — corrected from 293→292 (pre-existing count), now 293 after adding new test file. Updated test count 246→247.
+- Fixed: README package structure breakdown — simplified to avoid overlapping category counting (33 src + 3 factories + 3 migrations + 247 tests + 5 support + 1 rector.php + 1 config = 293).
+- Added: `EventsPhase161ProductionAuditTest.php` — Phase 161 comprehensive production audit (30 tests) covering: README file count accuracy, README version badge alignment with composer.json, PHPStan 2.x config validation (level max, reportUnusedIgnoredErrors, treatPhpDocTypesAsCertain, checkUninitializedProperties, universalObjectCratesClasses), EventsServiceProvider non-deferred verification, all 33 source files strict_types=1 verification, proprietary license headers across all source files, ServiceProvider provides() 7 bindings verification, config 7 top-level keys + all sub-keys exhaustiveness (table_names:3, queue:2, retry:2, retention:3, subscriptions:5), facade getFacadeAccessor correctness and return type, DomainEvent final/readonly properties, WildcardMatcher readonly final + static-only methods, ConditionEngine/ConditionEngineContract interface compliance, WebhookAction/Triggerable implementation, EventLog status constants + $statuses array, models config-driven table names, UUID string keys on all models, migrations config-driven table names, all 12 console commands final + extend Command, no deprecated setAccessible in source files, factories static string $model property, DispatchTriggerJob config-driven properties, EventScheduler/TriggerBuilder/SubscriptionBuilder constructor injection.
+- Registered: `EventsPhase161ProductionAuditTest.php` in `Pest.php`.
+- Updated: README version badge 4.95.1→4.96.0, test count 246→247, total PHP file count 293 (consistent).
+- Bumped: Version 4.96.0.
 
 ### v4.95.0
 
