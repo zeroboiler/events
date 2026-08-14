@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.91.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.92.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Max](https://img.shields.io/badge/PHPStan-Max%20(2.x)-success)() |
@@ -455,10 +455,10 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 241 test files + 5 support files
-│   ├── ... (241 test files)
+├── tests/                      # 242 test files + 5 support files
+│   ├── ... (242 test files)
 │   └── ...
-└── Total: 287 PHP files (28 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 241 tests + 5 support)
+└── Total: 288 PHP files (33 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 242 tests + 5 support + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -904,7 +904,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (241 test files)
+composer test        # Run Pest test suite (242 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -926,6 +926,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.92.0
+
+- Added: `EventsPhase158ProductionAuditTest.php` — Phase 158 comprehensive production audit (55+ tests) covering: PHP 8.5 strict types across src and database, return type declarations completeness for all public methods (EventManager::fire/fireModel/executeTrigger/registerScheduler/setEnabled, TriggerBuilder::save, SubscriptionBuilder::save, DomainEvent::occur/fromArray/toArray, ConditionEngine::matches, WildcardMatcher static methods, ActionResolver::resolve, EventScheduler::register), typed properties verification (EventManager, ConditionEngine, TriggerBuilder, SubscriptionBuilder, DispatchTriggerJob, DomainEvent), docblock quality (class-level, @throws, @param), ServiceProvider register/boot/provides consistency (7 bindings with singleton/transient verification, config merge verification), config completeness (7 top-level keys + all sub-keys for queue, retry, retention, subscriptions, table_names), EventManager::registerScheduler() convenience method integration test, DomainEvent edge cases (occur factory, invalid UUID fallback, missing payload default, toArray key completeness), WildcardMatcher boundary cases (empty pattern/event, exact match, catch-all, single-segment, cross-segment, findMatchingPatterns order preservation, extractWildcards), ConditionEngine full operator coverage (21 operators + AND logic + nested dot notation + ReDoS protection + inverted range normalization), DispatchTriggerJob config-driven properties (tries, queue, backoff string/array formats, promoted readonly verification), models config-driven table names, migration files existence and config-driven table names, factory static $model properties, PHPStan configuration validation (level max, directory scan, reportUnusedIgnoredErrors, universalObjectCratesClasses), CI workflow configuration (PHP 8.5, all tools).
+- Registered: `EventsPhase158ProductionAuditTest.php` in `Pest.php`.
+- Updated: README version badge 4.91.0→4.92.0, test count 241→242 test files, total PHP file count 287→288.
+- Bumped: Version 4.92.0.
 
 ### v4.91.0
 
