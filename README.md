@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.1.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.2.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208%20(2.x)-success)() |
@@ -455,14 +455,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 254 test files + 5 support files
+├── tests/                      # 256 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (254 test files)
-└── Total: 300 PHP files (33 src + 3 factories + 3 migrations + 254 tests + 5 support + 1 rector.php + 1 config)
+│   └── ... (256 test files)
+└── Total: 302 PHP files (33 src + 3 factories + 3 migrations + 256 tests + 5 support + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -908,7 +908,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (254 test files)
+composer test        # Run Pest test suite (256 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -930,6 +930,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.2.0
+
+- Added: `DispatchTriggerJobSerializationTest` — 13 tests verifying job property initialization, config-driven defaults (tries, backoff, queue, connection), edge cases (negative/zero tries, empty queue name, whitespace in backoff, non-integer tries), nested payload preservation, and readonly property accessibility.
+- Added: `EventManagerCacheInvalidationTest` — 10 tests verifying cache invalidation on trigger create/enable/disable/delete, consecutive invalidation safety, cache population after wildcard fire, non-wildcard trigger cache invalidation, and non-existent trigger skip behavior.
+- Registered both new test files in `Pest.php` test suite configuration.
+- Bumped: Version 5.2.0, total 302 PHP files (33 src + 256 tests).
 
 ### v5.1.0
 
