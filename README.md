@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.67.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.68.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
@@ -407,7 +407,7 @@ events/
 │   │   ├── EventLogFactory.php
 │   │   ├── SubscriptionFactory.php
 │   │   └── TriggerFactory.php
-├── migrations/
+│   └── migrations/
 │       ├── 2024_01_01_000001_create_triggers_table.php
 │       ├── 2024_01_01_000002_create_event_logs_table.php
 │       └── 2025_06_28_000001_create_event_subscriptions_table.php
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 220 test files (Pest + support)
+└── tests/                      # 226 test files (Pest + support)
 ```
 
 ### How It Works
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (220 test files)
+composer test        # Run Pest test suite (226 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -875,6 +875,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.68.0
+
+- Fixed: README package structure tree — `database/migrations/` correctly indented as a child of `database/` (was incorrectly a sibling of `database/`).
+- Fixed: README test file count corrected from 220 to 226 (matching actual file count on disk).
+- Added: Phase 140 comprehensive manual audit — all 35 source files verified for PHP 8.5 strict_types, license headers, final classes, `#[Override]`, typed properties, return types, docblocks, `#[Pure]` attributes, no `setAccessible`, no TODO/FIXME.
+- Bumped: Version 4.68.0.
 
 ### v4.67.0
 
