@@ -1008,7 +1008,7 @@ Key fixes and improvements:
 This is a private package. Contribution guidelines:
 
 1. **Code style**: Follow PSR-12. Run `composer lint` (Laravel Pint) before committing.
-2. **Static analysis**: Run `composer analyse` (PHPStan max). Zero errors allowed.
+2. **Static analysis**: Run `composer analyse` (PHPStan level 8). Zero errors allowed.
 3. **Tests**: Run `composer test` (Pest). All tests must pass. Add tests for new features.
 4. **Rector**: Run `composer rector` to apply automated code improvements.
 5. **Full CI**: Run `composer ci` to execute all checks in order.
