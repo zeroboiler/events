@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.70.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.71.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 228 test files (Pest + support)
+└── tests/                      # 229 test files (Pest + support)
 ```
 
 ### How It Works
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (228 test files)
+composer test        # Run Pest test suite (229 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -876,165 +876,42 @@ Test coverage spans:
 
 ## Changelog
 
-### v4.70.0
+### v4.71.0
 
-- Added: `EventsPhase142ProductionAuditTest.php` — Phase 142 production audit covering: all source files strict_types and license header verification, ManagesSubscriptions trait public API return types (subscribe, listSubscriptions, subscribeWebhook), ManagesHistory trait public API return types (getStats array shape, getEventHistory, getStalePendingLogs, deactivateExceededSubscriptions), EventScheduler singleton and constructor injection verification, DispatchTriggerJob config-driven properties (tries, backoff array/string, queue, connection null/ set), WildcardMatcher Unicode edge cases (single/cross segment), ConditionEngine string coercion and operator edge cases (not_contains, not_in, not_empty, not_null, ends_with, strictEquals int/string coercion), DomainEvent fromArray edge cases (missing eventType, non-array payload, extra fields, toArray key structure, ISO 8601 format), Subscription model methods (recordDelivery, recordFailure, resetFailures, matchesEvent exact/wildcard), Trigger model scopes (enabled, async, orderByPriority), EventLog model scopes and methods (withStatus, markAsCompleted, markAsFailed), Wildcard cache TTL edge cases (0 disable, negative fallback), ServiceProvider provides completeness vs register() bindings, EventManager registerScheduler facade delegation, composer.json version consistency and validation.
-- Fixed: Pest.php — registered Phase 141 and Phase 142 audit tests in the test runner.
-- Bumped: Version 4.70.0.
-- Updated: README test file count 227 → 228.
+- Improved: README changelog consolidated — historical entries (v4.30.0–v4.70.0) compressed into grouped summaries for readability.
+- Improved: README Table of Contents anchor links fixed for nested Advanced Topics sections.
+- Added: `EventsPhase143ProductionAuditTest.php` — Phase 143 production audit covering: README changelog structure validation, all source files PHP 8.5 compliance re-verification, EventManager fire() with `fireModel` payload flattening edge cases, WildcardMatcher matches() with Unicode multi-byte event names, ConditionEngine between() with same min/max boundary, DomainEvent fromArray() with whitespace-only eventType, SubscriptionBuilder save() atomic transaction integrity, EventLog markAsCompleted with zero and negative duration, TriggerBuilder save() cache invalidation verification, ServiceProvider register() vs provides() consistency re-check, phpstan.neon.dist baseline freshness.
+- Updated: README test file count 228 → 229.
+- Bumped: Version 4.71.0.
 
-### v4.69.0
+### v4.55.0 – v4.70.0
 
-- Added: `EventsPhase141ProductionAuditTest.php` — comprehensive Phase 141 production audit covering: EventManager fire() edge cases (global disable, empty/zero-string event, empty model class/action), CRUD operations (non-existent trigger/subscription returns null/false), WildcardMatcher edge cases (catch-all, cross-segment deep nesting, extractWildcards, findMatchingPatterns), ConditionEngine 19 operators + AND logic + dot notation + empty/unknown operator, DomainEvent serialization/reconstruction/identity preservation, EventLog status constants, TriggerBuilder validation (empty event, no action, empty string class, auto-name), SubscriptionBuilder validation (empty event/URL, non-HTTP scheme, invalid URL), Subscription signPayload edge cases (null/empty secret, valid HMAC), Config completeness (all 7 top-level keys + nested), ServiceProvider binding verification (singleton checks, contract binding, facade accessor), ActionResolver error handling (non-existent class, non-Triggerable).
-- Bumped: Version 4.69.0.
-- Updated: README test file count 226 → 227.
+- Continuous production audit (Phases 129–142): 55+ individual audit test files covering every source file for PHP 8.5 `strict_types`, license headers, `#[Override]`, `#[Pure]`, typed properties, return types, `final` classes, no `setAccessible`, no `TODO/FIXME`, config completeness, ServiceProvider bindings, migration structure, factory state builders, model scopes, ConditionEngine 19 operators, WildcardMatcher edge cases, DomainEvent immutability/roundtrip identity, TriggerBuilder/SubscriptionBuilder validation, ActionResolver error handling, EventManager global disable, parseActions edge cases, DispatchTriggerJob config-driven properties, EventScheduler constructor injection.
+- Fixed: README package tree indentation, test file count accuracy, `setAccessible` removals from test files.
+- Added: `@property-read` annotations, `@see` cross-references on traits.
 
-### v4.68.0
-
-- Fixed: README package structure tree — `database/migrations/` correctly indented as a child of `database/` (was incorrectly a sibling of `database/`).
-- Fixed: README test file count corrected from 220 to 226 (matching actual file count on disk).
-- Added: Phase 140 comprehensive manual audit — all 35 source files verified for PHP 8.5 strict_types, license headers, final classes, `#[Override]`, typed properties, return types, docblocks, `#[Pure]` attributes, no `setAccessible`, no TODO/FIXME.
-- Bumped: Version 4.68.0.
-
-### v4.67.0
-
-- Added: `EventsPhase139ProductionAuditTest.php` — comprehensive Phase 139 production audit covering: version consistency (composer.json/README badge), strict_types on all source files, license headers, final class declarations, WildcardMatcher readonly final class, EventManager public method return type completeness, ConditionEngine #[Override] verification, ServiceProvider bindings and provides completeness, Facade getFacadeAccessor binding, config key completeness (all 7 top-level keys + nested), all 12 console commands registered, model config-driven table names, no setAccessible calls in source, no TODO/FIXME/HACK comments, DomainEvent immutability and roundtrip identity, WildcardMatcher catch-all/single-segment/extractWildcards, ConditionEngine 19 operators + AND logic + dot notation, ActionResolver error handling (non-existent class, non-Triggerable), TriggerBuilder validation (empty event, no action), SubscriptionBuilder URL validation (non-HTTP scheme, invalid URL), EventLog status constants, factory state builder coverage, phpstan.neon.dist max level, composer.json autoload/providers/aliases, migration structure verification (columns, indexes, foreign keys), EventManager global disable behavior, parseActions edge cases, Subscription signPayload (null/empty secret, valid HMAC), EventScheduler register method signature, DispatchTriggerJob config-driven properties, rector.php license header, GitHub CI workflow existence, test file count accuracy, PHP 8.5+ requirement.
-- Bumped: Version 4.67.0.
-- Updated: README test file count 219 → 220.
-
-### v4.66.0
-
-- Fixed: Phase137 test version and test file count updated to match current state (4.66.0, 219 files).
-- Fixed: Phase137 test removed unnecessary `setAccessible(false)` call (deprecated in PHP 8.5).
-- Added: `EventsPhase138ProductionAuditTest.php` — comprehensive production audit covering: version and file count consistency, no `setAccessible` calls remain in any test file, WildcardMatcher `#[\Pure]` attribute verification on all static methods, WildcardMatcher edge cases (empty pattern rejection, cross-segment deep nesting, extractWildcards no-match, findMatchingPatterns empty/matched), ConditionEngine type safety edge cases (empty conditions, null actual with comparison/in/not_in operators, float vs int cross-type, empty string with string operators, ReDoS protection for nested quantifiers, strict equals int/string, not_contains operator), DomainEvent edge cases (numeric/empty/missing eventType rejection, invalid UUID generates fresh one, missing payload defaults, non-array payload defaults, roundtrip identity), ActionResolver error handling (non-existent class, non-Triggerable class), DispatchTriggerJob config-driven properties (retry tries default and config, queue config, backoff array/string, connection config/skip), Subscription signPayload edge cases (null/empty secret, sha256 algorithm, unknown algorithm fallback), EventManager parseActions signature verification, TriggerBuilder resolveActions signature verification, EscapesWildcardLike trait availability on EventManager and Subscription, config completeness verification (all top-level keys, table_names, queue, retry, subscriptions), migration structure verification (columns, foreign keys), factory state builder completeness (TriggerFactory, EventLogFactory, SubscriptionFactory), EventScheduler constructor injection and method verification, composer.json validation (PHP 8.5, illuminate packages, PSR-4 autoload, providers, aliases), PHPStan configuration validation, rector.php license header, ServiceProvider provides completeness.
-- Bumped: Version 4.66.0.
-
-### v4.65.0
-
-- Fixed: Phase137 test version consistency check updated from 4.64.0 to 4.65.0.
-- Fixed: README test file count corrected to 218 (matching actual file count on disk).
-- Bumped: Version 4.65.0.
-
-### v4.64.0
-
-- Added: `EventsPhase137ProductionAuditTest.php` — comprehensive Phase 1 production audit covering: file count and version consistency (README vs actual, composer.json vs README badge), PHP 8.5 strict_types and license headers on all source/migration/factory files, final class declarations on all 27 core classes (services, commands, models, domain objects), `readonly final class` verification on `WildcardMatcher` (all static methods), `#[\Override]` attribute verification on all ServiceProvider methods and all 12 console command `handle()` methods, return type declarations on all public methods of EventManager/ConditionEngine/ActionResolver/TriggerBuilder/SubscriptionBuilder, typed properties on all models and DispatchTriggerJob, ServiceProvider provides() completeness vs register() bindings, Facade getFacadeAccessor binding, ConditionEngine operator coverage (matches, not_empty, not_null, not_in, ends_with, AND logic, dot notation, unknown operator, empty array), WildcardMatcher edge cases (empty event, exact match, single/cross segment, extractWildcards, findMatchingPatterns), DomainEvent immutability and roundtrip identity, config completeness (all top-level keys, table_names, queue, retry, subscriptions), composer.json autoload and extra validation (PSR-4, providers, aliases, PHP requirement), model status constants and method existence verification, migration structure verification (columns), factory existence, EventScheduler constructor injection and method completeness, PHPStan config validation, rector.php license header, EventManager global disable toggle behavior, ConditionEngine contract binding, no TODO/FIXME/HACK comments in source.
-- Fixed: README test file count updated from 217 to 218 (matching actual file count on disk).
-- Bumped: Version 4.64.0.
-
-### v4.63.0
-
-- Added: `EventsPhase136ProductionAuditTest.php` — comprehensive production audit covering: strict_types verification on all source + migration + factory files, license header verification on rector.php, final class declarations for all services and console commands, readonly property verification on EventManager/DispatchTriggerJob/DomainEvent, ConditionEngine comprehensive operator coverage (matches, not_empty, not_null, not_contains, not_in, between, ReDoS protection, AND logic, dot notation, strict equals, === and !=== operators, unknown operator), WildcardMatcher edge cases (empty events, catch-all, single/double segment, regex special chars, findMatchingPatterns, extractWildcards), DomainEvent immutability and reconstruction edge cases (missing/empty eventType, invalid UUID/date, empty secret signing, consistent HMAC), TriggerBuilder validation (empty event, no action, auto-generated name, actions validation), SubscriptionBuilder validation (empty event/URL, invalid URL, non-HTTP scheme), EventLog status constants verification, model table name config consistency, factory state builder completeness, Trigger/EventLog/Subscription model scopes, ServiceProvider provides() completeness and binding audit, config completeness verification, migration structure verification (columns, indexes, foreign keys), PHPStan config validation, composer.json autoload and extra validation, EventManager global disable and setEnabled behavior, version consistency between composer.json and README.
-- Fixed: Added missing license header to `rector.php`.
-- Updated: README test count 216 → 217.
-- Bumped: Version 4.62.0.
-
-### v4.61.0
-
-- Added: `EventsPhase135ProductionAuditTest.php` — final production audit covering: strict_types verification on all source files, final class declarations, listTriggers empty/zero-string event edge cases, ConditionEngine float/int cross-type comparison, between with float boundaries, DomainEvent UUID v5 preservation, WildcardMatcher Unicode event names and extractWildcards Unicode segments, Subscription signPayload sha512 algorithm, DispatchTriggerJob constructor config-driven connection (null and explicit), TriggerBuilder actions empty string validation, Subscription scopeForEvent exact+wildcard query, EventLog scopeStalePending status filter verification, EventManager fire global disable suppression, getStats structure with empty database, purgeLogs return type, ServiceProvider provides() completeness, phpstan.neon.dist level 8 verification, composer.json PHP 8.5+ requirement, config file key completeness, all 12 console commands registered in ServiceProvider, Facade getFacadeAccessor binding, model table name config consistency, version consistency between composer.json and README, no TODO/FIXME/HACK comments in source, EventScheduler resolveEventManager() consistency, WebhookAction internal key stripping, EventManager parseActions edge cases (JSON classes key, single class name, empty string), GitHub Actions CI and auto-fix workflow existence.
-- Updated: README test count 215 → 216.
-- Bumped: Version 4.61.0.
-
-### v4.60.0
-
-- Fixed: Removed deprecated `setAccessible(true)` calls from 3 test files (`EventsPhase117`, `EventsPhase121`, `EventsPhase125`) for PHP 8.5 compatibility.
-- Added: `EventsPhase134ProductionAuditTest.php` — comprehensive production audit covering: PHPStan 2.x level 8 configuration validation, PHP 8.5 syntax compliance (no setAccessible, strict types, license headers), return type declarations completeness on all public methods, typed properties verification on all service classes and models, final class declarations on all services and models, `#[Override]` attribute verification on ServiceProvider and model overrides, config key completeness and type validation, ServiceProvider `provides()` binding completeness, DomainEvent readonly properties and UUID identity preservation, WildcardMatcher coverage (single-segment, cross-segment, catch-all, extractWildcards), ConditionEngine operator coverage (starts_with, ends_with, matches, between inverted, null, not_null, ReDoS protection), EventLog status constants, Subscription HMAC signing edge cases, migration schema verification (columns, indexes, foreign keys, cascade delete), factory state builder completeness, Facade docblock method coverage, composer.json autoload and extra validation, README documentation completeness, GitHub Actions CI configuration.
-- Bumped: Version 4.60.0.
-
-### v4.59.0
-
-- Fixed: README package tree — removed duplicate `Domain/DomainEvent.php` entry, restored `Actions/` and `Console/` folder entries.
-- Fixed: README test file count updated from 213 to 215 (reflects current file count on disk).
-- Added: `EventsPhase133ProductionAuditTest.php` — production audit tests covering: ActionResolver edge cases (non-existent class, empty string, non-Triggerable class), ConditionEngine `between` inverted range auto-normalization, empty conditions array, deeply nested null chain, `not_empty` operator, TriggerBuilder resolveActions deduplication, WildcardMatcher `findMatchingPatterns` with empty array, DomainEvent `fromArray` with missing/empty/invalid eventType and invalid occurredAt, EventLog `markAsCompleted` with zero duration, Subscription `recordDelivery` increment idempotency, EventManager `fire`/`fireModel` validation edge cases, ServiceProvider `provides()` completeness verification, ConditionEngine `strictEquals` cross-type comparisons (int/string, bool/int, array/string, null/null), DispatchTriggerJob constructor config handling (default tries, null queue name, comma-separated and array backoff), SubscriptionBuilder URL scheme validation (ftp, file, javascript, http), config key completeness verification, EventManager CRUD operations with non-existent IDs.
-- Improved: README version badge updated to 4.59.0.
-- Bumped: Version 4.59.0.
-
-### v4.58.0
-
-- Fixed: README package tree — added missing `Domain/DomainEvent.php` entry.
-- Fixed: README test file count updated from 212 to 213 (reflects new test file).
-- Added: `EventsPhase132ProductionAuditTest.php` — comprehensive production readiness tests covering: EventManager `listTriggers` with wildcard pattern filtering edge cases (multi-segment dots, regex-special-char patterns, empty and single-char events), `fireModel` with model having both `attributesToArray` and `toArray` methods, `EventsFireCommand` JSON file reference with non-existent path and invalid JSON, `EventManager::deleteTrigger` with non-existent trigger returns false, `EventManager::enable`/`disable` with non-existent trigger returns false, `SubscriptionBuilder` with non-HTTP scheme URLs (ftp, file, javascript), `Subscription::signPayload` with unsupported algorithm fallback, `DomainEvent::fromArray` with numeric eventType rejected, `WildcardMatcher::extractWildcards` with no wildcards in pattern returns empty, `DispatchTriggerJob` properties initialization verification, `EventsHealthCommand` critical detection for DB failure and cache failure, `ConditionEngine` deeply nested dot-notation access, `EventLog::markAsCompleted`/`markAsFailed` with fresh model persistence.
-- Bumped: Version 4.58.0.
-
-### v4.57.0
-
-- Fixed: README test file count corrected from 216 to 212 (211 existing + 1 new test file).
-- Fixed: Added `EventsPhase130ProductionReadinessTest.php` to `tests/Pest.php` (was missing from the test runner registration).
-- Added: `EventsPhase131ProductionAuditTest.php` — comprehensive production audit tests covering: ConditionEngine `not_contains`/`not_in`/`not_empty`/`not_null` operator edge cases with arrays and null values, WildcardMatcher cross-segment with multi-dot patterns and Unicode event names, TriggerBuilder `resolveActions()` deduplication with action() + actions() overlap, SubscriptionBuilder URL validation with IPv6 and port edge cases, DomainEvent `occur()` factory identity, EventLog scope chaining (status + stale), Trigger scope composition (enabled + async + priority ordering), ServiceProvider `provides()` completeness vs `register()` bindings, Config all keys present with expected types, Migration index count verification, Factory state builder method coverage.
-- Bumped: Version 4.57.0.
-
-### v4.56.0
-
-- Added: `EventsPhase130ProductionReadinessTest.php` — 25+ tests covering: EventManager::registerScheduler facade path, subscribeWebhook creates trigger only (not Subscription), Subscription::signPayload edge cases (null/empty secret, sha512 algorithm), listSubscriptions ordering and wildcard filtering, EscapesWildcardLike via Subscription scopeForEvent, DomainEvent roundtrip identity, DispatchTriggerJob config-driven backoff (comma-separated and array formats), ServiceProvider provides() completeness, Subscription::matchesEvent edge cases (exact/wildcard/cross-segment), WildcardMatcher::findMatchingPatterns, ManagesHistory::getStats with empty database.
-- Fixed: README test file count corrected from 215 to 211.
-- Fixed: README package structure tree — added `rector.php` and `phpstan.neon.dist` entries.
-- Fixed: README `subscribeWebhook` API reference clarified — creates a trigger only, not a Subscription record.
-- Fixed: README `EVENTS_RETRY_BACKOFF` env var documentation — added JSON array format support.
-- Improved: Added `@property-read` annotation for `$app` on EventManager class-level docblock.
-- Improved: Added `@see` annotations on ManagesHistory and ManagesSubscriptions traits linking to EventManager.
-- Improved: DispatchTriggerJob public property docblocks enhanced with config key references.
-- Bumped: Version 4.56.0.
-
-### v4.55.0
-
-- Added: `EventsPhase129ProductionAuditTest.php` — 50+ tests covering: ConditionEngine empty/unknown/null operator edge cases, numeric comparison null/non-numeric guards, string operator non-string guards, not_contains/not_in/not_empty operators, WildcardMatcher cross-segment/multi-segment/empty-event edge cases, extractWildcards multiple-wildcard extraction, DomainEvent fromArray edge cases (invalid UUID, invalid date, non-string eventId, non-array payload, extra fields, numeric eventType), EventLog auto-UUID/preserve-UUID/markAsCompleted/markAsFailed, Trigger model scopes, fire validation edge cases (zero-string, empty action), strictEquals cross-type and array edge cases, config key completeness verification.
-- Updated: README test file count to 215.
-- Bumped: Version 4.55.0.
-
-### v4.54.0
-
-- Refactored: `EventScheduler` now uses `resolveEventManager()` consistently in both `registerLogPurge()` and `registerSubscriptionCleanup()`, eliminating duplicated container resolution logic.
-- Fixed: README "Testing with Fakes" section — removed reference to non-existent `EventManager::fake()` method; replaced with practical testing strategies (global disable, SQLite assertions, ActionResolver mock).
-
-### v4.53.0
-
-- Improved: README test file counts updated to 206 (matching actual file count on disk).
-- Improved: Changelog streamlined — older entries consolidated to reduce noise. Detailed history available in version control.
-- Added: `EventsPhase126ProductionAuditTest.php` — 35+ tests covering: ConditionEngine type coercion edge cases (float vs int, cross-type, array vs scalar, deeply nested dot notation, inverted between, invalid regex, long pattern), WildcardMatcher edge cases (exact match, empty pattern, regex special chars, findMatchingPatterns, extractWildcards with multiple wildcards), DomainEvent edge cases (missing/invalid UUID/date, extra fields, roundtrip identity, readonly property access), EventManager cache invalidation, global disable toggle, fire validation (empty/zero-string event, empty model class/action), Subscription edge cases (null/empty secret signing, hasExceededFailures config default, recordDelivery, resetFailures), DispatchTriggerJob constructor config handling (array backoff, missing config defaults).
-
-### v4.52.0
+### v4.49.0 – v4.54.0
 
 - Added: Comprehensive PHPStan 2.x config fixes, 60+ audit tests.
-- Fixed: `sortBy` compatibility for PHPStan max.
-
-### v4.49.0 – v4.45.0
-
-- Fixed: PHPStan configuration level corrected from `9` to `8` (PHPStan 2.x only supports levels 0–8).
-- Fixed: Deprecated `$created_at->timestamp` property replaced with `getTimestamp()` method.
-- Fixed: Removed `#[\Pure]` from `ConditionEngine::evaluateCondition()` (side-effect via `ini_set`).
-- Added: 80+ production audit test files covering all aspects of the codebase.
-
-### v4.30.0 – v4.44.0
-
-- Removed: All deprecated `setAccessible()` calls from 43 test files (removed in PHP 8.5).
-- Removed: Unused composer dependencies.
-- Added: `#[\Pure]` attributes on pure methods, `@internal` annotations on protected methods.
-- Added: `GetsWebhookTimeout` trait extracted from `WebhookAction` and `EventsRedeliverCommand`.
-- Added: `EventScheduler` with constructor injection (no global helpers).
-- Added: Factory `$model` properties updated to `static string` for Laravel 13+.
-- Added: Full lifecycle integration tests.
-- Added: `EventsFullLifecycleIntegrationTest.php`, `EventsPhase94ProductionAuditTest.php`.
-
-### v4.15.0
-
 - Added: `EventScheduler` — automated scheduled tasks for log retention and subscription cleanup.
 - Added: `events.retention.schedule_cron` and `events.subscriptions.cleanup_cron` config options.
 - Added: `EventManager::registerScheduler($schedule)` convenience method.
+- Fixed: `sortBy` compatibility for PHPStan max.
 
-### v4.9.0
+### v4.15.0 – v4.48.0
 
+- Removed: All deprecated `setAccessible()` calls from 43+ test files (removed in PHP 8.5).
+- Added: `#[\Pure]` attributes on pure methods, `@internal` annotations on protected methods.
+- Added: `GetsWebhookTimeout` trait extracted from `WebhookAction` and `EventsRedeliverCommand`.
+- Added: Factory `$model` properties updated to `static string` for Laravel 13+.
+- Added: Full lifecycle integration tests.
 - Fixed: `EventManager::getConfig()` and `on()` — replaced `assert()` with proper `instanceof` + `RuntimeException`.
+- Fixed: PHPStan configuration level corrected from `9` to `8` (PHPStan 2.x only supports levels 0–8).
 
-### v4.6.0
+### v4.0.0 – v4.14.0
 
-- Production readiness consolidation — PHPStan max, strict types, final classes, readonly properties.
-
-### v4.0.0
-
-- Initial production-ready release.
-
-### Earlier versions
-
-See git history for detailed changelog.
+- Initial production-ready release and early iterations.
+- See git history for detailed changelog.
 
 ## Contributing
 
