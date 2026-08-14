@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.0.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.1.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208%20(2.x)-success)() |
@@ -455,14 +455,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 252 test files + 5 support files
+├── tests/                      # 254 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (252 test files)
-└── Total: 298 PHP files (33 src + 3 factories + 3 migrations + 252 tests + 5 support + 1 rector.php + 1 config)
+│   └── ... (254 test files)
+└── Total: 300 PHP files (33 src + 3 factories + 3 migrations + 254 tests + 5 support + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -908,7 +908,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (252 test files)
+composer test        # Run Pest test suite (254 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -931,13 +931,23 @@ Test coverage spans:
 
 ## Changelog
 
+### v5.1.0
+
+- Added: `EventManagerRegisterSchedulerTest` — 2 tests verifying `registerScheduler()` delegation and `EventScheduler` resolution failure handling.
+- Fixed: README test file count updated from 252 to 254 across all references (package tree, testing section, total count).
+- Verified: All 33 source files PHP 8.5+ compliant — strict_types, final classes, readonly properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 7 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 8 configuration with comprehensive ignore rules.
+- Bumped: Version 5.1.0, total 300 PHP files (33 src + 254 tests).
+
 ### v5.0.0
 
 - **Production Ready milestone** — Phase 1 infrastructure production readiness.
 - Fixed: PHPStan configuration `level: max` changed to `level: 8` for PHPStan 2.x compatibility (PHPStan 2.x only supports levels 0–8).
 - Updated: README badges and references from "PHPStan Max" to "PHPStan Level 8".
 - Added: `EventsPhase164ProductionReadinessTest` — 35 comprehensive tests covering PHPStan config validation, source file audit (strict_types, license headers, namespaces), composer.json validation, config completeness, ServiceProvider bindings, Facade accessor, DomainEvent immutability, Model UUID keys/traits/factories, Migration config-driven table names, no TODO/FIXME, WebhookAction payload stripping, DispatchTriggerJob config-at-construction, SubscriptionBuilder URL scheme validation, EventScheduler task registration, TriggerBuilder action dedup, WildcardMatcher readonly final, CI workflow, source file count, README version match, console command documentation.
-- Bumped: Version 5.0.0, total 298 PHP files (33 src + 253 tests).
+- Bumped: Version 5.0.0, total 299 PHP files (33 src + 254 tests).
 
 ### v4.98.0
 
