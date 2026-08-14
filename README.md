@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.66.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.67.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 219 test files (Pest + support)
+└── tests/                      # 220 test files (Pest + support)
 ```
 
 ### How It Works
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (219 test files)
+composer test        # Run Pest test suite (220 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -875,6 +875,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.67.0
+
+- Added: `EventsPhase139ProductionAuditTest.php` — comprehensive Phase 139 production audit covering: version consistency (composer.json/README badge), strict_types on all source files, license headers, final class declarations, WildcardMatcher readonly final class, EventManager public method return type completeness, ConditionEngine #[Override] verification, ServiceProvider bindings and provides completeness, Facade getFacadeAccessor binding, config key completeness (all 7 top-level keys + nested), all 12 console commands registered, model config-driven table names, no setAccessible calls in source, no TODO/FIXME/HACK comments, DomainEvent immutability and roundtrip identity, WildcardMatcher catch-all/single-segment/extractWildcards, ConditionEngine 19 operators + AND logic + dot notation, ActionResolver error handling (non-existent class, non-Triggerable), TriggerBuilder validation (empty event, no action), SubscriptionBuilder URL validation (non-HTTP scheme, invalid URL), EventLog status constants, factory state builder coverage, phpstan.neon.dist max level, composer.json autoload/providers/aliases, migration structure verification (columns, indexes, foreign keys), EventManager global disable behavior, parseActions edge cases, Subscription signPayload (null/empty secret, valid HMAC), EventScheduler register method signature, DispatchTriggerJob config-driven properties, rector.php license header, GitHub CI workflow existence, test file count accuracy, PHP 8.5+ requirement.
+- Bumped: Version 4.67.0.
+- Updated: README test file count 219 → 220.
 
 ### v4.66.0
 
