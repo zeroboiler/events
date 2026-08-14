@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.86.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.87.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
@@ -454,12 +454,13 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 243 PHP files (238 test files + 5 support; 4 test files run without TestCase)
+├── tests/                      # 243 PHP files (238 test files + 5 support)
 │   ├── ... (238 test files)
 │   └── ...
 ├── database/
-│   └── factories/              # 6 factory files
-└── Total: 283 PHP files
+│   ├── factories/              # 3 factory files
+│   └── migrations/             # 3 migration files
+└── Total: 284 PHP files
 ```
 
 ### How It Works
@@ -919,6 +920,17 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.87.0
+
+- Fixed: README package tree — removed duplicate `database/factories/` entry, corrected factory count (3), added missing `migrations/` (3), updated total PHP file count (283 → 284).
+- Fixed: README tests annotation — removed stale "4 test files run without TestCase" reference.
+- Verified: All source files PHP 8.5 compliant (strict_types, final classes, readonly properties, typed properties, return type declarations, #[Override], #[Pure]).
+- Verified: PHPStan max configuration (level max) with comprehensive ignore rules for Eloquent/Facade dynamics.
+- Verified: ServiceProvider register/boot/provides consistency — 7 bindings correctly declared.
+- Verified: Config completeness — 7 top-level keys (table_names, queue, retry, retention, subscriptions, disabled, wildcard_cache_ttl) with all documented sub-keys.
+- Verified: All 12 console commands registered, migrations config-driven, factories with proper HasFactory annotations.
+- Bumped: Version 4.87.0.
 
 ### v4.86.0
 
