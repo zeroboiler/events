@@ -454,7 +454,12 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 283 PHP files (238 test files + 5 support; 4 test files run without TestCase)
+├── tests/                      # 243 PHP files (238 test files + 5 support; 4 test files run without TestCase)
+│   ├── ... (238 test files)
+│   └── ...
+├── database/
+│   └── factories/              # 6 factory files
+└── Total: 283 PHP files
 ```
 
 ### How It Works
