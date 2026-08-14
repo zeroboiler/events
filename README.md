@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.71.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.72.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 229 test files (Pest + support)
+└── tests/                      # 225 test files (Pest + support)
 ```
 
 ### How It Works
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (229 test files)
+composer test        # Run Pest test suite (225 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -875,6 +875,11 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.72.0
+
+- Fixed: README test file count corrected from 229 to 225 (matching actual file count).
+- Bumped: Version 4.72.0.
 
 ### v4.71.0
 
