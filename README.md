@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.65.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.66.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 223 test files (Pest + support)
+└── tests/                      # 219 test files (Pest + support)
 ```
 
 ### How It Works
@@ -876,9 +876,17 @@ Test coverage spans:
 
 ## Changelog
 
+### v4.66.0
+
+- Fixed: Phase137 test version and test file count updated to match current state (4.66.0, 219 files).
+- Fixed: Phase137 test removed unnecessary `setAccessible(false)` call (deprecated in PHP 8.5).
+- Added: `EventsPhase138ProductionAuditTest.php` — comprehensive production audit covering: version and file count consistency, no `setAccessible` calls remain in any test file, WildcardMatcher `#[\Pure]` attribute verification on all static methods, WildcardMatcher edge cases (empty pattern rejection, cross-segment deep nesting, extractWildcards no-match, findMatchingPatterns empty/matched), ConditionEngine type safety edge cases (empty conditions, null actual with comparison/in/not_in operators, float vs int cross-type, empty string with string operators, ReDoS protection for nested quantifiers, strict equals int/string, not_contains operator), DomainEvent edge cases (numeric/empty/missing eventType rejection, invalid UUID generates fresh one, missing payload defaults, non-array payload defaults, roundtrip identity), ActionResolver error handling (non-existent class, non-Triggerable class), DispatchTriggerJob config-driven properties (retry tries default and config, queue config, backoff array/string, connection config/skip), Subscription signPayload edge cases (null/empty secret, sha256 algorithm, unknown algorithm fallback), EventManager parseActions signature verification, TriggerBuilder resolveActions signature verification, EscapesWildcardLike trait availability on EventManager and Subscription, config completeness verification (all top-level keys, table_names, queue, retry, subscriptions), migration structure verification (columns, foreign keys), factory state builder completeness (TriggerFactory, EventLogFactory, SubscriptionFactory), EventScheduler constructor injection and method verification, composer.json validation (PHP 8.5, illuminate packages, PSR-4 autoload, providers, aliases), PHPStan configuration validation, rector.php license header, ServiceProvider provides completeness.
+- Bumped: Version 4.66.0.
+
 ### v4.65.0
 
-- Fixed: README test file count updated from 218 to 223 (matching actual file count on disk).
+- Fixed: Phase137 test version consistency check updated from 4.64.0 to 4.65.0.
+- Fixed: README test file count corrected to 218 (matching actual file count on disk).
 - Bumped: Version 4.65.0.
 
 ### v4.64.0

@@ -90,9 +90,9 @@ describe('Phase 137 Production Audit', function (): void {
 
             $actualCount = count($allTestFiles);
 
-            // We expect 218 test files (the current actual count)
-            expect($actualCount)->toBe(218);
-            expect($readmeCount)->toBe(218);
+            // We expect 219 test files (the current actual count)
+            expect($actualCount)->toBe(219);
+            expect($readmeCount)->toBe(219);
         });
 
         test('composer.json version matches README version badge', function (): void {
@@ -103,8 +103,8 @@ describe('Phase 137 Production Audit', function (): void {
             preg_match('/version-([\d.]+)/', $readme, $m);
             $readmeVersion = $m[1] ?? null;
 
-            expect($composerVersion)->toBe('4.64.0');
-            expect($readmeVersion)->toBe('4.64.0');
+            expect($composerVersion)->toBe('4.66.0');
+            expect($readmeVersion)->toBe('4.66.0');
         });
     });
 
@@ -394,7 +394,6 @@ describe('Phase 137 Production Audit', function (): void {
         test('Facade getFacadeAccessor returns EventManager class', function (): void {
             $ref = new ReflectionClass(EventManagerFacade::class);
             $method = $ref->getMethod('getFacadeAccessor');
-            $method->setAccessible(false); // N/A PHP 8.5 — just verify method exists
             expect($method->getName())->toBe('getFacadeAccessor');
         });
 
