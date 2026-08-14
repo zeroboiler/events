@@ -11,6 +11,7 @@ namespace ZeroBoiler\Events\Concerns;
 use Illuminate\Database\Eloquent\Collection;
 use ZeroBoiler\Events\Actions\WebhookAction;
 use ZeroBoiler\Events\Models\Subscription;
+use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\SubscriptionBuilder;
 
 /**
@@ -54,8 +55,9 @@ trait ManagesSubscriptions
     /**
      * Remove a webhook subscription by its ID.
      *
-     * Deletes the subscription record. Does not delete the associated
-     * trigger (use disable() for that if needed).
+     * Deletes the subscription record and its associated internal trigger
+     * (created by SubscriptionBuilder::save()) to prevent orphaned triggers
+     * that would continue dispatching webhooks after unsubscribe.
      */
     public function unsubscribe(string $subscriptionId): bool
     {
@@ -65,7 +67,16 @@ trait ManagesSubscriptions
             return false;
         }
 
+        // Clean up the internal trigger that was created by SubscriptionBuilder.
+        // The trigger's action is WebhookAction and its action_params contain
+        // the subscription_id — match on that to find the correct trigger.
+        Trigger::where('action', 'like', '%WebhookAction%')
+            ->whereRaw("JSON_EXTRACT(action, '$.params.subscription_id') = ?", [$subscriptionId])
+            ->delete();
+
         $subscription->delete();
+
+        $this->invalidateTriggerCache();
 
         return true;
     }

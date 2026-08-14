@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.97.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.98.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Max](https://img.shields.io/badge/PHPStan-Max%20(2.x)-success)() |
@@ -455,14 +455,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 248 test files + 5 support files
+├── tests/                      # 251 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (248 test files)
-└── Total: 294 PHP files (33 src + 3 factories + 3 migrations + 248 tests + 5 support + 1 rector.php + 1 config)
+│   └── ... (251 test files)
+└── Total: 297 PHP files (33 src + 3 factories + 3 migrations + 251 tests + 5 support + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -908,7 +908,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (248 test files)
+composer test        # Run Pest test suite (251 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -930,6 +930,15 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.98.0
+
+- Fixed: `Subscription::recordDelivery()` race condition — changed from `$this->delivery_count + 1` to atomic `increment()` to prevent lost increments under concurrent webhook deliveries.
+- Fixed: `ManagesSubscriptions::unsubscribe()` now also deletes the associated internal trigger (created by `SubscriptionBuilder::save()`) and invalidates the wildcard trigger cache, preventing orphaned triggers from continuing to dispatch webhooks after the subscription is removed.
+- Added: `SubscriptionRecordDeliveryAtomicTest` — 5 tests verifying atomic increment behavior, stale in-memory state handling, and multiple consecutive deliveries.
+- Added: `UnsubscribeCleansTriggerTest` — 5 tests verifying trigger cleanup on unsubscribe, cache invalidation, non-existent ID handling, unrelated trigger preservation, and multi-subscription isolation.
+- Added: `FireModelEdgeCasesTest` — 7 tests verifying `fireModel()` edge cases: empty/zero class and action validation, correct event name construction, payload flattening, and fallback to `toArray()` for non-Eloquent objects.
+- Bumped: Version 4.98.0, total 297 PHP files (33 src + 251 tests).
 
 ### v4.97.0
 
