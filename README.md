@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.73.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.74.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 230 PHP files (225 test files + 5 support)
+└── tests/                      # 230 PHP files (227 test files + 3 support)
 ```
 
 ### How It Works
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (225 test files)
+composer test        # Run Pest test suite (227 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -876,9 +876,15 @@ Test coverage spans:
 
 ## Changelog
 
+### v4.74.0
+
+- Fixed: README test file counts corrected — 227 test files + 3 support files (230 total PHP files), previously claimed 225+5.
+- Phase 145 production audit pass — README accuracy, PHP 8.5 compliance verification.
+- Bumped: Version 4.74.0.
+
 ### v4.73.0
 
-- Improved: README test file counts corrected — 225 test files + 5 support files (230 total PHP files).
+- Improved: README test file counts corrected — 227 test files + 3 support files (230 total PHP files).
 - Added: `EventsPhase144ProductionAuditTest.php` — Phase 144 production audit covering: README accuracy (version badge, TOC sections, CLI command list, package tree directories), PHP 8.5 source compliance (strict_types, license headers, final/readonly classes), ServiceProvider binding completeness (singleton/transient verification, provides() consistency), config key coverage, Facade @method annotation coverage, DomainEvent edge cases, ConditionEngine 21 operator completeness, Model casts and scopes, Factory state builders, PHPStan configuration validation.
 - Bumped: Version 4.73.0.
 
