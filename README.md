@@ -891,7 +891,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 
 Test coverage spans:
 - Core EventManager (fire, match, dispatch, CRUD, cache, async)
-- ConditionEngine (19 operators + AND logic + dot notation + ReDoS protection)
+- ConditionEngine (21 operators + AND logic + dot notation + ReDoS protection)
 - WildcardMatcher (single-segment, cross-segment, catch-all, extraction)
 - TriggerBuilder / SubscriptionBuilder (fluent interface, validation, action merging)
 - ActionResolver (class resolution, error handling)
@@ -954,7 +954,7 @@ Test coverage spans:
 
 ### v4.55.0 – v4.70.0
 
-- Continuous production audit (Phases 129–142): 55+ individual audit test files covering every source file for PHP 8.5 `strict_types`, license headers, `#[Override]`, `#[Pure]`, typed properties, return types, `final` classes, no `setAccessible`, no `TODO/FIXME`, config completeness, ServiceProvider bindings, migration structure, factory state builders, model scopes, ConditionEngine 19 operators, WildcardMatcher edge cases, DomainEvent immutability/roundtrip identity, TriggerBuilder/SubscriptionBuilder validation, ActionResolver error handling, EventManager global disable, parseActions edge cases, DispatchTriggerJob config-driven properties, EventScheduler constructor injection.
+- Continuous production audit (Phases 129–142): 55+ individual audit test files covering every source file for PHP 8.5 `strict_types`, license headers, `#[Override]`, `#[Pure]`, typed properties, return types, `final` classes, no `setAccessible`, no `TODO/FIXME`, config completeness, ServiceProvider bindings, migration structure, factory state builders, model scopes, ConditionEngine 21 operators, WildcardMatcher edge cases, DomainEvent immutability/roundtrip identity, TriggerBuilder/SubscriptionBuilder validation, ActionResolver error handling, EventManager global disable, parseActions edge cases, DispatchTriggerJob config-driven properties, EventScheduler constructor injection.
 - Fixed: README package tree indentation, test file count accuracy, `setAccessible` removals from test files.
 - Added: `@property-read` annotations, `@see` cross-references on traits.
 
