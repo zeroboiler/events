@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.76.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.77.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
@@ -444,7 +444,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 231 PHP files (226 test files + 5 support)
+└── tests/                      # 232 PHP files (227 test files + 5 support)
 ```
 
 ### How It Works
@@ -882,7 +882,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (226 test files)
+composer test        # Run Pest test suite (227 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -904,6 +904,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.77.0
+
+- Added: `EventsPhase148ProductionAuditTest` — Phase 148 production audit with 30+ tests covering README accuracy, PHP 8.5 compliance, ServiceProvider bindings (7 provides), config completeness (7 top-level keys), constructor DI verification, DomainEvent readonly/final, #[Override] on register/boot/provides, deprecated function checks, migration/factory strict_types, version consistency, phpstan config validation.
+- Bumped: Test count 226→227 test files.
+- Bumped: Version 4.77.0.
 
 ### v4.76.0
 
