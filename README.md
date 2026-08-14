@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.3.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.4.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208%20(2.x)-success)() |
@@ -135,7 +135,7 @@ return [
         'cleanup_cron' => env('EVENTS_SUB_CLEANUP_CRON', '0 3 * * *'),
     ],
 
-    'disabled' => env('EVENTS_DISABLED', false),
+    'disabled' => env('EVENTS_DISABLED') === 'true' || env('EVENTS_DISABLED') === '1' || env('EVENTS_DISABLED') === true,
 
     'wildcard_cache_ttl' => env('EVENTS_WILDCARD_CACHE_TTL', 300),
 ];
@@ -157,7 +157,7 @@ return [
 | `EVENTS_SUB_SIGNATURE_ALGORITHM` | `sha256` | HMAC algorithm for webhook payload signing |
 | `EVENTS_SUB_SECRET_LENGTH` | `32` | Length of auto-generated webhook secrets (minimum 16) |
 | `EVENTS_SUB_CLEANUP_CRON` | `0 3 * * *` | Cron expression for automatic subscription cleanup schedule |
-| `EVENTS_DISABLED` | `false` | Set `true` to globally disable the entire event system |
+| `EVENTS_DISABLED` | `false` | Set `true` to globally disable the entire event system. Accepts `true`, `1`, or `"true"` (case-sensitive) |
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Cache TTL (seconds) for enabled wildcard triggers; set to `0` to disable |
 
 ## Usage
@@ -457,14 +457,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 259 test files + 5 support files
+├── tests/                      # 260 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (259 test files)
-└── Total: 305 PHP files (33 src + 259 tests + 5 support + 1 rector.php + 1 config + 6 factories/migrations)
+│   └── ... (260 test files)
+└── Total: 306 PHP files (33 src + 260 tests + 5 support + 1 rector.php + 1 config + 6 factories/migrations)
 ```
 
 ### How It Works
@@ -910,7 +910,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (259 test files)
+composer test        # Run Pest test suite (260 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -932,6 +932,15 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.4.0
+
+- Fixed: `config/events.php` `disabled` key now uses strict boolean evaluation (`env('EVENTS_DISABLED') === 'true' || env('EVENTS_DISABLED') === '1' || env('EVENTS_DISABLED') === true`) instead of `env('EVENTS_DISABLED', false)` which could return non-boolean string values from `.env`.
+- Added: `EventSchedulerFacadeProxyTest` — 3 tests verifying `registerScheduler()` delegation through both the facade and resolved instance, and config-driven cron expression customization.
+- Updated: README environment variables table — documented that `EVENTS_DISABLED` accepts `true`, `1`, or `"true"` (case-sensitive).
+- Updated: README config example — `disabled` key updated to match the strict boolean evaluation pattern.
+- Updated: README test file counts — 260 test files, 306 total PHP files.
+- Bumped: Version 5.4.0.
 
 ### v5.3.0
 

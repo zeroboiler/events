@@ -275,6 +275,7 @@ uses(TestCase::class)->in(
     'SubscriptionSecretLengthConfigTest.php',
     'WildcardMatcherEdgeCasesPhase2Test.php',
     'EventManagerFullLifecycleTest.php',
+    'EventSchedulerFacadeProxyTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)

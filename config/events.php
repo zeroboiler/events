@@ -90,7 +90,7 @@ return [
     |
     */
 
-    'disabled' => env('EVENTS_DISABLED', false),
+    'disabled' => env('EVENTS_DISABLED') === 'true' || env('EVENTS_DISABLED') === '1' || env('EVENTS_DISABLED') === true,
 
     /*
     |--------------------------------------------------------------------------
