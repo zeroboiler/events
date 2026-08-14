@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.69.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.70.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 227 test files (Pest + support)
+└── tests/                      # 228 test files (Pest + support)
 ```
 
 ### How It Works
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (227 test files)
+composer test        # Run Pest test suite (228 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -875,6 +875,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.70.0
+
+- Added: `EventsPhase142ProductionAuditTest.php` — Phase 142 production audit covering: all source files strict_types and license header verification, ManagesSubscriptions trait public API return types (subscribe, listSubscriptions, subscribeWebhook), ManagesHistory trait public API return types (getStats array shape, getEventHistory, getStalePendingLogs, deactivateExceededSubscriptions), EventScheduler singleton and constructor injection verification, DispatchTriggerJob config-driven properties (tries, backoff array/string, queue, connection null/ set), WildcardMatcher Unicode edge cases (single/cross segment), ConditionEngine string coercion and operator edge cases (not_contains, not_in, not_empty, not_null, ends_with, strictEquals int/string coercion), DomainEvent fromArray edge cases (missing eventType, non-array payload, extra fields, toArray key structure, ISO 8601 format), Subscription model methods (recordDelivery, recordFailure, resetFailures, matchesEvent exact/wildcard), Trigger model scopes (enabled, async, orderByPriority), EventLog model scopes and methods (withStatus, markAsCompleted, markAsFailed), Wildcard cache TTL edge cases (0 disable, negative fallback), ServiceProvider provides completeness vs register() bindings, EventManager registerScheduler facade delegation, composer.json version consistency and validation.
+- Fixed: Pest.php — registered Phase 141 and Phase 142 audit tests in the test runner.
+- Bumped: Version 4.70.0.
+- Updated: README test file count 227 → 228.
 
 ### v4.69.0
 
