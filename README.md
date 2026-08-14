@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.68.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.69.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 226 test files (Pest + support)
+└── tests/                      # 227 test files (Pest + support)
 ```
 
 ### How It Works
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (226 test files)
+composer test        # Run Pest test suite (227 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -875,6 +875,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.69.0
+
+- Added: `EventsPhase141ProductionAuditTest.php` — comprehensive Phase 141 production audit covering: EventManager fire() edge cases (global disable, empty/zero-string event, empty model class/action), CRUD operations (non-existent trigger/subscription returns null/false), WildcardMatcher edge cases (catch-all, cross-segment deep nesting, extractWildcards, findMatchingPatterns), ConditionEngine 19 operators + AND logic + dot notation + empty/unknown operator, DomainEvent serialization/reconstruction/identity preservation, EventLog status constants, TriggerBuilder validation (empty event, no action, empty string class, auto-name), SubscriptionBuilder validation (empty event/URL, non-HTTP scheme, invalid URL), Subscription signPayload edge cases (null/empty secret, valid HMAC), Config completeness (all 7 top-level keys + nested), ServiceProvider binding verification (singleton checks, contract binding, facade accessor), ActionResolver error handling (non-existent class, non-Triggerable).
+- Bumped: Version 4.69.0.
+- Updated: README test file count 226 → 227.
 
 ### v4.68.0
 
