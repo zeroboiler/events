@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.63.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.64.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 217 test files (Pest + support)
+└── tests/                      # 218 test files (Pest + support)
 ```
 
 ### How It Works
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (217 test files)
+composer test        # Run Pest test suite (218 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -876,7 +876,13 @@ Test coverage spans:
 
 ## Changelog
 
-### v4.62.0
+### v4.64.0
+
+- Added: `EventsPhase137ProductionAuditTest.php` — comprehensive Phase 1 production audit covering: file count and version consistency (README vs actual, composer.json vs README badge), PHP 8.5 strict_types and license headers on all source/migration/factory files, final class declarations on all 27 core classes (services, commands, models, domain objects), `readonly final class` verification on `WildcardMatcher` (all static methods), `#[\Override]` attribute verification on all ServiceProvider methods and all 12 console command `handle()` methods, return type declarations on all public methods of EventManager/ConditionEngine/ActionResolver/TriggerBuilder/SubscriptionBuilder, typed properties on all models and DispatchTriggerJob, ServiceProvider provides() completeness vs register() bindings, Facade getFacadeAccessor binding, ConditionEngine operator coverage (matches, not_empty, not_null, not_in, ends_with, AND logic, dot notation, unknown operator, empty array), WildcardMatcher edge cases (empty event, exact match, single/cross segment, extractWildcards, findMatchingPatterns), DomainEvent immutability and roundtrip identity, config completeness (all top-level keys, table_names, queue, retry, subscriptions), composer.json autoload and extra validation (PSR-4, providers, aliases, PHP requirement), model status constants and method existence verification, migration structure verification (columns), factory existence, EventScheduler constructor injection and method completeness, PHPStan config validation, rector.php license header, EventManager global disable toggle behavior, ConditionEngine contract binding, no TODO/FIXME/HACK comments in source.
+- Fixed: README test file count updated from 217 to 218 (matching actual file count on disk).
+- Bumped: Version 4.64.0.
+
+### v4.63.0
 
 - Added: `EventsPhase136ProductionAuditTest.php` — comprehensive production audit covering: strict_types verification on all source + migration + factory files, license header verification on rector.php, final class declarations for all services and console commands, readonly property verification on EventManager/DispatchTriggerJob/DomainEvent, ConditionEngine comprehensive operator coverage (matches, not_empty, not_null, not_contains, not_in, between, ReDoS protection, AND logic, dot notation, strict equals, === and !=== operators, unknown operator), WildcardMatcher edge cases (empty events, catch-all, single/double segment, regex special chars, findMatchingPatterns, extractWildcards), DomainEvent immutability and reconstruction edge cases (missing/empty eventType, invalid UUID/date, empty secret signing, consistent HMAC), TriggerBuilder validation (empty event, no action, auto-generated name, actions validation), SubscriptionBuilder validation (empty event/URL, invalid URL, non-HTTP scheme), EventLog status constants verification, model table name config consistency, factory state builder completeness, Trigger/EventLog/Subscription model scopes, ServiceProvider provides() completeness and binding audit, config completeness verification, migration structure verification (columns, indexes, foreign keys), PHPStan config validation, composer.json autoload and extra validation, EventManager global disable and setEnabled behavior, version consistency between composer.json and README.
 - Fixed: Added missing license header to `rector.php`.
