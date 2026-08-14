@@ -424,7 +424,7 @@ events/
 │       ├── 2024_01_01_000002_create_event_logs_table.php
 │       └── 2025_06_28_000001_create_event_subscriptions_table.php
 ├── rector.php                    # Rector code upgrade configuration (Laravel 13)
-├── phpstan.neon.dist            # PHPStan max configuration
+├── phpstan.neon.dist            # PHPStan level 8 configuration
 ├── src/
 │   ├── Actions/
 │   │   └── WebhookAction.php   # Triggerable: HTTP POST webhook dispatch
