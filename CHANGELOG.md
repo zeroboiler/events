@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.92.0] — 2026-08-14
+
+### Added
+- `EventsPhase158ProductionAuditTest.php` — Phase 158 comprehensive production audit (75+ tests) covering: PHP 8.5 strict types, final classes, return type declarations, typed properties, #[Override] on ServiceProvider, docblock quality, exception hierarchy, event store contracts, EventBus compliance, Model verification, scheduler registration.
+
+### Changed
+- Version bumped to 4.92.0
+
+---
+
 ## [4.82.0] — 2026-08-14
 
 ### Improved
