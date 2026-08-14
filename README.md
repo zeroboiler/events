@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.82.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.83.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
@@ -389,7 +389,7 @@ app(EventScheduler::class)->register(app(Schedule::class));
 Or via the `EventManager` facade:
 
 ```php
-// app/Console/Kernel.php (Laravel 12 and earlier)
+// app/Console/Kernel.php (Laravel 13 and earlier)
 use ZeroBoiler\Events\Facades\EventManager;
 
 protected function schedule(Schedule $schedule): void
@@ -454,7 +454,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 237 PHP files (232 test files + 5 support; 2 test files run without TestCase)
+└── tests/                      # 238 PHP files (233 test files + 5 support; 3 test files run without TestCase)
 ```
 
 ### How It Works
@@ -892,7 +892,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (232 test files)
+composer test        # Run Pest test suite (233 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -914,6 +914,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.83.0
+
+- Added: `EventsPhase153ProductionAuditTest.php` — Phase 153 comprehensive production audit (40+ tests) covering: PHP 8.5 compliance (strict_types, license headers, final classes, readonly properties), constructor DI verification, ServiceProvider provides() consistency (7 bindings), config completeness (7 top-level keys + all sub-keys), interface implementations (ConditionEngineContract, Triggerable), facade accessor, model config-driven table names, EventLog status constants and lifecycle, ConditionEngine 21 operators coverage, DomainEvent edge cases (empty eventType, invalid UUID, zero-string eventType), EventManager input validation (empty event, empty model class, zero-string action, non-existent IDs), TriggerBuilder validation (empty event, no action, zero-string action), SubscriptionBuilder URL scheme enforcement (ftp/file/javascript rejection, http/https acceptance), global disable behavior, WildcardMatcher edge cases (empty pattern/empty event), ActionResolver error handling (non-existent class, non-Triggerable class), README accuracy (version badge, test count, total PHP file count), PHPStan configuration validation, migration/factory file counts (3+3), no deprecated functions (no setAccessible, no TODO/FIXME), 12 console commands with final classes, Subscription lifecycle (recordDelivery, recordFailure, resetFailures, signPayload), README "Laravel 12" → "Laravel 13" reference update, README "2 test files" → "3 test files" correction.
+- Fixed: README "Laravel 12 and earlier" reference updated to "Laravel 13 and earlier" for `Kernel::schedule()` code example.
+- Fixed: README test file count corrected: "2 test files run without TestCase" → "3 test files" (WildcardMatcherTest, WildcardMatcherEdgeCasesTest, EscapesWildcardLikeTest).
+- Updated: README test count 232→233 test files, total 237→238 PHP files.
+- Bumped: Version 4.83.0.
 
 ### v4.82.0
 
