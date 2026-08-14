@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.87.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.89.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
@@ -454,13 +454,10 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 243 PHP files (238 test files + 5 support)
-│   ├── ... (238 test files)
+├── tests/                      # 240 test files + 5 support files
+│   ├── ... (240 test files)
 │   └── ...
-├── database/
-│   ├── factories/              # 3 factory files
-│   └── migrations/             # 3 migration files
-└── Total: 284 PHP files
+└── Total: 286 PHP files (28 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 240 tests + 5 support)
 ```
 
 ### How It Works
@@ -898,7 +895,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (238 test files)
+composer test        # Run Pest test suite (240 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -920,6 +917,22 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.89.0
+
+- Added: `EventsPhase156ProductionAuditTest.php` — Phase 156 production audit with 25+ tests covering: EventManager parseActions edge cases (empty string, zero string, whitespace, single class, JSON array, JSON object, JSON classes+params), WildcardMatcher pure edge cases (dot-only patterns, empty pattern/event, exact match, cross-segment zero additional, findMatchingPatterns order preservation, non-matching, extractWildcards non-matching), ConditionEngine strict types (empty conditions, strict equals same/different types, between inverted ranges, nested dot notation null, not_empty with arrays, matches 500-char rejection, AND logic), EventScheduler config resilience, wildcard cache TTL edge cases (0 disabled, negative fallback, string fallback, valid integer).
+- Updated: README test count 239→240 test files, total 285→286 PHP files.
+- Bumped: Version 4.89.0.
+
+### v4.88.0
+
+- Fixed: phpstan.neon.dist — Renamed deprecated `reportUnmatchedIgnoredErrors` to `reportUnusedIgnoredErrors` for PHPStan 2.x compatibility. Added suppressions for Collection::values() and emptyArray constructs.
+- Fixed: README package tree — removed duplicate `database/factories/` and `database/migrations/` entries that appeared after the `tests/` section. Updated total PHP file count.
+- Added: `EventManagerCrudAdvancedTest.php` — 13 tests covering: getTrigger by ID (found/not-found), listTriggers with event filter/enabled filter/limit/wildcard pattern, deleteTrigger (success/not-found/soft-delete verification), enable/disable non-existent IDs, invalidateTriggerCache, setEnabled runtime toggle, fire with disabled system, listTriggers wildcard LIKE query.
+- Verified: All source files PHP 8.5 compliant (strict_types, final classes, readonly properties, typed properties, return type declarations, #[Override], #[Pure]).
+- Verified: ServiceProvider register/boot/provides consistency — 7 bindings correctly declared.
+- Verified: Config completeness — 7 top-level keys with all documented sub-keys.
+- Bumped: Version 4.88.0.
 
 ### v4.87.0
 

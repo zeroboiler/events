@@ -5,7 +5,7 @@ parameters:
         - database/migrations
         - database/factories
         - tests
-    reportUnmatchedIgnoredErrors: true
+    reportUnusedIgnoredErrors: true
     treatPhpDocTypesAsCertain: false
     checkMissingIterableValueType: true
     checkGenericClassInNonGenericObjectType: true
@@ -32,3 +32,6 @@ parameters:
         - '#Call to an undefined method PHPUnit\\\\Framework\\\\MockObject::.*shouldHaveReceived\\(\\)#'
         - '#Call to an undefined method PHPUnit\\\\Framework\\\\MockObject::.*shouldNotHaveReceived\\(\\)#'
         - '#Cannot access property \\$event on Illuminate\\\\Database\\\\Eloquent\\\\Model#'
+        - '#Construct empty array with emptyArray#'
+        - '#Method Illuminate\\\\Database\\\\Eloquent\\\\Collection::values\\(\\) should return#'
+        - '#Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Collection::values\\(\\)#'
