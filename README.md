@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.77.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.78.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
@@ -376,10 +376,20 @@ When disabled, all `fire()` calls silently return without dispatching any trigge
 
 ### Scheduled Tasks
 
-The package provides an `EventScheduler` that registers automated maintenance tasks. To enable scheduled tasks, register the scheduler in your application's `Kernel::schedule()` method:
+The package provides an `EventScheduler` that registers automated maintenance tasks. To enable scheduled tasks, register the scheduler in your console routes:
 
 ```php
-// app/Console/Kernel.php
+// routes/console.php
+use Illuminate\Support\Facades\Schedule;
+use ZeroBoiler\Events\EventScheduler;
+
+app(EventScheduler::class)->register(app(Schedule::class));
+```
+
+Or via the `EventManager` facade:
+
+```php
+// app/Console/Kernel.php (Laravel 12 and earlier)
 use ZeroBoiler\Events\Facades\EventManager;
 
 protected function schedule(Schedule $schedule): void
@@ -444,7 +454,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 232 PHP files (227 test files + 5 support)
+└── tests/                      # 233 PHP files (228 test files + 5 support; 2 test files run without TestCase)
 ```
 
 ### How It Works
@@ -882,7 +892,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (227 test files)
+composer test        # Run Pest test suite (228 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -904,6 +914,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.78.0
+
+- Fixed: `EventsIntegrationTest.php` registered in `Pest.php` — was previously excluded and could not run via `composer test`.
+- Added: `EventsPhase149ProductionAuditTest.php` — Phase 149 production audit with 30+ tests covering: PHP 8.5 compliance (strict_types, license headers, final classes, readonly, typed properties, return types, #[Override], #[Pure]), ServiceProvider register/boot/provides consistency (7 provides), config completeness (7 top-level keys), constructor DI verification (EventManager, EventScheduler, TriggerBuilder, SubscriptionBuilder), DomainEvent readonly/final/immutable + roundtrip, model getTable/casts/newFactory verification, factory `$model` static string pattern, migration timestamps, Triggerable interface signature, WebhookAction Triggerable implementation, DispatchTriggerJob config-driven properties, no deprecated setAccessible calls, phpstan.neon.dist validation, EventsIntegrationTest Pest.php registration, README accuracy (version badge, test count, command count), ConditionEngine 20 named operators + implicit equality.
+- Updated: README Scheduled Tasks section — added Laravel 13 `routes/console.php` approach alongside legacy `Kernel::schedule()` method.
+- Updated: README test count 227→228 test files, total 232→233 PHP files.
+- Bumped: Version 4.78.0.
 
 ### v4.77.0
 
