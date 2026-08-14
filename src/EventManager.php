@@ -36,6 +36,10 @@ use ZeroBoiler\Events\Models\Trigger;
  *
  * @property-read \Illuminate\Container\Container $app
  *
+ * @mixin \ZeroBoiler\Events\Concerns\ManagesHistory
+ * @mixin \ZeroBoiler\Events\Concerns\ManagesSubscriptions
+ * @mixin \ZeroBoiler\Events\Concerns\EscapesWildcardLike
+ *
  * @see \ZeroBoiler\Events\Facades\EventManager
  */
 final class EventManager

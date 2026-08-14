@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.81.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.82.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
@@ -454,7 +454,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 236 PHP files (231 test files + 5 support; 2 test files run without TestCase)
+└── tests/                      # 237 PHP files (232 test files + 5 support; 2 test files run without TestCase)
 ```
 
 ### How It Works
@@ -892,7 +892,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (231 test files)
+composer test        # Run Pest test suite (232 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -914,6 +914,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.82.0
+
+- Improved: Added `@mixin` annotations to `EventManager` class docblock for trait method IDE autocompletion (`ManagesHistory`, `ManagesSubscriptions`, `EscapesWildcardLike`).
+- Improved: Added `@see` cross-references to model docblocks: `Trigger` → `TriggerBuilder`, `Subscription` → `SubscriptionBuilder` + `WebhookAction`, `EventLog` → `DispatchTriggerJob`.
+- Added: `EventsPhase152ProductionAuditTest.php` — Phase 152 comprehensive production audit (25+ tests) covering: `@mixin` annotations, `@see` cross-references, `declare(strict_types=1)` across all source files, license headers, final classes, return type completeness, `WildcardMatcher` readonly final, `DomainEvent` immutability, `ServiceProvider` provides() consistency (7 bindings), config completeness, interface implementations, facade accessor, `EventLog` status constants, config-driven table names, no deprecated `setAccessible()`, phpstan config validation, version alignment, 12 console commands, `DispatchTriggerJob` promoted properties, `ConditionEngine` 21 operators.
+- Updated: README test count 231→232 test files, total 236→237 PHP files.
+- Bumped: Version 4.82.0.
 
 ### v4.81.0
 

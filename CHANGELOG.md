@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.82.0] — 2026-08-14
+
+### Improved
+- Added `@mixin` annotations to `EventManager` class docblock for trait method IDE autocompletion (`ManagesHistory`, `ManagesSubscriptions`, `EscapesWildcardLike`).
+- Added `@see` cross-references to model docblocks: `Trigger` → `TriggerBuilder`, `Subscription` → `SubscriptionBuilder` + `WebhookAction`, `EventLog` → `DispatchTriggerJob`.
+
+### Added
+- `EventsPhase152ProductionAuditTest.php` — Phase 152 comprehensive production audit (25+ tests) covering: `@mixin` annotations on `EventManager`, `@see` cross-references on all models, `declare(strict_types=1)` across all source files, license header presence, all source classes are `final`, `EventManager` public method return type completeness, `WildcardMatcher` `readonly final` + static-only verification, `DomainEvent` immutability + readonly properties, `ServiceProvider` `provides()` consistency (7 bindings), config file completeness (7 top-level keys), `ConditionEngine` → `ConditionEngineContract` implementation, `WebhookAction` → `Triggerable` implementation, facade accessor correctness, `EventLog` 4 status constants, models config-driven `getTable()`, no deprecated `setAccessible()` calls in source, `phpstan.neon.dist` validation, `composer.json` version alignment with README badge, all 12 console commands registered, `DispatchTriggerJob` constructor promoted readonly properties, `ConditionEngine` 21 operator match expression coverage.
+
+- Updated: README test count 231→232 test files, total 236→237 PHP files.
+- Bumped: Version 4.82.0.
+
+---
+
 ## [4.52.0] — 2026-08-13
 
 ### Fixed

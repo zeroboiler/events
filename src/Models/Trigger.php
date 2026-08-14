@@ -32,6 +32,8 @@ use ZeroBoiler\Events\Database\Factories\TriggerFactory;
  * @property-read Collection<int, EventLog> $eventLogs
  *
  * @mixin \Illuminate\Database\Eloquent\Builder<Trigger>
+ *
+ * @see \ZeroBoiler\Events\TriggerBuilder
  */
 final class Trigger extends Model
 {

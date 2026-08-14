@@ -30,6 +30,8 @@ use ZeroBoiler\Events\Database\Factories\EventLogFactory;
  * @property-read Trigger $trigger
  *
  * @mixin \Illuminate\Database\Eloquent\Builder<EventLog>
+ *
+ * @see \ZeroBoiler\Events\Jobs\DispatchTriggerJob
  */
 final class EventLog extends Model
 {

@@ -40,6 +40,9 @@ use ZeroBoiler\Events\WildcardMatcher;
  * @property Carbon $updated_at
  *
  * @mixin \Illuminate\Database\Eloquent\Builder<Subscription>
+ *
+ * @see \ZeroBoiler\Events\SubscriptionBuilder
+ * @see \ZeroBoiler\Events\Actions\WebhookAction
  */
 final class Subscription extends Model
 {
