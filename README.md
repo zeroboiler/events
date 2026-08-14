@@ -1,9 +1,9 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.89.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.90.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
-[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
+| ![PHPStan Max](https://img.shields.io/badge/PHPStan-Max%20(2.x)-success)() |
 [![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -917,6 +917,17 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.90.0
+
+- Fixed: `EventsPhase154ProductionAuditTest.php` registered in `Pest.php` — was missing and would not run with `composer test`.
+- Updated: README PHPStan badge to reference PHPStan 2.x explicitly.
+- Verified: All 240 test files registered in Pest.php (Phase 154 added).
+- Verified: PHPStan max (level max) configuration compatible with PHPStan 2.x.
+- Verified: All 28 source files PHP 8.5 compliant — `declare(strict_types=1)`, `final` classes, `readonly` promoted properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: ServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 7 top-level keys with all documented sub-keys.
+- Bumped: Version 4.90.0.
 
 ### v4.89.0
 
