@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.80.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.81.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
@@ -454,7 +454,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 235 PHP files (230 test files + 5 support; 2 test files run without TestCase)
+└── tests/                      # 236 PHP files (231 test files + 5 support; 2 test files run without TestCase)
 ```
 
 ### How It Works
@@ -892,7 +892,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (230 test files)
+composer test        # Run Pest test suite (231 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -914,6 +914,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.81.0
+
+- Added: `EventManagerDeleteTriggerTest` — Dedicated test suite for `EventManager::deleteTrigger()` covering: successful deletion, non-existent ID, wildcard cache invalidation, soft-delete behavior, cascade to event logs, wildcard event pattern deletion.
+- Added: `universalObjectCratesClasses` to `phpstan.neon.dist` for Laravel 13 Eloquent model dynamic property support (PHPStan 2.x).
+- Updated: README test count 230→231 test files, total 235→236 PHP files.
+- Bumped: Version 4.81.0.
 
 ### v4.80.0
 

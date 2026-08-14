@@ -14,6 +14,9 @@ parameters:
     checkClassLikeNameCase: true
     checkPropertyHookNameCase: true
     checkEnumCaseValueNameCase: true
+    universalObjectCratesClasses:
+        - Illuminate\Database\Eloquent\Model
+        - Illuminate\Database\Eloquent\Builder
     ignoreErrors:
         - '#Call to an undefined (static )?method Illuminate\\\\Support\\\\Facades\\\\(Config|Cache|Queue|Log|DB|Schema)::.*#'
         - '#Call to an undefined (static )?method Illuminate\\\\Support\\\\Facades\\\\Http::.*#'
