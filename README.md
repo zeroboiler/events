@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.83.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.84.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
@@ -454,7 +454,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 238 PHP files (233 test files + 5 support; 3 test files run without TestCase)
+└── tests/                      # 240 PHP files (234 test files + 5 support; 3 test files run without TestCase)
 ```
 
 ### How It Works
@@ -892,7 +892,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (233 test files)
+composer test        # Run Pest test suite (234 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -914,6 +914,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.84.0
+
+- Added: `EventsPhase154ProductionAuditTest.php` — Phase 154 production audit (40+ tests) covering: PHP 8.5 compliance verification, final classes, readonly properties, constructor DI, ServiceProvider provides() consistency (7 bindings), config completeness (7 top-level keys), interface implementations, facade accessor, model constants and methods, ConditionEngine 21 operators, DomainEvent immutability and roundtrip, WildcardMatcher edge cases (single/double/catch-all), DispatchTriggerJob promoted properties, no deprecated functions, README accuracy, CLI command documentation, SubscriptionBuilder URL scheme enforcement, EventScheduler constructor DI.
+- Updated: README test count 233→234 test files, total 238→240 PHP files.
+- Bumped: Version 4.84.0.
 
 ### v4.83.0
 
