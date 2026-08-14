@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.84.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.85.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
@@ -454,7 +454,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 240 PHP files (234 test files + 5 support; 3 test files run without TestCase)
+└── tests/                      # 281 PHP files (238 test files + 5 support; 3 test files run without TestCase)
 ```
 
 ### How It Works
@@ -892,7 +892,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (234 test files)
+composer test        # Run Pest test suite (238 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -914,6 +914,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.85.0
+
+- Added: `EventsPhase155ProductionAuditTest.php` — Phase 155 production audit with 40+ tests covering: README accuracy (version badge, test counts, total PHP file counts), PHP 8.5 compliance (strict_types, license headers, final classes, readonly properties), ServiceProvider provides() consistency (7 bindings), config completeness (7 top-level keys + all subscription sub-keys), interface implementations (ConditionEngineContract, Triggerable), facade accessor verification, DomainEvent immutability + roundtrip identity, ConditionEngine 21 operators (including implicit equality), WildcardMatcher edge cases (single/cross-segment/catch-all/extract), EventScheduler constructor DI, DispatchTriggerJob config-driven properties, EscapesWildcardLike + GetsWebhookTimeout trait method verification, EventManager trait usage verification, EventLog status constants, TriggerBuilder/SubscriptionBuilder constructor DI + save() validation, SubscriptionBuilder URL scheme enforcement, EventManager fire/fireModel empty input validation, ActionResolver error handling, 12 console command registration, phpstan.neon.dist validation, database factories (3) + migrations (3) counts, Models soft deletes, Models config-driven table names, Models casts #[Override], WebhookAction handle #[Override], readonly constructor-promoted properties.
+- Updated: README test count 234→238 test files, total 240→281 PHP files.
+- Bumped: Version 4.85.0.
 
 ### v4.84.0
 
