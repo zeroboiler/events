@@ -280,7 +280,7 @@ test('phpstan.neon.dist has correct level for PHPStan 2.x', function (): void {
     $contents = (string) file_get_contents(__DIR__.'/../phpstan.neon.dist');
 
     // PHPStan 2.x supports levels 0-8 only
-    expect($contents)->toContain('level: 8');
+    expect($contents)->toContain('level: max');
     expect($contents)->toContain('paths:');
     expect($contents)->toContain('src');
     expect($contents)->toContain('reportUnmatchedIgnoredErrors: true');

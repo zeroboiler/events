@@ -480,7 +480,7 @@ test('phpstan.neon.dist has correct configuration', function (): void {
     expect($config)->not->toBeFalse();
     $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
 
-    expect($content)->toContain('level: 9');
+    expect($content)->toContain('level: max');
     expect($content)->toContain('paths:');
     expect($content)->toContain('- src');
     expect($content)->toContain('- database/migrations');

@@ -317,7 +317,7 @@ it('verifies config subscriptions has all required keys', function (): void {
 
 it('verifies phpstan.neon.dist has level 9', function (): void {
     $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    expect($content)->toContain('level: 9');
+    expect($content)->toContain('level: max');
     expect($content)->toContain('checkGenericClassInNonGenericObjectType: true');
     expect($content)->toContain('checkUninitializedProperties: true');
     expect($content)->toContain('checkFunctionNameCase: true');

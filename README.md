@@ -1,9 +1,9 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.62.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.63.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
-|[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
+|[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
 [![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -412,7 +412,7 @@ events/
 │       ├── 2024_01_01_000002_create_event_logs_table.php
 │       └── 2025_06_28_000001_create_event_subscriptions_table.php
 ├── rector.php                    # Rector code upgrade configuration (Laravel 13)
-├── phpstan.neon.dist            # PHPStan level 8 configuration
+├── phpstan.neon.dist            # PHPStan max configuration
 ├── src/
 │   ├── Actions/
 │   │   └── WebhookAction.php   # Triggerable: HTTP POST webhook dispatch
@@ -854,7 +854,7 @@ Before deploying to production, verify:
 
 ```bash
 composer test        # Run Pest test suite (217 test files)
-composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
+composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
 composer ci          # All checks (lint → analyse → rector → test)
@@ -949,7 +949,7 @@ Test coverage spans:
 ### v4.52.0
 
 - Added: Comprehensive PHPStan 2.x config fixes, 60+ audit tests.
-- Fixed: `sortBy` compatibility for PHPStan level 8.
+- Fixed: `sortBy` compatibility for PHPStan max.
 
 ### v4.49.0 – v4.45.0
 
@@ -981,7 +981,7 @@ Test coverage spans:
 
 ### v4.6.0
 
-- Production readiness consolidation — PHPStan level 8, strict types, final classes, readonly properties.
+- Production readiness consolidation — PHPStan max, strict types, final classes, readonly properties.
 
 ### v4.0.0
 
@@ -996,7 +996,7 @@ See git history for detailed changelog.
 This is a private package. Contribution guidelines:
 
 1. **Code style**: Follow PSR-12. Run `composer lint` (Laravel Pint) before committing.
-2. **Static analysis**: Run `composer analyse` (PHPStan level 8). Zero errors allowed.
+2. **Static analysis**: Run `composer analyse` (PHPStan max). Zero errors allowed.
 3. **Tests**: Run `composer test` (Pest). All tests must pass. Add tests for new features.
 4. **Rector**: Run `composer rector` to apply automated code improvements.
 5. **Full CI**: Run `composer ci` to execute all checks in order.

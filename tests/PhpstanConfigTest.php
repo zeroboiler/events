@@ -15,7 +15,7 @@ test('phpstan.neon.dist exists and contains level 9', function (): void {
 
     $content = File::get($path);
 
-    expect($content)->toContain('level: 9', 'PHPStan level must be 9')
+    expect($content)->toContain('level: max', 'PHPStan level must be 9')
         ->and($content)->toContain('paths:', 'PHPStan must define paths')
         ->and($content)->toContain('src', 'PHPStan must scan src/ directory');
 });

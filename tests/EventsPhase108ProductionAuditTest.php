@@ -397,7 +397,7 @@ test('config/events.php retention has all required keys', function (): void {
 
 test('phpstan.neon.dist has level 9', function (): void {
     $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    expect($content)->toContain('level: 9');
+    expect($content)->toContain('level: max');
 });
 
 test('phpstan.neon.dist includes src path', function (): void {

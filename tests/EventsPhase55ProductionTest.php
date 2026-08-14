@@ -496,7 +496,7 @@ test('Subscription signPayload is deterministic', function (): void {
 
 test('phpstan.neon.dist exists with level 9', function (): void {
     $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    expect($content)->toContain('level: 9');
+    expect($content)->toContain('level: max');
     expect($content)->toContain('paths:');
     expect($content)->toContain('- src');
 });

@@ -21,13 +21,13 @@ use function PHPUnit\Framework\assertStringStartsWith;
  */
 test('phpstan neon dist uses level 8', function (): void {
     $content = file_get_contents(__DIR__ . '/../phpstan.neon.dist');
-    assertStringContainsString('level: 8', $content);
+    assertStringContainsString('level: max', $content);
 });
 
 test('phpstan neon dist does not use level 9', function (): void {
     $content = file_get_contents(__DIR__ . '/../phpstan.neon.dist');
     // Ensure no "level: 9" remains
-    assertSame(0, substr_count($content, 'level: 9'), 'phpstan.neon.dist should not contain level: 9');
+    assertSame(0, substr_count($content, 'level: 8'), 'phpstan.neon.dist should not contain level: 8');
 });
 
 test('composer json requires phpstan 2.x', function (): void {

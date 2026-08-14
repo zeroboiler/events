@@ -174,7 +174,7 @@ test('Phase 107: WebhookAction handle throws without URL', function (): void {
 
 test('Phase 107: phpstan.neon.dist has level 9', function (): void {
     $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    expect($content)->toContain('level: 9');
+    expect($content)->toContain('level: max');
 });
 
 test('Phase 107: phpstan.neon.dist includes migrations and factories', function (): void {

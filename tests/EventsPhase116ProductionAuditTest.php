@@ -383,7 +383,7 @@ test('all 12 console commands are registered in ServiceProvider', function (): v
 test('phpstan.neon.dist has level 9 and required checks', function (): void {
     $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
 
-    expect($content)->toContain('level: 9');
+    expect($content)->toContain('level: max');
     expect($content)->toContain('reportUnmatchedIgnoredErrors: true');
     expect($content)->toContain('treatPhpDocTypesAsCertain: false');
     expect($content)->toContain('checkMissingIterableValueType: true');

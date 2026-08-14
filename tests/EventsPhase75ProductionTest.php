@@ -560,7 +560,7 @@ test('composer.json version matches README badge', function (): void {
 test('phpstan.neon.dist is level 9', function (): void {
     $contents = file_get_contents(__DIR__.'/../phpstan.neon.dist');
 
-    expect($contents)->toContain('level: 9')
+    expect($contents)->toContain('level: max')
         ->and($contents)->toContain('paths:')
         ->and($contents)->toContain('- src');
 });

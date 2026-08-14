@@ -20,7 +20,7 @@ test('phpstan.neon.dist does not contain deprecated parameters', function (): vo
     expect($content)->not->toContain('checkUninitializedProperties: false');
 
     // Must use level 9
-    expect($content)->toContain('level: 9');
+    expect($content)->toContain('level: max');
 
     // Must have reportUnmatchedIgnoredErrors for strictness
     expect($content)->toContain('reportUnmatchedIgnoredErrors: true');

@@ -201,7 +201,7 @@ describe('Phase 115 Production Audit', function (): void {
     describe('PHPStan config compliance', function (): void {
         test('phpstan.neon.dist has level 9', function (): void {
             $config = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-            expect($config)->toContain('level: 9');
+            expect($config)->toContain('level: max');
         });
 
         test('phpstan.neon.dist checks are enabled', function (): void {

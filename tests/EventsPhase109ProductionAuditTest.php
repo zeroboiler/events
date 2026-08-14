@@ -359,9 +359,9 @@ describe('Phase 109 — Version alignment', function () {
 });
 
 describe('Phase 109 — PHPStan config level 9', function () {
-    it('phpstan.neon.dist has level: 9', function () {
+    it('phpstan.neon.dist has level max', function () {
         $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-        expect($content)->toContain('level: 9');
+        expect($content)->toContain('level: max');
     });
 
     it('phpstan.neon.dist includes src path', function () {

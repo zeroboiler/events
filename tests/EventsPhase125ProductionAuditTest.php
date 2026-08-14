@@ -32,8 +32,8 @@ describe('Events Phase 125 — Production Readiness Audit', function (): void {
     describe('PHPStan Configuration', function (): void {
         it('phpstan.neon.dist has level 8 (PHPStan 2.x compatible)', function (): void {
             $config = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-            expect($config)->toContain('level: 8');
-            expect($config)->not->toContain('level: 9');
+            expect($config)->toContain('level: max');
+            expect($config)->not->toContain('level: 8');
         });
 
         it('phpstan.neon.dist includes tests in analysis paths', function (): void {

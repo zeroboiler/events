@@ -187,7 +187,7 @@ describe('Phase 96 — PHP 8.5 + PHPStan 9 Strict Audit', function () {
 
             $content = file_get_contents($phpstanConfig);
             expect($content)->not->toBeFalse();
-            expect($content)->toContain('level: 9');
+            expect($content)->toContain('level: max');
         });
 
         test('phpstan.neon.dist checks src directory', function () {

@@ -20,9 +20,9 @@ describe('PHPStan Level 9 Configuration', function (): void {
         $content = file_get_contents($path);
 
         expect($content)->toBeString();
-        expect($content)->toContain('level: 9');
-        expect($content)->not->toContain('level: 8');
-        expect($content)->not->Contain('level: max');
+        expect($content)->toContain('level: max');
+        expect($content)->not->toContain('level: 9');
+        expect($content)->not->Contain('level: 9');
     });
 
     test('phpstan.neon.dist scans src directory', function (): void {

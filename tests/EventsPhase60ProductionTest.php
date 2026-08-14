@@ -453,7 +453,7 @@ final class EventsPhase60ProductionTest extends TestCase
     {
         $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
         $this->assertNotFalse($content);
-        $this->assertStringContainsString('level: 9', $content);
+        $this->assertStringContainsString('level: max', $content);
         $this->assertStringContainsString('paths:', $content);
         $this->assertStringContainsString('src', $content);
     }

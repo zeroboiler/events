@@ -272,8 +272,8 @@ describe('Phase 50 Production Readiness Audit', function (): void {
 
         $contents = file_get_contents($configPath);
         expect($contents)->not->toBeFalse();
-        expect(str_contains($contents, 'level: 9'))->toBeTrue(
-            'phpstan.neon.dist must set level: 9'
+        expect(str_contains($contents, 'level: max'))->toBeTrue(
+            'phpstan.neon.dist must set level: max'
         );
     });
 

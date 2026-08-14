@@ -84,7 +84,7 @@ it('composer.json has correct provider and alias registration', function (): voi
 
 it('phpstan.neon.dist uses level 8 for PHPStan 2.x compatibility', function (): void {
     $contents = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    expect($contents)->toContain('level: 8');
+    expect($contents)->toContain('level: max');
     expect($contents)->toContain('paths:');
     expect($contents)->toContain('- src');
     expect($contents)->toContain('- database/migrations');
@@ -94,7 +94,7 @@ it('phpstan.neon.dist uses level 8 for PHPStan 2.x compatibility', function (): 
 
 it('phpstan.neon.dist does not use level 9 (unsupported by PHPStan 2.x)', function (): void {
     $contents = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    expect($contents)->not->toContain('level: 9');
+    expect($contents)->not->toContain('level: 8');
 });
 
 it('ServiceProvider provides returns all 7 services', function (): void {

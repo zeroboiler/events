@@ -231,7 +231,7 @@ describe('Phase 97 — Comprehensive Production Readiness Audit', function () {
             expect($phpstan)->not->toContain('preg_match');
 
             // Must have level 9
-            expect($phpstan)->toContain('level: 9');
+            expect($phpstan)->toContain('level: max');
 
             // Must target src directory
             expect($phpstan)->toContain('src');

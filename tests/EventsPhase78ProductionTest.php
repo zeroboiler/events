@@ -331,7 +331,7 @@ describe('Phase 78 — Final Production Readiness', function () {
             $path = __DIR__.'/../phpstan.neon.dist';
             expect(file_exists($path))->toBeTrue();
             $contents = file_get_contents($path);
-            expect(str_contains($contents, 'level: 9'))->toBeTrue();
+            expect(str_contains($contents, 'level: max'))->toBeTrue();
             expect(str_contains($contents, 'checkGenericClassInNonGenericObjectType: false'))->toBeTrue();
             expect(! str_contains($contents, 'baselineFile'))->toBeTrue('baselineFile should be removed');
         });

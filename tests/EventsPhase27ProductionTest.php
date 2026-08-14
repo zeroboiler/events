@@ -398,7 +398,7 @@ it('phpstan.neon.dist exists and has level 9', function (): void {
     expect(file_exists($path))->toBeTrue('phpstan.neon.dist must exist');
 
     $contents = file_get_contents($path);
-    expect($contents)->toContain('level: 9');
+    expect($contents)->toContain('level: max');
     expect($contents)->toContain('paths:');
     expect($contents)->toContain('src');
 });

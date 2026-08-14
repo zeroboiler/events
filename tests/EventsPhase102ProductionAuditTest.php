@@ -472,7 +472,7 @@ test('phpstan neon dist has correct configuration', function (): void {
     $neon = file_get_contents(__DIR__.'/../phpstan.neon.dist');
 
     // Level 9
-    expect(str_contains($neon, 'level: 9'))->toBeTrue('PHPStan level must be 9');
+    expect(str_contains($neon, 'level: max'))->toBeTrue('PHPStan level must be 9');
 
     // Critical checks enabled
     expect(str_contains($neon, 'checkUninitializedProperties: true'))->toBeTrue();

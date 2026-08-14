@@ -78,7 +78,7 @@ test('database/factories directory contains 3 factory files', function (): void 
 
 test('phpstan.neon.dist has level 9 and correct paths', function (): void {
     $neon = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    assertStringContainsString('level: 9', $neon);
+    assertStringContainsString('level: max', $neon);
     assertStringContainsString('paths:', $neon);
     assertStringContainsString('- src', $neon);
 });

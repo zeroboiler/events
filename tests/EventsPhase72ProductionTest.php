@@ -330,7 +330,7 @@ test('composer.json extra.laravel has correct provider and alias', function (): 
 
 test('phpstan.neon.dist has level 8', function (): void {
     $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    expect($content)->toContain('level: 8');
+    expect($content)->toContain('level: max');
 });
 
 test('all 3 migration files exist with up and down methods', function (): void {
