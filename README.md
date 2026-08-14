@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.95.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.95.1-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Max](https://img.shields.io/badge/PHPStan-Max%20(2.x)-success)() |
@@ -455,10 +455,10 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 246 test files + 4 support files
+├── tests/                      # 246 test files + 5 support files
 │   ├── ... (246 test files)
 │   └── ...
-└── Total: 292 PHP files (33 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 246 tests + 4 support + 1 rector.php + 1 config)
+└── Total: 293 PHP files (33 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 246 tests + 5 support + 1 rector.php + 1 config)
 ```
 
 ### How It Works
