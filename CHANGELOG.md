@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [4.94.0] — 2026-08-14
+
+### Added
+- `EventsPhase159ProductionAuditTest.php` — Phase 159 comprehensive production audit (60+ tests) covering: force async fire(), event name validation edge cases, fireModel() edge cases, ConditionEngine ReDoS protection, WildcardMatcher boundary cases, ServiceProvider deferred provider verification, config cross-validation, DomainEvent fromArray edge cases, global disable behavior, SubscriptionBuilder/TriggerBuilder validation, PHP 8.5 source compliance, comprehensive operator coverage, models config-driven table names, facade accessor correctness, DispatchTriggerJob config-driven properties.
+
+### Changed
+- Registered `EventsPhase159ProductionAuditTest.php` in `Pest.php`.
+- Updated README version badge 4.93.0→4.94.0, test count 244→245, total PHP files 290→291.
+- Bumped version to 4.94.0.
+
+---
+
 ## [4.92.0] — 2026-08-14
 
 ### Added

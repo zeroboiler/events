@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.93.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.94.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Max](https://img.shields.io/badge/PHPStan-Max%20(2.x)-success)() |
@@ -455,10 +455,10 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 244 test files + 5 support files
-│   ├── ... (244 test files)
+├── tests/                      # 245 test files + 5 support files
+│   ├── ... (245 test files)
 │   └── ...
-└── Total: 290 PHP files (33 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 244 tests + 5 support + 1 rector.php + 1 config)
+└── Total: 291 PHP files (33 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 245 tests + 5 support + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -904,7 +904,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (244 test files)
+composer test        # Run Pest test suite (245 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -926,6 +926,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.94.0
+
+- Added: `EventsPhase159ProductionAuditTest.php` — Phase 159 comprehensive production audit (60+ tests) covering: fire() with force async mode, fire() event name validation edge cases ("0" string, empty string, special characters), fireModel() edge cases (stdClass with toArray, "0" class/action rejection), ConditionEngine ReDoS protection (500-char limit, nested quantifier rejection, safe regex acceptance, non-string actual handling), WildcardMatcher boundary cases (single-segment no multi-segment, catch-all * with multi-segment, empty string rejection, findMatchingPatterns order preservation, extractWildcards for **), EventsServiceProvider deferred provider verification (provides() 7 bindings, singleton vs transient verification, ConditionEngineContract binding), config cross-validation (7 top-level keys, table_names/queue/retry/retention/subscriptions sub-keys, disabled/wildcard_cache_ttl defaults), DomainEvent fromArray edge cases (missing/empty eventType, invalid UUID fallback, valid UUID preservation, invalid datetime fallback, valid datetime preservation, toArray key completeness, occur factory freshness), EventManager global disable behavior (fire silent return, isDisabled/setEnabled toggle, invalidateTriggerCache), SubscriptionBuilder validation (empty event/URL/invalid URL/non-HTTP schemes rejection, "0" event rejection), TriggerBuilder validation (empty event, missing action, empty action class in actions(), auto-generated name, "0" event rejection), PHP 8.5 source compliance (declare strict_types across all src, all classes final, no setAccessible calls), ConditionEngine comprehensive operator coverage (equality, strict equality ===, not_empty, not_contains, starts_with, ends_with, AND logic, nested dot notation, empty conditions, between auto-normalize, in operator, null-safe comparisons), models config-driven table names, facade accessor correctness (getFacadeAccessor, @method completeness), DispatchTriggerJob config-driven properties (tries, backoff string format, queue name, promoted readonly).
+- Registered: `EventsPhase159ProductionAuditTest.php` in `Pest.php`.
+- Updated: README version badge 4.93.0→4.94.0, test count 244→245 test files, total PHP file count 290→291.
+- Bumped: Version 4.94.0.
 
 ### v4.93.0
 
