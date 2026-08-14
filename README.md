@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.79.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.80.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
@@ -454,7 +454,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 234 PHP files (229 test files + 5 support; 2 test files run without TestCase)
+└── tests/                      # 235 PHP files (230 test files + 5 support; 2 test files run without TestCase)
 ```
 
 ### How It Works
@@ -892,7 +892,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (229 test files)
+composer test        # Run Pest test suite (230 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -914,6 +914,12 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.80.0
+
+- Added: `EventsPhase151ProductionAuditTest` — Phase 151 production audit with 30+ tests covering: PHP 8.5 compliance (strict_types, license headers, final classes, readonly properties, promoted constructors), DomainEvent immutability + roundtrip, WildcardMatcher readonly final + static-only methods, ServiceProvider provides() consistency (7 bindings), config completeness (7 top-level keys + all sub-keys), ConditionEngine 20 named operators + implicit equality, facade getFacadeAccessor #[Override], models getTable config-driven, model casts verification, EventLog status constants, EventManager fire/fireModel empty input validation, TriggerBuilder/SubscriptionBuilder save() validation, SubscriptionBuilder non-HTTP URL rejection, WebhookAction Triggerable implementation, DispatchTriggerJob config-driven public properties, EventScheduler constructor injection + resolveEventManager null fallback, phpstan.neon.dist validation, README version/test count accuracy, console commands extend Command + final, Triggerable/ConditionEngineContract interface signatures, migration/factory file counts, trait @see cross-references, no TODO/FIXME markers.
+- Updated: README test count 229→230 test files, total 234→235 PHP files.
+- Bumped: Version 4.80.0.
 
 ### v4.79.0
 
