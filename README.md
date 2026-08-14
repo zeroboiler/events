@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.61.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.62.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 |[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-success)]()
@@ -443,7 +443,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 216 test files (Pest + support)
+└── tests/                      # 217 test files (Pest + support)
 ```
 
 ### How It Works
@@ -853,7 +853,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (216 test files)
+composer test        # Run Pest test suite (217 test files)
 composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -875,6 +875,13 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.62.0
+
+- Added: `EventsPhase136ProductionAuditTest.php` — comprehensive production audit covering: strict_types verification on all source + migration + factory files, license header verification on rector.php, final class declarations for all services and console commands, readonly property verification on EventManager/DispatchTriggerJob/DomainEvent, ConditionEngine comprehensive operator coverage (matches, not_empty, not_null, not_contains, not_in, between, ReDoS protection, AND logic, dot notation, strict equals, === and !=== operators, unknown operator), WildcardMatcher edge cases (empty events, catch-all, single/double segment, regex special chars, findMatchingPatterns, extractWildcards), DomainEvent immutability and reconstruction edge cases (missing/empty eventType, invalid UUID/date, empty secret signing, consistent HMAC), TriggerBuilder validation (empty event, no action, auto-generated name, actions validation), SubscriptionBuilder validation (empty event/URL, invalid URL, non-HTTP scheme), EventLog status constants verification, model table name config consistency, factory state builder completeness, Trigger/EventLog/Subscription model scopes, ServiceProvider provides() completeness and binding audit, config completeness verification, migration structure verification (columns, indexes, foreign keys), PHPStan config validation, composer.json autoload and extra validation, EventManager global disable and setEnabled behavior, version consistency between composer.json and README.
+- Fixed: Added missing license header to `rector.php`.
+- Updated: README test count 216 → 217.
+- Bumped: Version 4.62.0.
 
 ### v4.61.0
 
