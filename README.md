@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.90.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.91.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Max](https://img.shields.io/badge/PHPStan-Max%20(2.x)-success)() |
@@ -25,6 +25,7 @@ Database-driven dynamic event manager for Laravel — register, manage, and fire
   - [Performance Considerations](#performance-considerations)
   - [Error Handling Patterns](#error-handling-patterns)
 - [Security Considerations](#security-considerations)
+- [Limitations](#limitations)
 - [Troubleshooting](#troubleshooting)
 - [Production Deployment Checklist](#production-deployment-checklist)
 - [API Reference](#api-reference)
@@ -454,10 +455,10 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 240 test files + 5 support files
-│   ├── ... (240 test files)
+├── tests/                      # 241 test files + 5 support files
+│   ├── ... (241 test files)
 │   └── ...
-└── Total: 286 PHP files (28 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 240 tests + 5 support)
+└── Total: 287 PHP files (28 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 241 tests + 5 support)
 ```
 
 ### How It Works
@@ -774,6 +775,14 @@ try {
 ### Webhook URL Scheme Enforcement
 - `SubscriptionBuilder::save()` rejects non-HTTP(S) URL schemes (e.g., `ftp://`, `file://`, `mailto:`) to prevent SSRF-like abuse. Only `http://` and `https://` URLs are accepted for webhook subscriptions.
 
+## Limitations
+
+- **No built-in rate limiting** — Protect webhook endpoints with the [zeroboiler/security](../security) package or Laravel's built-in rate limiting middleware.
+- **No event replay/rebuild** — The `DomainEvent` value object supports serialization/reconstruction, but the package does not include automatic event store replay or aggregate rebuild functionality.
+- **SQLite limitations** — `ENUM` columns are not natively supported by SQLite; the migrations use `$table->enum()` which Laravel converts to `VARCHAR` with CHECK constraints on SQLite.
+- **Single-server scheduling** — `EventScheduler` uses `onOneServer()` for scheduled tasks, which requires a shared cache driver (Redis, Memcached) in multi-server deployments.
+- **No dead-letter queue** — Failed async dispatches after all retries are exhausted are logged but not automatically routed to a dead-letter queue. Use Laravel's failed job events or the `zeroboiler:events:retry --status=failed` command for manual intervention.
+
 ## Troubleshooting
 
 | Issue | Cause | Solution |
@@ -895,7 +904,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (240 test files)
+composer test        # Run Pest test suite (241 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -917,6 +926,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.91.0
+
+- Added: README "Limitations" section — documents rate limiting, event replay, SQLite ENUM, single-server scheduling, and dead-letter queue constraints.
+- Added: `EventsPhase157ProductionReadinessTest.php` — Final production readiness audit with 30+ tests covering: PHP 8.5 syntax compliance (strict_types, license headers, final classes), constructor DI verification (all 5 service classes), DomainEvent immutability + roundtrip identity, ConditionEngine full operator coverage (21 operators), WildcardMatcher readonly final + #[Pure] attribute, ServiceProvider provides() consistency (7 bindings), singleton vs transient binding verification, config completeness (7 top-level keys + subscription sub-keys), model config-driven table names, EventLog status constants, facade getFacadeAccessor, Triggerable interface signature, no deprecated setAccessible calls.
+- Registered: `EventsPhase157ProductionReadinessTest.php` in `Pest.php`.
+- Updated: README test count 240→241 test files, total 286→287 PHP files.
+- Bumped: Version 4.91.0.
 
 ### v4.90.0
 
