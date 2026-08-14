@@ -122,7 +122,8 @@ trait ManagesSubscriptions
         string $url,
         array $conditions = [],
         int $priority = 0,
-    ): string {
+    ): string
+    {
         $trigger = $this->register($event)
             ->action(WebhookAction::class)
             ->actionParams(['url' => $url])

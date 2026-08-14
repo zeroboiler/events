@@ -1,9 +1,9 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.75.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.76.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
-|[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()|
+[![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
 [![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -23,6 +23,7 @@ Database-driven dynamic event manager for Laravel — register, manage, and fire
   - [Custom Triggerable Actions](#custom-triggerable-actions)
   - [Testing Strategies](#testing-strategies)
   - [Performance Considerations](#performance-considerations)
+  - [Error Handling Patterns](#error-handling-patterns)
 - [Security Considerations](#security-considerations)
 - [Troubleshooting](#troubleshooting)
 - [Production Deployment Checklist](#production-deployment-checklist)
@@ -708,6 +709,34 @@ $this->assertDatabaseHas('event_logs', [
 - **Index usage**: The `triggers` table has a composite index on `(event, enabled)` for fast exact-match lookups.
 - **No orphaned logs**: Async jobs create `EventLog` entries inside the job handler, preventing orphaned records if the queue fails.
 
+### Error Handling Patterns
+
+The event system uses different error handling strategies depending on dispatch mode:
+
+**Synchronous triggers:**
+- Failed action handlers throw the original exception after logging the error and marking the `EventLog` as `failed`.
+- Callers can `try/catch` around `fire()` to handle synchronous failures.
+
+```php
+try {
+    EventManager::fire('order.placed', $payload);
+} catch (\Throwable $e) {
+    // A synchronous trigger action failed
+    // EventLog entry is already marked as 'failed' with the error message
+    report($e);
+}
+```
+
+**Asynchronous triggers:**
+- Failed jobs are retried according to `events.retry.tries` and `events.retry.backoff`.
+- After all retries are exhausted, `DispatchTriggerJob::failed()` marks the `EventLog` as `failed` and logs the error.
+- Use `zeroboiler:events:retry --status=failed` to manually re-dispatch failed jobs.
+
+**Webhook subscriptions:**
+- Non-2xx responses increment the subscription's `failure_count`.
+- After exceeding `events.subscriptions.max_failures` (default: 10), the subscription is auto-deactivated.
+- Use `zeroboiler:events:redeliver {logId}` to manually retry a failed webhook delivery.
+
 ## Security Considerations
 
 ### HMAC Webhook Signing
@@ -875,6 +904,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.76.0
+
+- Fixed: PSR-12 brace placement — `ManagesHistory::getEventHistory()` and `ManagesSubscriptions::subscribeWebhook()` opening braces moved to own line.
+- Fixed: Import order in `EventManager.php` — `Illuminate\Console\Scheduling\Schedule` sorted alphabetically with other framework imports.
+- Added: README "Error Handling Patterns" section — documents synchronous/async/webhook error strategies with code examples.
+- Improved: README badge formatting — fixed markdown table alignment for PHPStan badge.
+- Bumped: Version 4.76.0.
 
 ### v4.75.0
 

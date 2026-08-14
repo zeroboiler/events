@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Database\Eloquent\Collection;
@@ -22,7 +23,6 @@ use ZeroBoiler\Events\Concerns\ManagesSubscriptions;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
-use Illuminate\Console\Scheduling\Schedule;
 
 /**
  * Central event orchestrator for the ZeroBoiler Events system.

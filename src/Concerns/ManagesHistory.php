@@ -44,7 +44,8 @@ trait ManagesHistory
         ?string $status = null,
         ?string $triggerId = null,
         int $limit = 100,
-    ): Collection {
+    ): Collection
+    {
         $query = EventLog::query()->with('trigger');
 
         if ($event !== null && $event !== '') {
