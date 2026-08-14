@@ -78,7 +78,7 @@ if (! function_exists('config_path')) {
 if (! function_exists('database_path')) {
     function database_path(string $path = ''): string
     {
-        return '/database/'.($path !== '' ? $path : '');
+        return '/database'.($path !== '' ? '/'.$path : '');
     }
 }
 

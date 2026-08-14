@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.92.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.93.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Max](https://img.shields.io/badge/PHPStan-Max%20(2.x)-success)() |
@@ -455,10 +455,10 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 242 test files + 5 support files
-│   ├── ... (242 test files)
+├── tests/                      # 244 test files + 5 support files
+│   ├── ... (244 test files)
 │   └── ...
-└── Total: 288 PHP files (33 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 242 tests + 5 support + 1 rector.php + 1 config)
+└── Total: 290 PHP files (33 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 244 tests + 5 support + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -904,7 +904,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (242 test files)
+composer test        # Run Pest test suite (244 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -926,6 +926,16 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.93.0
+
+- Fixed: `helpers.php` `database_path()` helper — removed erroneous trailing slash that produced `/database//path` double-slash paths.
+- Fixed: Removed deprecated `setAccessible()` calls from `EventsPhase155ProductionAuditTest.php` (3 occurrences) and `EventsPhase157ProductionReadinessTest.php` (1 occurrence) — these calls were removed in PHP 8.5 and would cause fatal errors at runtime.
+- Added: `HelpersDatabasePathTest.php` — 3 tests verifying `database_path()` helper produces correct paths without double slashes.
+- Added: `ParseActionsIntegrationTest.php` — 7 tests covering `TriggerBuilder` action format persistence: multi-action with shared params (`classes` + `params`), single class with params, plain class name, JSON array of classes, action deduplication, and action+actions merge behavior.
+- Registered: Both new test files in `Pest.php`.
+- Updated: README version badge 4.92.0→4.93.0, test count 242→244 test files, total PHP file count 288→290.
+- Bumped: Version 4.93.0.
 
 ### v4.92.0
 

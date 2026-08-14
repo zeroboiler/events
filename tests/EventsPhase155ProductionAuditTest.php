@@ -190,7 +190,6 @@ test('config subscriptions section has all required keys')
 test('Facade getFacadeAccessor returns EventManager class name')
     ->expect(function (): bool {
         $facade = new ReflectionMethod(\ZeroBoiler\Events\Facades\EventManager::class, 'getFacadeAccessor');
-        $facade->setAccessible(false);
 
         return true; // If the method exists and is #[\Override], it's correct
     })->toBeTrue();
@@ -216,7 +215,6 @@ test('ConditionEngine supports all 21 operators including implicit equality')
     ->expect(function (): int {
         $reflection = new ReflectionClass(\ZeroBoiler\Events\ConditionEngine::class);
         $method = $reflection->getMethod('evaluateCondition');
-        $method->setAccessible(false);
 
         $engine = new \ZeroBoiler\Events\ConditionEngine();
 
@@ -407,11 +405,7 @@ test('TriggerBuilder save() validates empty event name')
             $manager = new \ZeroBoiler\Events\EventManager($engine, $resolver, app());
             $builder = new \ZeroBoiler\Events\TriggerBuilder($manager);
 
-            // Force event to empty
-            $ref = new ReflectionProperty($builder, 'event');
-            $ref->setAccessible(false);
-
-            // The save() method should throw
+            // The event property defaults to '' — save() should throw without needing to modify it
             $builder->action('SomeClass');
             $builder->save();
         } catch (\InvalidArgumentException $e) {
