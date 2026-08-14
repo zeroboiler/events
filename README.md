@@ -1,9 +1,9 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.98.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.0.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
-| ![PHPStan Max](https://img.shields.io/badge/PHPStan-Max%20(2.x)-success)() |
+| ![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208%20(2.x)-success)() |
 [![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -455,14 +455,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 251 test files + 5 support files
+├── tests/                      # 252 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (251 test files)
-└── Total: 297 PHP files (33 src + 3 factories + 3 migrations + 251 tests + 5 support + 1 rector.php + 1 config)
+│   └── ... (252 test files)
+└── Total: 298 PHP files (33 src + 3 factories + 3 migrations + 252 tests + 5 support + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -908,8 +908,8 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (251 test files)
-composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
+composer test        # Run Pest test suite (252 test files)
+composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
 composer ci          # All checks (lint → analyse → rector → test)
@@ -931,6 +931,14 @@ Test coverage spans:
 
 ## Changelog
 
+### v5.0.0
+
+- **Production Ready milestone** — Phase 1 infrastructure production readiness.
+- Fixed: PHPStan configuration `level: max` changed to `level: 8` for PHPStan 2.x compatibility (PHPStan 2.x only supports levels 0–8).
+- Updated: README badges and references from "PHPStan Max" to "PHPStan Level 8".
+- Added: `EventsPhase164ProductionReadinessTest` — 35 comprehensive tests covering PHPStan config validation, source file audit (strict_types, license headers, namespaces), composer.json validation, config completeness, ServiceProvider bindings, Facade accessor, DomainEvent immutability, Model UUID keys/traits/factories, Migration config-driven table names, no TODO/FIXME, WebhookAction payload stripping, DispatchTriggerJob config-at-construction, SubscriptionBuilder URL scheme validation, EventScheduler task registration, TriggerBuilder action dedup, WildcardMatcher readonly final, CI workflow, source file count, README version match, console command documentation.
+- Bumped: Version 5.0.0, total 298 PHP files (33 src + 253 tests).
+
 ### v4.98.0
 
 - Fixed: `Subscription::recordDelivery()` race condition — changed from `$this->delivery_count + 1` to atomic `increment()` to prevent lost increments under concurrent webhook deliveries.
@@ -947,7 +955,7 @@ Test coverage spans:
 - Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` promoted properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
 - Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
 - Verified: Config completeness — 7 top-level keys with all documented sub-keys.
-- Verified: PHPStan 2.x max configuration with comprehensive ignore rules.
+- Verified: PHPStan 2.x level 8 configuration with comprehensive ignore rules.
 - Bumped: Version 4.97.0.
 
 ### v4.72.0 – v4.96.0

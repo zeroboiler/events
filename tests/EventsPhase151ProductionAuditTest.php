@@ -275,7 +275,6 @@ describe('config completeness', function (): void {
 describe('Facade', function (): void {
     test('getFacadeAccessor returns EventManager class name', function (): void {
         $ref = new ReflectionMethod(EventManagerFacade::class, 'getFacadeAccessor');
-        $ref->setAccessible(true);
         $result = $ref->invoke(null);
         expect($result)->toBe(\ZeroBoiler\Events\EventManager::class);
     });
@@ -485,7 +484,6 @@ describe('EventScheduler', function (): void {
         $container = new Illuminate\Container\Container;
         $scheduler = new EventScheduler($container);
         $ref = new ReflectionMethod(EventScheduler::class, 'resolveEventManager');
-        $ref->setAccessible(true);
         $result = $ref->invoke($scheduler);
         expect($result)->toBeNull();
     });
@@ -650,7 +648,6 @@ describe('builder validation', function (): void {
         $builder = $em->on('order.placed');
         // The event is already set — test with empty by direct construction
         $ref = new ReflectionProperty(TriggerBuilder::class, 'event');
-        $ref->setAccessible(true);
         $ref->setValue($builder, '');
         $builder->action(\App\Actions\SendOrderNotification::class);
         $builder->save();
@@ -661,10 +658,8 @@ describe('builder validation', function (): void {
         $builder = $em->on('test.event');
         // Reset action to empty
         $ref = new ReflectionProperty(TriggerBuilder::class, 'action');
-        $ref->setAccessible(true);
         $ref->setValue($builder, '');
         $refActions = new ReflectionProperty(TriggerBuilder::class, 'actions');
-        $refActions->setAccessible(true);
         $refActions->setValue($builder, []);
         $builder->save();
     })->throws(InvalidArgumentException::class);

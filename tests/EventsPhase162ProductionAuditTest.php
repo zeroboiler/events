@@ -285,7 +285,6 @@ test('models use config-driven table names via getTable', function (): void {
 
 test('Facade getFacadeAccessor returns EventManager class', function (): void {
     $reflection = new ReflectionMethod(EventManagerFacade::class, 'getFacadeAccessor');
-    $reflection->setAccessible(true);
     $result = $reflection->invoke(null);
 
     expect($result)->toBe(\ZeroBoiler\Events\EventManager::class);

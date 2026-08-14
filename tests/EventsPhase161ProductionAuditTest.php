@@ -60,7 +60,6 @@ it('verifies EventsServiceProvider is NOT declared as deferred', function (): vo
     // so it must NOT be deferred — those need to run eagerly.
     $reflection = new ReflectionClass(EventsServiceProvider::class);
     $property = $reflection->getProperty('defer');
-    $property->setAccessible(true);
     expect($property->getValue(new EventsServiceProvider(app())))->toBeFalse();
 });
 
@@ -293,9 +292,7 @@ it('verifies all models use UUID string keys', function (): void {
     foreach ([Trigger::class, EventLog::class, Subscription::class] as $modelClass) {
         $reflection = new ReflectionClass($modelClass);
         $keyType = $reflection->getProperty('keyType');
-        $keyType->setAccessible(true);
         $incrementing = $reflection->getProperty('incrementing');
-        $incrementing->setAccessible(true);
 
         $instance = $modelClass::make();
         expect($keyType->getValue($instance))->toBe('string')

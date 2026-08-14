@@ -236,7 +236,6 @@ test('WebhookAction implements Triggerable', function (): void {
 test('Facade getFacadeAccessor returns correct binding', function (): void {
     $reflection = new ReflectionClass(EventManagerFacade::class);
     $method = $reflection->getMethod('getFacadeAccessor');
-    $method->setAccessible(true);
     $result = $method->invoke(null);
 
     expect($result)->toBe(EventManager::class);
