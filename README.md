@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.85.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.86.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 [![PHPStan Max](https://img.shields.io/badge/PHPStan-Max-success)]()
@@ -454,7 +454,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 281 PHP files (238 test files + 5 support; 3 test files run without TestCase)
+└── tests/                      # 283 PHP files (238 test files + 5 support; 4 test files run without TestCase)
 ```
 
 ### How It Works
@@ -914,6 +914,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.86.0
+
+- Added: `EventsModelScopesTest.php` — Comprehensive model scope tests covering: Trigger::scopeEnabled, Trigger::scopeAsync, Trigger::scopeOrderByPriority, EventLog::scopeWithStatus, EventLog::scopeFailed, EventLog::scopePending, EventLog::scopeCompleted, EventLog::scopeStalePending, Subscription::scopeActive, Subscription::scopeOrderByPriority, Subscription::scopeExceededFailures, Subscription::scopeForEvent (exact + wildcard), Subscription instance methods (recordDelivery, recordFailure, resetFailures, hasExceededFailures, matchesEvent, signPayload), EventLog instance methods (markAsCompleted, markAsFailed), model relationships (Trigger::eventLogs, EventLog::trigger), config-driven table names.
+- Added: `EventsManagerAdvancedFeaturesTest.php` — Tests for EventManager::listSubscriptions (with wildcard/active filters), EventManager::getStalePendingLogs (with limit), EventManager::deactivateExceededSubscriptions, EventManager::getStats with $since filter, EventManager::subscribeWebhook quick method.
+- Added: `EventsWildcardMatcherFullTest.php` — WildcardMatcher::findMatchingPatterns (pattern matching, empty patterns, order preservation, cross-segment), extractWildcards edge cases (empty pattern/event, segment count mismatch, multiple wildcards, non-matching), Unicode event names, special characters (hyphens, underscores, numbers).
+- Updated: README package tree file counts — 283 PHP files, 238 test files, 4 test files run without TestCase.
+- Bumped: Version 4.86.0.
 
 ### v4.85.0
 
