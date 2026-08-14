@@ -497,7 +497,7 @@ describe('phpstan configuration', function (): void {
         $path = __DIR__ . '/../phpstan.neon.dist';
         expect(file_exists($path))->toBeTrue();
         $contents = file_get_contents($path);
-        expect($contents)->toContain('level: max');
+        expect($contents)->toContain('level: 9');
     });
 
     test('phpstan.neon.dist scans src, tests, database paths', function (): void {

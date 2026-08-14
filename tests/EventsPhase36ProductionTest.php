@@ -816,7 +816,7 @@ describe('Events Phase 36 Production', function () {
 
         it('uses level 9', function () {
             $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-            expect($content)->toContain('level: max');
+            expect($content)->toContain('level: 9');
         });
 
         it('scans src directory', function () {

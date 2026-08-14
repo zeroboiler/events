@@ -387,7 +387,7 @@ test('Subscription factory state builders exist', function (): void {
 
 test('phpstan.neon.dist uses max level', function (): void {
     $contents = file_get_contents(base_path('phpstan.neon.dist'));
-    expect($contents)->toContain('level: max');
+    expect($contents)->toContain('level: 9');
 });
 
 test('composer.json autoload PSR-4 is correct', function (): void {

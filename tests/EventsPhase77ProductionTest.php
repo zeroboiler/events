@@ -557,7 +557,7 @@ test('composer.json PHPStan version is ^2.2', function (): void {
 test('phpstan.neon.dist has level 9', function (): void {
     $config = file_get_contents(__DIR__.'/../phpstan.neon.dist');
     assert($config !== false);
-    expect($config)->toContain('level: max');
+    expect($config)->toContain('level: 9');
 });
 
 test('phpstan.neon.dist has baselineFile', function (): void {

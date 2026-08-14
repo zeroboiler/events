@@ -701,7 +701,7 @@ describe('Phase 100 — Final Production Audit', function (): void {
             expect(file_exists($path))->toBeTrue();
 
             $contents = file_get_contents($path);
-            expect(str_contains($contents, 'level: max'))->toBeTrue();
+            expect(str_contains($contents, 'level: 9'))->toBeTrue();
         });
 
         it('phpstan.neon.dist includes src path', function (): void {

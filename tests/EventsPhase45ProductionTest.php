@@ -248,7 +248,7 @@ describe('Phase 45 Production Audit', function () {
     describe('PHPStan config', function () {
         it('phpstan.neon.dist has level 9', function () {
             $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-            expect($content)->toContain('level: max');
+            expect($content)->toContain('level: 9');
         });
 
         it('phpstan.neon.dist has bootstrapFiles', function () {

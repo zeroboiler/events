@@ -179,7 +179,7 @@ it('config retention settings are complete', function (): void {
 
 it('phpstan.neon.dist uses max level', function (): void {
     $config = file_get_contents(base_path('../phpstan.neon.dist'));
-    expect($config)->toContain('level: max');
+    expect($config)->toContain('level: 9');
     expect($config)->toContain('reportUnmatchedIgnoredErrors: true');
 });
 

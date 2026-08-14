@@ -353,7 +353,7 @@ test('Phase 150: phpstan.neon.dist exists and has correct level', function (): v
     expect(file_exists($configPath))->toBeTrue();
 
     $content = file_get_contents($configPath);
-    expect($content)->toContain('level: max');
+    expect($content)->toContain('level: 9');
     expect($content)->toContain('paths:');
     expect($content)->toContain('src');
 });

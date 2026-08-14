@@ -230,7 +230,7 @@ it('phpstan.neon.dist has level 9 and required check flags', function (): void {
     $config = file_get_contents(__DIR__.'/../phpstan.neon.dist');
     expect($config)->not->toBeFalse();
 
-    expect($config)->toContain('level: max');
+    expect($config)->toContain('level: 9');
     expect($config)->toContain('checkMissingIterableValueType: true');
     expect($config)->toContain('checkGenericClassInNonGenericObjectType: true');
     expect($config)->toContain('checkUninitializedProperties: true');

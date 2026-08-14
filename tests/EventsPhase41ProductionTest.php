@@ -52,7 +52,7 @@ it('composer.json has correct autoload configuration', function (): void {
 
 it('phpstan.neon.dist is configured at level 9', function (): void {
     $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    expect($content)->toContain('level: max');
+    expect($content)->toContain('level: 9');
 });
 
 it('EventManager is final class', function (): void {

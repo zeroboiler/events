@@ -27,16 +27,16 @@ use ZeroBoiler\Events\Models\Subscription;
  * comprehensive source file audit, and final production gate.
  */
 describe('Phase 164 — PHPStan 2.x config and final production gate', function (): void {
-    test('phpstan.neon.dist uses level 8 (not "max") for PHPStan 2.x compatibility', function (): void {
+    test('phpstan.neon.dist uses level 9 for PHPStan 2.x', function (): void {
         $configPath = __DIR__.'/../phpstan.neon.dist';
         expect(file_exists($configPath))->toBeTrue();
 
         $content = file_get_contents($configPath);
         expect($content)->not->toBeFalse();
 
-        // PHPStan 2.x only supports levels 0–8; "max" was PHPStan 1.x only
-        expect($content)->not->toContain('level: max');
-        expect($content)->toContain('level: 8');
+        // PHPStan 2.x supports levels 0–9
+        expect($content)->not->toContain('level: 9');
+        expect($content)->toContain('level: 9');
     });
 
     test('phpstan.neon.dist has valid neon structure', function (): void {

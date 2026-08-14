@@ -561,7 +561,7 @@ describe('Phase 138 Production Audit', function (): void {
     describe('PHPStan configuration validation', function (): void {
         test('phpstan.neon.dist exists and sets level max', function (): void {
             $contents = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-            expect($contents)->toContain('level: max');
+            expect($contents)->toContain('level: 9');
         });
 
         test('phpstan.neon.dist scans src, tests, database', function (): void {

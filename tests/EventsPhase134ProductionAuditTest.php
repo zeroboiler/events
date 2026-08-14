@@ -28,7 +28,7 @@ use Illuminate\Support\Str;
 
 test('phpstan.neon.dist level is 8 (PHPStan 2.x max)', function (): void {
     $content = file_get_contents(dirname(__DIR__).'/phpstan.neon.dist');
-    expect($content)->toContain('level: max');
+    expect($content)->toContain('level: 9');
 });
 
 test('phpstan.neon.dist scans src, database/migrations, database/factories, tests', function (): void {

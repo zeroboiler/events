@@ -136,7 +136,7 @@ describe('Phase 119 Production Audit', function (): void {
         it('phpstan.neon.dist has level 9', function (): void {
             $path = __DIR__.'/../phpstan.neon.dist';
             expect(file_exists($path))->toBeTrue();
-            expect(file_get_contents($path))->toContain('level: max');
+            expect(file_get_contents($path))->toContain('level: 9');
         });
 
         it('composer requires PHP ^8.5 and version matches badge', function (): void {

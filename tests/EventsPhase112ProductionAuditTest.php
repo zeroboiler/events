@@ -542,7 +542,7 @@ test('phpstan.neon.dist has level 9 and correct paths', function () {
     $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
     expect($content)->not->toBeFalse();
 
-    expect($content)->toContain('level: max');
+    expect($content)->toContain('level: 9');
     expect($content)->toContain('paths:');
     expect($content)->toContain('- src');
     expect($content)->toContain('- database/migrations');

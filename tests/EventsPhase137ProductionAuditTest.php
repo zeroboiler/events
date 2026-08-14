@@ -882,7 +882,7 @@ describe('Phase 137 Production Audit', function (): void {
     describe('PHPStan config validation', function (): void {
         test('phpstan.neon.dist exists and has level max', function (): void {
             $contents = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-            expect($contents)->toContain('level: max');
+            expect($contents)->toContain('level: 9');
             expect($contents)->toContain('paths:');
             expect($contents)->toContain('src');
         });

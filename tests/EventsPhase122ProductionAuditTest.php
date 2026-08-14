@@ -15,13 +15,13 @@ use function PHPUnit\Framework\assertStringStartsWith;
  * Phase 122 production audit — PHPStan 2.x level correction.
  *
  * Validates:
- * - phpstan.neon.dist uses level 8 (PHPStan 2.x max, not level 9 which was PHPStan 1.x only)
+ * - phpstan.neon.dist uses level 9 for PHPStan 2.x
  * - composer.json requires phpstan/phpstan ^2.2
- * - README badge references level 8
+ * - README badge references level 9
  */
-test('phpstan neon dist uses level 8', function (): void {
+test('phpstan neon dist uses level 9', function (): void {
     $content = file_get_contents(__DIR__ . '/../phpstan.neon.dist');
-    assertStringContainsString('level: max', $content);
+    assertStringContainsString('level: 9', $content);
 });
 
 test('phpstan neon dist does not use level 9', function (): void {
@@ -33,7 +33,7 @@ test('phpstan neon dist does not use level 9', function (): void {
 test('composer json requires phpstan 2.x', function (): void {
     $composer = json_decode(file_get_contents(__DIR__ . '/../composer.json'), true);
     $phpstanVersion = $composer['require-dev']['phpstan/phpstan'] ?? '';
-    assertStringStartsWith('^2', $phpstanVersion, 'phpstan/phpstan must be ^2.x for level 8');
+    assertStringStartsWith('^2', $phpstanVersion, 'phpstan/phpstan must be ^2.x for level 9');
 });
 
 test('phpstan neon dist includes required analysis paths', function (): void {
@@ -57,17 +57,17 @@ test('phpstan neon dist has facade ignore rules', function (): void {
     assertStringContainsString('Http::', $content);
 });
 
-test('readme badge shows phpstan level 8', function (): void {
+test('readme badge shows phpstan level 9', function (): void {
     $readme = file_get_contents(__DIR__ . '/../README.md');
-    assertStringContainsString('PHPStan-Level%208', $readme, 'README badge should reference level 8');
+    assertStringContainsString('PHPStan-Level%209', $readme, 'README badge should reference level 9');
 });
 
 test('readme does not reference phpstan level 9 in active sections', function (): void {
     $readme = file_get_contents(__DIR__ . '/../README.md');
 
-    // The badge should say level 8
-    assertStringContainsString('PHPStan-Level%208', $readme);
+    // The badge should say level 9
+    assertStringContainsString('PHPStan-Level%209', $readme);
 
-    // Testing section should reference level 8
-    assertStringContainsString('PHPStan level 8', $readme);
+    // Testing section should reference level 9
+    assertStringContainsString('PHPStan level 9', $readme);
 });

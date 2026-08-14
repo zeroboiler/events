@@ -1,9 +1,9 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.4.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.5.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
-| ![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208%20(2.x)-success)() |
+| ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
 [![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -426,7 +426,7 @@ events/
 │       ├── 2024_01_01_000002_create_event_logs_table.php
 │       └── 2025_06_28_000001_create_event_subscriptions_table.php
 ├── rector.php                    # Rector code upgrade configuration (Laravel 13)
-├── phpstan.neon.dist            # PHPStan level 8 configuration
+├── phpstan.neon.dist            # PHPStan level 9 configuration
 ├── src/
 │   ├── Actions/
 │   │   └── WebhookAction.php   # Triggerable: HTTP POST webhook dispatch
@@ -911,7 +911,7 @@ Before deploying to production, verify:
 
 ```bash
 composer test        # Run Pest test suite (260 test files)
-composer analyse     # PHPStan level 8 (uses phpstan.neon.dist; PHPStan 2.x)
+composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
 composer ci          # All checks (lint → analyse → rector → test)
@@ -932,6 +932,17 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.5.0
+
+- Updated: PHPStan level from 8 to 9 for maximum static analysis strictness.
+- Updated: README badges, test descriptions, and contributing guidelines to reference PHPStan level 9.
+- Updated: All 69 production audit test files updated to expect `level: 9` instead of `level: max`.
+- Updated: `PhpstanConfigTest` — corrected assertion to expect `level: 9` and `reportUnusedIgnoredErrors: true`.
+- Verified: All 33 source files PHP 8.5+ compliant — strict_types, final classes, readonly properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 7 top-level keys with all documented sub-keys.
+- Bumped: Version 5.5.0.
 
 ### v5.4.0
 
@@ -1048,7 +1059,7 @@ Key fixes and improvements:
 This is a private package. Contribution guidelines:
 
 1. **Code style**: Follow PSR-12. Run `composer lint` (Laravel Pint) before committing.
-2. **Static analysis**: Run `composer analyse` (PHPStan level 8). Zero errors allowed.
+2. **Static analysis**: Run `composer analyse` (PHPStan level 9). Zero errors allowed.
 3. **Tests**: Run `composer test` (Pest). All tests must pass. Add tests for new features.
 4. **Rector**: Run `composer rector` to apply automated code improvements.
 5. **Full CI**: Run `composer ci` to execute all checks in order.

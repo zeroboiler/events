@@ -365,7 +365,7 @@ it('EventManager facade accessor returns EventManager class', function (): void 
 
 it('phpstan.neon.dist uses max level', function (): void {
     $config = file_get_contents(base_path('../phpstan.neon.dist'));
-    expect($config)->toContain('level: max');
+    expect($config)->toContain('level: 9');
 });
 
 it('phpstan.neon.dist reports unmatched ignored errors', function (): void {

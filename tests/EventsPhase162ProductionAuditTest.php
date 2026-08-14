@@ -305,7 +305,7 @@ test('phpstan.neon.dist exists and is valid', function (): void {
     expect(file_exists($path))->toBeTrue();
 
     $contents = file_get_contents($path);
-    expect($contents)->toContain('level: max');
+    expect($contents)->toContain('level: 9');
     expect($contents)->toContain('reportUnusedIgnoredErrors: true');
     expect($contents)->toContain('universalObjectCratesClasses');
 });

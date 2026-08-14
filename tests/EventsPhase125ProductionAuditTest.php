@@ -30,9 +30,9 @@ use ZeroBoiler\Events\WildcardMatcher;
 
 describe('Events Phase 125 — Production Readiness Audit', function (): void {
     describe('PHPStan Configuration', function (): void {
-        it('phpstan.neon.dist has level 8 (PHPStan 2.x compatible)', function (): void {
+        it('phpstan.neon.dist has level 9 (PHPStan 2.x compatible)', function (): void {
             $config = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-            expect($config)->toContain('level: max');
+            expect($config)->toContain('level: 9');
             expect($config)->not->toContain('level: 8');
         });
 

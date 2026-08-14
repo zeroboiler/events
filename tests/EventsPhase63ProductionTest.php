@@ -657,7 +657,7 @@ test('phase 63: phpstan.neon.dist exists with level 9')
     ->expect(function (): bool {
         $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
 
-        return str_contains($content, 'level: max');
+        return str_contains($content, 'level: 9');
     })->toBeTrue();
 
 test('phase 63: TriggerBuilder actions() validation rejects empty string')

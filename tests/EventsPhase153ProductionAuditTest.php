@@ -507,7 +507,7 @@ describe('Phase 153 production audit', function (): void {
             expect(file_exists($configPath))->toBeTrue();
 
             $content = file_get_contents($configPath);
-            expect($content)->toContain('level: max');
+            expect($content)->toContain('level: 9');
         });
 
         test('phpstan.neon.dist has src and tests paths', function (): void {

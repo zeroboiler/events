@@ -20,7 +20,7 @@ describe('PHPStan Level 9 Configuration', function (): void {
         $content = file_get_contents($path);
 
         expect($content)->toBeString();
-        expect($content)->toContain('level: max');
+        expect($content)->toContain('level: 9');
         expect($content)->not->toContain('level: 9');
         expect($content)->not->Contain('level: 9');
     });

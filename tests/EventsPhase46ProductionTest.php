@@ -479,7 +479,7 @@ test('EventManager public methods have return type declarations', function () {
 // ---------------------------------------------------------------------------
 test('phpstan.neon.dist has level 9', function () {
     $neon = file_get_contents(base_path('../phpstan.neon.dist'));
-    expect($neon)->toContain('level: max');
+    expect($neon)->toContain('level: 9');
 });
 
 test('phpstan.neon.dist has paths configured', function () {

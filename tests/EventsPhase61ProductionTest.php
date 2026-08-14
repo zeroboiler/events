@@ -422,7 +422,7 @@ describe('Phase 61 — Production Readiness Deep Audit', function (): void {
 
     test('phpstan.neon.dist has level 9', function (): void {
         $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-        expect($content)->toContain('level: max');
+        expect($content)->toContain('level: 9');
     });
 
     test('composer.json has correct structure', function (): void {

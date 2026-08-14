@@ -102,7 +102,7 @@ describe('Phase 82 Production Audit', function (): void {
 
             $content = file_get_contents($configPath);
 
-            expect($content)->toContain('level: max');
+            expect($content)->toContain('level: 9');
             expect($content)->toContain('checkFunctionNameCase: true');
             expect($content)->toContain('checkUninitializedProperties: true');
             expect($content)->toContain('checkGenericClassInNonGenericObjectType: true');

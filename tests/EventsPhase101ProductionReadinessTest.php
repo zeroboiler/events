@@ -394,7 +394,7 @@ describe('Phase 101 — Production Readiness Audit', function (): void {
             $basePath = dirname((new ReflectionClass(EventManager::class))->getFileName());
             $contents = file_get_contents($basePath.'/../phpstan.neon.dist');
 
-            expect($contents)->toContain('level: max');
+            expect($contents)->toContain('level: 9');
             expect($contents)->toContain('reportUnmatchedIgnoredErrors: true');
             expect($contents)->toContain('checkGenericClassInNonGenericObjectType: true');
             expect($contents)->toContain('checkUninitializedProperties: true');

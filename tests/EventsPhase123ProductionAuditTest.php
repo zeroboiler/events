@@ -82,9 +82,9 @@ it('composer.json has correct provider and alias registration', function (): voi
     expect($aliases['EventManager'])->toBe('ZeroBoiler\\Events\\Facades\\EventManager');
 });
 
-it('phpstan.neon.dist uses level 8 for PHPStan 2.x compatibility', function (): void {
+it('phpstan.neon.dist uses level 9 for PHPStan 2.x', function (): void {
     $contents = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    expect($contents)->toContain('level: max');
+    expect($contents)->toContain('level: 9');
     expect($contents)->toContain('paths:');
     expect($contents)->toContain('- src');
     expect($contents)->toContain('- database/migrations');

@@ -98,7 +98,7 @@ test('all console commands are final', function (): void {
 test('phpstan.neon.dist uses level max', function (): void {
     $config = file_get_contents(__DIR__.'/../phpstan.neon.dist');
     assertIsString($config);
-    assertStringContainsString('level: max', $config);
+    assertStringContainsString('level: 9', $config);
     assertStringContainsString('reportUnmatchedIgnoredErrors: true', $config);
 });
 

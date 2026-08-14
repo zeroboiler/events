@@ -358,7 +358,7 @@ describe('Phase 87 — Production Audit', function (): void {
 
     test('phpstan.neon.dist level is 9', function (): void {
         $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-        expect($content)->toContain('level: max');
+        expect($content)->toContain('level: 9');
         expect($content)->toContain('checkMissingIterableValueType: true');
         expect($content)->toContain('checkGenericClassInNonGenericObjectType: true');
         expect($content)->toContain('checkUninitializedProperties: true');

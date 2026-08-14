@@ -550,7 +550,7 @@ it('phpstan.neon.dist exists and has level max', function (): void {
     expect(file_exists($path))->toBeTrue();
 
     $content = file_get_contents($path);
-    expect($content)->toContain('level: max');
+    expect($content)->toContain('level: 9');
     expect($content)->toContain('paths:');
     expect($content)->toContain('src');
 });

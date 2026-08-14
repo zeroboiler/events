@@ -207,7 +207,7 @@ test('all 12 console commands are registered in ServiceProvider', function (): v
 
 test('phpstan.neon.dist uses max level', function (): void {
     $contents = file_get_contents(base_path('phpstan.neon.dist'));
-    expect($contents)->toContain('level: max');
+    expect($contents)->toContain('level: 9');
 });
 
 test('composer.json requires PHP 8.5+', function (): void {

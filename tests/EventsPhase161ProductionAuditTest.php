@@ -47,7 +47,7 @@ it('verifies README version badge matches composer.json version', function (): v
 it('verifies PHPStan config uses level max and reportUnusedIgnoredErrors', function (): void {
     $config = file_get_contents(__DIR__.'/../phpstan.neon.dist');
 
-    expect($config)->toContain('level: max')
+    expect($config)->toContain('level: 9')
         ->and($config)->toContain('reportUnusedIgnoredErrors: true')
         ->and($config)->toContain('treatPhpDocTypesAsCertain: false')
         ->and($config)->toContain('checkMissingIterableValueType: true')

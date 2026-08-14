@@ -513,7 +513,7 @@ test('phpstan.neon.dist has level max and correct paths')
             return false;
         }
 
-        return str_contains($neon, 'level: max')
+        return str_contains($neon, 'level: 9')
             && str_contains($neon, 'paths:')
             && str_contains($neon, 'src');
     })->toBeTrue();

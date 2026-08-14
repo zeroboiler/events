@@ -609,7 +609,7 @@ test('subscription model uses escapes wildcard like trait', function (): void {
 test('phpstan config has correct level and settings', function (): void {
     $config = file_get_contents(__DIR__.'/../phpstan.neon.dist');
 
-    expect(str_contains($config, 'level: max'))->toBeTrue('PHPStan level must be 9');
+    expect(str_contains($config, 'level: 9'))->toBeTrue('PHPStan level must be 9');
     expect(str_contains($config, 'paths:'))->toBeTrue();
     expect(str_contains($config, 'src'))->toBeTrue();
     expect(str_contains($config, 'database/migrations'))->toBeTrue();

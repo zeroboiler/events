@@ -189,7 +189,7 @@ describe('Phase 90 — Return Type Declarations', function (): void {
 describe('Phase 90 — PHPStan Config', function (): void {
     test('phpstan.neon.dist has level 9', function (): void {
         $contents = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-        expect($contents)->toContain('level: max');
+        expect($contents)->toContain('level: 9');
     });
 
     test('phpstan.neon.dist analyses src only', function (): void {

@@ -845,7 +845,7 @@ describe('Phase 47 Production Tests', function () {
     describe('phpstan.neon.dist configuration', function () {
         it('exists and has level 9', function () {
             $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-            expect($content)->toContain('level: max');
+            expect($content)->toContain('level: 9');
         });
 
         it('analyzes src directory', function () {

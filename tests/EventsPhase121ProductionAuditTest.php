@@ -444,7 +444,7 @@ test('ConditionEngine safeRegexMatch is NOT #[Pure] (side effects)', function ()
 
 test('phpstan.neon.dist exists and has level 9', function (): void {
     $neon = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    expect($neon)->toContain('level: max');
+    expect($neon)->toContain('level: 9');
     expect($neon)->toContain('paths:');
     expect($neon)->toContain('- src');
     expect($neon)->toContain('database/migrations');

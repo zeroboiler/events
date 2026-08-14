@@ -112,7 +112,7 @@ describe('Phase 93 — Production Readiness Audit', function () {
         test('phpstan.neon.dist has level 9', function () {
             $contents = file_get_contents(__DIR__.'/../phpstan.neon.dist');
 
-            expect($contents)->toContain('level: max');
+            expect($contents)->toContain('level: 9');
         });
 
         test('phpstan.neon.dist checks all PHPStan 9 strict options', function () {

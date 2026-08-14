@@ -288,7 +288,7 @@ describe('Phase 143 Production Audit', function (): void {
         it('phpstan.neon.dist exists and has level max', function (): void {
             $content = file_get_contents(__DIR__ . '/../phpstan.neon.dist');
 
-            expect($content)->toContain('level: max');
+            expect($content)->toContain('level: 9');
         });
 
         it('phpstan.neon.dist scans src, database/migrations, database/factories, tests', function (): void {

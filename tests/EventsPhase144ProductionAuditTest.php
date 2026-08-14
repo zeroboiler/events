@@ -588,7 +588,7 @@ describe('EventsPhase144ProductionAudit', function (): void {
     describe('PHPStan configuration', function (): void {
         test('phpstan.neon.dist exists and has max level', function (): void {
             $neon = file_get_contents(base_path('phpstan.neon.dist'));
-            expect($neon)->toContain('level: max');
+            expect($neon)->toContain('level: 9');
         });
 
         test('phpstan.neon includes phpstan.neon.dist', function (): void {

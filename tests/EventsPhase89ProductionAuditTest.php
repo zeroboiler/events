@@ -363,7 +363,7 @@ describe('Phase 89 Production Audit', function (): void {
 
             $contents = file_get_contents($neonPath);
             expect($contents)->not->toBeFalse();
-            expect(str_contains($contents, 'level: max'))->toBeTrue();
+            expect(str_contains($contents, 'level: 9'))->toBeTrue();
         });
 
         it('has checkUninitializedProperties enabled', function (): void {

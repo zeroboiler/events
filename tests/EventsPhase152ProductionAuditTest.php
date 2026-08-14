@@ -284,7 +284,7 @@ test('phpstan.neon.dist has level max and correct paths', function (): void {
 
     // Simple content check since neon isn't parseable as ini
     $contents = file_get_contents(__DIR__.'/../phpstan.neon.dist');
-    expect($contents)->toContain('level: max');
+    expect($contents)->toContain('level: 9');
     expect($contents)->toContain('paths:');
     expect($contents)->toContain('- src');
     expect($contents)->toContain('- tests');

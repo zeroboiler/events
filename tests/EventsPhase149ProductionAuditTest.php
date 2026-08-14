@@ -443,11 +443,11 @@ describe('Phase 149 Production Audit', function (): void {
     });
 
     // ─── phpstan.neon.dist validation ───────────────────────────────────
-    test('phpstan.neon.dist has level: max and covers src/tests/factories/migrations', function (): void {
+    test('phpstan.neon.dist has level: 9 and covers src/tests/factories/migrations', function (): void {
         $content = file_get_contents(__DIR__.'/../phpstan.neon.dist');
         expect($content)->not->toBeFalse();
 
-        expect(str_contains($content, 'level: max'))->toBeTrue();
+        expect(str_contains($content, 'level: 9'))->toBeTrue();
         expect(str_contains($content, 'src'))->toBeTrue();
         expect(str_contains($content, 'tests'))->toBeTrue();
         expect(str_contains($content, 'factories'))->toBeTrue();
