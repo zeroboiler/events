@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-4.94.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-4.95.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Max](https://img.shields.io/badge/PHPStan-Max%20(2.x)-success)() |
@@ -455,10 +455,10 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 245 test files + 5 support files
-│   ├── ... (245 test files)
+├── tests/                      # 246 test files + 4 support files
+│   ├── ... (246 test files)
 │   └── ...
-└── Total: 291 PHP files (33 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 245 tests + 5 support + 1 rector.php + 1 config)
+└── Total: 292 PHP files (33 src + 12 console + 3 models + 4 concerns + 4 contracts/actions/domain + 3 factories + 3 migrations + 246 tests + 4 support + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -904,7 +904,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (245 test files)
+composer test        # Run Pest test suite (246 test files)
 composer analyse     # PHPStan max (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -926,6 +926,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v4.95.0
+
+- Fixed: README test file count — corrected support file count from 5 to 4 (actual support files: CreatesApplication.php, TestActions.php, TestCase.php, helpers.php).
+- Added: `EventsPhase160ProductionAuditTest.php` — Phase 160 comprehensive production audit (20 tests) covering: strict types compliance across all src files, final class verification, readonly promoted properties on TriggerBuilder/SubscriptionBuilder, EventManager public API completeness, facade accessor correctness, ConditionEngine/ConditionEngineContract interface compliance, Triggerable interface implementation by WebhookAction, EventsServiceProvider provides() bindings verification, WildcardMatcher readonly final class, DomainEvent immutability, DispatchTriggerJob typed constructor properties, UUID primary keys on all models, no deprecated setAccessible() calls, EscapesWildcardLike SQL LIKE escaping, GetsWebhookTimeout return type, README test file count accuracy.
+- Registered: `EventsPhase160ProductionAuditTest.php` in `Pest.php`.
+- Updated: README version badge 4.94.0→4.95.0, test count 245→246 test files, total PHP file count 291→292.
+- Bumped: Version 4.95.0.
 
 ### v4.94.0
 
