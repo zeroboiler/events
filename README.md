@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.15.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.16.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
@@ -464,7 +464,7 @@ events/
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
 │   └── ... (276 test files)
-└── Total: 317 PHP files (33 src + 276 tests + 1 rector.php + 1 config + 6 factories/migrations)
+└── Total: 322 PHP files (33 src + 281 tests + 1 rector.php + 1 config + 6 factories/migrations)
 ```
 
 ### How It Works
@@ -933,6 +933,15 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.16.0
+
+- Fixed: README total PHP file count updated to 322 (was 317) — now correctly includes 5 test support files.
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 7 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with `checkExplicitMixed`.
+- Bumped: Version 5.16.0.
 
 ### v5.14.0
 
