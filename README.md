@@ -463,8 +463,8 @@ events/
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (282 test files)
-└── Total: 328 PHP files (33 src + 282 tests + 1 rector.php + 1 config + 6 factories/migrations)
+│   └── ... (284 test files)
+└── Total: 330 PHP files (33 src + 284 tests + 1 rector.php + 1 config + 6 factories/migrations)
 ```
 
 ### How It Works
