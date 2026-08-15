@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Actions;
 
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -36,7 +35,7 @@ final class WebhookAction implements Triggerable
      */
     private function getMaxFailures(): int
     {
-        $max = Config::get('events.subscriptions.max_failures', 10);
+        $max = $this->getWebhookConfig()->get('events.subscriptions.max_failures', 10);
 
         return is_int($max) && $max > 0 ? $max : 10;
     }

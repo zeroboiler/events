@@ -9,9 +9,10 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Throwable;
@@ -43,17 +44,21 @@ final class DispatchTriggerJob implements ShouldQueue
      * construction time so each queued job carries its own settings.
      *
      * @param  array<string, mixed>  $payload
+     * @param  Container|null  $app  Container for config resolution; falls back to app() helper
      */
     public function __construct(
         public readonly string $triggerId,
         public readonly string $event,
         public readonly array $payload,
+        ?Container $app = null,
     ) {
+        $config = $this->resolveConfig($app);
+
         // Retry configuration
-        $triesConfig = Config::get('events.retry.tries', 3);
+        $triesConfig = $config->get('events.retry.tries', 3);
         $this->tries = is_int($triesConfig) && $triesConfig > 0 ? $triesConfig : 3;
 
-        $backoffConfig = Config::get('events.retry.backoff', '60,300,900');
+        $backoffConfig = $config->get('events.retry.backoff', '60,300,900');
         if (is_array($backoffConfig)) {
             // Support array format directly: [60, 300, 900]
             $this->backoff = array_values(array_map(
@@ -69,13 +74,36 @@ final class DispatchTriggerJob implements ShouldQueue
         }
 
         // Queue configuration
-        $queueConfig = Config::get('events.queue.queue', 'default');
+        $queueConfig = $config->get('events.queue.queue', 'default');
         $this->queue = is_string($queueConfig) && $queueConfig !== '' ? $queueConfig : 'default';
 
-        $connectionConfig = Config::get('events.queue.connection', null);
+        $connectionConfig = $config->get('events.queue.connection', null);
         if (is_string($connectionConfig) && $connectionConfig !== '') {
             $this->connection = $connectionConfig;
         }
+    }
+
+    /**
+     * Resolve the config repository from container or global helper.
+     *
+     * @internal Not part of the public API.
+     */
+    private function resolveConfig(?Container $app): ConfigRepository
+    {
+        if ($app !== null) {
+            $config = $app->get('config');
+            if ($config instanceof ConfigRepository) {
+                return $config;
+            }
+        }
+
+        $config = app('config');
+
+        if ($config instanceof ConfigRepository) {
+            return $config;
+        }
+
+        throw new \RuntimeException('Config repository not available.');
     }
 
     /**

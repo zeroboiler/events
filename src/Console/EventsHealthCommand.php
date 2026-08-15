@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace ZeroBoiler\Events\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Subscription;
 use ZeroBoiler\Events\Models\Trigger;
@@ -32,6 +32,28 @@ final class EventsHealthCommand extends Command
     protected string $description = 'Check event system health and configuration';
 
     /**
+     * Get the config repository from the container.
+     *
+     * @internal Not part of the public API.
+     */
+    protected function getConfig(): ConfigRepository
+    {
+        $config = $this->laravel?->get('config');
+
+        if ($config instanceof ConfigRepository) {
+            return $config;
+        }
+
+        $config = app('config');
+
+        if ($config instanceof ConfigRepository) {
+            return $config;
+        }
+
+        throw new \RuntimeException('Config repository not available.');
+    }
+
+    /**
      * Execute the health check command.
      *
      * @return int Command exit code (SUCCESS if all checks pass, FAILURE if any critical check fails)
@@ -41,9 +63,10 @@ final class EventsHealthCommand extends Command
     {
         $results = [];
         $hasCritical = false;
+        $config = $this->getConfig();
 
         // 1. Global disable check
-        $disabled = Config::get('events.disabled', false);
+        $disabled = $config->get('events.disabled', false);
         $results['global_disabled'] = [
             'status' => $disabled === true ? 'WARNING' : 'OK',
             'message' => $disabled === true
@@ -107,9 +130,9 @@ final class EventsHealthCommand extends Command
         }
 
         // 6. Queue configuration
-        $queueConnection = Config::get('events.queue.connection', 'default');
-        $queueName = Config::get('events.queue.queue', 'default');
-        $retryTries = Config::get('events.retry.tries', 3);
+        $queueConnection = $config->get('events.queue.connection', 'default');
+        $queueName = $config->get('events.queue.queue', 'default');
+        $retryTries = $config->get('events.retry.tries', 3);
         $results['queue_config'] = [
             'status' => 'OK',
             'message' => "Connection: {$queueConnection}, Queue: {$queueName}, Retries: {$retryTries}.",

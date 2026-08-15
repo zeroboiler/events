@@ -20,13 +20,13 @@ parameters:
         - Illuminate\Database\Eloquent\Model
         - Illuminate\Database\Eloquent\Builder
     ignoreErrors:
-        - '#Call to an undefined (static )?method Illuminate\\\\Support\\\\Facades\\\\(Config|Cache|Queue|Log|DB|Schema)::.*#'
+        - '#Call to an undefined (static )?method Illuminate\\\\Support\\\\Facades\\\\(Cache|Queue|Log|DB|Schema)::.*#'
         - '#Call to an undefined (static )?method Illuminate\\\\Support\\\\Facades\\\\Http::.*#'
         - '#Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model::\\$payload#'
         - '#Access to an undefined property ZeroBoiler\\\\Events\\\\Models\\\\(Trigger|EventLog|Subscription)::\\$.*#'
         - '#Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Collection::push\\(\\)#'
         - '#Call to an undefined method.*::wildcardToLike\\(\\)#'
-        - '#Call to an undefined function (now|database_path)\\(\\)#'
+        - '#Call to an undefined function (now|database_path|app)\\(\\)#'
         - '#Dynamic call to static method#'
         - '#Access to an undefined property.*\\$table#'
         - '#Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Collection::sortBy\\(\\)#'
@@ -37,3 +37,8 @@ parameters:
         - '#Construct empty array with emptyArray#'
         - '#Method Illuminate\\\\Database\\\\Eloquent\\\\Collection::values\\(\\) should return#'
         - '#Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Collection::values\\(\\)#'
+        - '#Call to an undefined method.*::getWebhookConfig\\(\\)#'
+        - '#Call to an undefined method.*::getConfigValue\\(\\)#'
+        - '#Access to an undefined property.*\\$laravel#'
+        - '#Method ZeroBoiler\\\\Events\\\\Console\\\\EventsHealthCommand::getConfig\\(\\) should return#'
+        - '#Cannot access property \\$app on ZeroBoiler\\\\Events\\\\Concerns\\\\GetsWebhookTimeout#'

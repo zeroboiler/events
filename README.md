@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.12.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.13.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
@@ -457,14 +457,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 270 test files + 5 support files
+├── tests/                      # 271 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (270 test files)
-└── Total: 316 PHP files (33 src + 275 tests + 1 rector.php + 1 config + 6 factories/migrations)
+│   └── ... (271 test files)
+└── Total: 317 PHP files (33 src + 276 tests + 1 rector.php + 1 config + 6 factories/migrations)
 ```
 
 ### How It Works
@@ -910,7 +910,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (270 test files)
+composer test        # Run Pest test suite (271 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -932,6 +932,22 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.13.0
+
+- Refactored: **Eliminated all `Config` facade usage** from source code for improved testability and consistency:
+  - `GetsWebhookTimeout` trait — replaced `Config::get()` with container-injected `ConfigRepository` via new `getWebhookConfig()` method. Respects the `getConfig()` pattern when available, falls back to container resolution.
+  - `WebhookAction` — `getMaxFailures()` now reads from `$this->getWebhookConfig()` instead of static `Config` facade.
+  - `Subscription` model — `scopeExceededFailures()`, `hasExceededFailures()`, and `signPayload()` now use new `getConfigValue()` method that resolves from container `ConfigRepository`.
+  - `DispatchTriggerJob` — constructor now accepts optional `Container` parameter for config resolution. Added `resolveConfig()` helper. All `Config::get()` calls replaced with `$config->get()`.
+  - `EventsHealthCommand` — added `getConfig()` method that resolves from `$this->laravel` or `app()` helper. All `Config::get()` calls replaced.
+- Updated: `phpstan.neon.dist` — removed `Config` from facade ignore rules, added `app()` to undefined function ignores, added ignores for new trait methods (`getWebhookConfig`, `getConfigValue`, `$laravel`, `$app`).
+- Added: `ConfigFacadeEliminationTest` — 7 tests verifying no source file imports or calls the `Config` facade, and that all refactored classes use container-based config access.
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 7 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with `checkExplicitMixed`.
+- Bumped: Version 5.13.0.
 
 ### v5.12.0
 

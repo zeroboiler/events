@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\Database\Factories\SubscriptionFactory;
@@ -204,8 +204,7 @@ final class Subscription extends Model
      */
     public function scopeExceededFailures(Builder $query): Builder
     {
-        $threshold = Config::get('events.subscriptions.max_failures', 10);
-        $max = is_int($threshold) ? $threshold : 10;
+        $max = $this->getConfigValue('events.subscriptions.max_failures', 10);
 
         return $query->where('failure_count', '>=', $max);
     }
@@ -220,9 +219,9 @@ final class Subscription extends Model
      */
     public function hasExceededFailures(?int $max = null): bool
     {
-        $threshold = $max ?? Config::get('events.subscriptions.max_failures', 10);
+        $threshold = $max ?? $this->getConfigValue('events.subscriptions.max_failures', 10);
 
-        return $this->failure_count >= (is_int($threshold) ? $threshold : 10);
+        return $this->failure_count >= $threshold;
     }
 
     /**
@@ -236,11 +235,31 @@ final class Subscription extends Model
             return '';
         }
 
-        $algorithm = Config::get('events.subscriptions.signature_algorithm', 'sha256');
+        $algorithm = $this->getConfigValue('events.subscriptions.signature_algorithm', 'sha256');
 
         $result = hash_hmac(is_string($algorithm) ? $algorithm : 'sha256', $payload, $this->secret);
 
         return $result !== false ? $result : '';
+    }
+
+    /**
+     * Get a config value with type-safe fallback.
+     *
+     * Uses the container's ConfigRepository for consistency with
+     * EventManager, EventScheduler, and SubscriptionBuilder patterns.
+     * Avoids static Config facade for improved testability.
+     *
+     * @internal Not part of the public API.
+     */
+    protected function getConfigValue(string $key, mixed $default = null): mixed
+    {
+        $config = app('config');
+
+        if ($config instanceof ConfigRepository) {
+            return $config->get($key, $default);
+        }
+
+        return $default;
     }
 
     /**
