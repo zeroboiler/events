@@ -83,6 +83,12 @@ final class Subscription extends Model
         'deleted_at',
     ];
 
+    /**
+     * The "booted" method of the model.
+     *
+     * Auto-generates a UUID primary key when creating a new model
+     * instance without an explicit ID.
+     */
     #[\Override]
     protected static function boot(): void
     {
