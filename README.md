@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.22.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.23.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
@@ -457,14 +457,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 288 test files + 5 support files
+├── tests/                      # 289 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (288 test files)
-└── Total: 334 PHP files (33 src + 288 tests + 1 rector.php + 1 config + 6 factories/migrations + 5 support)
+│   └── ... (289 test files)
+└── Total: 335 PHP files (33 src + 289 tests + 1 rector.php + 1 config + 6 factories/migrations + 5 support)
 ```
 
 ### How It Works
@@ -911,7 +911,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (288 test files)
+composer test        # Run Pest test suite (289 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -933,6 +933,16 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.23.0
+
+- Added: `EventsPhase167Phase1InfrastructureAuditTest` — 30+ comprehensive production-readiness tests: source file structure (33 files with strict types), final/readonly class verification, constructor injection with promoted properties, ServiceProvider 7-binding consistency with singleton/transient verification, Facade accessor correctness, config 8-key completeness, model table names from config, EventLog status constants, DomainEvent immutability and roundtrip identity, ReDoS protection (500-char limit + nested quantifier rejection), WildcardMatcher all pattern types (catch-all, single-segment, cross-segment, exact, extract), webhook URL scheme enforcement (ftp:// and file:// rejection), HMAC signature determinism, PHP 8.5 attribute compliance (#[Override] on ServiceProvider, #[Pure] on ConditionEngine/WildcardMatcher), database factory model references, phpstan.neon.dist level 9 configuration, composer.json PHP 8.5/Laravel 13 verification, all 12 console commands with signatures, config-driven migrations, ConditionEngine all 21 operators, global disable toggle, EscapesWildcardLike SQL injection prevention.
+- Updated: README test count references 288→289, total PHP file count 334→335, version badge 5.22.0→5.23.0.
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with `checkExplicitMixed`.
+- Bumped: Version 5.23.0.
 
 ### v5.22.0
 

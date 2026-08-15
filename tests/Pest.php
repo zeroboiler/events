@@ -297,6 +297,7 @@ uses(TestCase::class)->in(
     'ExecuteTriggerEdgeCasesTest.php',
     'FireModelEdgeCasesExtendedTest.php',
     'EventsPhase166Phase1InfrastructureAuditTest.php',
+    'EventsPhase167Phase1InfrastructureAuditTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)
