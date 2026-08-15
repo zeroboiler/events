@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.5.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.6.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
@@ -457,14 +457,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 260 test files + 5 support files
+├── tests/                      # 264 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (260 test files)
-└── Total: 306 PHP files (33 src + 260 tests + 5 support + 1 rector.php + 1 config + 6 factories/migrations)
+│   └── ... (264 test files)
+└── Total: 310 PHP files (33 src + 269 tests + 1 rector.php + 1 config + 6 factories/migrations)
 ```
 
 ### How It Works
@@ -910,7 +910,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (260 test files)
+composer test        # Run Pest test suite (264 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -932,6 +932,14 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.6.0
+
+- Added: `EventsServiceProviderProvidesTest` — 3 tests verifying `provides()` returns all 7 expected bindings with correct types and no duplicates.
+- Added: `WildcardMatcherExtractWildcardsTest` — 11 tests covering `extractWildcards()` edge cases: single/multiple wildcards, cross-segment patterns, mismatched segments, catch-all, empty segments, numeric values.
+- Added: `SubscriptionBuilderUrlValidationTest` — 8 tests verifying SSRF protection rejects `ftp://`, `file://`, `mailto://`, `javascript:` schemes and accepts `http://` and `https://`.
+- Updated: README test file counts — 264 test files, 310 total PHP files.
+- Bumped: Version 5.6.0.
 
 ### v5.5.0
 
