@@ -457,14 +457,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 276 test files + 5 support files
+├── tests/                      # 279 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (276 test files)
-└── Total: 322 PHP files (33 src + 281 tests + 1 rector.php + 1 config + 6 factories/migrations)
+│   └── ... (279 test files)
+└── Total: 325 PHP files (33 src + 284 tests + 1 rector.php + 1 config + 6 factories/migrations)
 ```
 
 ### How It Works

@@ -144,6 +144,8 @@ final class EventManager
      * Invalidate the trigger cache.
      *
      * Call after register / unregister / enable / disable.
+     *
+     * @return void
      */
     public function invalidateTriggerCache(): void
     {
@@ -166,6 +168,8 @@ final class EventManager
      * This only affects the in-memory config and does not persist
      * across requests. Use `EVENTS_DISABLED=true` in .env for
      * persistent disable.
+     *
+     * @return void
      */
     public function setEnabled(bool $enabled): void
     {
@@ -290,6 +294,8 @@ final class EventManager
      * @param  bool  $async  When true, forces all matching triggers to be dispatched asynchronously via queue.
      *                       When false, triggers are dispatched according to their individual `async` setting.
      *
+     * @return void
+     *
      * @throws \InvalidArgumentException If the event name is empty
      * @throws \Throwable If a synchronous trigger action fails (re-thrown after logging)
      */
@@ -326,6 +332,8 @@ final class EventManager
      * @param  string  $modelClass  The fully-qualified model class name
      * @param  string  $action  The model action (e.g., 'created', 'updated', 'deleted')
      * @param  object  $model  The model instance (must have attributesToArray or toArray method)
+     *
+     * @return void
      *
      * @throws \InvalidArgumentException If the model class or action is empty
      */
@@ -370,6 +378,8 @@ final class EventManager
      * `EventManagerFacade::registerScheduler($schedule)`.
      *
      * @param  Schedule  $schedule  The Laravel scheduler instance
+     *
+     * @return void
      */
     public function registerScheduler(Schedule $schedule): void
     {

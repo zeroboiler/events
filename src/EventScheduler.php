@@ -52,6 +52,8 @@ final class EventScheduler
      * Register all event-related scheduled tasks with the given scheduler.
      *
      * @param  Schedule  $schedule  The Laravel scheduler instance
+     *
+     * @return void
      */
     public function register(Schedule $schedule): void
     {

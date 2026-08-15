@@ -138,6 +138,7 @@ final class SubscriptionBuilder
      * secret for HMAC payload verification.
      *
      * @throws \InvalidArgumentException If event name is empty, URL is empty/invalid, or URL is non-HTTP(S)
+     * @throws \JsonException If JSON encoding of webhook payload fails during signing
      */
     public function save(): Subscription
     {

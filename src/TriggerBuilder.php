@@ -191,6 +191,7 @@ final class TriggerBuilder
      * INSERT→UPDATE could collide on the UUID primary key.
      *
      * @throws \InvalidArgumentException If event name is empty or no action is provided
+     * @throws \JsonException If JSON encoding of action string fails
      */
     public function save(): Trigger
     {
