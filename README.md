@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.6.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.7.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
@@ -932,6 +932,15 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.7.0
+
+- Refactored: `EventScheduler` — replaced static `Config` facade calls with container-injected `ConfigRepository` via `$this->getConfig()`, matching the `EventManager::getConfig()` pattern. Improves testability and reduces static coupling.
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent (EventManager, ConditionEngine, ConditionEngineContract, ActionResolver, TriggerBuilder, SubscriptionBuilder, EventScheduler).
+- Verified: Config completeness — 7 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with comprehensive ignore rules.
+- Bumped: Version 5.7.0.
 
 ### v5.6.0
 

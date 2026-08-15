@@ -10,8 +10,8 @@ namespace ZeroBoiler\Events;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 
 /**
  * Scheduler for automated event log maintenance tasks.
@@ -23,12 +23,30 @@ use Illuminate\Support\Facades\Config;
  *
  * Uses constructor injection for the container to avoid relying on the
  * global `app()` helper, which improves testability and PHPStan compliance.
+ * Reads config through the container's `ConfigRepository` for consistency
+ * with EventManager's `getConfig()` pattern.
  */
 final class EventScheduler
 {
     public function __construct(
         protected readonly Container $app,
     ) {}
+
+    /**
+     * Get the config repository from the container with type narrowing.
+     *
+     * @internal Not part of the public API.
+     */
+    protected function getConfig(): ConfigRepository
+    {
+        $config = $this->app->get('config');
+
+        if ($config instanceof ConfigRepository) {
+            return $config;
+        }
+
+        throw new \RuntimeException('Config repository not available in the container.');
+    }
 
     /**
      * Register all event-related scheduled tasks with the given scheduler.
@@ -69,17 +87,17 @@ final class EventScheduler
      */
     protected function registerLogPurge(Schedule $schedule): void
     {
-        $days = Config::get('events.retention.days');
+        $days = $this->getConfig()->get('events.retention.days');
 
         if ($days === null || ! is_numeric($days) || (int) $days <= 0) {
             return;
         }
 
         $retentionDays = (int) $days;
-        $cron = Config::get('events.retention.schedule_cron', '0 2 * * *');
+        $cron = $this->getConfig()->get('events.retention.schedule_cron', '0 2 * * *');
         $cronExpression = is_string($cron) && $cron !== '' ? $cron : '0 2 * * *';
 
-        $includePending = Config::get('events.retention.include_pending', false);
+        $includePending = $this->getConfig()->get('events.retention.include_pending', false);
         $scheduler = $this;
 
         $schedule->call(function () use ($scheduler, $retentionDays, $includePending): void {
@@ -110,7 +128,7 @@ final class EventScheduler
      */
     protected function registerSubscriptionCleanup(Schedule $schedule): void
     {
-        $cleanupCron = Config::get('events.subscriptions.cleanup_cron', '0 3 * * *');
+        $cleanupCron = $this->getConfig()->get('events.subscriptions.cleanup_cron', '0 3 * * *');
         $cronExpression = is_string($cleanupCron) && $cleanupCron !== '' ? $cleanupCron : '0 3 * * *';
 
         $scheduler = $this;
