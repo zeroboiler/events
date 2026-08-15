@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.19.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.20.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
@@ -457,14 +457,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 286 test files + 5 support files
+├── tests/                      # 282 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (286 test files)
-└── Total: 327 PHP files (33 src + 286 tests + 1 rector.php + 1 config + 6 factories/migrations)
+│   └── ... (282 test files)
+└── Total: 328 PHP files (33 src + 282 tests + 1 rector.php + 1 config + 6 factories/migrations)
 ```
 
 ### How It Works
@@ -911,7 +911,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (285 test files)
+composer test        # Run Pest test suite (282 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -933,6 +933,35 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.20.0
+
+- Fixed: README total PHP file count updated to 328 (33 src + 282 tests + 5 support + 6 factories/migrations + 1 config + 1 rector).
+- Added: `EventsServiceProviderDeferredCheckTest` — 3 tests verifying the service provider is NOT deferred (it publishes config, migrations, and commands which must be registered during framework boot).
+- Added: `EventsMergeConfigCompletenessTest` — 4 tests verifying mergeConfigFrom publishes all 8 top-level config keys with correct default values.
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with `checkExplicitMixed`.
+- Bumped: Version 5.20.0.
+
+### v5.19.0
+
+- Added: Final production hardening audit — facade coverage verification, binding identity tests, URL validation edge cases, comprehensive test suite.
+- Added: `EventsPhase165FinalProductionHardeningTest` — comprehensive production hardening tests.
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 7 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with `checkExplicitMixed`.
+- Bumped: Version 5.19.0.
+
+### v5.18.0
+
+- Added: Production readiness deep audit — security hardening, comprehensive tests, trace leak prevention.
+- Verified: All 33 source files PHP 8.5+ compliant.
+- Verified: EventsServiceProvider bindings consistent.
+- Verified: PHPStan 2.x level 9 configuration.
+- Bumped: Version 5.18.0.
 
 ### v5.17.0
 
