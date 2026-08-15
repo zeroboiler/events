@@ -290,6 +290,7 @@ uses(TestCase::class)->in(
     'ModelBootDocblockConsistencyTest.php',
     'ProductionReadinessDeepAuditTest.php',
     'EventsComprehensiveProductionAuditTest.php',
+    'EventsPhase165FinalProductionHardeningTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)
