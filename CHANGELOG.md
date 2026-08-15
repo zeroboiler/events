@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.9.0] — 2026-08-15
+
+### Changed
+- `phpstan.neon.dist` — added `checkExplicitMixed: true` for stricter mixed-type detection at PHPStan level 9.
+- Version bumped to 5.9.0.
+
+### Verified
+- All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent (EventManager, ConditionEngine, ConditionEngineContract, ActionResolver, TriggerBuilder, SubscriptionBuilder, EventScheduler).
+- Config completeness — 7 top-level keys (`table_names`, `queue`, `retry`, `retention`, `subscriptions`, `disabled`, `wildcard_cache_ttl`) with all documented sub-keys.
+- PHPStan 2.x level 9 configuration.
+- Total 315 PHP files (33 src + 269 tests + 6 database + 5 config/support).
+
+---
+
 ## [4.94.0] — 2026-08-14
 
 ### Added

@@ -15,6 +15,7 @@ parameters:
     checkPropertyHookNameCase: true
     checkEnumCaseValueNameCase: true
     checkAlwaysTrueInstanceof: true
+    checkExplicitMixed: true
     universalObjectCratesClasses:
         - Illuminate\Database\Eloquent\Model
         - Illuminate\Database\Eloquent\Builder
