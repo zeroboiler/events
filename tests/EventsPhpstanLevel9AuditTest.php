@@ -211,8 +211,8 @@ describe('PHPStan Level 9 Production Audit', function (): void {
 
         $readme = file_get_contents(__DIR__.'/../README.md');
 
-        expect($composer['version'])->toBe('5.10.0');
-        expect($readme)->toContain('version-5.10.0');
+        expect($composer['version'])->toBe('5.16.0');
+        expect($readme)->toContain('version-5.16.0');
     });
 
     test('no setAccessible calls in source files (removed in PHP 8.5)', function (): void {
