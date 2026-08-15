@@ -36,7 +36,7 @@ final class EventsHealthCommand extends Command
      *
      * @internal Not part of the public API.
      */
-    protected function getConfig(): ConfigRepository
+    private function getConfig(): ConfigRepository
     {
         $config = $this->laravel?->get('config');
 
