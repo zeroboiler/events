@@ -6,6 +6,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.17.0] — 2026-08-15
+
+### Improved
+- Error logging in `EventManager::executeTrigger()` no longer leaks full stack traces — replaced `$e->getTraceAsString()` with `array_keys($basePayload)` for diagnostic context without exposing internal file paths. Security hardening for production log monitoring.
+
+### Added
+- `ProductionReadinessDeepAuditTest.php` — 55+ comprehensive tests covering:
+  - **Security**: SSRF URL pattern rejection (12 attack vectors), stack trace leak prevention, subscription secret hiding from serialization, webhook payload key stripping verification.
+  - **Contract consistency**: Singleton/transient binding identity for all 7 services (EventManager, ConditionEngine, ConditionEngineContract, ActionResolver, TriggerBuilder, SubscriptionBuilder, EventScheduler).
+  - **Wildcard cache**: TTL 0 disables caching, invalidation on trigger create.
+  - **DomainEvent**: Readonly property verification, roundtrip preservation, invalid UUID/date graceful handling, toArray key completeness, empty eventType throws.
+  - **ConditionEngine**: not_contains, not_empty, ===, !== operators; ReDoS protection (long pattern rejection, nested quantifier rejection); empty conditions match everything.
+  - **Event lifecycle**: Global disable, empty payload dispatch, fireModel event name construction, action deduplication, trigger deletion with cache invalidation.
+  - **Facade proxy**: Root instance identity, on() returns TriggerBuilder, subscribe() returns SubscriptionBuilder.
+  - **WildcardMatcher**: Exact, single/cross segment, catch-all, regex special chars, extract wildcards.
+  - **parseActions**: Empty string, single class, JSON array, JSON object with class+params, JSON with classes+params.
+  - **Event history**: getStats zero-state structure, purgeLogs completed+failed only, purgeLogs include pending.
+  - **Subscription lifecycle**: subscribeWebhook creates WebhookAction trigger, subscribe creates record + internal trigger, unsubscribe cleans both, HMAC deterministic signing.
+
+### Changed
+- README test file count updated to 285, total PHP file count to 330.
+- Version bumped to 5.17.0.
+
+---
+
 ## [5.10.0] — 2026-08-15
 
 ### Fixed

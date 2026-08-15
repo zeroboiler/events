@@ -569,7 +569,7 @@ final class EventManager
                 'trigger_id' => $trigger->id,
                 'event' => $log->event,
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
+                'payload_keys' => array_keys($basePayload),
             ]);
 
             throw $e;
