@@ -10,6 +10,8 @@ namespace ZeroBoiler\Events;
 
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
+
+use function database_path;
 use ZeroBoiler\Events\Console\EventsDisableCommand;
 use ZeroBoiler\Events\Console\EventsEnableCommand;
 use ZeroBoiler\Events\Console\EventsFireCommand;
