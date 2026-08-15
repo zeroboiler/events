@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.20.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.21.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
@@ -457,14 +457,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 284 test files + 5 support files
+├── tests/                      # 287 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (284 test files)
-└── Total: 330 PHP files (33 src + 284 tests + 1 rector.php + 1 config + 6 factories/migrations)
+│   └── ... (287 test files)
+└── Total: 333 PHP files (33 src + 287 tests + 1 rector.php + 1 config + 6 factories/migrations + 5 support)
 ```
 
 ### How It Works
@@ -911,7 +911,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (284 test files)
+composer test        # Run Pest test suite (287 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -933,6 +933,18 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.21.0
+
+- Added: `TriggerBuilderResolveActionsMergeTest` — 6 tests verifying action/actions() merge, dedup, and insertion-order preservation logic.
+- Added: `ExecuteTriggerEdgeCasesTest` — 6 tests covering empty action strings, whitespace actions, unresolvable action classes, and multi-action sequential dispatch.
+- Added: `FireModelEdgeCasesExtendedTest` — 7 tests covering stdClass without attributesToArray, empty class/action validation, model attribute flattening, empty/zero-string fire(), global disable toggle.
+- Updated: README test count references 284→287, total PHP file count 330→333.
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with `checkExplicitMixed`.
+- Bumped: Version 5.21.0.
 
 ### v5.20.0
 

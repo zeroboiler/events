@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.21.0] — 2026-08-15
+
+### Added
+- `TriggerBuilderResolveActionsMergeTest.php` — 6 tests verifying action()/actions() merge, dedup, insertion-order preservation, empty-string rejection, and triple-dedup scenarios.
+- `ExecuteTriggerEdgeCasesTest.php` — 6 tests covering empty action strings (silently completes), whitespace-only actions, unresolvable action class throws + marks log as failed, and multi-action sequential dispatch.
+- `FireModelEdgeCasesExtendedTest.php` — 7 tests covering stdClass without attributesToArray, empty model class/action validation, model attribute flattening via toArray, empty/zero-string fire() throws, global disable toggle, and setEnabled(true) re-enable.
+
+### Changed
+- README test count references 284→287, total PHP file count 330→333.
+- Version bumped to 5.21.0.
+
+---
+
 ## [5.17.0] — 2026-08-15
 
 ### Improved
