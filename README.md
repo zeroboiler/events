@@ -464,7 +464,7 @@ events/
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
 │   └── ... (279 test files)
-└── Total: 325 PHP files (33 src + 284 tests + 1 rector.php + 1 config + 6 factories/migrations)
+└── Total: 328 PHP files (33 src + 284 tests + 1 rector.php + 1 phpstan.neon.dist + 1 config + 6 factories/migrations)
 ```
 
 ### How It Works
