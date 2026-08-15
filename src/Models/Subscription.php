@@ -51,12 +51,26 @@ final class Subscription extends Model
     use HasFactory;
     use SoftDeletes;
 
+    /**
+     * Get the table name from config with type-safe fallback.
+     *
+     * Uses the container's ConfigRepository for testability instead of
+     * the static config() facade.
+     */
     #[\Override]
     public function getTable(): string
     {
-        $table = config('events.table_names.subscriptions', 'event_subscriptions');
+        $config = app('config');
 
-        return is_string($table) ? $table : 'event_subscriptions';
+        if ($config instanceof ConfigRepository) {
+            $table = $config->get('events.table_names.subscriptions', 'event_subscriptions');
+
+            if (is_string($table) && $table !== '') {
+                return $table;
+            }
+        }
+
+        return 'event_subscriptions';
     }
 
     protected string $keyType = 'string';

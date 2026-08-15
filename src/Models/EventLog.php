@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events\Models;
 
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -39,12 +40,26 @@ final class EventLog extends Model
     use HasFactory;
     use SoftDeletes;
 
+    /**
+     * Get the table name from config with type-safe fallback.
+     *
+     * Uses the container's ConfigRepository for testability instead of
+     * the static config() facade.
+     */
     #[\Override]
     public function getTable(): string
     {
-        $table = config('events.table_names.event_logs', 'event_logs');
+        $config = app('config');
 
-        return is_string($table) ? $table : 'event_logs';
+        if ($config instanceof ConfigRepository) {
+            $table = $config->get('events.table_names.event_logs', 'event_logs');
+
+            if (is_string($table) && $table !== '') {
+                return $table;
+            }
+        }
+
+        return 'event_logs';
     }
 
     protected string $keyType = 'string';

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events\Models;
 
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,12 +42,26 @@ final class Trigger extends Model
     use HasFactory;
     use SoftDeletes;
 
+    /**
+     * Get the table name from config with type-safe fallback.
+     *
+     * Uses the container's ConfigRepository for testability instead of
+     * the static config() facade.
+     */
     #[\Override]
     public function getTable(): string
     {
-        $table = config('events.table_names.triggers', 'triggers');
+        $config = app('config');
 
-        return is_string($table) ? $table : 'triggers';
+        if ($config instanceof ConfigRepository) {
+            $table = $config->get('events.table_names.triggers', 'triggers');
+
+            if (is_string($table) && $table !== '') {
+                return $table;
+            }
+        }
+
+        return 'triggers';
     }
 
     protected string $keyType = 'string';
