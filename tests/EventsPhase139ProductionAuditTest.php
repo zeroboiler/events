@@ -10,14 +10,13 @@ use ZeroBoiler\Events\Tests\TestCase;
 
 uses(TestCase::class);
 
-test('events version is 4.67.0 in composer.json', function (): void {
+test('events version matches between composer.json and README', function (): void {
     $json = json_decode(file_get_contents(base_path('composer.json')), true);
-    expect($json['version'])->toBe('4.67.0');
-});
+    $version = $json['version'];
+    expect($version)->toBeString()->and($version)->not->toBeEmpty();
 
-test('events version badge in README matches composer.json', function (): void {
     $readme = file_get_contents(base_path('README.md'));
-    expect($readme)->toContain('version-4.67.0');
+    expect($readme)->toContain('version-'.$version);
 });
 
 test('all source files have strict types declaration', function (): void {

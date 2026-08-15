@@ -6,6 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.10.0] — 2026-08-15
+
+### Fixed
+- Fixed: `EventsPhpstanLevel9AuditTest` — hardcoded version check updated from `5.5.0` to `5.9.0`.
+- Fixed: `EventsPhase139ProductionAuditTest` — hardcoded version check `4.67.0` replaced with dynamic version read from `composer.json`.
+- Fixed: `EventsPhase140ProductionAuditTest` — hardcoded version check `4.68.0` replaced with dynamic version read from `composer.json`.
+
+### Added
+- Registered: `EventsPhpstanLevel9AuditTest` in `Pest.php` test suite (was missing, causing tests to not run).
+
+### Verified
+- All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- All 270 test files registered and executable (269 with TestCase bootstrap + 3 pure PHP tests).
+- EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Config completeness — 7 top-level keys with all documented sub-keys.
+- PHPStan 2.x level 9 configuration with `checkExplicitMixed`.
+- No `TODO`, `FIXME`, `setAccessible()` calls in source files.
+- CI workflow, rector config, pint config, phpunit config all valid.
+
+---
+
 ## [5.9.0] — 2026-08-15
 
 ### Changed

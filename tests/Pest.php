@@ -269,6 +269,7 @@ uses(TestCase::class)->in(
     'FireModelEdgeCasesTest.php',
     'EventsPhase163ProductionAuditTest.php',
     'EventsPhase164ProductionReadinessTest.php',
+    'EventsPhpstanLevel9AuditTest.php',
     'EventManagerRegisterSchedulerTest.php',
     'DispatchTriggerJobSerializationTest.php',
     'EventManagerCacheInvalidationTest.php',
