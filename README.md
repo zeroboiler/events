@@ -131,7 +131,7 @@ return [
         'secret_length' => env('EVENTS_SUB_SECRET_LENGTH', 32),
         'max_failures' => env('EVENTS_SUB_MAX_FAILURES', 10),
         'timeout' => env('EVENTS_SUB_TIMEOUT', 30),
-        'signature_algorithm' => 'sha256',
+        'signature_algorithm' => env('EVENTS_SUB_SIGNATURE_ALGORITHM', 'sha256'),
         'cleanup_cron' => env('EVENTS_SUB_CLEANUP_CRON', '0 3 * * *'),
     ],
 
