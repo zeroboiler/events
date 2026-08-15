@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.7.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.8.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
@@ -457,14 +457,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 264 test files + 5 support files
+├── tests/                      # 269 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (264 test files)
-└── Total: 310 PHP files (33 src + 269 tests + 1 rector.php + 1 config + 6 factories/migrations)
+│   └── ... (269 test files)
+└── Total: 315 PHP files (33 src + 274 tests + 1 rector.php + 1 config + 6 factories/migrations)
 ```
 
 ### How It Works
@@ -910,7 +910,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (264 test files)
+composer test        # Run Pest test suite (269 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -932,6 +932,19 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.8.0
+
+- Added: `EventManagerZeroEventNameTest` — 4 tests verifying `fire()` rejects empty string and `"0"` event names, and accepts valid event names containing zeros.
+- Added: `EventManagerFireDeterministicSortTest` — 3 tests verifying `getMatchingTriggers()` deterministic ordering: priority DESC → created_at ASC → ID ASC tiebreaker, higher priority first, and stable ordering on repeated calls.
+- Added: `ConditionEngineEmptyConditionsTest` — 8 tests covering empty conditions array, empty operator arrays, non-string operators, null/not_null operators, and nested dot notation with intermediate null.
+- Added: `DispatchTriggerJobConfigEdgeCasesTest` — 6 tests verifying config-driven property handling: zero/negative tries fallback, empty backoff string, whitespace backoff entries, empty queue name fallback, and complex nested payload preservation.
+- Added: `WebhookActionPayloadSanitizationTest` — 5 tests verifying WebhookAction payload validation: missing URL, empty URL, non-string URL, and payload with only internal keys.
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 7 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration.
+- Bumped: Version 5.8.0, total 315 PHP files (33 src + 269 tests).
 
 ### v5.7.0
 
