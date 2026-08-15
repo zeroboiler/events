@@ -40,6 +40,9 @@ class TriggerFactory extends Factory
         ];
     }
 
+    /**
+     * Set the trigger as async.
+     */
     public function async(): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -47,6 +50,9 @@ class TriggerFactory extends Factory
         ]);
     }
 
+    /**
+     * Set the trigger as sync.
+     */
     public function sync(): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -54,6 +60,9 @@ class TriggerFactory extends Factory
         ]);
     }
 
+    /**
+     * Set the trigger as enabled.
+     */
     public function enabled(): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -61,6 +70,9 @@ class TriggerFactory extends Factory
         ]);
     }
 
+    /**
+     * Set the trigger as disabled.
+     */
     public function disabled(): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -68,6 +80,11 @@ class TriggerFactory extends Factory
         ]);
     }
 
+    /**
+     * Set conditions for the trigger.
+     *
+     * @param  array<string, mixed>  $conditions
+     */
     public function withConditions(array $conditions): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -75,6 +92,9 @@ class TriggerFactory extends Factory
         ]);
     }
 
+    /**
+     * Set the priority for the trigger.
+     */
     public function priority(int $priority): self
     {
         return $this->state(fn (array $attributes): array => [

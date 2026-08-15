@@ -6,6 +6,58 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.24.0] — 2026-08-15
+
+### Improved
+- `TriggerFactory` — added docblocks to all state methods (`async`, `sync`, `enabled`, `disabled`, `withConditions`, `priority`, `forEvent`, `withAction`, `withName`).
+- `SubscriptionFactory` — added docblocks with `@param` tags to all state methods (`withFailureCount`, `withDeliveryCount`, `withPriority`).
+
+### Added
+- `EventsPhase168Phase1FinalProductionAuditTest.php` — 80+ comprehensive Phase 1 infrastructure production readiness tests covering:
+  - PHP 8.5 source compliance (strict_types, license headers, no setAccessible, no TODO/FIXME)
+  - Final class verification (15 core + 12 console commands)
+  - Interface contracts (ConditionEngineContract, Triggerable)
+  - Constructor injection patterns (no global helpers in constructors)
+  - PHPStan 9 configuration validation (level 9, checkExplicitMixed, paths, baseline)
+  - ServiceProvider register/boot/provides with #[Override] attributes
+  - Config completeness (7 top-level keys + all sub-keys)
+  - DomainEvent value object (readonly properties, roundtrip, fromArray edge cases)
+  - WildcardMatcher (readonly final, static methods, regex special chars, extractWildcards)
+  - ConditionEngine full 21-operator matrix + AND logic + ReDoS protection + dot notation + strictEquals
+  - Facade accessor and @method annotation coverage
+  - Trait composition (EscapesWildcardLike, GetsWebhookTimeout, ManagesHistory, ManagesSubscriptions)
+  - Composer configuration (PHP 8.5, Laravel 13, PHPStan 2.x, PSR-4, extra.laravel)
+  - CI configuration (PHP 8.5, PHPStan, Pint, Rector, Pest 80% coverage)
+  - Database migrations (config-driven table names, up/down methods)
+  - Console commands (12 final classes, zeroboiler:events: prefix, int return types)
+  - EscapesWildcardLike behavior (wildcard→%, SQL special char escaping)
+  - EventLog status constants (4 statuses + $statuses array)
+  - Rector/Pint/PHPUnit configuration validation
+
+### Changed
+- Version bumped to 5.24.0.
+- README test count updated 289→290, total PHP files 335→336.
+- README version badge updated to 5.24.0.
+- New test registered in Pest.php.
+
+---
+
+## [5.23.0] — 2026-08-15
+
+### Added
+- Tests badge to README.
+- Phase 2-3-4 production audit verified.
+
+---
+
+## [5.22.0] — 2026-08-15
+
+### Improved
+- Phase 1 infrastructure production readiness audit (30+ tests).
+- PHPStan cleanup and visibility fixes.
+
+---
+
 ## [5.21.0] — 2026-08-15
 
 ### Added

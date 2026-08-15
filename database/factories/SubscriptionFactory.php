@@ -40,6 +40,9 @@ class SubscriptionFactory extends Factory
         ];
     }
 
+    /**
+     * Set the subscription as active.
+     */
     public function active(): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -47,6 +50,9 @@ class SubscriptionFactory extends Factory
         ]);
     }
 
+    /**
+     * Set the subscription as inactive.
+     */
     public function inactive(): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -54,6 +60,9 @@ class SubscriptionFactory extends Factory
         ]);
     }
 
+    /**
+     * Set the event name for the subscription.
+     */
     public function forEvent(string $event): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -61,6 +70,9 @@ class SubscriptionFactory extends Factory
         ]);
     }
 
+    /**
+     * Set the webhook URL for the subscription.
+     */
     public function withUrl(string $url): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -68,6 +80,11 @@ class SubscriptionFactory extends Factory
         ]);
     }
 
+    /**
+     * Set conditions for the subscription.
+     *
+     * @param  array<string, mixed>  $conditions
+     */
     public function withConditions(array $conditions): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -75,6 +92,9 @@ class SubscriptionFactory extends Factory
         ]);
     }
 
+    /**
+     * Set the HMAC signing secret for the subscription.
+     */
     public function withSecret(string $secret): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -82,6 +102,9 @@ class SubscriptionFactory extends Factory
         ]);
     }
 
+    /**
+     * Remove the HMAC signing secret from the subscription.
+     */
     public function withoutSecret(): self
     {
         return $this->state(fn (array $attributes): array => [
@@ -91,6 +114,8 @@ class SubscriptionFactory extends Factory
 
     /**
      * Set a specific failure count.
+     *
+     * @param  int  $count  The failure count value
      */
     public function withFailureCount(int $count): self
     {
@@ -101,6 +126,8 @@ class SubscriptionFactory extends Factory
 
     /**
      * Set a specific delivery count.
+     *
+     * @param  int  $count  The delivery count value
      */
     public function withDeliveryCount(int $count): self
     {
@@ -111,6 +138,8 @@ class SubscriptionFactory extends Factory
 
     /**
      * Set a specific priority.
+     *
+     * @param  int  $priority  The priority value (higher = first)
      */
     public function withPriority(int $priority): self
     {
