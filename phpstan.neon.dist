@@ -17,8 +17,8 @@ parameters:
     checkAlwaysTrueInstanceof: true
     checkExplicitMixed: true
     universalObjectCratesClasses:
-        - Illuminate\Database\Eloquent\Model
-        - Illuminate\Database\Eloquent\Builder
+        - Illuminate\\Database\\Eloquent\\Model
+        - Illuminate\\Database\\Eloquent\\Builder
     ignoreErrors:
         - '#Call to an undefined (static )?method Illuminate\\\\Support\\\\Facades\\\\(Cache|Queue|Log|DB|Schema)::.*#'
         - '#Call to an undefined (static )?method Illuminate\\\\Support\\\\Facades\\\\Http::.*#'
@@ -41,5 +41,5 @@ parameters:
         - '#Call to an undefined method.*::getWebhookConfig\\(\\)#'
         - '#Call to an undefined method.*::getConfigValue\\(\\)#'
         - '#Method ZeroBoiler\\\\Events\\\\Console\\\\EventsHealthCommand::getConfig\\(\\) should return#'
-        - '#Cannot access property \$app on ZeroBoiler\\\\\\\\Events\\\\\\\\Concerns\\\\\\\\GetsWebhookTimeout#'
-        - '#Cannot access property \$app on .*$#'
+        - '#Cannot access property \\$app on ZeroBoiler\\\\Events\\\\Concerns\\\\GetsWebhookTimeout#'
+        - '#Cannot access property \\$app on ZeroBoiler\\\\Events\\\\Console\\\\EventsRedeliverCommand#'
