@@ -36,9 +36,9 @@ use ZeroBoiler\Events\Models\Trigger;
  *
  * @property-read \Illuminate\Container\Container $app
  *
- * @mixin \ZeroBoiler\Events\Concerns\ManagesHistory
- * @mixin \ZeroBoiler\Events\Concerns\ManagesSubscriptions
- * @mixin \ZeroBoiler\Events\Concerns\EscapesWildcardLike
+ * @see \ZeroBoiler\Events\Concerns\ManagesHistory Provides event history, statistics, and log purge operations
+ * @see \ZeroBoiler\Events\Concerns\ManagesSubscriptions Provides webhook subscription management operations
+ * @see \ZeroBoiler\Events\Concerns\EscapesWildcardLike Provides wildcard-to-SQL-LIKE pattern conversion
  *
  * @see \ZeroBoiler\Events\Facades\EventManager
  */

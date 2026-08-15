@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.24.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.25.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
-|[![Tests: 290](https://img.shields.io/badge/Tests-290-brightgreen)]()|
+|[![Tests: 291](https://img.shields.io/badge/Tests-291-brightgreen)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 290 test files + 5 support files
+├── tests/                      # 291 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (290 test files)
-└── Total: 336 PHP files (33 src + 290 tests + 1 rector.php + 1 config + 6 factories/migrations + 5 support)
+│   └── ... (291 test files)
+└── Total: 337 PHP files (33 src + 291 tests + 1 rector.php + 1 config + 6 factories/migrations + 5 support)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (290 test files)
+composer test        # Run Pest test suite (291 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -934,6 +934,17 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.25.0
+
+- Fixed: `EventManager` class docblock — replaced incorrect `@mixin` annotations for traits with `@see` annotations (traits don't work with PHP's `@mixin` type hinting).
+- Added: `EventManagerSubscribeWebhookEdgeCasesTest` — 6 tests verifying `subscribeWebhook()` creates correct triggers, passes conditions and priority, does NOT create Subscription records (unlike `subscribe()` builder), respects default priority, and handles async fire correctly.
+- Updated: README test count references 290→291, total PHP file count 336→337, version badge 5.24.0→5.25.0.
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with `checkExplicitMixed`.
+- Bumped: Version 5.25.0.
 
 ### v5.23.0
 
