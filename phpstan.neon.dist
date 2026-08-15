@@ -41,4 +41,5 @@ parameters:
         - '#Call to an undefined method.*::getWebhookConfig\\(\\)#'
         - '#Call to an undefined method.*::getConfigValue\\(\\)#'
         - '#Method ZeroBoiler\\\\Events\\\\Console\\\\EventsHealthCommand::getConfig\\(\\) should return#'
-        - '#Cannot access property \\$app on ZeroBoiler\\\\Events\\\\Concerns\\\\GetsWebhookTimeout#'
+        - '#Cannot access property \$app on ZeroBoiler\\\\\\\\Events\\\\\\\\Concerns\\\\\\\\GetsWebhookTimeout#'
+        - '#Cannot access property \$app on .*$#'

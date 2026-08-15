@@ -81,6 +81,17 @@ final class EventManager
     }
 
     /**
+     * Get the application container.
+     *
+     * Exposed as public so that collaborators (e.g., SubscriptionBuilder)
+     * can access the container without reaching into protected properties.
+     */
+    public function container(): Container
+    {
+        return $this->app;
+    }
+
+    /**
      * Get the wildcard trigger cache TTL from config or use default.
      *
      * Returns 0 when `events.wildcard_cache_ttl` is explicitly set to 0,
@@ -173,7 +184,7 @@ final class EventManager
     {
         $query = Trigger::query();
 
-        if ($event !== null && $event !== '') {
+        if ($event !== null && $event !== '' && $event !== '0') {
             $likePattern = $this->wildcardToLike($event);
             if ($likePattern !== null) {
                 $query->where('event', 'like', $likePattern);
@@ -194,9 +205,15 @@ final class EventManager
 
     /**
      * Get a trigger by ID.
+     *
+     * @param  string  $triggerId  The UUID of the trigger
      */
     public function getTrigger(string $triggerId): ?Trigger
     {
+        if ($triggerId === '' || $triggerId === '0') {
+            return null;
+        }
+
         return Trigger::find($triggerId);
     }
 
@@ -210,6 +227,10 @@ final class EventManager
      */
     public function deleteTrigger(string $triggerId): bool
     {
+        if ($triggerId === '' || $triggerId === '0') {
+            return false;
+        }
+
         $trigger = Trigger::find($triggerId);
 
         if ($trigger === null) {
@@ -229,6 +250,10 @@ final class EventManager
      */
     public function enable(string $triggerId): bool
     {
+        if ($triggerId === '' || $triggerId === '0') {
+            return false;
+        }
+
         $result = Trigger::where('id', $triggerId)->update(['enabled' => true]) > 0;
 
         if ($result) {
@@ -245,6 +270,10 @@ final class EventManager
      */
     public function disable(string $triggerId): bool
     {
+        if ($triggerId === '' || $triggerId === '0') {
+            return false;
+        }
+
         $result = Trigger::where('id', $triggerId)->update(['enabled' => false]) > 0;
 
         if ($result) {

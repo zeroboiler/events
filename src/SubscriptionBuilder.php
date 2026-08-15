@@ -52,10 +52,8 @@ final class SubscriptionBuilder
      */
     protected function getConfig(): ConfigRepository
     {
-        // Use app() helper which resolves from the container bound during ServiceProvider registration.
-        // This avoids the static Config facade while keeping the trait-based architecture clean.
-        $app = $this->eventManager->app;
-        $config = $app->get('config');
+        // Use the public container() method on EventManager for safe access.
+        $config = $this->eventManager->container()->get('config');
 
         if ($config instanceof ConfigRepository) {
             return $config;

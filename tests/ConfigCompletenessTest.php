@@ -57,7 +57,7 @@ describe('Events config completeness', function (): void {
         $retention = config('events.retention');
 
         expect($retention)->toBeArray()
-            ->and($retention)->toHaveKeys(['days', 'include_pending']);
+            ->and($retention)->toHaveKeys(['days', 'include_pending', 'schedule_cron']);
     });
 
     test('config subscriptions has all required keys', function (): void {
@@ -66,9 +66,11 @@ describe('Events config completeness', function (): void {
         expect($subs)->toBeArray()
             ->and($subs)->toHaveKeys([
                 'auto_generate_secret',
+                'secret_length',
                 'max_failures',
                 'timeout',
                 'signature_algorithm',
+                'cleanup_cron',
             ])
             ->and($subs['max_failures'])->toBeGreaterThanOrEqual(1)
             ->and($subs['timeout'])->toBeGreaterThanOrEqual(1)

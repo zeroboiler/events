@@ -457,14 +457,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 279 test files + 5 support files
+├── tests/                      # 276 test files + 5 support files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (279 test files)
-└── Total: 320 PHP files (33 src + 279 tests + 1 rector.php + 1 config + 6 factories/migrations)
+│   └── ... (276 test files)
+└── Total: 317 PHP files (33 src + 276 tests + 1 rector.php + 1 config + 6 factories/migrations)
 ```
 
 ### How It Works
@@ -846,6 +846,7 @@ Before deploying to production, verify:
 | `getStalePendingLogs(Carbon $before, int $limit)` | `Collection` | Get stuck pending logs older than threshold |
 | `deactivateExceededSubscriptions()` | `int` | Deactivate all subscriptions that exceeded failure threshold |
 | `executeTrigger(Trigger $trigger, EventLog $log)` | `void` | Execute a trigger synchronously (throws on failure) |
+| `container()` | `Container` | Get the application container instance |
 
 ### TriggerBuilder
 
@@ -910,7 +911,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (279 test files)
+composer test        # Run Pest test suite (276 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events\Concerns;
 
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 
 /**
@@ -42,9 +43,11 @@ trait GetsWebhookTimeout
 
         // Fallback for trait contexts (e.g., EventsRedeliverCommand uses GetsWebhookTimeout
         // but doesn't have its own getConfig() — it reads from container via app()).
+        // Note: property_exists() checks for the property existence regardless of visibility.
         if (property_exists($this, 'app')) {
-            $app = $this->app;
-            if ($app instanceof \Illuminate\Container\Container) {
+            /** @var Container|null $app */
+            $app = $this->app ?? null;
+            if ($app instanceof Container) {
                 $config = $app->get('config');
                 if ($config instanceof ConfigRepository) {
                     return $config;
