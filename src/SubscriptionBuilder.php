@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace ZeroBoiler\Events;
 
-use Illuminate\Support\Facades\Config;
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use ZeroBoiler\Events\Actions\WebhookAction;
@@ -44,6 +44,25 @@ final class SubscriptionBuilder
     public function __construct(
         protected readonly EventManager $eventManager,
     ) {}
+
+    /**
+     * Get the config repository from the container.
+     *
+     * @internal Not part of the public API.
+     */
+    protected function getConfig(): ConfigRepository
+    {
+        // Use app() helper which resolves from the container bound during ServiceProvider registration.
+        // This avoids the static Config facade while keeping the trait-based architecture clean.
+        $app = $this->eventManager->app;
+        $config = $app->get('config');
+
+        if ($config instanceof ConfigRepository) {
+            return $config;
+        }
+
+        throw new \RuntimeException('Config repository not available in the container.');
+    }
 
     /**
      * Set the event name to subscribe to.
@@ -146,9 +165,9 @@ final class SubscriptionBuilder
         }
 
         // Generate a secret if none was provided and auto_generate_secret is enabled
-        $autoGenerate = Config::get('events.subscriptions.auto_generate_secret', true);
+        $autoGenerate = $this->getConfig()->get('events.subscriptions.auto_generate_secret', true);
         if ($this->secret === null && $autoGenerate !== false) {
-            $secretLength = Config::get('events.subscriptions.secret_length', 32);
+            $secretLength = $this->getConfig()->get('events.subscriptions.secret_length', 32);
             $length = is_int($secretLength) && $secretLength >= 16 ? $secretLength : 32;
             $this->secret = 'whsec_'.Str::random($length);
         }

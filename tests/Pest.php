@@ -285,6 +285,7 @@ uses(TestCase::class)->in(
     'ConditionEngineEmptyConditionsTest.php',
     'DispatchTriggerJobConfigEdgeCasesTest.php',
     'WebhookActionPayloadSanitizationTest.php',
+    'SubscriptionBuilderConfigInjectionTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)
