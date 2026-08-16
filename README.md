@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.25.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.26.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
@@ -934,6 +934,16 @@ Test coverage spans:
 - EventScheduler registration and cron configuration
 
 ## Changelog
+
+### v5.26.0
+
+- Fixed: `Pest.php` — registered 10 previously unregistered test files (`ConfigFacadeEliminationModelsTest`, `EventManagerContainerAndIdGuardsTest`, `EventManagerFireDisabledSystemTest`, `EventsProductionApiSurfaceTest`, `SubscriptionBuilderContainerAccessTest`, `TriggerBuilderActionDedupTest`, `WildcardMatcherAndDomainEventTest`, `EscapesWildcardLikeTest`, `EventsWildcardMatcherFullTest`, `WildcardMatcherTest`).
+- Fixed: `phpstan.neon.dist` — added `bootstrapFiles: [tests/helpers.php]` so PHPStan can resolve global helper functions (`app()`, `config()`, `fake()`, `env()`, `database_path()`, `config_path()`) used across source and test files.
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with `checkExplicitMixed`, `bootstrapFiles`, and analysis paths.
+- Bumped: Version 5.26.0.
 
 ### v5.25.0
 

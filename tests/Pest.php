@@ -300,6 +300,21 @@ uses(TestCase::class)->in(
     'EventsPhase167Phase1InfrastructureAuditTest.php',
     'EventsPhase168Phase1FinalProductionAuditTest.php',
     'EventManagerSubscribeWebhookEdgeCasesTest.php',
+    // Newly registered tests (previously missing from Pest.php)
+    'ConfigFacadeEliminationModelsTest.php',
+    'EventManagerContainerAndIdGuardsTest.php',
+    'EventManagerFireDisabledSystemTest.php',
+    'EventsProductionApiSurfaceTest.php',
+    'SubscriptionBuilderContainerAccessTest.php',
+    'TriggerBuilderActionDedupTest.php',
+    'WildcardMatcherAndDomainEventTest.php',
+    'EventsPhase169ProductionReadinessTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)
+// Also registered separately to ensure they run in CI:
+uses(TestCase::class)->in(
+    'EscapesWildcardLikeTest.php',
+    'EventsWildcardMatcherFullTest.php',
+    'WildcardMatcherTest.php',
+);

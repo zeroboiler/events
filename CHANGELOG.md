@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.26.0] — 2026-08-16
+
+### Fixed
+- `Pest.php` — registered 10 previously unregistered test files that were not being discovered by the test runner.
+- `phpstan.neon.dist` — added `bootstrapFiles: [tests/helpers.php]` so PHPStan can resolve global helper functions (`app()`, `config()`, `fake()`, `env()`, `database_path()`, `config_path()`).
+
+### Changed
+- Version bumped to 5.26.0.
+- README version badge updated to 5.26.0.
+
+---
+
 ## [5.24.0] — 2026-08-15
 
 ### Improved
