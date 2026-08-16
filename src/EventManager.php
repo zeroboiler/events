@@ -506,10 +506,17 @@ final class EventManager
             // Create the EventLog inside the job so that if the job never
             // runs (queue down, Redis flushed, etc.) no orphaned log entry
             // is left behind in the database. See bug #632.
+            //
+            // Sanitize the payload for queue serialization: non-scalar values
+            // (objects, resources, closures) cannot be serialized by Redis/database
+            // queue drivers and would cause SilentJobFailed exceptions. Model
+            // objects from fireModel() are common non-serializable payloads.
+            $queuePayload = $this->sanitizePayloadForQueue($payload);
+
             Queue::push(new DispatchTriggerJob(
                 $trigger->id,
                 $event,
-                $payload,
+                $queuePayload,
                 $this->app,
             ));
         } else {
@@ -633,5 +640,41 @@ final class EventManager
         }
 
         return [$action];
+    }
+
+    /**
+     * Sanitize a payload array for queue serialization.
+     *
+     * Removes non-serializable values (objects, resources, closures) from the
+     * payload so that `DispatchTriggerJob` can be safely serialized by
+     * Redis/database queue drivers. Scalar values (string, int, float, bool,
+     * null) and arrays containing only serializable values are preserved.
+     *
+     * Non-serializable keys are replaced with a string placeholder indicating
+     * the original type, so the receiving action handler can detect that
+     * a value was stripped.
+     *
+     * @param  array<string, mixed>  $payload
+     * @return array<string, mixed>
+     *
+     * @internal Not part of the public API.
+     */
+    protected function sanitizePayloadForQueue(array $payload): array
+    {
+        $result = [];
+
+        foreach ($payload as $key => $value) {
+            if (is_array($value)) {
+                $nested = $this->sanitizePayloadForQueue($value);
+                $result[$key] = $nested;
+            } elseif (is_scalar($value) || $value === null) {
+                $result[$key] = $value;
+            } else {
+                // Non-serializable value: replace with type placeholder
+                $result[$key] = '[stripped:'.get_debug_type($value).']';
+            }
+        }
+
+        return $result;
     }
 }

@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.42.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.43.0-blue) |
 |![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)()
-|[![Tests: 305](https://img.shields.io/badge/Tests-305-brightgreen)]()|
+|[![Tests: 306](https://img.shields.io/badge/Tests-306-brightgreen)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 310 test files
+├── tests/                      # 311 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (305 test files)
-└── Total: 351 PHP files (33 src + 310 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (306 test files)
+└── Total: 352 PHP files (33 src + 311 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (305 test files)
+composer test        # Run Pest test suite (306 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,18 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 305 test files |
+| Test coverage | ✅ 306 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.43.0
+
+- Fixed: `EventManager::dispatchTrigger()` — added `sanitizePayloadForQueue()` to strip non-serializable values (objects, resources, closures) from async dispatch payloads. Prevents `SerializationException` when using Redis/database queue drivers with `fireModel()` or payloads containing Eloquent models. Non-serializable values are replaced with `[stripped:<type>]` placeholders.
+- Added: `EventsPhase180QueueSerializationSafetyTest` — 13 test groups covering: DispatchTriggerJob Container-not-stored-as-property verification, promoted readonly properties audit, serialization/unserialization round-trip, payload sanitization with object stripping, scalar payload preservation, source file quality audit (strict_types, license headers, final classes, sanitizePayloadForQueue method existence), config completeness (8 top-level keys, 6 subscription sub-keys), ServiceProvider 7-binding registration verification, provides() return value.
+- Updated: Pest.php registered 1 new test file (305→306).
+- Updated: README test count badge 305→306, total PHP file count 351→352, version badge 5.42.0→5.43.0.
+- Bumped: Version 5.43.0.
 
 ### v5.42.0
 
