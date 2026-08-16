@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.44.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.45.0-blue) |
 |![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)()
-|[![Tests: 307](https://img.shields.io/badge/Tests-307-brightgreen)]()|
+|[![Tests: 308](https://img.shields.io/badge/Tests-308-brightgreen)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 311 test files
+├── tests/                      # 308 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (307 test files)
-└── Total: 353 PHP files (33 src + 307 tests + 1 rector.php + 1 config + 3 factories + 3 migrations + 5 support)
+│   └── ... (308 test files)
+└── Total: 354 PHP files (33 src + 308 tests + 1 rector.php + 1 config + 3 factories + 3 migrations + 5 support)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (307 test files)
+composer test        # Run Pest test suite (308 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,18 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 307 test files |
+| Test coverage | ✅ 308 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.45.0
+
+- Fixed: `TriggerBuilder::resolveActions()` — added `@return list<string>` PHPDoc type annotation for PHPStan-level precision. The method already returned `array<string>`, but the generic list type was missing from the docblock.
+- Fixed: README test count badge corrected from 307→308, structure section corrected from "311 test files" (inaccurate) to "308 test files", total PHP file count updated from 353→354.
+- Added: `EventsPhase182ProductionInfrastructureAuditTest` — 60 test groups covering: all 33 source files strict_types + license header verification, TriggerBuilder resolveActions docblock type verification, EventManager/ActionResolver/EventScheduler/DomainEvent/DispatchTriggerJob constructor parameter audit (promoted, readonly, type), DomainEvent 3 readonly public properties, trait composition (EventManager 3 traits, ManagesHistory/ManagesSubscriptions/Subscription each use EscapesWildcardLike), EventsServiceProvider provides() returns exactly 7 bindings, config completeness (8 top-level keys, 3 table_names, 6 subscriptions sub-keys, retry/retention keys), Facade method alignment (executeTrigger, registerScheduler, container), EventManager public method return types (fire, fireModel, on, subscribe, getStats), composer.json validation (PHP 8.5, Laravel 13, version 5.44.0, providers, aliases), model casts verification (Trigger 4 casts, EventLog 3 casts, Subscription 6 casts), EventLog status constants, WildcardMatcher readonly/final, ConditionEngine readonly/final + contract implementation, WebhookAction readonly/final + Triggerable, PHPStan config (level 9, checkExplicitMixed, analysis paths), migration/factory file structure (3+3), no setAccessible() in src, ManagesHistory/ManagesSubscriptions return types, EscapesWildcardLike nullable return, GetsWebhookTimeout return types, DomainEvent roundtrip identity + missing eventType validation, WildcardMatcher edge cases (empty pattern, no matches, ** extractWildcards), ConditionEngine ReDoS protection (nested quantifiers, 500-char limit).
+- Updated: Pest.php registered 1 new test file (307→308).
+- Bumped: Version 5.45.0.
 
 ### v5.44.0
 
