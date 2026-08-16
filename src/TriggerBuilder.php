@@ -110,6 +110,7 @@ final class TriggerBuilder
      *
      * @internal Not part of the public API.
      */
+    /** @return list<string> */
     private function resolveActions(): array
     {
         $all = $this->actions;
