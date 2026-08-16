@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.30.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.31.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
-|[![Tests: 296](https://img.shields.io/badge/Tests-296-brightgreen)]()|
+|[![Tests: 297](https://img.shields.io/badge/Tests-297-brightgreen)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 296 test files
+├── tests/                      # 297 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (296 test files)
-└── Total: 337 PHP files (33 src + 296 tests + 1 rector.php + 1 config/events.php + 6 factories/migrations)
+│   └── ... (297 test files)
+└── Total: 338 PHP files (33 src + 297 tests + 1 rector.php + 1 config/events.php + 6 factories/migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (296 test files)
+composer test        # Run Pest test suite (297 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,19 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 296 test files |
+| Test coverage | ✅ 297 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.31.0
+
+- Added: `EventsPhase173InfrastructureAuditTest` — 28 comprehensive production readiness tests: composer.json PHP 8.5+/Laravel 13.x verification, PHPStan level 9 config (12 checks), all 33 source files strict types + license headers, all classes final, WildcardMatcher readonly final, EventManager promoted readonly constructor properties, ServiceProvider 7 bindings, Facade accessor, config 8 top-level keys with sub-keys, ConditionEngine → ConditionEngineContract implementation, WebhookAction → Triggerable implementation, DispatchTriggerJob → ShouldQueue implementation, DomainEvent roundtrip identity preservation, DomainEvent fromArray empty eventType rejection, ReDoS protection (long pattern + nested quantifiers), WildcardMatcher catch-all/cross-segment/single-segment patterns, ConditionEngine all 21 operators, EscapesWildcardLike SQL escaping, 12 console commands, model cast definitions, public API method completeness, public return type declarations, phpunit.xml configuration.
+- Updated: README test count badge 296→297, total PHP file count 337→338, version badge 5.30.0→5.31.0.
+- Verified: All 33 source files PHP 8.5+ compliant — strict types, final classes, readonly properties, typed properties, return type declarations, `#[Override]`/`#[Pure]` attributes, docblocks.
+- Verified: EventsServiceProvider register()/boot()/provides() — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Bumped: Version 5.31.0.
 
 ### v5.30.0
 
