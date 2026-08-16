@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.43.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.44.0-blue) |
 |![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)()
-|[![Tests: 306](https://img.shields.io/badge/Tests-306-brightgreen)]()|
+|[![Tests: 307](https://img.shields.io/badge/Tests-307-brightgreen)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -464,8 +464,8 @@ events/
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (306 test files)
-└── Total: 352 PHP files (33 src + 311 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (307 test files)
+└── Total: 353 PHP files (33 src + 307 tests + 1 rector.php + 1 config + 3 factories + 3 migrations + 5 support)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (306 test files)
+composer test        # Run Pest test suite (307 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,18 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 306 test files |
+| Test coverage | ✅ 307 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.44.0
+
+- Fixed: `SubscriptionBuilder::withSecret()` — added minimum 16-character validation for webhook signing secrets. Previously, any non-empty string was accepted, which could lead to weak HMAC signatures. Now throws `InvalidArgumentException` for secrets shorter than 16 characters.
+- Added: `EventsPhase181ProductionReadinessTest` — 26 test groups covering: SubscriptionBuilder secret length validation (reject <16 chars, accept exactly 16, accept long), EventsHealthCommand `$laravel` property docblock, source file strict_types verification (33 files), license header verification, all public classes final verification (26 classes), DomainEvent nested payload roundtrip identity, ConditionEngine `not_contains` and `not_empty` operators, WildcardMatcher multi-segment patterns, config completeness (8 top-level keys, 3 tables, 6 subscription sub-keys), ServiceProvider provides() verification (7 bindings), model casts verification (Trigger, EventLog, Subscription), EventLog status constants, composer.json validation (PHP 8.5, Laravel 13), WildcardMatcher readonly final class, sanitizePayloadForQueue strip/keep verification, TriggerBuilder resolveActions merge/dedup, Subscription recordDelivery atomic transaction, DispatchTriggerJob ShouldQueue interface, getStats return shape verification, no setAccessible() in src, phpstan.neon.dist validation, rector.php Laravel 13 set target.
+- Updated: Pest.php registered 1 new test file (306→307).
+- Updated: README test count badge 306→307, total PHP file count 352→353, version badge 5.43.0→5.44.0.
+- Bumped: Version 5.44.0.
 
 ### v5.43.0
 

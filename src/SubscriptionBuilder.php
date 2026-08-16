@@ -84,9 +84,15 @@ final class SubscriptionBuilder
 
     /**
      * Set the HMAC signing secret for webhook payload verification.
+     *
+     * @throws \InvalidArgumentException If the secret is too short (minimum 16 characters)
      */
     public function withSecret(string $secret): self
     {
+        if (strlen($secret) < 16) {
+            throw new \InvalidArgumentException('Webhook signing secret must be at least 16 characters.');
+        }
+
         $this->secret = $secret;
 
         return $this;

@@ -22,6 +22,8 @@ use ZeroBoiler\Events\Models\Trigger;
  * Useful in production for monitoring dashboards, pre-deploy checks,
  * and ops runbooks. Reports on database connectivity, trigger counts,
  * subscription health, queue configuration, and cache status.
+ *
+ * @property-read \Illuminate\Contracts\Foundation\Application|null $laravel
  */
 final class EventsHealthCommand extends Command
 {
