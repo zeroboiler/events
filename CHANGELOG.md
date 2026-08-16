@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.30.0] — 2026-08-16
+
+### Fixed
+- `EventManager::getMatchingTriggers()` — changed `sortBy` flag from `SORT_REGULAR` to `SORT_NUMERIC` for deterministic integer-based priority sorting. `SORT_REGULAR` compares arrays element-by-element which can produce unexpected ordering when comparing negative priority values.
+
+### Changed
+- Version bumped to 5.30.0.
+- README version badge updated to 5.30.0.
+- README test count badge corrected from 300 to 295 (verified actual test file count).
+- README total PHP file count updated.
+
+---
+
 ## [5.26.0] — 2026-08-16
 
 ### Fixed

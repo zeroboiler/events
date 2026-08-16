@@ -441,7 +441,7 @@ final class EventManager
                 $t->created_at?->getTimestamp() ?? 0,
                 $t->id,
             ],
-            SORT_REGULAR,
+            SORT_NUMERIC,
         );
 
         return $sorted->values();
