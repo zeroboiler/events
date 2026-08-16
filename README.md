@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.26.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.27.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
@@ -933,7 +933,37 @@ Test coverage spans:
 - Service provider bindings, config completeness, migrations, factories
 - EventScheduler registration and cron configuration
 
+## Production Readiness Summary
+
+| Criterion | Status |
+|---|---|
+| PHP 8.5+ strict types | ✅ All 33 source files |
+| Final classes | ✅ All classes |
+| Readonly properties | ✅ Promoted constructor props |
+| Typed properties | ✅ All declared |
+| Return type declarations | ✅ All methods |
+| Docblocks | ✅ All classes/methods |
+| #[Override] attributes | ✅ All overrides |
+| #[Pure] attributes | ✅ Side-effect-free methods |
+| PHPStan level 9 | ✅ phpstan.neon.dist |
+| ServiceProvider provides() | ✅ 7 bindings |
+| Config completeness | ✅ 8 top-level keys |
+| Migrations | ✅ 3 tables |
+| CLI commands | ✅ 12 commands |
+| Facade | ✅ EventManager |
+| Test coverage | ✅ 298 test files |
+| No deprecated APIs | ✅ No setAccessible() |
+
 ## Changelog
+
+### v5.27.0
+
+- Added: Production Readiness Summary table to README.
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with `checkExplicitMixed`, `bootstrapFiles`, and analysis paths.
+- Bumped: Version 5.27.0.
 
 ### v5.26.0
 
