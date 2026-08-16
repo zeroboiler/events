@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.39.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.40.0-blue) |
 |![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)()
-|[![Tests: 308](https://img.shields.io/badge/Tests-308-brightgreen)]()|
+|[![Tests: 309](https://img.shields.io/badge/Tests-309-brightgreen)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 308 test files
+├── tests/                      # 309 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (308 test files)
-└── Total: 354 PHP files (33 src + 308 tests + 5 test support + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (309 test files)
+└── Total: 355 PHP files (33 src + 309 tests + 5 test support + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (308 test files)
+composer test        # Run Pest test suite (309 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,17 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 308 test files |
+| Test coverage | ✅ 309 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.40.0
+
+- Added: `EventsPhase178ProductionFinalAuditTest` — 21 comprehensive test groups: ServiceProvider 7-binding registration with lifetime verification (singleton vs transient), config consistency (7 top-level keys, all documented env vars, default values), ConditionEngine 14 edge cases (empty conditions, empty operator array, invalid regex, inverted between range, dot notation, mixed type equality, AND logic), WildcardMatcher 9 patterns (case sensitivity, multiple wildcards, empty patterns, findMatchingPatterns, extractWildcards edge cases), DomainEvent 7 reconstruction edge cases (missing/empty eventType, invalid UUID, invalid datetime, missing payload, roundtrip preservation), EventManager 11 public API guards (container(), empty string guards, fire throws, fireModel throws, listTriggers), TriggerBuilder 4 edge cases (empty/0 class name throws, save without action throws, auto-name generation), SubscriptionBuilder 5 URL validation edge cases (empty event/URL, invalid URL, non-HTTP schemes, file:// SSRF prevention), EscapesWildcardLike 4 SQL safety tests (backslash/percent/underscore escaping, no-wildcard null return), Model integrity 11 tests (fillable fields, hidden fields, UUID string keys, casts), DispatchTriggerJob 3 config edge cases (default tries, default queue, readonly properties), Facade correctness 3 tests (accessor, final class, documented methods), EventScheduler config registration, Source file quality audit 5 tests (33 files, strict_types, license headers, no TODO/FIXME, no setAccessible), Version consistency 6 tests (composer.json version, PHP 8.5, illuminate/contracts, PSR-4, providers, aliases), PHPStan config 4 tests (level 9, strict options, bootstrap, analysis paths), Migrations/factories 5 tests (3 migrations, 3 factories, strict_types), Console commands 36 tests (12 commands × 3 checks: final class, handle return type, strict_types), ManagesHistory 5 operations, ManagesSubscriptions 4 operations, Global disable system 3 tests.
+- Updated: Pest.php registered 1 new test file (308→309).
+- Updated: README test count badge 308→309, total PHP file count 354→355.
+- Bumped: Version 5.40.0.
 
 ### v5.39.0
 
