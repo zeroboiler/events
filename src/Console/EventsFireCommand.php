@@ -74,7 +74,7 @@ final class EventsFireCommand extends Command
             $this->info('Payload:');
             foreach ($payload as $key => $value) {
                 $display = is_array($value) || is_object($value)
-                    ? json_encode($value)
+                    ? (json_encode($value) ?: '(unencodable)')
                     : (string) $value;
                 $this->line("  {$key}: {$display}");
             }

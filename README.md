@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.33.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.34.0-blue) |
 |![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)()
@@ -955,6 +955,14 @@ Test coverage spans:
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.34.0
+
+- Fixed: `EventsFireCommand::handle()` — `json_encode()` return value now properly handled (falls back to `'(unencodable)'` on failure, preventing PHPStan level 9 `false` to `string` error).
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`/`#[Pure]` attributes, docblocks.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Bumped: Version 5.34.0.
 
 ### v5.33.0
 
