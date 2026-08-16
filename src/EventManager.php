@@ -510,6 +510,7 @@ final class EventManager
                 $trigger->id,
                 $event,
                 $payload,
+                $this->app,
             ));
         } else {
             $log = new EventLog([

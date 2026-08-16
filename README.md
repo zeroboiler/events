@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.32.0-blue) |
-[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
-[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
-| ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
-|[![Tests: 298](https://img.shields.io/badge/Tests-298-brightgreen)]()|
+| ![Latest Version](https://img.shields.io/badge/version-5.33.0-blue) |
+|![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
+|[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
+| ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)()
+|[![Tests: 298](https://img.shields.io/badge/Tests-298-brightgreen)]()
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -465,7 +465,7 @@ events/
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
 │   └── ... (298 test files)
-└── Total: 339 PHP files (33 src + 298 tests + 1 rector.php + 1 config/events.php + 6 factories/migrations)
+└── Total: 344 PHP files (33 src + 298 tests + 5 test support + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -955,6 +955,16 @@ Test coverage spans:
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.33.0
+
+- Fixed: `EventManager::dispatchTrigger()` — now passes `$this->app` container to `DispatchTriggerJob` constructor for consistent container-injected config resolution (previously fell back to global `app()` helper).
+- Fixed: README badge table alignment (pipe character formatting).
+- Fixed: README total PHP file count updated to 344 (33 src + 298 tests + 5 test support + 1 rector.php + 1 config + 3 factories + 3 migrations).
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`/`#[Pure]` attributes, docblocks.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Bumped: Version 5.33.0.
 
 ### v5.32.0
 
