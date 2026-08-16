@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.31.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.32.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
-|[![Tests: 297](https://img.shields.io/badge/Tests-297-brightgreen)]()|
+|[![Tests: 298](https://img.shields.io/badge/Tests-298-brightgreen)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 297 test files
+├── tests/                      # 298 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (297 test files)
-└── Total: 338 PHP files (33 src + 297 tests + 1 rector.php + 1 config/events.php + 6 factories/migrations)
+│   └── ... (298 test files)
+└── Total: 339 PHP files (33 src + 298 tests + 1 rector.php + 1 config/events.php + 6 factories/migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (297 test files)
+composer test        # Run Pest test suite (298 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,20 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 297 test files |
+| Test coverage | ✅ 298 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.32.0
+
+- Fixed: `Pest.php` — registered 4 previously unregistered test files (`EventsPhase172FinalProductionReadinessAuditTest`, `EventsPhase173InfrastructureAuditTest`, `EventsProductionReadinessAuditTest`, `EventsPhase174InfrastructureAuditTest`).
+- Added: `EventsPhase174InfrastructureAuditTest` — 45+ comprehensive production readiness tests covering: source file integrity (33 files, strict_types, license headers, final classes, readonly WildcardMatcher), typed properties and return type declarations (EventManager, DomainEvent, DispatchTriggerJob promoted readonly), attribute compliance (#[Override] on ServiceProvider methods, #[Pure] on ConditionEngine/WildcardMatcher, facade accessor, no #[Override] on DispatchTriggerJob handle/failed), ServiceProvider 7 binding consistency with singleton/transient verification, Facade accessor correctness, Config completeness (8 top-level keys, all sub-keys), Model compliance (Trigger/EventLog/Subscription casts, EventLog status constants), DomainEvent immutability (roundtrip, empty eventType rejection, invalid UUID handling), ReDoS protection (500-char limit, nested quantifiers), all 21 ConditionEngine operators, WildcardMatcher patterns (catch-all, single-segment, cross-segment, exact), EscapesWildcardLike SQL injection prevention, HMAC signing determinism, composer.json PHP 8.5+/Laravel 13.x validation, phpstan.neon.dist level 9 with all checks, Pest.php test registration completeness, WebhookAction Triggerable implementation, global disable toggle, all 12 console commands, EventManager 26-method public API completeness.
+- Updated: README test count badges 297→298, total PHP file count 338→339, version badge 5.31.0→5.32.0.
+- Verified: All 33 source files PHP 8.5+ compliant — strict types, final classes, readonly properties, typed properties, return type declarations, `#[Override]`/`#[Pure]` attributes, docblocks.
+- Verified: EventsServiceProvider register()/boot()/provides() — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Bumped: Version 5.32.0.
 
 ### v5.31.0
 
