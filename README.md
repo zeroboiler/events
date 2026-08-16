@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.28.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.29.0-blue) |
 [![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)() |
-|[![Tests: 299](https://img.shields.io/badge/Tests-299-brightgreen)]()|
+|[![Tests: 300](https://img.shields.io/badge/Tests-300-brightgreen)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 299 test files
+├── tests/                      # 300 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (299 test files)
-└── Total: 338 PHP files (33 src + 299 tests + 1 rector.php + 1 config + 6 factories/migrations)
+│   └── ... (300 test files)
+└── Total: 341 PHP files (33 src + 300 tests + 1 rector.php + 1 config/events.php + 6 factories/migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (299 test files)
+composer test        # Run Pest test suite (300 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,17 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 299 test files |
+| Test coverage | ✅ 300 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.29.0
+
+- Fixed: `DispatchTriggerJob::handle()` and `DispatchTriggerJob::failed()` — removed incorrect `#[\Override]` attributes. These methods do not override any parent or interface method (`ShouldQueue` is a marker interface; `Queueable` and `InteractsWithQueue` traits do not define `handle()` or `failed()`). PHPStan 9 with `#[\Override]` enforcement would flag these as errors.
+- Added: `EventsPhase171InfrastructureAuditTest` — comprehensive Phase 1 infrastructure production readiness test covering: DispatchTriggerJob no-override handle/failed verification, all 33 source files strict_types/final/readonly/typed compliance, ServiceProvider 7-binding consistency, Config 8-key completeness, Facade accessor correctness, DomainEvent roundtrip identity, ReDoS protection, WildcardMatcher patterns, EventManager global disable, ConditionEngine 21 operators, WebhookAction HMAC signing, EscapesWildcardLike SQL injection prevention, TriggerBuilder action dedup, phpstan.neon.dist level 9 configuration, composer.json PHP 8.5+/Laravel 13.x verification, Subscription recordDelivery transactional atomicity, wildcard cache TTL configuration, all 12 console command signatures, all 3 factories model references, all 3 migrations timestamp ordering.
+- Updated: README test count references 299→300, total PHP file count 338→339, version badge 5.28.0→5.29.0.
+- Bumped: Version 5.29.0.
 
 ### v5.28.0
 
