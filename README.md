@@ -4,7 +4,7 @@
 |![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)()
-|[![Tests: 307](https://img.shields.io/badge/Tests-307-brightgreen)]()|
+|[![Tests: 308](https://img.shields.io/badge/Tests-308-brightgreen)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 307 test files
+├── tests/                      # 308 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (307 test files)
-└── Total: 353 PHP files (33 src + 307 tests + 5 test support + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (308 test files)
+└── Total: 354 PHP files (33 src + 308 tests + 5 test support + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (307 test files)
+composer test        # Run Pest test suite (308 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,7 +951,7 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 307 test files |
+| Test coverage | ✅ 308 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
