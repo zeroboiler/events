@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-| ![Latest Version](https://img.shields.io/badge/version-5.34.0-blue) |
+| ![Latest Version](https://img.shields.io/badge/version-5.35.0-blue) |
 |![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)()
-|[![Tests: 298](https://img.shields.io/badge/Tests-298-brightgreen)]()
+|[![Tests: 301](https://img.shields.io/badge/Tests-301-brightgreen)]()
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
