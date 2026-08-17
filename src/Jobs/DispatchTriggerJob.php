@@ -20,22 +20,35 @@ use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
+/**
+ * Queued job that dispatches an event trigger and records the result.
+ *
+ * Created by EventManager::dispatchTrigger() for async triggers or
+ * by EventsRetryCommand for manual retries. Reads queue config
+ * (tries, backoff, queue name, connection) at construction time so
+ * each queued job carries its own settings independent of env changes.
+ *
+ * The EventLog record is created inside handle() (not during construction)
+ * to prevent orphaned log entries when the queue is unavailable.
+ *
+ * @see \ZeroBoiler\Events\EventManager::dispatchTrigger()
+ */
 final class DispatchTriggerJob implements ShouldQueue
 {
     use InteractsWithQueue;
     use Queueable;
 
     /** @var list<int> Backoff intervals in seconds between retry attempts. Read from `events.retry.backoff` config. */
-    public array $backoff = [60, 300, 900];
+    public readonly array $backoff;
 
     /** @var string Queue name. Read from `events.queue.queue` config. */
-    public string $queue = 'default';
+    public readonly string $queue;
 
     /** @var int Number of times the job may be attempted. Read from `events.retry.tries` config. */
-    public int $tries = 3;
+    public readonly int $tries;
 
     /** @var string|null Queue connection name (read from events.queue.connection config) */
-    public ?string $connection = null;
+    public readonly ?string $connection;
 
     /**
      * Create a new dispatch trigger job.

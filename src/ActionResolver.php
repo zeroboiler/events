@@ -11,6 +11,14 @@ namespace ZeroBoiler\Events;
 use Illuminate\Container\Container;
 use ZeroBoiler\Events\Contracts\Triggerable;
 
+/**
+ * Resolves a class FQN string to a Triggerable instance from the container.
+ *
+ * Used by EventManager to instantiate action handlers before dispatch.
+ * Validates that the resolved class implements the Triggerable contract.
+ *
+ * @see \ZeroBoiler\Events\Contracts\Triggerable
+ */
 final class ActionResolver
 {
     public function __construct(
