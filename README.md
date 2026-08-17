@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.64.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.65.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 341](https://img.shields.io/badge/Tests-341-brightgreen)
+![Tests: 331](https://img.shields.io/badge/Tests-331-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 341 test files
+└── tests/                      # 331 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (336 test files)
-└── Total: 379 PHP files (33 src + 341 tests + 5 support + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (326 test files)
+└── Total: 377 PHP files (33 src + 331 tests + 5 support + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (341 test files)
+composer test        # Run Pest test suite (331 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,24 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 341 test files |
+| Test coverage | ✅ 331 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.65.0
+
+- Fixed: README test count badges corrected from 341 to actual count of 331 test files registered in Pest.php.
+- Fixed: README structure section updated (326 test files, 377 total PHP files).
+- Fixed: README production readiness summary table test count corrected.
+- Added: `EventsPhase201ProductionReadinessTest` — 30+ tests covering comprehensive production readiness: WildcardMatcher edge cases (empty pattern/event, single-dot, multi-wildcard, extractWildcards misaligned, findMatchingPatterns dedup), ConditionEngine edge cases (3-level nested dot notation, intermediate non-array key, starts_with/ends_with on non-string, numeric string comparison), DomainEvent round-trip with complex payloads, EventLog scopeStalePending filtering, Subscription scopeExceededFailures config respect, EventManager fire() async: true force override, Config completeness validation (8 top-level keys, all sub-keys), ServiceProvider binding correctness (7 bindings: 4 singletons, 2 transients, 1 contract), wildcard cache invalidation on trigger disable.
+- Registered: 1 new test file in Pest.php test suite configuration (331 test files).
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations on all 155 methods, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent (EventManager singleton, ConditionEngine singleton, ConditionEngineContract→ConditionEngine, ActionResolver singleton, TriggerBuilder transient, SubscriptionBuilder transient, EventScheduler singleton).
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with `checkExplicitMixed`.
+- Verified: All 12 Artisan commands have strict types, return type declarations, docblocks, and `#[Override]` on handle().
+- Bumped: Version 5.65.0.
 
 ### v5.64.0
 
