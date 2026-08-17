@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.62.0] — 2026-08-17
+
+### Fixed
+- Fixed `DomainEventImmutabilityTest`: updated 2 tests that incorrectly expected `DomainEvent::fromArray()` to accept empty/missing `eventType` — now correctly expect `\InvalidArgumentException` (matching the actual implementation)
+
+### Added
+- **Phase 195 Final Production Audit**: 28 new test cases covering strict types enforcement across all source files, final class enforcement, constructor property promotion, readonly property verification, #[\Override] attribute audit, console command return type audit, config completeness validation, `sanitizePayloadForQueue` edge cases, `ConditionEngine` operator coverage, `ActionResolver` error handling, facade docblock completeness, and PHPStan level verification
+
+---
+
 ## [5.61.0] — 2026-08-17
 
 ### Fixed

@@ -102,14 +102,11 @@ test('DomainEvent::fromArray handles invalid datetime gracefully', function (): 
         ->and($event->occurredAt)->toBeInstanceOf(DateTimeImmutable::class);
 });
 
-test('DomainEvent::fromArray handles missing eventType', function (): void {
-    $event = DomainEvent::fromArray([
+test('DomainEvent::fromArray throws for missing eventType', function (): void {
+    DomainEvent::fromArray([
         'payload' => ['key' => 'value'],
     ]);
-
-    expect($event->eventType)->toBe('')
-        ->and($event->payload)->toBe(['key' => 'value']);
-});
+})->throws(\InvalidArgumentException::class, 'DomainEvent eventType is required for reconstruction.');
 
 test('DomainEvent::fromArray handles missing payload', function (): void {
     $event = DomainEvent::fromArray([
@@ -119,14 +116,9 @@ test('DomainEvent::fromArray handles missing payload', function (): void {
     expect($event->payload)->toBe([]);
 });
 
-test('DomainEvent::fromArray handles completely empty data', function (): void {
-    $event = DomainEvent::fromArray([]);
-
-    expect($event->eventType)->toBe('')
-        ->and($event->payload)->toBe([])
-        ->and($event->eventId)->not->toBeNull()
-        ->and($event->occurredAt)->toBeInstanceOf(DateTimeImmutable::class);
-});
+test('DomainEvent::fromArray throws for completely empty data', function (): void {
+    DomainEvent::fromArray([]);
+})->throws(\InvalidArgumentException::class, 'DomainEvent eventType is required for reconstruction.');
 
 test('DomainEvent roundtrip toArray → fromArray is lossless', function (): void {
     $original = DomainEvent::occur('invoice.paid', [
