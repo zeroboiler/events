@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.51.0] — 2026-08-17
+
+### Fixed
+- `EventManager::executeTrigger()` — moved `$basePayload` initialization outside the `try` block to prevent undefined variable access in `catch` block when `$log->payload` is not an array.
+- `README.md` — fixed broken markdown badge formatting (malformed pipe characters causing badges not to render).
+
+### Added
+- Phase 187 production infrastructure audit test (56 test cases): WildcardMatcher edge cases, ConditionEngine operator edge cases, dot-notation nesting, DomainEvent immutability/reconstruction, TriggerBuilder validation, Subscription scopes/methods, EventLog scopes, EscapesWildcardLike trait, Config completeness verification, ServiceProvider binding assertions (singleton vs transient), and Facade proxy verification.
+
+### Changed
+- Version bumped to 5.51.0.
+- README test count badge updated from 313 to 314.
+- README version badge updated to 5.51.0.
+- Pest.php — registered `EventsPhase187FinalProductionInfrastructureAuditTest.php`.
+
+---
+
 ## [5.30.0] — 2026-08-16
 
 ### Fixed

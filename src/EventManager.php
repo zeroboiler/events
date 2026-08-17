@@ -544,9 +544,10 @@ final class EventManager
         $log->status = EventLog::STATUS_DISPATCHED;
         $log->save();
 
+        $basePayload = is_array($log->payload) ? $log->payload : [];
+
         try {
             $actions = $this->parseActions($trigger->action);
-            $basePayload = is_array($log->payload) ? $log->payload : [];
 
             foreach ($actions as $entry) {
                 // parseActions returns a normalised array where each entry
