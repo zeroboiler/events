@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.65.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.66.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 331](https://img.shields.io/badge/Tests-331-brightgreen)
+![Tests: 332](https://img.shields.io/badge/Tests-332-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 331 test files
+└── tests/                      # 332 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (326 test files)
-└── Total: 377 PHP files (33 src + 331 tests + 5 support + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (327 test files)
+└── Total: 378 PHP files (33 src + 337 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (331 test files)
+composer test        # Run Pest test suite (332 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,17 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 331 test files |
+| Test coverage | ✅ 332 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.66.0
+
+- Added: `EventsPhase202FinalProductionAuditTest` — 35+ tests covering final production readiness: WildcardMatcher deep edge cases (dot-only patterns, trailing/leading dots, ** at start/middle/end, pattern longer than event), ConditionEngine 4-level nested dot notation, DomainEvent round-trip with empty/nested payloads and occurredAt preservation, EventManager listTriggers/listSubscriptions filter consistency (enabled/disabled/activeOnly/wildcard), TriggerBuilder save with multiple actions + params (classes key and class key serialization), SubscriptionBuilder secret generation (prefix, length, custom secret), EventLog status constants validation, Subscription HMAC signing consistency and null secret, EventScheduler register() no-exception, WebhookAction missing URL validation, ActionResolver non-existent class and non-Triggerable class rejection, EscapesWildcardLike percent/underscore SQL escaping, production readiness checks (12 commands registered, config completeness, 7 ServiceProvider bindings).
+- Registered: 1 new test file in Pest.php test suite configuration (332 test files).
+- Updated: README version badge, test count badges (331→332), structure section (337 test files, 378 total PHP files), testing section, production readiness summary table.
+- Bumped: Version 5.66.0.
 
 ### v5.65.0
 
