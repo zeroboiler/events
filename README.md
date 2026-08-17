@@ -426,8 +426,9 @@ events/
 │       ├── 2024_01_01_000001_create_triggers_table.php
 │       ├── 2024_01_01_000002_create_event_logs_table.php
 │       └── 2025_06_28_000001_create_event_subscriptions_table.php
-├── rector.php                    # Rector code upgrade configuration (Laravel 13)
+├── phpstan-baseline.neon        # PHPStan level 9 error baseline
 ├── phpstan.neon.dist            # PHPStan level 9 configuration
+├── rector.php                    # Rector code upgrade configuration (Laravel 13)
 ├── src/
 │   ├── Actions/
 │   │   └── WebhookAction.php   # Triggerable: HTTP POST webhook dispatch
@@ -458,14 +459,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 335 test files
-│   ├── Pest.php               # Test suite configuration
-│   ├── TestCase.php           # Base test case (Laravel bootstrap)
-│   ├── CreatesApplication.php # Application trait
-│   ├── TestActions.php        # Test action implementations
-│   ├── helpers.php            # Test helper functions
-│   └── ... (329 test files)
-└── Total: 381 PHP files (33 src + 339 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
+└── tests/                      # 340 test files (335 tests + 5 support)
+    ├── Pest.php               # Test suite configuration
+    ├── TestCase.php           # Base test case (Laravel bootstrap)
+    ├── CreatesApplication.php # Application trait
+    ├── TestActions.php        # Test action implementations
+    ├── helpers.php            # Test helper functions
+    └── ... (335 test files)
+└── Total: 381 PHP files (33 src + 340 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
 ```
 
 ### How It Works
