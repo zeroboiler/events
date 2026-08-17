@@ -210,4 +210,22 @@ class EventsPhase196JobReadonlyConfigAuditTest extends TestCase
 
         expect($prop->getValue($job))->toBeNull();
     }
+
+    public function test_job_config_driven_defaults_without_overrides(): void
+    {
+        $app = $this->createApplication();
+        // Do NOT set any config — verify defaults kick in
+        $job = new DispatchTriggerJob(
+            triggerId: (string) \Illuminate\Support\Str::uuid(),
+            event: 'test.defaults',
+            payload: ['foo' => 'bar'],
+            app: $app,
+        );
+
+        expect($job->tries)->toBe(3);
+        expect($job->queue)->toBe('default');
+        expect($job->connection)->toBeNull();
+        // Default backoff from config fallback '60,300,900'
+        expect($job->backoff)->toBe([60, 300, 900]);
+    }
 }
