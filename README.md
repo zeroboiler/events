@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-|| ![Latest Version](https://img.shields.io/badge/version-5.47.0-blue) |
+|| ![Latest Version](https://img.shields.io/badge/version-5.48.0-blue) |
 |![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)()
-|| ![Tests: 310](https://img.shields.io/badge/Tests-310-brightgreen)]()|
+|| ![Tests: 316](https://img.shields.io/badge/Tests-316-brightgreen)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -77,7 +77,7 @@ EventManager::fire('order.placed', ['order_id' => 123, 'total' => 150]);
 
 - **Dynamic Triggers** — Register event triggers in the database; no code deployment needed to add, modify, or remove them.
 - **Wildcard Matching** — Support for `*` (single-segment), `**` (cross-segment), and catch-all patterns.
-- **Condition Engine** — Rich condition operators: `>`, `<`, `>=`, `<=`, `=`, `!=`, `in`, `not_in`, `contains`, `between`, `null`, `not_null`, `empty`, `starts_with`, `ends_with`, `matches` (regex with ReDoS protection), and nested dot-notation fields.
+- **Condition Engine** — Rich condition operators: `>`, `<`, `>=`, `<=`, `=`, `!=`, `in`, `not_in`, `contains`, `not_contains`, `between`, `null`, `not_null`, `empty`, `not_empty`, `starts_with`, `ends_with`, `matches` (regex with ReDoS protection), and nested dot-notation fields.
 - **Sync & Async Dispatch** — Execute triggers synchronously or queue them for async processing with configurable retry and backoff. Force async mode with `fire($event, $payload, async: true)` or `--async` CLI flag.
 - **Webhook Subscriptions** — Subscribe external systems to events with HMAC-SHA256 payload signing, failure tracking, and auto-deactivation.
 - **Domain Events** — First-class `DomainEvent` value object for event sourcing patterns with UUID, timestamp, serialization, and reconstruction.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 310 test files
+├── tests/                      # 316 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (310 test files)
-└── Total: 356 PHP files (33 src + 310 tests + 1 rector.php + 1 config + 3 factories + 3 migrations + 5 support)
+│   └── ... (316 test files)
+└── Total: 357 PHP files (33 src + 316 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (310 test files)
+composer test        # Run Pest test suite (316 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,18 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-|| Test coverage | ✅ 310 test files |
+|| Test coverage | ✅ 316 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.48.0
+
+- Fixed: `WebhookAction::handle()` docblock — enriched with `@throws` documentation for `InvalidArgumentException` (missing URL) and `Throwable` (HTTP failure re-throw). Existing `#[Override]` attribute was already present.
+- Added: `not_contains` and `not_empty` operators to README Features list (already implemented in ConditionEngine but previously undocumented).
+- Added: `EventsPhase184InfrastructureAuditTest` — 35 test groups covering: `not_contains` operator (array membership negation, string substring negation, non-string/non-array actual, empty array), `not_empty` operator (string, array, int, zero, null), `between` with non-numeric actual, null actual, inverted range auto-normalization, numeric operators null-safety (null actual, null value), WildcardMatcher edge cases (empty pattern, empty input array, no matches, filtering, non-wildcard extractWildcards, double-star extractWildcards), ConditionEngine dot notation (missing keys, null field), `starts_with`/`ends_with` non-string actual, regex non-string actual, empty conditions, source file quality checks (strict_types, final class, readonly final, `#[Override]` on `matches()`, `#[\Pure]` on `strictEquals()`).
+- Updated: README test count badge 310→316, Architecture section file counts 356→362, Testing section 310→316, Production Readiness table 310→316.
+- Bumped: Version 5.48.0.
 
 ### v5.47.0
 

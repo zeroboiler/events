@@ -45,8 +45,13 @@ final class WebhookAction implements Triggerable
      *
      * The payload is expected to contain a `url` key (the webhook endpoint).
      * If a `subscription_id` is present, the webhook is signed with HMAC.
+     * Non-2xx responses increment the subscription's failure count;
+     * exceeding the threshold auto-deactivates the subscription.
      *
      * @param  array<string, mixed>  $payload
+     *
+     * @throws \InvalidArgumentException When payload is missing a non-empty "url" key
+     * @throws \Throwable When the HTTP request fails (re-thrown after logging)
      */
     #[\Override]
     public function handle(array $payload): void
