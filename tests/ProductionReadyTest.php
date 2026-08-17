@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
-use App\Actions\LogOrderEvent;
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\LogOrderEvent;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Queue;
 use ZeroBoiler\Events\Actions\WebhookAction;
@@ -21,8 +21,7 @@ use ZeroBoiler\Events\SubscriptionBuilder;
 use ZeroBoiler\Events\TriggerBuilder;
 use ZeroBoiler\Events\WildcardMatcher;
 
-// Load test action classes (App\Actions namespace)
-require_once __DIR__.'/TestActions.php';
+// Load test action classes (ZeroBoiler\Events\Tests\Actions namespace)
 
 beforeEach(function (): void {
     Queue::fake();

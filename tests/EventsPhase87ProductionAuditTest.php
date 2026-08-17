@@ -46,7 +46,7 @@ describe('Phase 87 — Production Audit', function (): void {
 
         $trigger = $builder
             ->name('Single Action With Params')
-            ->action('App\\Actions\\TestAction')
+            ->action(\ZeroBoiler\Events\Tests\Actions\TestAction')
             ->actionParams(['url' => 'https://example.com/hook'])
             ->async(true)
             ->priority(5)
@@ -54,7 +54,7 @@ describe('Phase 87 — Production Audit', function (): void {
 
         $decoded = json_decode($trigger->action, true);
         expect($decoded)->toBeArray();
-        expect($decoded['class'])->toBe('App\\Actions\\TestAction');
+        expect($decoded['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\TestAction');
         expect($decoded['params'])->toBe(['url' => 'https://example.com/hook']);
 
         $trigger->delete();
@@ -66,14 +66,14 @@ describe('Phase 87 — Production Audit', function (): void {
 
         $trigger = $builder
             ->name('Multi Action With Params')
-            ->actions(['App\\Actions\\First', 'App\\Actions\\Second'])
+            ->actions([\ZeroBoiler\Events\Tests\Actions\First', \ZeroBoiler\Events\Tests\Actions\Second'])
             ->actionParams(['webhook_url' => 'https://example.com'])
             ->priority(10)
             ->save();
 
         $decoded = json_decode($trigger->action, true);
         expect($decoded)->toBeArray();
-        expect($decoded['classes'])->toBe(['App\\Actions\\First', 'App\\Actions\\Second']);
+        expect($decoded['classes'])->toBe([\ZeroBoiler\Events\Tests\Actions\First', \ZeroBoiler\Events\Tests\Actions\Second']);
         expect($decoded['params'])->toBe(['webhook_url' => 'https://example.com']);
 
         $trigger->delete();
@@ -247,7 +247,7 @@ describe('Phase 87 — Production Audit', function (): void {
     test('TriggerBuilder validates event name is not empty on save', function (): void {
         $manager = app(\ZeroBoiler\Events\EventManager::class);
 
-        expect(fn () => $manager->on('')->action('App\\Actions\\Test')->save())
+        expect(fn () => $manager->on('')->action(\ZeroBoiler\Events\Tests\Actions\Test')->save())
             ->toThrow(InvalidArgumentException::class, 'Event name is required');
     });
 

@@ -27,7 +27,7 @@ test('fire event with no matching triggers creates no logs', function (): void {
 test('fire event with multiple matching triggers dispatches all', function (): void {
     Trigger::factory()->create([
         'event' => 'order.placed',
-        'action' => 'App\Actions\LogA',
+        'action' => 'ZeroBoiler\Events\Tests\Actions\LogA',
         'conditions' => null,
         'enabled' => true,
         'async' => false,
@@ -36,7 +36,7 @@ test('fire event with multiple matching triggers dispatches all', function (): v
 
     Trigger::factory()->create([
         'event' => 'order.placed',
-        'action' => 'App\Actions\LogB',
+        'action' => 'ZeroBoiler\Events\Tests\Actions\LogB',
         'conditions' => null,
         'enabled' => true,
         'async' => false,
@@ -51,7 +51,7 @@ test('fire event with multiple matching triggers dispatches all', function (): v
 test('fire event with multiple actions in trigger executes all actions', function (): void {
     Trigger::factory()->create([
         'event' => 'multi.action',
-        'action' => json_encode(['App\Actions\ActionOne', 'App\Actions\ActionTwo']),
+        'action' => json_encode(['ZeroBoiler\Events\Tests\Actions\ActionOne', 'ZeroBoiler\Events\Tests\Actions\ActionTwo']),
         'conditions' => null,
         'enabled' => true,
         'async' => false,
@@ -66,7 +66,7 @@ test('fire event with multiple actions in trigger executes all actions', functio
 test('fire event with cross-segment wildcard matches nested events', function (): void {
     Trigger::factory()->create([
         'event' => 'order.**',
-        'action' => 'App\Actions\CrossSegment',
+        'action' => 'ZeroBoiler\Events\Tests\Actions\CrossSegment',
         'conditions' => null,
         'enabled' => true,
         'async' => false,
@@ -81,7 +81,7 @@ test('fire event with cross-segment wildcard matches nested events', function ()
 test('fire event with catch-all wildcard matches single-segment event', function (): void {
     Trigger::factory()->create([
         'event' => '*',
-        'action' => 'App\Actions\CatchAll',
+        'action' => 'ZeroBoiler\Events\Tests\Actions\CatchAll',
         'conditions' => null,
         'enabled' => true,
         'async' => false,
@@ -96,7 +96,7 @@ test('fire event with catch-all wildcard matches single-segment event', function
 test('fire event with empty payload works', function (): void {
     Trigger::factory()->create([
         'event' => 'empty.payload',
-        'action' => 'App\Actions\EmptyPayload',
+        'action' => 'ZeroBoiler\Events\Tests\Actions\EmptyPayload',
         'conditions' => null,
         'enabled' => true,
         'async' => false,
@@ -110,7 +110,7 @@ test('fire event with empty payload works', function (): void {
 test('fire event with condition on nested field', function (): void {
     Trigger::factory()->create([
         'event' => 'nested.test',
-        'action' => 'App\Actions\Nested',
+        'action' => 'ZeroBoiler\Events\Tests\Actions\Nested',
         'conditions' => ['user.role' => 'admin'],
         'enabled' => true,
         'async' => false,
@@ -151,7 +151,7 @@ test('invalidateTriggerCache clears wildcard cache', function (): void {
 test('fire model event with object without attributesToArray uses toArray', function (): void {
     Trigger::factory()->create([
         'event' => 'App\Models\Order.created',
-        'action' => 'App\Actions\OrderCreated',
+        'action' => 'ZeroBoiler\Events\Tests\Actions\OrderCreated',
         'conditions' => null,
         'enabled' => true,
         'async' => false,
@@ -176,7 +176,7 @@ test('fire model event with object without attributesToArray uses toArray', func
 test('sync trigger failure marks log as failed', function (): void {
     Trigger::factory()->create([
         'event' => 'fail.event',
-        'action' => 'App\Actions\FailingAction',
+        'action' => 'ZeroBoiler\Events\Tests\Actions\FailingAction',
         'conditions' => null,
         'enabled' => true,
         'async' => false,

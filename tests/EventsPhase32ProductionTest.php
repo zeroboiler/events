@@ -270,11 +270,11 @@ test('wildcard matcher returns empty for non-matching pattern extraction', funct
 test('trigger builder deduplicates actions across action() and actions()', function (): void {
     $trigger = Trigger::factory()->create([
         'event' => 'test.dedup.actions',
-        'action' => json_encode(['App\\Actions\\A', 'App\\Actions\\B', 'App\\Actions\\A']),
+        'action' => json_encode([\ZeroBoiler\Events\Tests\Actions\A', \ZeroBoiler\Events\Tests\Actions\B', \ZeroBoiler\Events\Tests\Actions\A']),
     ]);
 
     $decoded = json_decode($trigger->action, true);
-    expect($decoded)->toBe(['App\\Actions\\A', 'App\\Actions\\B']);
+    expect($decoded)->toBe([\ZeroBoiler\Events\Tests\Actions\A', \ZeroBoiler\Events\Tests\Actions\B']);
 });
 
 // ─── EventLog status transitions ───

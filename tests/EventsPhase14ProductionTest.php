@@ -49,8 +49,8 @@ test('TriggerBuilder save with action() and actions() overlapping produces corre
 
     $builder = app(\ZeroBoiler\Events\TriggerBuilder::class);
     $builder->on('order.placed');
-    $builder->action('App\\Actions\\NotifyAction');
-    $builder->actions(['App\\Actions\\NotifyAction', 'App\\Actions\\LogAction']);
+    $builder->action(\ZeroBoiler\Events\Tests\Actions\NotifyAction');
+    $builder->actions([\ZeroBoiler\Events\Tests\Actions\NotifyAction', \ZeroBoiler\Events\Tests\Actions\LogAction']);
 
     // Access the save logic without actually saving
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
@@ -58,25 +58,25 @@ test('TriggerBuilder save with action() and actions() overlapping produces corre
 
     // NotifyAction should appear only once (first occurrence preserved)
     expect($resolved)->toBe([
-        'App\\Actions\\NotifyAction',
-        'App\\Actions\\LogAction',
+        \ZeroBoiler\Events\Tests\Actions\NotifyAction',
+        \ZeroBoiler\Events\Tests\Actions\LogAction',
     ]);
 });
 
 test('TriggerBuilder save with action() not in actions() prepends correctly', function (): void {
     $builder = app(\ZeroBoiler\Events\TriggerBuilder::class);
     $builder->on('user.created');
-    $builder->action('App\\Actions\\FirstAction');
-    $builder->actions(['App\\Actions\\SecondAction', 'App\\Actions\\ThirdAction']);
+    $builder->action(\ZeroBoiler\Events\Tests\Actions\FirstAction');
+    $builder->actions([\ZeroBoiler\Events\Tests\Actions\SecondAction', \ZeroBoiler\Events\Tests\Actions\ThirdAction']);
 
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
     $resolved = $resolveReflection->invoke($builder);
 
     // action() should be prepended since it's not in the actions() list
     expect($resolved)->toBe([
-        'App\\Actions\\FirstAction',
-        'App\\Actions\\SecondAction',
-        'App\\Actions\\ThirdAction',
+        \ZeroBoiler\Events\Tests\Actions\FirstAction',
+        \ZeroBoiler\Events\Tests\Actions\SecondAction',
+        \ZeroBoiler\Events\Tests\Actions\ThirdAction',
     ]);
 });
 
@@ -548,7 +548,7 @@ test('WebhookAction handle throws for missing URL', function (): void {
 
 test('TriggerBuilder save throws for empty event', function (): void {
     $builder = app(\ZeroBoiler\Events\TriggerBuilder::class);
-    $builder->action('App\\Actions\\Test');
+    $builder->action(\ZeroBoiler\Events\Tests\Actions\Test');
 
     expect(fn (): Trigger => $builder->save())
         ->toThrow(\InvalidArgumentException::class, 'Event name is required');
@@ -603,8 +603,8 @@ test('TriggerBuilder fluent interface returns self', function (): void {
 
     expect($builder->name('Test'))->toBe($builder);
     expect($builder->on('test.event'))->toBe($builder);
-    expect($builder->action('App\\Actions\\Test'))->toBe($builder);
-    expect($builder->actions(['App\\Actions\\Test']))->toBe($builder);
+    expect($builder->action(\ZeroBoiler\Events\Tests\Actions\Test'))->toBe($builder);
+    expect($builder->actions([\ZeroBoiler\Events\Tests\Actions\Test']))->toBe($builder);
     expect($builder->when(['status' => 'active']))->toBe($builder);
     expect($builder->async(true))->toBe($builder);
     expect($builder->priority(10))->toBe($builder);

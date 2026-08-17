@@ -6,15 +6,14 @@
 
 declare(strict_types=1);
 
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Facades\EventManager as EventManagerFacade;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\TriggerBuilder;
 
-// Load test action classes (App\Actions namespace)
-require_once __DIR__.'/TestActions.php';
+// Load test action classes (ZeroBoiler\Events\Tests\Actions namespace)
 
 beforeEach(function (): void {
     Trigger::query()->delete();

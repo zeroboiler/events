@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
-use App\Actions\LogOrderEvent;
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\LogOrderEvent;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
@@ -24,8 +24,7 @@ use ZeroBoiler\Events\SubscriptionBuilder;
 use ZeroBoiler\Events\TriggerBuilder;
 use ZeroBoiler\Events\WildcardMatcher;
 
-// Load test action classes (App\Actions namespace)
-require_once __DIR__.'/TestActions.php';
+// Load test action classes (ZeroBoiler\Events\Tests\Actions namespace)
 
 beforeEach(function (): void {
     Queue::fake();
@@ -137,7 +136,7 @@ describe('EventManager executeTrigger failure', function (): void {
     test('executeTrigger marks log as failed and re-throws exception', function (): void {
         $trigger = Trigger::factory()->create([
             'event' => 'fail.test',
-            'action' => 'App\\Actions\\FailingAction',
+            'action' => \ZeroBoiler\Events\Tests\Actions\FailingAction',
             'enabled' => true,
             'async' => false,
         ]);
@@ -150,7 +149,7 @@ describe('EventManager executeTrigger failure', function (): void {
 
         // Register a class that throws
         $app = app();
-        $app->bind('App\\Actions\\FailingAction', function () {
+        $app->bind(\ZeroBoiler\Events\Tests\Actions\FailingAction', function () {
             return new class implements \ZeroBoiler\Events\Contracts\Triggerable
             {
                 public function handle(array $payload): void
@@ -175,7 +174,7 @@ describe('EventManager executeTrigger failure', function (): void {
 
         $app = app();
 
-        $app->bind('App\\Actions\\CountAction', function () use (&$callCount) {
+        $app->bind(\ZeroBoiler\Events\Tests\Actions\CountAction', function () use (&$callCount) {
             return new class($callCount) implements \ZeroBoiler\Events\Contracts\Triggerable
             {
                 public function __construct(public int &$count) {}
@@ -189,7 +188,7 @@ describe('EventManager executeTrigger failure', function (): void {
 
         $trigger = Trigger::factory()->create([
             'event' => 'multi.success',
-            'action' => json_encode(['App\\Actions\\CountAction', 'App\\Actions\\CountAction']),
+            'action' => json_encode([\ZeroBoiler\Events\Tests\Actions\CountAction', \ZeroBoiler\Events\Tests\Actions\CountAction']),
             'enabled' => true,
             'async' => false,
         ]);

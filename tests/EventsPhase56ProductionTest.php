@@ -124,14 +124,14 @@ describe('Phase 56 — Production Hardening Edge Cases', function (): void {
     describe('TriggerBuilder validation edge cases', function (): void {
         test('save throws for event name consisting only of spaces', function (): void {
             $builder = app(TriggerBuilder::class);
-            $builder->on('   ')->action('App\Actions\Foo');
+            $builder->on('   ')->action('ZeroBoiler\Events\Tests\Actions\Foo');
 
             expect(fn () => $builder->save())->toThrow(\InvalidArgumentException::class);
         });
 
         test('save auto-generates name from event with multiple segments', function (): void {
             $builder = app(TriggerBuilder::class);
-            $trigger = $builder->on('order.item.created')->action('App\Actions\Foo')->save();
+            $trigger = $builder->on('order.item.created')->action('ZeroBoiler\Events\Tests\Actions\Foo')->save();
 
             expect($trigger->name)->toBe('order.item.created Trigger');
         });

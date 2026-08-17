@@ -20,7 +20,6 @@ use ZeroBoiler\Events\SubscriptionBuilder;
 use ZeroBoiler\Events\TriggerBuilder;
 use ZeroBoiler\Events\WildcardMatcher;
 
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Queue::fake();
@@ -42,7 +41,7 @@ describe('Facade proxy', function (): void {
     test('facade proxies fire() to EventManager', function (): void {
         Trigger::factory()->create([
             'event' => 'facade.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -54,7 +53,7 @@ describe('Facade proxy', function (): void {
     test('facade proxies fireModel() to EventManager', function (): void {
         Trigger::factory()->create([
             'event' => 'stdClass.updated',
-            'action' => \App\Actions\LogOrderCreated::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\LogOrderCreated::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -128,9 +127,9 @@ describe('Cache invalidation', function (): void {
 describe('ActionResolver', function (): void {
     test('resolves valid Triggerable class from container', function (): void {
         $resolver = app(ActionResolver::class);
-        $handler = $resolver->resolve(\App\Actions\SendOrderNotification::class);
+        $handler = $resolver->resolve(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
 
-        expect($handler)->toBeInstanceOf(\App\Actions\SendOrderNotification::class);
+        expect($handler)->toBeInstanceOf(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
     });
 
     test('throws on non-existent class', function (): void {

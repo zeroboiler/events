@@ -233,7 +233,7 @@ test('EventManager CRUD operations: create, read, update, delete', function (): 
     // Create
     $trigger = $manager->on('test.crud')
         ->name('CRUD Test')
-        ->action('App\\Actions\\SendOrderNotification')
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')
         ->save();
 
     expect($trigger)->toBeInstanceOf(Trigger::class)
@@ -292,7 +292,7 @@ test('EventManager global disable suppresses all fire calls', function (): void 
 
     $manager->on('test.disabled')
         ->name('Disabled Test')
-        ->action('App\\Actions\\LogOrderEvent')
+        ->action(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent')
         ->save();
 
     $countBefore = EventLog::count();
@@ -342,7 +342,7 @@ test('EventManager fireModel constructs event name and flattens attributes', fun
 
     $manager->on('TestModel.created')
         ->name('FireModel Test')
-        ->action('App\\Actions\\LogOrderEvent')
+        ->action(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent')
         ->save();
 
     $manager->fireModel(get_class($model), 'created', $model);
@@ -371,7 +371,7 @@ test('TriggerBuilder validates event and action on save', function (): void {
 
     // Missing event
     expect(fn () => $manager->on('')
-        ->action('App\\Actions\\LogOrderEvent')
+        ->action(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent')
         ->save())
         ->toThrow(InvalidArgumentException::class, 'Event name is required');
 
@@ -395,12 +395,12 @@ test('TriggerBuilder resolveActions merges and deduplicates action() + actions()
 
     // Use actions() with action() — should merge without duplicates
     $trigger = $manager->on('test.merge')
-        ->action('App\\Actions\\LogOrderEvent')
-        ->actions(['App\\Actions\\LogOrderEvent', 'App\\Actions\\SendOrderNotification'])
+        ->action(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent')
+        ->actions([\ZeroBoiler\Events\Tests\Actions\LogOrderEvent', \ZeroBoiler\Events\Tests\Actions\SendOrderNotification'])
         ->save();
 
     $decoded = json_decode($trigger->action, true);
-    expect($decoded)->toBe(['App\\Actions\\LogOrderEvent', 'App\\Actions\\SendOrderNotification']);
+    expect($decoded)->toBe([\ZeroBoiler\Events\Tests\Actions\LogOrderEvent', \ZeroBoiler\Events\Tests\Actions\SendOrderNotification']);
 });
 
 test('SubscriptionBuilder validates event and URL on save', function (): void {
@@ -568,24 +568,24 @@ test('parseActions handles all documented formats', function (): void {
     $ref->setAccessible(true);
 
     // Single class name
-    expect($ref->invoke($manager, 'App\\Actions\\Foo'))
-        ->toBe(['App\\Actions\\Foo']);
+    expect($ref->invoke($manager, \ZeroBoiler\Events\Tests\Actions\Foo'))
+        ->toBe([\ZeroBoiler\Events\Tests\Actions\Foo']);
 
     // JSON array of class names
     expect($ref->invoke($manager, '["App\\\\Actions\\\\Foo","App\\\\Actions\\\\Bar"]'))
-        ->toBe(['App\\Actions\\Foo', 'App\\Actions\\Bar']);
+        ->toBe([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar']);
 
     // JSON object with class + params
     $result = $ref->invoke($manager, '{"class":"App\\\\Actions\\\\Foo","params":{"url":"https://example.com"}}');
     expect($result)->toBe([
-        ['class' => 'App\\Actions\\Foo', 'params' => ['url' => 'https://example.com']],
+        ['class' => \ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://example.com']],
     ]);
 
     // JSON object with classes + params (multiple actions)
     $result = $ref->invoke($manager, '{"classes":["App\\\\Actions\\\\Foo","App\\\\Actions\\\\Bar"],"params":{"url":"https://example.com"}}');
     expect($result)->toBe([
-        ['class' => 'App\\Actions\\Foo', 'params' => ['url' => 'https://example.com']],
-        ['class' => 'App\\Actions\\Bar', 'params' => ['url' => 'https://example.com']],
+        ['class' => \ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://example.com']],
+        ['class' => \ZeroBoiler\Events\Tests\Actions\Bar', 'params' => ['url' => 'https://example.com']],
     ]);
 
     // Empty string

@@ -13,10 +13,9 @@ use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\WildcardMatcher;
 
-use App\Actions\NullAction;
+use ZeroBoiler\Events\Tests\Actions\NullAction;
 
-// Load test action classes (App\Actions namespace)
-require_once __DIR__.'/TestActions.php';
+// Load test action classes (ZeroBoiler\Events\Tests\Actions namespace)
 
 describe('Phase 190 — Final Production Readiness', function (): void {
     describe('EventManager fire() with zero matching triggers', function (): void {

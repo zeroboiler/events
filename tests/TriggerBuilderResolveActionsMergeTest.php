@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
-use App\Actions\LogOrderEvent;
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\LogOrderEvent;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use ZeroBoiler\Events\Tests\TestCase;
 
 uses(TestCase::class);

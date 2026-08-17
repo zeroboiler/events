@@ -14,7 +14,6 @@ use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
 // Load test action classes
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Trigger::query()->delete();
@@ -26,7 +25,7 @@ describe('Phase 42: Final Production Hardening', function (): void {
     test('fireModel key collision: model attributes named model/model_class/action are overridden by metadata', function (): void {
         Trigger::factory()->create([
             'event' => 'App\Models\CollisionTest.created',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -65,7 +64,7 @@ describe('Phase 42: Final Production Hardening', function (): void {
     test('fireModel with empty attributes does not crash', function (): void {
         Trigger::factory()->create([
             'event' => 'App\Models\EmptyModel.updated',
-            'action' => \App\Actions\LogOrderEvent::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -108,8 +107,8 @@ describe('Phase 42: Final Production Hardening', function (): void {
         $reflection = new ReflectionClass($manager);
         $method = $reflection->getMethod('parseActions');
 
-        $result = $method->invoke($manager, 'App\\Actions\\SomeAction');
-        expect($result)->toBe(['App\\Actions\\SomeAction']);
+        $result = $method->invoke($manager, \ZeroBoiler\Events\Tests\Actions\SomeAction');
+        expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\SomeAction']);
     });
 
     test('parseActions handles JSON with empty classes array', function (): void {
@@ -130,7 +129,7 @@ describe('Phase 42: Final Production Hardening', function (): void {
 
         $result = $method->invoke($manager, '{"classes": ["App\\\\Actions\\\\Foo"], "params": {"url": "https://example.com"}}');
         expect($result)->toBe([
-            ['class' => 'App\\Actions\\Foo', 'params' => ['url' => 'https://example.com']],
+            ['class' => \ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://example.com']],
         ]);
     });
 

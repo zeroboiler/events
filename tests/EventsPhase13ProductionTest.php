@@ -19,9 +19,9 @@ test('TriggerBuilder resolveActions deduplicates preserving order', function ():
     $builder->action(App\Models\User::class);
     $builder->actions([
         App\Models\User::class,
-        'App\\Actions\\LogAction',
-        'App\\Actions\\LogAction', // Duplicate
-        'App\\Actions\\NotifyAction',
+        \ZeroBoiler\Events\Tests\Actions\LogAction',
+        \ZeroBoiler\Events\Tests\Actions\LogAction', // Duplicate
+        \ZeroBoiler\Events\Tests\Actions\NotifyAction',
     ]);
 
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
@@ -32,49 +32,49 @@ test('TriggerBuilder resolveActions deduplicates preserving order', function ():
     // Deduplicate preserving order: [User, LogAction, NotifyAction]
     expect($result)->toBe([
         'App\\Models\\User',
-        'App\\Actions\\LogAction',
-        'App\\Actions\\NotifyAction',
+        \ZeroBoiler\Events\Tests\Actions\LogAction',
+        \ZeroBoiler\Events\Tests\Actions\NotifyAction',
     ]);
 });
 
 test('TriggerBuilder resolveActions handles empty action with actions array', function (): void {
     $builder = app(TriggerBuilder::class);
     $builder->actions([
-        'App\\Actions\\Foo',
-        'App\\Actions\\Bar',
+        \ZeroBoiler\Events\Tests\Actions\Foo',
+        \ZeroBoiler\Events\Tests\Actions\Bar',
     ]);
 
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
     $result = $resolveReflection->invoke($builder);
 
     expect($result)->toBe([
-        'App\\Actions\\Foo',
-        'App\\Actions\\Bar',
+        \ZeroBoiler\Events\Tests\Actions\Foo',
+        \ZeroBoiler\Events\Tests\Actions\Bar',
     ]);
 });
 
 test('TriggerBuilder resolveActions handles single action only', function (): void {
     $builder = app(TriggerBuilder::class);
-    $builder->action('App\\Actions\\Single');
+    $builder->action(\ZeroBoiler\Events\Tests\Actions\Single');
 
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
     $result = $resolveReflection->invoke($builder);
 
-    expect($result)->toBe(['App\\Actions\\Single']);
+    expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Single']);
 });
 
 test('TriggerBuilder resolveActions deduplicates all-same entries', function (): void {
     $builder = app(TriggerBuilder::class);
     $builder->actions([
-        'App\\Actions\\Same',
-        'App\\Actions\\Same',
-        'App\\Actions\\Same',
+        \ZeroBoiler\Events\Tests\Actions\Same',
+        \ZeroBoiler\Events\Tests\Actions\Same',
+        \ZeroBoiler\Events\Tests\Actions\Same',
     ]);
 
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
     $result = $resolveReflection->invoke($builder);
 
-    expect($result)->toBe(['App\\Actions\\Same']);
+    expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Same']);
 });
 
 test('ConditionEngine contains operator with array actual and string value', function (): void {
@@ -398,9 +398,9 @@ test('parseActions handles simple class name', function (): void {
     $manager = app(\ZeroBoiler\Events\EventManager::class);
     $reflection = new ReflectionMethod($manager, 'parseActions');
 
-    $result = $reflection->invoke($manager, 'App\\Actions\\Foo');
+    $result = $reflection->invoke($manager, \ZeroBoiler\Events\Tests\Actions\Foo');
 
-    expect($result)->toBe(['App\\Actions\\Foo']);
+    expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo']);
 });
 
 test('parseActions handles JSON array of classes', function (): void {
@@ -410,8 +410,8 @@ test('parseActions handles JSON array of classes', function (): void {
     $result = $reflection->invoke($manager, '["App\\\\Actions\\\\Foo","App\\\\Actions\\\\Bar"]');
 
     expect($result)->toBe([
-        'App\\Actions\\Foo',
-        'App\\Actions\\Bar',
+        \ZeroBoiler\Events\Tests\Actions\Foo',
+        \ZeroBoiler\Events\Tests\Actions\Bar',
     ]);
 });
 
@@ -424,7 +424,7 @@ test('parseActions handles JSON object with class + params', function (): void {
 
     expect($result)->toBe([
         [
-            'class' => 'App\\Actions\\Webhook',
+            'class' => \ZeroBoiler\Events\Tests\Actions\Webhook',
             'params' => ['url' => 'https://example.com'],
         ],
     ]);

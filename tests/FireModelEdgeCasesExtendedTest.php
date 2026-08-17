@@ -45,7 +45,7 @@ describe('EventManager fireModel edge cases', function (): void {
         // Create a trigger to capture the event log
         $trigger = $eventManager->on('App\\Models\\FakeModel.created')
             ->name('FireModel Test')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         try {

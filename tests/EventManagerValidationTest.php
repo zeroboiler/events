@@ -11,7 +11,6 @@ use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
 // Load test action classes
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Trigger::query()->delete();

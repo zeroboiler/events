@@ -103,10 +103,10 @@ it('TriggerFactory forEvent state returns correct event', function (): void {
 });
 
 it('TriggerFactory withAction state returns correct action', function (): void {
-    $factory = TriggerFactory::new()->withAction('App\\Actions\\CustomAction');
+    $factory = TriggerFactory::new()->withAction(\ZeroBoiler\Events\Tests\Actions\CustomAction');
     $attributes = $factory->raw();
 
-    expect($attributes['action'])->toBe('App\\Actions\\CustomAction');
+    expect($attributes['action'])->toBe(\ZeroBoiler\Events\Tests\Actions\CustomAction');
 });
 
 it('TriggerFactory withName state returns correct name', function (): void {
@@ -185,9 +185,9 @@ it('TriggerBuilder fluent interface returns self on all setters', function (): v
 
     expect($builder->name('Test'))
         ->toBeInstanceOf(TriggerBuilder::class)
-        ->and($builder->action('App\\Actions\\TestAction'))
+        ->and($builder->action(\ZeroBoiler\Events\Tests\Actions\TestAction'))
         ->toBeInstanceOf(TriggerBuilder::class)
-        ->and($builder->actions(['App\\Actions\\A', 'App\\Actions\\B']))
+        ->and($builder->actions([\ZeroBoiler\Events\Tests\Actions\A', \ZeroBoiler\Events\Tests\Actions\B']))
         ->toBeInstanceOf(TriggerBuilder::class)
         ->and($builder->when(['key' => 'value']))
         ->toBeInstanceOf(TriggerBuilder::class)

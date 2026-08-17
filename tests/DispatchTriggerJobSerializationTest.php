@@ -6,13 +6,12 @@
 
 declare(strict_types=1);
 
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use Illuminate\Support\Facades\Config;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Tests\TestCase;
 
-// Load test action classes (App\Actions namespace)
-require_once __DIR__.'/TestActions.php';
+// Load test action classes (ZeroBoiler\Events\Tests\Actions namespace)
 
 uses(TestCase::class);
 

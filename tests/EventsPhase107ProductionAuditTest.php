@@ -139,7 +139,7 @@ test('Phase 107: Subscription signPayload returns empty string for null/empty se
 test('Phase 107: TriggerBuilder save invalidates trigger cache', function (): void {
     $eventManager = app(EventManager::class);
     $builder = $eventManager->on('test.cache.invalidate')
-        ->action(\App\Actions\SendOrderNotification::class);
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
 
     $trigger = $builder->save();
     expect($trigger)->toBeInstanceOf(Trigger::class);

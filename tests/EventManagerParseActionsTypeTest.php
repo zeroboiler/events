@@ -28,11 +28,11 @@ describe('EventManager::parseActions — return type validation', function (): v
             app(),
         );
 
-        $result = $this->invokeMethod($em, 'parseActions', ['App\\Actions\\SendNotification']);
+        $result = $this->invokeMethod($em, 'parseActions', [\ZeroBoiler\Events\Tests\Actions\SendNotification']);
 
         expect($result)->toBeArray()
             ->toHaveCount(1)
-            ->and($result[0])->toBe('App\\Actions\\SendNotification');
+            ->and($result[0])->toBe(\ZeroBoiler\Events\Tests\Actions\SendNotification');
     });
 
     test('JSON array of class names returns list of strings', function (): void {
@@ -43,13 +43,13 @@ describe('EventManager::parseActions — return type validation', function (): v
         );
 
         $result = $this->invokeMethod($em, 'parseActions', [
-            json_encode(['App\\Actions\\Foo', 'App\\Actions\\Bar']),
+            json_encode([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar']),
         ]);
 
         expect($result)->toBeArray()
             ->toHaveCount(2)
-            ->and($result[0])->toBe('App\\Actions\\Foo')
-            ->and($result[1])->toBe('App\\Actions\\Bar');
+            ->and($result[0])->toBe(\ZeroBoiler\Events\Tests\Actions\Foo')
+            ->and($result[1])->toBe(\ZeroBoiler\Events\Tests\Actions\Bar');
     });
 
     test('JSON object with class+params returns list of one array', function (): void {
@@ -60,14 +60,14 @@ describe('EventManager::parseActions — return type validation', function (): v
         );
 
         $result = $this->invokeMethod($em, 'parseActions', [
-            json_encode(['class' => 'App\\Actions\\Webhook', 'params' => ['url' => 'https://x.com']]),
+            json_encode(['class' => \ZeroBoiler\Events\Tests\Actions\Webhook', 'params' => ['url' => 'https://x.com']]),
         ]);
 
         expect($result)->toBeArray()
             ->toHaveCount(1)
             ->and($result[0])->toBeArray()
             ->and($result[0])->toHaveKey('class')
-            ->and($result[0]['class'])->toBe('App\\Actions\\Webhook')
+            ->and($result[0]['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\Webhook')
             ->and($result[0])->toHaveKey('params')
             ->and($result[0]['params'])->toBe(['url' => 'https://x.com']);
     });
@@ -81,7 +81,7 @@ describe('EventManager::parseActions — return type validation', function (): v
 
         $result = $this->invokeMethod($em, 'parseActions', [
             json_encode([
-                'classes' => ['App\\Actions\\Foo', 'App\\Actions\\Bar'],
+                'classes' => [\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar'],
                 'params' => ['topic' => 'orders'],
             ]),
         ]);
@@ -89,10 +89,10 @@ describe('EventManager::parseActions — return type validation', function (): v
         expect($result)->toBeArray()
             ->toHaveCount(2)
             ->and($result[0])->toBeArray()
-            ->and($result[0]['class'])->toBe('App\\Actions\\Foo')
+            ->and($result[0]['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\Foo')
             ->and($result[0]['params'])->toBe(['topic' => 'orders'])
             ->and($result[1])->toBeArray()
-            ->and($result[1]['class'])->toBe('App\\Actions\\Bar')
+            ->and($result[1]['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\Bar')
             ->and($result[1]['params'])->toBe(['topic' => 'orders']);
     });
 
@@ -105,17 +105,17 @@ describe('EventManager::parseActions — return type validation', function (): v
 
         $result = $this->invokeMethod($em, 'parseActions', [
             json_encode([
-                ['class' => 'App\\Actions\\A', 'params' => ['k' => 1]],
-                ['class' => 'App\\Actions\\B'],
+                ['class' => \ZeroBoiler\Events\Tests\Actions\A', 'params' => ['k' => 1]],
+                ['class' => \ZeroBoiler\Events\Tests\Actions\B'],
             ]),
         ]);
 
         expect($result)->toBeArray()
             ->toHaveCount(2)
             ->and($result[0])->toBeArray()
-            ->and($result[0]['class'])->toBe('App\\Actions\\A')
+            ->and($result[0]['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\A')
             ->and($result[1])->toBeArray()
-            ->and($result[1]['class'])->toBe('App\\Actions\\B');
+            ->and($result[1]['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\B');
     });
 
     test('non-JSON string returns list with the original string', function (): void {
@@ -125,9 +125,9 @@ describe('EventManager::parseActions — return type validation', function (): v
             app(),
         );
 
-        $result = $this->invokeMethod($em, 'parseActions', ['App\\Actions\\Simple']);
+        $result = $this->invokeMethod($em, 'parseActions', [\ZeroBoiler\Events\Tests\Actions\Simple']);
 
-        expect($result)->toBe(['App\\Actions\\Simple']);
+        expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Simple']);
     });
 
     test('every entry is either a string or an array with class key', function (): void {

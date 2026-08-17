@@ -25,7 +25,6 @@ use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 
 // Load test action classes
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Trigger::query()->delete();
@@ -427,7 +426,7 @@ describe('Phase 153 production audit', function (): void {
         test('fire does not dispatch when disabled', function (): void {
             $trigger = Trigger::factory()->enabled()->create([
                 'event' => 'test.disabled',
-                'action' => \App\Actions\SendOrderNotification::class,
+                'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             ]);
 
             EventManagerFacade::setEnabled(false);

@@ -24,7 +24,6 @@ use ZeroBoiler\Events\TriggerBuilder;
 use ZeroBoiler\Events\WildcardMatcher;
 
 // Load test action classes
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Config::set('events.disabled', false);
@@ -47,7 +46,7 @@ describe('EventManager Fire & Dispatch', function (): void {
     it('fires event and dispatches matching sync trigger with condition evaluation', function (): void {
         Trigger::factory()->create([
             'event' => 'order.placed',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'conditions' => ['amount' => ['>', 50]],
             'enabled' => true,
             'async' => false,
@@ -65,7 +64,7 @@ describe('EventManager Fire & Dispatch', function (): void {
     it('does not dispatch trigger when conditions do not match', function (): void {
         Trigger::factory()->create([
             'event' => 'order.placed',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'conditions' => ['amount' => ['>', 500]],
             'enabled' => true,
             'async' => false,
@@ -79,7 +78,7 @@ describe('EventManager Fire & Dispatch', function (): void {
     it('dispatches wildcard triggers for matching events', function (): void {
         Trigger::factory()->create([
             'event' => 'order.*',
-            'action' => \App\Actions\LogOrderEvent::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -97,7 +96,7 @@ describe('EventManager Fire & Dispatch', function (): void {
     it('deduplicates triggers matched by both exact and wildcard queries', function (): void {
         Trigger::factory()->create([
             'event' => 'order.placed',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -111,7 +110,7 @@ describe('EventManager Fire & Dispatch', function (): void {
     it('respects priority ordering when dispatching multiple triggers', function (): void {
         Trigger::factory()->create([
             'event' => 'order.placed',
-            'action' => \App\Actions\LowPriority::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\LowPriority::class,
             'enabled' => true,
             'async' => false,
             'priority' => 1,
@@ -119,7 +118,7 @@ describe('EventManager Fire & Dispatch', function (): void {
 
         Trigger::factory()->create([
             'event' => 'order.placed',
-            'action' => \App\Actions\HighPriority::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\HighPriority::class,
             'enabled' => true,
             'async' => false,
             'priority' => 100,
@@ -136,7 +135,7 @@ describe('EventManager Fire & Dispatch', function (): void {
     it('creates event log entry for sync dispatch with duration', function (): void {
         Trigger::factory()->create([
             'event' => 'test.event',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -154,7 +153,7 @@ describe('EventManager Fire & Dispatch', function (): void {
     it('marks event log as failed when action throws', function (): void {
         Trigger::factory()->create([
             'event' => 'test.fail',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -183,7 +182,7 @@ describe('EventManager Fire & Dispatch', function (): void {
     it('silently returns when event system is globally disabled', function (): void {
         Trigger::factory()->create([
             'event' => 'test.event',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -200,7 +199,7 @@ describe('Cache Management', function (): void {
     it('invalidates trigger cache on enable/disable/delete', function (): void {
         $trigger = Trigger::factory()->create([
             'event' => 'cache.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -228,13 +227,13 @@ describe('Trigger CRUD', function (): void {
     it('list, get, delete triggers', function (): void {
         $trigger1 = Trigger::factory()->create([
             'event' => 'crud.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'priority' => 10,
         ]);
 
         $trigger2 = Trigger::factory()->create([
             'event' => 'crud.test',
-            'action' => \App\Actions\LogOrderEvent::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class,
             'priority' => 5,
         ]);
 
@@ -302,7 +301,7 @@ describe('Event History & Stats', function (): void {
     it('history and stats work correctly', function (): void {
         Trigger::factory()->create([
             'event' => 'stats.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -326,7 +325,7 @@ describe('Event History & Stats', function (): void {
     it('purge logs removes old completed logs', function (): void {
         Trigger::factory()->create([
             'event' => 'purge.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -347,7 +346,7 @@ describe('Validation', function (): void {
 
     it('trigger builder rejects empty event name', function (): void {
         expect(fn () => EventManagerFacade::on('')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save())->toThrow(\InvalidArgumentException::class, 'Event name is required');
     });
 

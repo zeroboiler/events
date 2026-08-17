@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use ZeroBoiler\Events\Database\Factories\EventLogFactory;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;

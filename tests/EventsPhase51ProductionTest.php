@@ -49,12 +49,12 @@ test('EventManager::register() is an alias for ::on()', function (): void {
 
     // Registering via register() should work the same as on()
     $trigger = $em->register('alias.test.event')
-        ->action(\App\Actions\SendOrderNotification::class)
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
         ->save();
 
     expect($trigger)->toBeInstanceOf(Trigger::class);
     expect($trigger->event)->toBe('alias.test.event');
-    expect($trigger->action)->toBe(\App\Actions\SendOrderNotification::class);
+    expect($trigger->action)->toBe(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
     expect($trigger->enabled)->toBeTrue();
 });
 
@@ -102,7 +102,7 @@ test('TriggerBuilder throws InvalidArgumentException for empty event on save', f
     $em = $app->make(EventManager::class);
 
     $em->on('') // Empty event
-        ->action(\App\Actions\SendOrderNotification::class)
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
         ->save();
 })->throws(\InvalidArgumentException::class, 'Event name is required');
 
@@ -119,7 +119,7 @@ test('TriggerBuilder auto-generates name from event when not provided', function
     $em = $app->make(EventManager::class);
 
     $trigger = $em->on('order.shipped')
-        ->action(\App\Actions\SendOrderNotification::class)
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
         ->save();
 
     expect($trigger->name)->toBe('order.shipped Trigger');
@@ -134,7 +134,7 @@ test('TriggerBuilder::save() invalidates trigger cache', function (): void {
     expect(Cache::has('zeroboiler:events:enabled_wildcard_triggers'))->toBeTrue();
 
     $em->on('cache.test.*')
-        ->action(\App\Actions\SendOrderNotification::class)
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
         ->save();
 
     // Cache should be invalidated after save
@@ -145,7 +145,7 @@ test('ActionResolver throws for non-existent class', function (): void {
     $app = app();
     $resolver = $app->make(ActionResolver::class);
 
-    $resolver->resolve('App\\Actions\\NonExistentClass12345');
+    $resolver->resolve(\ZeroBoiler\Events\Tests\Actions\NonExistentClass12345');
 })->throws(\InvalidArgumentException::class);
 
 test('ActionResolver error message includes class name for non-existent class', function (): void {
@@ -153,10 +153,10 @@ test('ActionResolver error message includes class name for non-existent class', 
     $resolver = $app->make(ActionResolver::class);
 
     try {
-        $resolver->resolve('App\\Actions\\NonExistentClass12345');
+        $resolver->resolve(\ZeroBoiler\Events\Tests\Actions\NonExistentClass12345');
         $this->fail('Expected InvalidArgumentException');
     } catch (\InvalidArgumentException $e) {
-        expect($e->getMessage())->toContain('App\\Actions\\NonExistentClass12345');
+        expect($e->getMessage())->toContain(\ZeroBoiler\Events\Tests\Actions\NonExistentClass12345');
         expect($e->getMessage())->toContain('does not exist');
     }
 });
@@ -190,9 +190,9 @@ test('ActionResolver successfully resolves valid Triggerable class', function ()
     $app = app();
     $resolver = $app->make(ActionResolver::class);
 
-    $result = $resolver->resolve(\App\Actions\SendOrderNotification::class);
+    $result = $resolver->resolve(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
 
-    expect($result)->toBeInstanceOf(\App\Actions\SendOrderNotification::class);
+    expect($result)->toBeInstanceOf(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
     expect($result)->toBeInstanceOf(\ZeroBoiler\Events\Contracts\Triggerable::class);
 });
 
@@ -658,10 +658,10 @@ test('TriggerBuilder resolveActions deduplicates when action() and actions() ove
     $em = $app->make(EventManager::class);
 
     $trigger = $em->on('dedup.test')
-        ->action(\App\Actions\SendOrderNotification::class)
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
         ->actions([
-            \App\Actions\LogOrderEvent::class,
-            \App\Actions\SendOrderNotification::class, // duplicate
+            \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class,
+            \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class, // duplicate
         ])
         ->save();
 
@@ -670,8 +670,8 @@ test('TriggerBuilder resolveActions deduplicates when action() and actions() ove
 
     expect($decoded)->toBeArray();
     expect(count($decoded))->toBe(2); // Deduped to 2 unique actions
-    expect(in_array(\App\Actions\SendOrderNotification::class, $decoded, true))->toBeTrue();
-    expect(in_array(\App\Actions\LogOrderEvent::class, $decoded, true))->toBeTrue();
+    expect(in_array(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class, $decoded, true))->toBeTrue();
+    expect(in_array(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class, $decoded, true))->toBeTrue();
 });
 
 test('Trigger model uses config-driven table name', function (): void {

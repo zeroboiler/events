@@ -11,7 +11,6 @@ use ZeroBoiler\Events\Facades\EventManager as EventManagerFacade;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Trigger::query()->delete();
@@ -22,7 +21,7 @@ beforeEach(function (): void {
 test('wildcard trigger cache is populated after firing', function (): void {
     Trigger::factory()->create([
         'event' => 'order.*',
-        'action' => 'App\Actions\LogOrderEvent',
+        'action' => 'ZeroBoiler\Events\Tests\Actions\LogOrderEvent',
         'conditions' => null,
         'enabled' => true,
         'async' => false,
@@ -36,7 +35,7 @@ test('wildcard trigger cache is populated after firing', function (): void {
 test('invalidateTriggerCache clears wildcard trigger cache', function (): void {
     Trigger::factory()->create([
         'event' => 'order.*',
-        'action' => 'App\Actions\LogOrderEvent',
+        'action' => 'ZeroBoiler\Events\Tests\Actions\LogOrderEvent',
         'conditions' => null,
         'enabled' => true,
         'async' => false,
@@ -57,7 +56,7 @@ test('configurable wildcard_cache_ttl is respected', function (): void {
 
     Trigger::factory()->create([
         'event' => 'order.*',
-        'action' => 'App\Actions\LogOrderEvent',
+        'action' => 'ZeroBoiler\Events\Tests\Actions\LogOrderEvent',
         'conditions' => null,
         'enabled' => true,
         'async' => false,

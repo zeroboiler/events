@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use ZeroBoiler\Events\ActionResolver;
 use ZeroBoiler\Events\ConditionEngine;
 use ZeroBoiler\Events\Contracts\ConditionEngineContract;
@@ -22,8 +22,7 @@ use ZeroBoiler\Events\SubscriptionBuilder;
 use ZeroBoiler\Events\TriggerBuilder;
 use ZeroBoiler\Events\WildcardMatcher;
 
-// Load test action classes (App\Actions namespace)
-require_once __DIR__.'/TestActions.php';
+// Load test action classes (ZeroBoiler\Events\Tests\Actions namespace)
 
 beforeEach(function (): void {
     Trigger::query()->delete();

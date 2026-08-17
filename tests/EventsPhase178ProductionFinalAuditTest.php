@@ -430,7 +430,7 @@ describe('Phase 178 — Production Infrastructure Final Audit', function (): voi
         it('save() generates name from event when not provided', function (): void {
             $manager = app(EventManager::class);
             $trigger = $manager->on('test.event')
-                ->action(\App\Actions\SendOrderNotification::class)
+                ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
                 ->save();
             expect($trigger->name)->toBe('test.event Trigger');
         });

@@ -17,7 +17,6 @@ use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\WildcardMatcher;
 
 // Load test action classes
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Trigger::query()->delete();
@@ -30,7 +29,7 @@ describe('Full Lifecycle: Fire → Dispatch → Log → Stats', function (): voi
     test('end-to-end: fire event, check log created with correct status and duration', function (): void {
         $trigger = Trigger::factory()->create([
             'event' => 'lifecycle.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'conditions' => null,
             'enabled' => true,
             'async' => false,
@@ -53,7 +52,7 @@ describe('Full Lifecycle: Fire → Dispatch → Log → Stats', function (): voi
     test('end-to-end: fire with condition mismatch creates no log', function (): void {
         Trigger::factory()->create([
             'event' => 'conditional.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'conditions' => ['amount' => ['>', 100]],
             'enabled' => true,
             'async' => false,
@@ -67,7 +66,7 @@ describe('Full Lifecycle: Fire → Dispatch → Log → Stats', function (): voi
     test('end-to-end: fire with condition match creates log', function (): void {
         Trigger::factory()->create([
             'event' => 'conditional.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'conditions' => ['amount' => ['>', 100]],
             'enabled' => true,
             'async' => false,
@@ -82,7 +81,7 @@ describe('Full Lifecycle: Fire → Dispatch → Log → Stats', function (): voi
     test('end-to-end: stats reflect fired events', function (): void {
         Trigger::factory()->create([
             'event' => 'stats.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'conditions' => null,
             'enabled' => true,
             'async' => false,
@@ -105,7 +104,7 @@ describe('Full Lifecycle: Fire → Dispatch → Log → Stats', function (): voi
     test('end-to-end: fire multiple events, check aggregate stats', function (): void {
         Trigger::factory()->create([
             'event' => 'multi.stat',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -126,7 +125,7 @@ describe('Trigger Priority Ordering', function (): void {
     test('higher priority triggers are dispatched first', function (): void {
         Trigger::factory()->create([
             'event' => 'priority.test',
-            'action' => \App\Actions\LowPriority::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\LowPriority::class,
             'enabled' => true,
             'async' => false,
             'priority' => 1,
@@ -134,7 +133,7 @@ describe('Trigger Priority Ordering', function (): void {
 
         Trigger::factory()->create([
             'event' => 'priority.test',
-            'action' => \App\Actions\HighPriority::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\HighPriority::class,
             'enabled' => true,
             'async' => false,
             'priority' => 100,
@@ -156,7 +155,7 @@ describe('Trigger Priority Ordering', function (): void {
     test('same priority triggers are ordered by creation time', function (): void {
         $triggerA = Trigger::factory()->create([
             'event' => 'same.priority',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
             'priority' => 50,
@@ -167,7 +166,7 @@ describe('Trigger Priority Ordering', function (): void {
 
         $triggerB = Trigger::factory()->create([
             'event' => 'same.priority',
-            'action' => \App\Actions\LogOrderEvent::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class,
             'enabled' => true,
             'async' => false,
             'priority' => 50,
@@ -187,13 +186,13 @@ describe('Wildcard Cache Invalidation', function (): void {
 
         // Create a wildcard trigger via builder (which calls invalidateTriggerCache)
         $builder = EventManagerFacade::on('cache.*')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->priority(10);
 
         // Manually save to avoid full builder flow issues in test
         $trigger = Trigger::factory()->create([
             'event' => 'cache.*',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -208,7 +207,7 @@ describe('Wildcard Cache Invalidation', function (): void {
     test('disabling a wildcard trigger prevents future matches', function (): void {
         $trigger = Trigger::factory()->create([
             'event' => 'toggle.*',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -233,7 +232,7 @@ describe('Event History Filtering', function (): void {
     test('getEventHistory returns logs filtered by status', function (): void {
         Trigger::factory()->create([
             'event' => 'history.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -250,14 +249,14 @@ describe('Event History Filtering', function (): void {
     test('getEventHistory returns logs filtered by event with wildcard', function (): void {
         Trigger::factory()->create([
             'event' => 'history.a',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
 
         Trigger::factory()->create([
             'event' => 'history.b',
-            'action' => \App\Actions\LogOrderEvent::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -272,7 +271,7 @@ describe('Event History Filtering', function (): void {
     test('getEventHistory respects limit', function (): void {
         Trigger::factory()->create([
             'event' => 'limit.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -290,7 +289,7 @@ describe('Purge Logs', function (): void {
     test('purgeLogs removes completed logs before threshold', function (): void {
         Trigger::factory()->create([
             'event' => 'purge.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);
@@ -401,7 +400,7 @@ describe('ActionResolver Edge Cases', function (): void {
     test('resolve returns Triggerable instance for valid class', function (): void {
         $resolver = app(ActionResolver::class);
 
-        $instance = $resolver->resolve(\App\Actions\SendOrderNotification::class);
+        $instance = $resolver->resolve(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
 
         expect($instance)->toBeInstanceOf(\ZeroBoiler\Events\Contracts\Triggerable::class);
     });

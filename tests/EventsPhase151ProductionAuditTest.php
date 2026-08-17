@@ -649,7 +649,7 @@ describe('builder validation', function (): void {
         // The event is already set — test with empty by direct construction
         $ref = new ReflectionProperty(TriggerBuilder::class, 'event');
         $ref->setValue($builder, '');
-        $builder->action(\App\Actions\SendOrderNotification::class);
+        $builder->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
         $builder->save();
     })->throws(InvalidArgumentException::class);
 

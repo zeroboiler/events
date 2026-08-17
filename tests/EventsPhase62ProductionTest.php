@@ -14,7 +14,7 @@ describe('EventManager Delete Trigger', function () {
     it('deletes an existing trigger by ID and invalidates cache', function () {
         $manager = app(\ZeroBoiler\Events\EventManager::class);
         $trigger = $manager->on('delete.test')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         $result = $manager->deleteTrigger($trigger->id);
@@ -38,7 +38,7 @@ describe('EventManager Delete Trigger', function () {
     it('deletes trigger even if it has event logs (via soft delete)', function () {
         $manager = app(\ZeroBoiler\Events\EventManager::class);
         $trigger = $manager->on('delete.with-logs')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         // Create an event log for the trigger
@@ -62,7 +62,7 @@ describe('TriggerBuilder Actions Validation', function () {
         $manager = app(\ZeroBoiler\Events\EventManager::class);
 
         expect(fn () => $manager->on('validate.actions')
-            ->actions([123, 'App\\Actions\\SendOrderNotification'])
+            ->actions([123, \ZeroBoiler\Events\Tests\Actions\SendOrderNotification'])
             ->save()
         )->toThrow(\InvalidArgumentException::class, 'non-empty string');
     });
@@ -71,7 +71,7 @@ describe('TriggerBuilder Actions Validation', function () {
         $manager = app(\ZeroBoiler\Events\EventManager::class);
 
         expect(fn () => $manager->on('validate.actions.empty')
-            ->actions(['', 'App\\Actions\\SendOrderNotification'])
+            ->actions(['', \ZeroBoiler\Events\Tests\Actions\SendOrderNotification'])
             ->save()
         )->toThrow(\InvalidArgumentException::class, 'non-empty string');
     });
@@ -81,8 +81,8 @@ describe('TriggerBuilder Actions Validation', function () {
 
         $trigger = $manager->on('validate.actions.valid')
             ->actions([
-                'App\\Actions\\SendOrderNotification',
-                'App\\Actions\\LogOrderEvent',
+                \ZeroBoiler\Events\Tests\Actions\SendOrderNotification',
+                \ZeroBoiler\Events\Tests\Actions\LogOrderEvent',
             ])
             ->save();
 
@@ -96,14 +96,14 @@ describe('TriggerBuilder Actions Validation', function () {
         $manager = app(\ZeroBoiler\Events\EventManager::class);
 
         $trigger = $manager->on('dedup.merge')
-            ->action('App\\Actions\\SendOrderNotification')
-            ->actions(['App\\Actions\\LogOrderEvent', 'App\\Actions\\SendOrderNotification'])
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')
+            ->actions([\ZeroBoiler\Events\Tests\Actions\LogOrderEvent', \ZeroBoiler\Events\Tests\Actions\SendOrderNotification'])
             ->save();
 
         $decoded = json_decode($trigger->action, true);
         // First action prepended, dedup removes duplicate SendOrderNotification
-        expect($decoded[0])->toBe('App\\Actions\\SendOrderNotification');
-        expect($decoded[1])->toBe('App\\Actions\\LogOrderEvent');
+        expect($decoded[0])->toBe(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification');
+        expect($decoded[1])->toBe(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent');
         expect(count($decoded))->toBe(2);
     });
 });
@@ -164,7 +164,7 @@ describe('EventManager Global Disable Integration', function () {
         $manager->setEnabled(true);
 
         $trigger = $manager->on('disable.fire-test')
-            ->action(\App\Actions\HighPriority::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\HighPriority::class)
             ->save();
 
         // Count event logs before

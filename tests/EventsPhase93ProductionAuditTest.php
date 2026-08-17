@@ -65,14 +65,14 @@ describe('Phase 93 — Production Readiness Audit', function () {
 
             $manager = app(EventManager::class);
             $result = $ref->invoke($manager, json_encode([
-                'class' => 'App\\Actions\\WebhookAction',
+                'class' => \ZeroBoiler\Events\Tests\Actions\WebhookAction',
                 'params' => ['url' => 'https://example.com'],
             ], JSON_THROW_ON_ERROR));
 
             expect($result)->toBeArray();
             expect(count($result))->toBe(1);
             expect($result[0])->toBeArray();
-            expect($result[0]['class'])->toBe('App\\Actions\\WebhookAction');
+            expect($result[0]['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\WebhookAction');
         });
 
         test('parseActions handles sequential list of class+params objects', function () {
@@ -80,16 +80,16 @@ describe('Phase 93 — Production Readiness Audit', function () {
 
             $manager = app(EventManager::class);
             $input = json_encode([
-                ['class' => 'App\\Actions\\ActionOne', 'params' => ['key' => 'val1']],
-                ['class' => 'App\\Actions\\ActionTwo', 'params' => ['key' => 'val2']],
+                ['class' => \ZeroBoiler\Events\Tests\Actions\ActionOne', 'params' => ['key' => 'val1']],
+                ['class' => \ZeroBoiler\Events\Tests\Actions\ActionTwo', 'params' => ['key' => 'val2']],
             ], JSON_THROW_ON_ERROR);
 
             $result = $ref->invoke($manager, $input);
 
             expect($result)->toBeArray();
             expect(count($result))->toBe(2);
-            expect($result[0]['class'])->toBe('App\\Actions\\ActionOne');
-            expect($result[1]['class'])->toBe('App\\Actions\\ActionTwo');
+            expect($result[0]['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\ActionOne');
+            expect($result[1]['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\ActionTwo');
         });
 
         test('parseActions handles whitespace-only action string', function () {
@@ -247,12 +247,12 @@ describe('Phase 93 — Production Readiness Audit', function () {
 
             $trigger = $manager->on('test.merge.dedup')
                 ->name('Merge Dedup Test')
-                ->action('App\\Actions\\FirstAction')
-                ->actions(['App\\Actions\\FirstAction', 'App\\Actions\\SecondAction'])
+                ->action(\ZeroBoiler\Events\Tests\Actions\FirstAction')
+                ->actions([\ZeroBoiler\Events\Tests\Actions\FirstAction', \ZeroBoiler\Events\Tests\Actions\SecondAction'])
                 ->save();
 
             $decoded = json_decode($trigger->action, true);
-            expect($decoded)->toBe(['App\\Actions\\FirstAction', 'App\\Actions\\SecondAction']);
+            expect($decoded)->toBe([\ZeroBoiler\Events\Tests\Actions\FirstAction', \ZeroBoiler\Events\Tests\Actions\SecondAction']);
         });
 
         test('save() with actionParams and multiple actions generates correct JSON', function () {
@@ -260,13 +260,13 @@ describe('Phase 93 — Production Readiness Audit', function () {
 
             $trigger = $manager->on('test.multi.params')
                 ->name('Multi Params Test')
-                ->actions(['App\\Actions\\ActionOne', 'App\\Actions\\ActionTwo'])
+                ->actions([\ZeroBoiler\Events\Tests\Actions\ActionOne', \ZeroBoiler\Events\Tests\Actions\ActionTwo'])
                 ->actionParams(['webhook_url' => 'https://example.com'])
                 ->save();
 
             $decoded = json_decode($trigger->action, true);
             expect($decoded)->toHaveKey('classes');
-            expect($decoded['classes'])->toBe(['App\\Actions\\ActionOne', 'App\\Actions\\ActionTwo']);
+            expect($decoded['classes'])->toBe([\ZeroBoiler\Events\Tests\Actions\ActionOne', \ZeroBoiler\Events\Tests\Actions\ActionTwo']);
             expect($decoded['params'])->toBe(['webhook_url' => 'https://example.com']);
         });
 
@@ -275,13 +275,13 @@ describe('Phase 93 — Production Readiness Audit', function () {
 
             $trigger = $manager->on('test.single.params')
                 ->name('Single Params Test')
-                ->action('App\\Actions\\WebhookAction')
+                ->action(\ZeroBoiler\Events\Tests\Actions\WebhookAction')
                 ->actionParams(['url' => 'https://example.com/hooks'])
                 ->save();
 
             $decoded = json_decode($trigger->action, true);
             expect($decoded)->toHaveKey('class');
-            expect($decoded['class'])->toBe('App\\Actions\\WebhookAction');
+            expect($decoded['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\WebhookAction');
             expect($decoded['params'])->toBe(['url' => 'https://example.com/hooks']);
         });
     });

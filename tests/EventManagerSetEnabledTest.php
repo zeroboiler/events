@@ -11,8 +11,7 @@ use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
-// Load test action classes (App\Actions namespace)
-require_once __DIR__.'/TestActions.php';
+// Load test action classes (ZeroBoiler\Events\Tests\Actions namespace)
 
 beforeEach(function (): void {
     Trigger::query()->delete();
@@ -47,7 +46,7 @@ test('setEnabled(false) prevents fire() from dispatching triggers', function ():
 
     // Register a trigger
     $manager->on('test.event')
-        ->action(\App\Actions\SendOrderNotification::class)
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
         ->save();
 
     // Verify it would normally fire
@@ -68,7 +67,7 @@ test('setEnabled(true) re-enables fire() dispatching after disable', function ()
     $manager = app(EventManager::class);
 
     $manager->on('test.event')
-        ->action(\App\Actions\SendOrderNotification::class)
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
         ->save();
 
     // Disable

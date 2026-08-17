@@ -28,8 +28,8 @@ test('executeTrigger uses basePayload from log payload for each action iteration
     $trigger = Trigger::factory()->create([
         'event' => 'test.base',
         'action' => json_encode([
-            ['class' => 'App\\Actions\\LogOrderEvent', 'params' => ['url' => 'https://example.com']],
-            ['class' => 'App\\Actions\\SendOrderNotification', 'params' => ['priority' => 'high']],
+            ['class' => \ZeroBoiler\Events\Tests\Actions\LogOrderEvent', 'params' => ['url' => 'https://example.com']],
+            ['class' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification', 'params' => ['priority' => 'high']],
         ]),
         'conditions' => null,
         'async' => false,
@@ -57,7 +57,7 @@ test('executeTrigger handles empty payload gracefully with basePayload', functio
 
     $trigger = Trigger::factory()->create([
         'event' => 'test.empty',
-        'action' => 'App\\Actions\\LogOrderEvent',
+        'action' => \ZeroBoiler\Events\Tests\Actions\LogOrderEvent',
         'conditions' => null,
         'async' => false,
         'enabled' => true,
@@ -84,7 +84,7 @@ test('executeTrigger action params are merged on top of basePayload', function (
 
     $trigger = Trigger::factory()->create([
         'event' => 'test.merge',
-        'action' => json_encode(['class' => 'App\\Actions\\SendOrderNotification', 'params' => ['webhook_url' => 'https://hook.com']]),
+        'action' => json_encode(['class' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification', 'params' => ['webhook_url' => 'https://hook.com']]),
         'conditions' => null,
         'async' => false,
         'enabled' => true,
@@ -112,7 +112,7 @@ test('TriggerBuilder save stores null conditions when no conditions set', functi
 
     $trigger = $manager->on('test.null.conditions')
         ->name('Null Conditions Trigger')
-        ->action('App\\Actions\\SendOrderNotification')
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')
         ->save();
 
     expect($trigger->conditions)->toBeNull();
@@ -124,7 +124,7 @@ test('TriggerBuilder save stores empty array conditions', function (): void {
 
     $trigger = $manager->on('test.empty.conditions')
         ->name('Empty Conditions Trigger')
-        ->action('App\\Actions\\SendOrderNotification')
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')
         ->when([])
         ->save();
 
@@ -342,8 +342,8 @@ test('TriggerBuilder all methods return self', function (): void {
 
     expect($builder)->toBeInstanceOf(TriggerBuilder::class);
     expect($builder->name('Test'))->toBe($builder);
-    expect($builder->action('App\\Actions\\SendOrderNotification'))->toBe($builder);
-    expect($builder->actions(['App\\Actions\\LogOrderEvent']))->toBe($builder);
+    expect($builder->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification'))->toBe($builder);
+    expect($builder->actions([\ZeroBoiler\Events\Tests\Actions\LogOrderEvent']))->toBe($builder);
     expect($builder->when(['status' => 'active']))->toBe($builder);
     expect($builder->async())->toBe($builder);
     expect($builder->async(false))->toBe($builder);
@@ -459,7 +459,7 @@ test('trigger cache is invalidated after save', function (): void {
     $manager = app(EventManager::class);
 
     $manager->on('test.cache.invalidate')
-        ->action('App\\Actions\\SendOrderNotification')
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')
         ->save();
 
     // After save, cache should be cleared

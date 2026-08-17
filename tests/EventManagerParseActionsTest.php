@@ -6,16 +6,15 @@
 
 declare(strict_types=1);
 
-use App\Actions\LogOrderEvent;
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\LogOrderEvent;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use Illuminate\Support\Facades\Queue;
 use ZeroBoiler\Events\EventsServiceProvider;
 use ZeroBoiler\Events\Facades\EventManager as EventManagerFacade;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
-// Load test action classes (App\Actions namespace)
-require_once __DIR__.'/TestActions.php';
+// Load test action classes (ZeroBoiler\Events\Tests\Actions namespace)
 
 beforeEach(function (): void {
     Queue::fake();
@@ -106,7 +105,7 @@ describe('EventManager::parseActions — action string parsing', function (): vo
     test('handles action that throws an exception during execution', function (): void {
         Trigger::factory()->create([
             'event' => 'parse.error',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
         ]);

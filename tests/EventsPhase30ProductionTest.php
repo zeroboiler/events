@@ -210,14 +210,14 @@ it('TriggerBuilder resolveActions deduplicates identical classes', function (): 
     $builder = $manager->on('test.event');
 
     // Set actions with duplicates
-    $builder->actions(['App\\Actions\\Foo', 'App\\Actions\\Foo', 'App\\Actions\\Bar', 'App\\Actions\\Foo']);
+    $builder->actions([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar', \ZeroBoiler\Events\Tests\Actions\Foo']);
 
     $ref = new ReflectionMethod($builder, 'resolveActions');
     $result = $ref->invoke($builder);
 
     expect($result)->toBe([
-        'App\\Actions\\Foo',
-        'App\\Actions\\Bar',
+        \ZeroBoiler\Events\Tests\Actions\Foo',
+        \ZeroBoiler\Events\Tests\Actions\Bar',
     ]);
 });
 
@@ -225,15 +225,15 @@ it('TriggerBuilder resolveActions merges single action() with actions() deduped'
     $manager = app(EventManager::class);
     $builder = $manager->on('test.event');
 
-    $builder->action('App\\Actions\\First');
-    $builder->actions(['App\\Actions\\Second', 'App\\Actions\\First']);
+    $builder->action(\ZeroBoiler\Events\Tests\Actions\First');
+    $builder->actions([\ZeroBoiler\Events\Tests\Actions\Second', \ZeroBoiler\Events\Tests\Actions\First']);
 
     $ref = new ReflectionMethod($builder, 'resolveActions');
     $result = $ref->invoke($builder);
 
     expect($result)->toBe([
-        'App\\Actions\\First',
-        'App\\Actions\\Second',
+        \ZeroBoiler\Events\Tests\Actions\First',
+        \ZeroBoiler\Events\Tests\Actions\Second',
     ]);
 });
 

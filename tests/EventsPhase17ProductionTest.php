@@ -195,7 +195,7 @@ it('fireModel works with models that only have toArray', function (): void {
 it('TriggerBuilder saves multiple actions as JSON array', function (): void {
     $manager = $this->app->make(EventManager::class);
     $trigger = $manager->on('multi.action.test')
-        ->actions([TestNullAction::class, 'App\\Actions\\AnotherAction'])
+        ->actions([TestNullAction::class, \ZeroBoiler\Events\Tests\Actions\AnotherAction'])
         ->save();
 
     $decoded = json_decode($trigger->action, true);

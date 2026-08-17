@@ -25,7 +25,7 @@ describe('EventManager Advanced CRUD', function (): void {
 
         $trigger = $manager->on('crud.test.get')
             ->name('Get Test Trigger')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         $result = $manager->getTrigger($trigger->id);
@@ -48,8 +48,8 @@ describe('EventManager Advanced CRUD', function (): void {
     it('listTriggers filters by event name (exact match)', function (): void {
         $manager = app(EventManager::class);
 
-        $manager->on('crud.list.exact')->action(\App\Actions\SendOrderNotification::class)->save();
-        $manager->on('crud.list.other')->action(\App\Actions\SendOrderNotification::class)->save();
+        $manager->on('crud.list.exact')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
+        $manager->on('crud.list.other')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
 
         $result = $manager->listTriggers('crud.list.exact');
 
@@ -60,8 +60,8 @@ describe('EventManager Advanced CRUD', function (): void {
     it('listTriggers filters by enabled status', function (): void {
         $manager = app(EventManager::class);
 
-        $enabled = $manager->on('crud.enabled.test')->action(\App\Actions\SendOrderNotification::class)->save();
-        $disabled = $manager->on('crud.disabled.test')->action(\App\Actions\SendOrderNotification::class)->save();
+        $enabled = $manager->on('crud.enabled.test')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
+        $disabled = $manager->on('crud.disabled.test')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
         $manager->disable($disabled->id);
 
         $enabledResults = $manager->listTriggers(null, enabled: true);
@@ -79,7 +79,7 @@ describe('EventManager Advanced CRUD', function (): void {
         $manager = app(EventManager::class);
 
         for ($i = 0; $i < 5; $i++) {
-            $manager->on("crud.limit.test.{$i}")->action(\App\Actions\SendOrderNotification::class)->save();
+            $manager->on("crud.limit.test.{$i}")->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
         }
 
         $result = $manager->listTriggers('crud.limit.test.*', limit: 2);
@@ -99,7 +99,7 @@ describe('EventManager Advanced CRUD', function (): void {
         $manager = app(EventManager::class);
 
         $trigger = $manager->on('crud.delete.test')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         // Verify it exists
@@ -130,7 +130,7 @@ describe('EventManager Advanced CRUD', function (): void {
 
         // Prime the cache with a wildcard trigger
         $manager->on('cache.invalidate.*')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         // Fire an event that should cache wildcard triggers
@@ -165,7 +165,7 @@ describe('EventManager Advanced CRUD', function (): void {
         $manager = app(EventManager::class);
 
         $manager->on('disabled.fire.test')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         $manager->setEnabled(false);
@@ -182,9 +182,9 @@ describe('EventManager Advanced CRUD', function (): void {
     it('listTriggers with wildcard pattern uses LIKE query', function (): void {
         $manager = app(EventManager::class);
 
-        $manager->on('crud.wildcard.a')->action(\App\Actions\SendOrderNotification::class)->save();
-        $manager->on('crud.wildcard.b')->action(\App\Actions\SendOrderNotification::class)->save();
-        $manager->on('other.prefix.x')->action(\App\Actions\SendOrderNotification::class)->save();
+        $manager->on('crud.wildcard.a')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
+        $manager->on('crud.wildcard.b')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
+        $manager->on('other.prefix.x')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
 
         $result = $manager->listTriggers('crud.wildcard.*');
 

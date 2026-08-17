@@ -48,7 +48,7 @@ describe('EventManager register alias', function (): void {
 
         $trigger = $em->on('test.fire.empty')
             ->name('Test Empty Payload')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         $em->fire('test.fire.empty');

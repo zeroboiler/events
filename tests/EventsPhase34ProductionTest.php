@@ -72,7 +72,7 @@ it('fireModel throws InvalidArgumentException for empty action', function (): vo
 it('fireModel flattens model attributes into payload root', function (): void {
     $manager = app(EventManager::class);
     $trigger = $manager->on('App\\Models\\Order.created')
-        ->action(\App\Actions\LogOrderEvent::class)
+        ->action(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class)
         ->save();
 
     $model = new class ('order-123') {
@@ -104,9 +104,9 @@ it('TriggerBuilder resolveActions deduplicates preserving insertion order', func
 
     $trigger = $manager->on('test.dedup')
         ->actions([
-            \App\Actions\SendOrderNotification::class,
-            \App\Actions\LogOrderEvent::class,
-            \App\Actions\SendOrderNotification::class, // duplicate
+            \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
+            \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class,
+            \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class, // duplicate
         ])
         ->save();
 
@@ -115,24 +115,24 @@ it('TriggerBuilder resolveActions deduplicates preserving insertion order', func
 
     // Should only have 2 entries (dedup)
     expect(count($decoded))->toBe(2);
-    expect($decoded[0])->toBe(\App\Actions\SendOrderNotification::class);
-    expect($decoded[1])->toBe(\App\Actions\LogOrderEvent::class);
+    expect($decoded[0])->toBe(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
+    expect($decoded[1])->toBe(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class);
 });
 
 it('TriggerBuilder action() + actions() merge preserves order', function (): void {
     $manager = app(EventManager::class);
 
     $trigger = $manager->on('test.merge')
-        ->action(\App\Actions\SendOrderNotification::class)
-        ->actions([\App\Actions\LogOrderEvent::class])
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
+        ->actions([\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class])
         ->save();
 
     $decoded = json_decode($trigger->action, true);
     expect($decoded)->toBeArray();
 
     // action() should be prepended if not already in actions()
-    expect($decoded[0])->toBe(\App\Actions\SendOrderNotification::class);
-    expect($decoded[1])->toBe(\App\Actions\LogOrderEvent::class);
+    expect($decoded[0])->toBe(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
+    expect($decoded[1])->toBe(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class);
 });
 
 it('SubscriptionBuilder save creates both subscription and trigger atomically', function (): void {
@@ -751,7 +751,7 @@ it('Trigger boot generates UUID for empty id', function (): void {
     $trigger = new Trigger([
         'name' => 'Boot UUID Test',
         'event' => 'test.boot.trigger',
-        'action' => 'App\\Actions\\TestAction',
+        'action' => \ZeroBoiler\Events\Tests\Actions\TestAction',
         'enabled' => true,
     ]);
 
@@ -801,8 +801,8 @@ it('TriggerBuilder fluent interface returns self on all setters', function (): v
 
     expect($builder->name('Test'))->toBe($builder);
     expect($builder->on('test.fluent2'))->toBe($builder);
-    expect($builder->action(\App\Actions\LogOrderEvent::class))->toBe($builder);
-    expect($builder->actions([\App\Actions\LogOrderEvent::class]))->toBe($builder);
+    expect($builder->action(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class))->toBe($builder);
+    expect($builder->actions([\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class]))->toBe($builder);
     expect($builder->when(['key' => 'value']))->toBe($builder);
     expect($builder->async())->toBe($builder);
     expect($builder->priority(5))->toBe($builder);

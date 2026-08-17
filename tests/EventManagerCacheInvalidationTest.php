@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use ZeroBoiler\Events\EventManager;
@@ -14,8 +14,7 @@ use ZeroBoiler\Events\Facades\EventManager as EventManagerFacade;
 use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\Tests\TestCase;
 
-// Load test action classes (App\Actions namespace)
-require_once __DIR__.'/TestActions.php';
+// Load test action classes (ZeroBoiler\Events\Tests\Actions namespace)
 
 uses(TestCase::class);
 

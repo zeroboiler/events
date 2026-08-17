@@ -9,7 +9,6 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Bus;
 use ZeroBoiler\Events\Models\Trigger;
 
-require_once __DIR__.'/TestActions.php';
 
 describe('EventManager deterministic ordering', function (): void {
     beforeEach(function (): void {
@@ -22,7 +21,7 @@ describe('EventManager deterministic ordering', function (): void {
         for ($i = 0; $i < 5; $i++) {
             $triggers[] = Trigger::factory()->create([
                 'event' => 'ordering.test',
-                'action' => \App\Actions\SendOrderNotification::class,
+                'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
                 'enabled' => true,
                 'async' => false,
                 'priority' => 50,
@@ -49,7 +48,7 @@ describe('EventManager deterministic ordering', function (): void {
     test('listTriggers respects priority ordering with created_at tiebreaker', function (): void {
         $high1 = Trigger::factory()->create([
             'event' => 'priority.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
             'priority' => 100,
@@ -57,7 +56,7 @@ describe('EventManager deterministic ordering', function (): void {
 
         $low1 = Trigger::factory()->create([
             'event' => 'priority.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
             'priority' => 10,
@@ -65,7 +64,7 @@ describe('EventManager deterministic ordering', function (): void {
 
         $high2 = Trigger::factory()->create([
             'event' => 'priority.test',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
             'priority' => 100,

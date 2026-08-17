@@ -218,7 +218,7 @@ describe('Phase 187 Production Infrastructure Audit', function (): void {
         it('constructs event name correctly', function (): void {
             $manager = app(EventManager::class);
             $trigger = $manager->on('App\\Models\\Order.created')
-                ->action(App\Actions\LogOrderCreated::class)
+                ->action(ZeroBoiler\Events\Tests\Actions\LogOrderCreated::class)
                 ->name('Log Order Created Test')
                 ->save();
 
@@ -241,7 +241,7 @@ describe('Phase 187 Production Infrastructure Audit', function (): void {
             $manager = app(EventManager::class);
             $builder = $manager->on('valid.event');
             // Try to save with empty event (by creating another builder)
-            $manager->on('')->action(App\Actions\LogOrderEvent::class)->save();
+            $manager->on('')->action(ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class)->save();
         })->throws(InvalidArgumentException::class, 'Event name is required');
 
         it('throws for missing action', function (): void {
@@ -259,7 +259,7 @@ describe('Phase 187 Production Infrastructure Audit', function (): void {
         it('auto-generates name from event when not provided', function (): void {
             $manager = app(EventManager::class);
             $trigger = $manager->on('test.autoname')
-                ->action(App\Actions\HighPriority::class)
+                ->action(ZeroBoiler\Events\Tests\Actions\HighPriority::class)
                 ->save();
 
             expect($trigger->name)->toBe('test.autoname Trigger');
@@ -268,8 +268,8 @@ describe('Phase 187 Production Infrastructure Audit', function (): void {
         it('deduplicates actions when action() and actions() contain same class', function (): void {
             $manager = app(EventManager::class);
             $trigger = $manager->on('test.dedup')
-                ->action(App\Actions\HighPriority::class)
-                ->actions([App\Actions\HighPriority::class, App\Actions\LowPriority::class])
+                ->action(ZeroBoiler\Events\Tests\Actions\HighPriority::class)
+                ->actions([ZeroBoiler\Events\Tests\Actions\HighPriority::class, ZeroBoiler\Events\Tests\Actions\LowPriority::class])
                 ->save();
 
             $parsed = $trigger->action;
@@ -277,7 +277,7 @@ describe('Phase 187 Production Infrastructure Audit', function (): void {
             $decoded = json_decode($parsed, true);
             expect(is_array($decoded))->toBeTrue();
             // HighPriority should only appear once
-            $count = count(array_filter($decoded, fn (mixed $v): bool => $v === 'App\\Actions\\HighPriority' || (is_array($v) && ($v['class'] ?? '') === 'App\\Actions\\HighPriority')));
+            $count = count(array_filter($decoded, fn (mixed $v): bool => $v === \ZeroBoiler\Events\Tests\Actions\HighPriority' || (is_array($v) && ($v['class'] ?? '') === \ZeroBoiler\Events\Tests\Actions\HighPriority')));
             expect($count)->toBe(1);
         });
     });

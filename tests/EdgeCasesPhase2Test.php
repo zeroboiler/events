@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use ZeroBoiler\Events\ConditionEngine;
 use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\WildcardMatcher;

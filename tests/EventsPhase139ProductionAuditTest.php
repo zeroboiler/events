@@ -462,8 +462,8 @@ test('TriggerBuilder resolves actions with deduplication', function (): void {
     // The TriggerBuilder::resolveActions() should deduplicate.
     $manager = app(\ZeroBoiler\Events\EventManager::class);
     $trigger = $manager->on('test.actions.dedup')
-        ->action(\App\Actions\SendOrderNotification::class)
-        ->actions([\App\Actions\SendOrderNotification::class])
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
+        ->actions([\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class])
         ->save();
 
     $parsed = json_decode($trigger->action, true);

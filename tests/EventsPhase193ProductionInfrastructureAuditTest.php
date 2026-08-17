@@ -261,7 +261,7 @@ describe('TriggerBuilder validation', function (): void {
 
         $builder
             ->name('Test')
-            ->action('App\\Actions\\TestAction')
+            ->action(\ZeroBoiler\Events\Tests\Actions\TestAction')
             ->save();
     })->throws(\InvalidArgumentException::class, 'Event name is required');
 
@@ -287,7 +287,7 @@ describe('TriggerBuilder validation', function (): void {
         Trigger::query()->delete();
 
         $trigger = $manager->on('test.auto-name')
-            ->action('App\\Actions\\DummyAction')
+            ->action(\ZeroBoiler\Events\Tests\Actions\DummyAction')
             ->save();
 
         expect($trigger->name)->toBe('test.auto-name Trigger');

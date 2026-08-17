@@ -22,7 +22,6 @@ use ZeroBoiler\Events\Models\Subscription;
 use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\WildcardMatcher;
 
-require_once __DIR__.'/TestActions.php';
 
 describe('Phase 94 — Production Readiness Audit', function () {
     describe('EventManager fireModel Edge Cases', function () {
@@ -43,7 +42,7 @@ describe('Phase 94 — Production Readiness Audit', function () {
         test('fireModel constructs correct event name format', function () {
             Trigger::factory()->create([
                 'event' => 'App\\Models\\Order.created',
-                'action' => \App\Actions\SendOrderNotification::class,
+                'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
                 'enabled' => true,
                 'async' => false,
             ]);
@@ -65,7 +64,7 @@ describe('Phase 94 — Production Readiness Audit', function () {
         test('fireModel flattens model attributes into payload root', function () {
             Trigger::factory()->create([
                 'event' => 'App\\Models\\Item.updated',
-                'action' => \App\Actions\LogOrderEvent::class,
+                'action' => \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class,
                 'enabled' => true,
                 'async' => false,
                 'conditions' => ['status' => 'active'],
@@ -88,7 +87,7 @@ describe('Phase 94 — Production Readiness Audit', function () {
         test('fireModel with object that only has toArray method', function () {
             Trigger::factory()->create([
                 'event' => 'App\\Models\\Basic.created',
-                'action' => \App\Actions\SendOrderNotification::class,
+                'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
                 'enabled' => true,
                 'async' => false,
             ]);
@@ -332,7 +331,7 @@ describe('Phase 94 — Production Readiness Audit', function () {
             // Fire an event to populate the cache
             Trigger::factory()->create([
                 'event' => 'cache.invalidate.test',
-                'action' => \App\Actions\SendOrderNotification::class,
+                'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
                 'enabled' => true,
                 'async' => false,
             ]);

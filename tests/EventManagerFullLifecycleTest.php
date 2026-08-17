@@ -16,7 +16,7 @@ describe('EventManager full lifecycle integration', function (): void {
         // Register
         $trigger = EventManager::on('lifecycle.test')
             ->name('Lifecycle Test Trigger')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->async(false)
             ->priority(5)
             ->save();
@@ -53,7 +53,7 @@ describe('EventManager full lifecycle integration', function (): void {
 
     it('supports enable/disable lifecycle', function (): void {
         $trigger = EventManager::on('toggle.test')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         expect($trigger->enabled)->toBeTrue();
@@ -77,7 +77,7 @@ describe('EventManager full lifecycle integration', function (): void {
 
     it('supports global disable/enable', function (): void {
         $trigger = EventManager::on('global.test')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         EventManager::setEnabled(false);
@@ -102,13 +102,13 @@ describe('EventManager full lifecycle integration', function (): void {
     it('supports wildcard trigger matching with cache invalidation', function (): void {
         // Register exact trigger
         $exact = EventManager::on('order.placed')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->priority(10)
             ->save();
 
         // Register wildcard trigger
         $wildcard = EventManager::on('order.*')
-            ->action(\App\Actions\LogOrderEvent::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class)
             ->name('Order Wildcard')
             ->priority(5)
             ->save();
@@ -131,7 +131,7 @@ describe('EventManager full lifecycle integration', function (): void {
 
     it('supports condition-based filtering', function (): void {
         $trigger = EventManager::on('conditional.test')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->when(['amount' => ['>', 100]])
             ->save();
 
@@ -178,7 +178,7 @@ describe('EventManager full lifecycle integration', function (): void {
 
     it('supports event history and statistics', function (): void {
         $trigger = EventManager::on('stats.test')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         EventManager::fire('stats.test', ['value' => 1]);
@@ -207,7 +207,7 @@ describe('EventManager full lifecycle integration', function (): void {
 
     it('supports register alias', function (): void {
         $trigger = EventManager::register('alias.test')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->name('Alias Test')
             ->save();
 

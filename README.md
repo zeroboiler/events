@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.67.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.68.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 333](https://img.shields.io/badge/Tests-333-brightgreen)
+![Tests: 334](https://img.shields.io/badge/Tests-334-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,7 +458,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 333 test files
+└── tests/                      # 334 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (333 test files)
+composer test        # Run Pest test suite (334 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,22 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 333 test files |
+| Test coverage | ✅ 334 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.68.0
+
+- **Breaking (tests only)**: Migrated `tests/TestActions.php` namespace from `App\Actions` to `ZeroBoiler\Events\Tests\Actions` for proper PSR-4 autoloading consistency. All 64+ test files updated. Removed manual `require_once __DIR__.'/TestActions.php'` calls (now autoloaded via composer autoload-dev).
+- Added: `FailingAction` — test action that throws `RuntimeException` for testing failure handling edge cases.
+- Added: `CountingAction` — test action that tracks call count and received payloads for testing multiple dispatch scenarios.
+- Enhanced: `SendOrderNotification` — added `$handled` boolean, `$receivedPayload` array, and `reset()` method for test verification.
+- Added: `EventsPhase204ProductionInfrastructureAuditTest` — 38+ tests covering: namespace migration verification, test action tracking/exceptions/counting, WildcardMatcher `*.*` multi-segment exact matching and extractWildcards alignment, ConditionEngine numeric string comparison and boundary values, all 12 classes final verification, strict_types=1 on all source files, return type declarations on public methods, model fillable/status constants, EscapesWildcardLike SQL special character escaping, DomainEvent round-trip preservation, EventManager public API return types, EventLog status constants, Subscription delivery tracking methods.
+- Updated: `TriggerFactory` action field generates `ZeroBoiler\Events\Tests\Actions\{word}Action` namespace instead of `App\Actions\`.
+- Registered: 1 new test file in Pest.php test suite configuration (334 test files).
+- Updated: README version badge (5.67.0→5.68.0), test count badges (333→334), structure section, testing section, production readiness summary table.
+- Bumped: Version 5.68.0.
 
 ### v5.67.0
 

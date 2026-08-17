@@ -680,7 +680,7 @@ describe('Events Phase 167 — Phase 1 Production Infrastructure Audit v5.23.0',
 
             Trigger::factory()->enabled()->create([
                 'event' => 'disable.test',
-                'action' => 'App\\Actions\\SendOrderNotification',
+                'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification',
             ]);
 
             $em->setEnabled(false);

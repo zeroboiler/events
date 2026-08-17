@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use Illuminate\Database\Eloquent\Collection;
 use ZeroBoiler\Events\ActionResolver;
 use ZeroBoiler\Events\ConditionEngine;
@@ -20,7 +20,6 @@ use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\TriggerBuilder;
 use ZeroBoiler\Events\WildcardMatcher;
 
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Trigger::query()->delete();

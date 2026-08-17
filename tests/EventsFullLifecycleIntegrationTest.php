@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
-use App\Actions\LogOrderEvent;
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\LogOrderEvent;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use ZeroBoiler\Events\ConditionEngine;
 use ZeroBoiler\Events\Contracts\ConditionEngineContract;
 use ZeroBoiler\Events\Domain\DomainEvent;
@@ -21,7 +21,6 @@ use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Database\Eloquent\Collection;
 
 // Load test action classes
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Trigger::query()->delete();

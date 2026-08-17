@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use ZeroBoiler\Events\Domain\DomainEvent;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
@@ -15,7 +15,6 @@ use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\WildcardMatcher;
 
 // Load test action classes
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Trigger::query()->delete();

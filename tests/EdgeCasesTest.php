@@ -18,7 +18,6 @@ use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\WildcardMatcher;
 
 // Load test action classes
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Queue::fake();
@@ -143,7 +142,7 @@ describe('EventManager edge cases', function (): void {
     test('fire with empty payload works for triggers without conditions', function (): void {
         Trigger::factory()->create([
             'event' => 'ping',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'conditions' => null,
             'enabled' => true,
             'async' => false,
@@ -158,7 +157,7 @@ describe('EventManager edge cases', function (): void {
     test('fire event with multiple matching triggers dispatches all', function (): void {
         Trigger::factory()->create([
             'event' => 'multi.match',
-            'action' => \App\Actions\SendOrderNotification::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class,
             'enabled' => true,
             'async' => false,
             'priority' => 50,
@@ -166,7 +165,7 @@ describe('EventManager edge cases', function (): void {
 
         Trigger::factory()->create([
             'event' => 'multi.match',
-            'action' => \App\Actions\LogOrderEvent::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class,
             'enabled' => true,
             'async' => false,
             'priority' => 10,
@@ -204,7 +203,7 @@ describe('EventManager edge cases', function (): void {
     test('fireModel with object that has attributesToArray', function (): void {
         Trigger::factory()->create([
             'event' => 'TestModel.created',
-            'action' => \App\Actions\LogOrderCreated::class,
+            'action' => \ZeroBoiler\Events\Tests\Actions\LogOrderCreated::class,
             'enabled' => true,
             'async' => false,
         ]);

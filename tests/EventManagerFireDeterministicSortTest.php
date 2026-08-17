@@ -6,17 +6,16 @@
 
 declare(strict_types=1);
 
-use App\Actions\HighPriority;
-use App\Actions\LogOrderEvent;
-use App\Actions\LowPriority;
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\HighPriority;
+use ZeroBoiler\Events\Tests\Actions\LogOrderEvent;
+use ZeroBoiler\Events\Tests\Actions\LowPriority;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use ZeroBoiler\Events\EventManager as EventManagerInstance;
 use ZeroBoiler\Events\Facades\EventManager;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
-// Load test action classes (App\Actions namespace)
-require_once __DIR__.'/TestActions.php';
+// Load test action classes (ZeroBoiler\Events\Tests\Actions namespace)
 
 beforeEach(function (): void {
     Trigger::query()->delete();

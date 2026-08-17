@@ -236,7 +236,7 @@ describe('Phase 50 Production Readiness Audit', function (): void {
     test('TriggerBuilder throws on empty event name when saving', function (): void {
         $app = $this->createApplication();
         $manager = $app->make(EventManager::class);
-        $builder = $manager->on('test.event')->action('App\Actions\TestAction');
+        $builder = $manager->on('test.event')->action('ZeroBoiler\Events\Tests\Actions\TestAction');
 
         // Save should succeed with valid data
         expect($builder)->toBeInstanceOf(TriggerBuilder::class);

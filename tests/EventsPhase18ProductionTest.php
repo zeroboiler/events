@@ -50,7 +50,7 @@ describe('EventManager fire validation', function (): void {
     test('fireModel constructs correct event name', function (): void {
         // Register a sync trigger that will be matched
         $trigger = $this->eventManager->on('App\\Models\\Order.created')
-            ->action(\App\Actions\LogOrderCreated::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\LogOrderCreated::class)
             ->sync()
             ->save();
 
@@ -87,7 +87,7 @@ describe('EventManager fire validation', function (): void {
         ");
 
         $this->eventManager->on('App\\Models\\User.created')
-            ->action('App\\Actions\\' . $actionClass)
+            ->action(\ZeroBoiler\Events\Tests\Actions\' . $actionClass)
             ->save();
 
         $model = new class
@@ -101,7 +101,7 @@ describe('EventManager fire validation', function (): void {
         $this->eventManager->fireModel('App\\Models\\User', 'created', $model);
 
         // Check that attributes are flattened into the payload
-        $captured = ('App\\Actions\\' . $actionClass)::$captured;
+        $captured = (\ZeroBoiler\Events\Tests\Actions\' . $actionClass)::$captured;
         expect($captured['id'])->toBe(42);
         expect($captured['email'])->toBe('test@example.com');
         expect($captured['role'])->toBe('admin');
@@ -113,7 +113,7 @@ describe('EventManager fire validation', function (): void {
 describe('TriggerBuilder save validation', function (): void {
     test('save throws on empty event name', function (): void {
         $builder = $this->app->make(TriggerBuilder::class);
-        $builder->action('App\\Actions\\SendOrderNotification')->save();
+        $builder->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')->save();
     })->throws(\InvalidArgumentException::class, 'Event name is required');
 
     test('save throws when no action is set', function (): void {
@@ -123,7 +123,7 @@ describe('TriggerBuilder save validation', function (): void {
 
     test('save auto-generates name from event when not provided', function (): void {
         $trigger = $this->eventManager->on('order.placed')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         expect($trigger->name)->toBe('order.placed Trigger');
@@ -132,7 +132,7 @@ describe('TriggerBuilder save validation', function (): void {
     test('save generates UUID', function (): void {
         $trigger = $this->eventManager->on('order.placed')
             ->name('Test Trigger')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         expect($trigger->id)->not->toBeEmpty();
@@ -142,30 +142,30 @@ describe('TriggerBuilder save validation', function (): void {
 
     test('save with multiple actions encodes as JSON array', function (): void {
         $trigger = $this->eventManager->on('order.placed')
-            ->actions([\App\Actions\SendOrderNotification::class, \App\Actions\LogOrderEvent::class])
+            ->actions([\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class, \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class])
             ->save();
 
         $decoded = json_decode($trigger->action, true);
         expect($decoded)->toBeArray();
-        expect($decoded)->toContain(\App\Actions\SendOrderNotification::class);
-        expect($decoded)->toContain(\App\Actions\LogOrderEvent::class);
+        expect($decoded)->toContain(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
+        expect($decoded)->toContain(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class);
     });
 
     test('save with action params encodes as JSON object', function (): void {
         $trigger = $this->eventManager->on('webhook.test')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->actionParams(['url' => 'https://example.com/hook'])
             ->save();
 
         $decoded = json_decode($trigger->action, true);
         expect($decoded)->toBeArray();
-        expect($decoded['class'])->toBe(\App\Actions\SendOrderNotification::class);
+        expect($decoded['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
         expect($decoded['params']['url'])->toBe('https://example.com/hook');
     });
 
     test('save with multiple actions and params uses classes key', function (): void {
         $trigger = $this->eventManager->on('multi.param.test')
-            ->actions([\App\Actions\SendOrderNotification::class, \App\Actions\LogOrderEvent::class])
+            ->actions([\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class, \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class])
             ->actionParams(['url' => 'https://example.com/hook'])
             ->save();
 
@@ -297,7 +297,7 @@ describe('EventManager trigger management', function (): void {
 
     test('deleteTrigger removes trigger and invalidates cache', function (): void {
         $trigger = $this->eventManager->on('test.delete')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         expect(Trigger::find($trigger->id))->not->toBeNull();
@@ -321,8 +321,8 @@ describe('EventManager trigger management', function (): void {
     });
 
     test('listTriggers filters by event name', function (): void {
-        $t1 = $this->eventManager->on('order.placed')->action(\App\Actions\SendOrderNotification::class)->save();
-        $t2 = $this->eventManager->on('order.shipped')->action(\App\Actions\LogOrderEvent::class)->save();
+        $t1 = $this->eventManager->on('order.placed')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
+        $t2 = $this->eventManager->on('order.shipped')->action(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class)->save();
 
         $results = $this->eventManager->listTriggers(event: 'order.placed');
 
@@ -331,8 +331,8 @@ describe('EventManager trigger management', function (): void {
     });
 
     test('listTriggers filters by enabled status', function (): void {
-        $t1 = $this->eventManager->on('test.enabled')->action(\App\Actions\SendOrderNotification::class)->save();
-        $t2 = $this->eventManager->on('test.disabled')->action(\App\Actions\LogOrderEvent::class)->save();
+        $t1 = $this->eventManager->on('test.enabled')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
+        $t2 = $this->eventManager->on('test.disabled')->action(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class)->save();
 
         $this->eventManager->disable($t2->id);
 
@@ -344,9 +344,9 @@ describe('EventManager trigger management', function (): void {
     });
 
     test('listTriggers supports wildcard filtering', function (): void {
-        $t1 = $this->eventManager->on('order.placed')->action(\App\Actions\SendOrderNotification::class)->save();
-        $t2 = $this->eventManager->on('order.shipped')->action(\App\Actions\LogOrderEvent::class)->save();
-        $t3 = $this->eventManager->on('user.created')->action(\App\Actions\HighPriority::class)->save();
+        $t1 = $this->eventManager->on('order.placed')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
+        $t2 = $this->eventManager->on('order.shipped')->action(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class)->save();
+        $t3 = $this->eventManager->on('user.created')->action(\ZeroBoiler\Events\Tests\Actions\HighPriority::class)->save();
 
         $results = $this->eventManager->listTriggers(event: 'order.*');
 
@@ -363,7 +363,7 @@ describe('EventManager cache invalidation', function (): void {
 
         // Create a wildcard trigger
         $this->eventManager->on('order.*')
-            ->action(\App\Actions\SendOrderNotification::class)
+            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
             ->save();
 
         // Access wildcard triggers to populate the cache

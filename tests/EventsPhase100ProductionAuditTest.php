@@ -117,14 +117,14 @@ describe('Phase 100 — Final Production Audit', function (): void {
 
     describe('EventManager fire() partial condition matching', function (): void {
         it('dispatches only matching triggers when multiple triggers exist', function (): void {
-            $this->app->bind(App\Actions\SendOrderNotification::class);
-            $this->app->bind(App\Actions\LogOrderEvent::class);
+            $this->app->bind(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
+            $this->app->bind(ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class);
 
             // Trigger 1: matches (amount > 50)
             $this->app->make(\ZeroBoiler\Events\EventManager::class)
                 ->on('order.placed')
                 ->name('High Value')
-                ->action(App\Actions\SendOrderNotification::class)
+                ->action(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
                 ->when(['amount' => ['>', 50]])
                 ->priority(10)
                 ->save();
@@ -133,7 +133,7 @@ describe('Phase 100 — Final Production Audit', function (): void {
             $this->app->make(\ZeroBoiler\Events\EventManager::class)
                 ->on('order.placed')
                 ->name('Medium Value')
-                ->action(App\Actions\LogOrderEvent::class)
+                ->action(ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class)
                 ->when(['amount' => ['>', 10]])
                 ->priority(5)
                 ->save();
@@ -142,7 +142,7 @@ describe('Phase 100 — Final Production Audit', function (): void {
             $this->app->make(\ZeroBoiler\Events\EventManager::class)
                 ->on('order.placed')
                 ->name('Premium')
-                ->action(App\Actions\HighPriority::class)
+                ->action(ZeroBoiler\Events\Tests\Actions\HighPriority::class)
                 ->when(['amount' => ['>', 1000]])
                 ->priority(20)
                 ->save();
@@ -159,12 +159,12 @@ describe('Phase 100 — Final Production Audit', function (): void {
         });
 
         it('dispatches nothing when all conditions fail', function (): void {
-            $this->app->bind(App\Actions\SendOrderNotification::class);
+            $this->app->bind(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
 
             $this->app->make(\ZeroBoiler\Events\EventManager::class)
                 ->on('order.placed')
                 ->name('Premium Only')
-                ->action(App\Actions\SendOrderNotification::class)
+                ->action(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
                 ->when(['amount' => ['>', 1000]])
                 ->save();
 
@@ -190,12 +190,12 @@ describe('Phase 100 — Final Production Audit', function (): void {
         });
 
         it('returns true and invalidates cache for existing trigger', function (): void {
-            $this->app->bind(App\Actions\SendOrderNotification::class);
+            $this->app->bind(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
 
             $trigger = $this->app->make(\ZeroBoiler\Events\EventManager::class)
                 ->on('test.event')
                 ->name('Test Trigger')
-                ->action(App\Actions\SendOrderNotification::class)
+                ->action(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
                 ->save();
 
             $eventManager = $this->app->make(\ZeroBoiler\Events\EventManager::class);
@@ -208,12 +208,12 @@ describe('Phase 100 — Final Production Audit', function (): void {
 
     describe('DispatchTriggerJob disabled trigger handling', function (): void {
         it('skips execution and logs warning when trigger is disabled', function (): void {
-            $this->app->bind(App\Actions\SendOrderNotification::class);
+            $this->app->bind(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
 
             $trigger = $this->app->make(\ZeroBoiler\Events\EventManager::class)
                 ->on('test.event')
                 ->name('Test Trigger')
-                ->action(App\Actions\SendOrderNotification::class)
+                ->action(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
                 ->save();
 
             // Disable the trigger
@@ -479,23 +479,23 @@ describe('Phase 100 — Final Production Audit', function (): void {
         it('merges single action() before actions() without duplicates', function (): void {
             $eventManager = $this->app->make(\ZeroBoiler\Events\EventManager::class);
             $trigger = $eventManager->on('test.event')
-                ->action(App\Actions\SendOrderNotification::class)
-                ->actions([App\Actions\LogOrderEvent::class])
+                ->action(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
+                ->actions([ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class])
                 ->name('Merged Actions')
                 ->save();
 
             $decoded = json_decode($trigger->action, true);
             expect(is_array($decoded))->toBeTrue();
             expect($decoded)->toHaveCount(2);
-            expect($decoded)->toContain(App\Actions\SendOrderNotification::class);
-            expect($decoded)->toContain(App\Actions\LogOrderEvent::class);
+            expect($decoded)->toContain(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
+            expect($decoded)->toContain(ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class);
         });
 
         it('deduplicates when action() and actions() have same class', function (): void {
             $eventManager = $this->app->make(\ZeroBoiler\Events\EventManager::class);
             $trigger = $eventManager->on('test.event')
-                ->action(App\Actions\SendOrderNotification::class)
-                ->actions([App\Actions\SendOrderNotification::class])
+                ->action(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
+                ->actions([ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class])
                 ->name('Dedup Actions')
                 ->save();
 
@@ -507,14 +507,14 @@ describe('Phase 100 — Final Production Audit', function (): void {
         it('generates correct JSON for single action with params', function (): void {
             $eventManager = $this->app->make(\ZeroBoiler\Events\EventManager::class);
             $trigger = $eventManager->on('test.event')
-                ->action(App\Actions\SendOrderNotification::class)
+                ->action(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
                 ->actionParams(['url' => 'https://example.com'])
                 ->name('Single Action With Params')
                 ->save();
 
             $decoded = json_decode($trigger->action, true);
             expect(is_array($decoded))->toBeTrue();
-            expect($decoded['class'])->toBe(App\Actions\SendOrderNotification::class);
+            expect($decoded['class'])->toBe(ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
             expect($decoded['params'])->toBe(['url' => 'https://example.com']);
         });
     });

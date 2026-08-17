@@ -51,8 +51,8 @@ it('EventManager parseActions returns single class for plain string', function (
     $method = $ref->getMethod('parseActions');
 
     $manager = app()->make(EventManagerConcrete::class);
-    $result = $method->invoke($manager, 'App\\Actions\\Foo');
-    expect($result)->toBe(['App\\Actions\\Foo']);
+    $result = $method->invoke($manager, \ZeroBoiler\Events\Tests\Actions\Foo');
+    expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo']);
 });
 
 it('EventManager parseActions handles JSON array of strings', function (): void {
@@ -61,7 +61,7 @@ it('EventManager parseActions handles JSON array of strings', function (): void 
 
     $manager = app()->make(EventManagerConcrete::class);
     $result = $method->invoke($manager, '["App\\\\Actions\\\\Foo","App\\\\Actions\\\\Bar"]');
-    expect($result)->toBe(['App\\Actions\\Foo', 'App\\Actions\\Bar']);
+    expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar']);
 });
 
 it('EventManager parseActions handles JSON object with class+params', function (): void {
@@ -71,7 +71,7 @@ it('EventManager parseActions handles JSON object with class+params', function (
     $manager = app()->make(EventManagerConcrete::class);
     $result = $method->invoke($manager, '{"class":"App\\\\Actions\\\\Foo","params":{"url":"https://test.com"}}');
     expect($result)->toBe([
-        ['class' => 'App\\Actions\\Foo', 'params' => ['url' => 'https://test.com']],
+        ['class' => \ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://test.com']],
     ]);
 });
 

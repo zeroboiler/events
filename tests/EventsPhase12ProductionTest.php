@@ -363,7 +363,7 @@ test('EventManager fireModel constructs correct event name', function () {
     // Register a sync trigger, then fire a model event
     $trigger = Trigger::factory()->create([
         'event' => 'App\\Models\\Order.created',
-        'action' => 'App\\Actions\\LogOrderCreated',
+        'action' => \ZeroBoiler\Events\Tests\Actions\LogOrderCreated',
         'async' => false,
         'enabled' => true,
     ]);

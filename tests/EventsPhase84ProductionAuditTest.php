@@ -214,32 +214,32 @@ describe('Phase 84 Production Audit', function () {
             // We test the final action string output through the builder
             // by examining the saved trigger
             $trigger = $em->on('test.dedup')
-                ->actions([\App\Actions\SendOrderNotification::class, \App\Actions\LogOrderEvent::class, \App\Actions\SendOrderNotification::class])
+                ->actions([\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class, \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class, \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class])
                 ->save();
 
             $actions = json_decode($trigger->action, true);
 
             // Should only have 2 unique actions, first occurrence preserved
             expect($actions)->toHaveCount(2)
-                ->and($actions[0])->toBe(\App\Actions\SendOrderNotification::class)
-                ->and($actions[1])->toBe(\App\Actions\LogOrderEvent::class);
+                ->and($actions[0])->toBe(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
+                ->and($actions[1])->toBe(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class);
         });
 
         it('merges action() and actions() without duplication', function () {
             $app = app();
             $em = $app->make(\ZeroBoiler\Events\EventManager::class);
 
-            $cls = \App\Actions\SendOrderNotification::class;
+            $cls = \ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class;
             $trigger = $em->on('test.merge')
                 ->action($cls)
-                ->actions([$cls, \App\Actions\LogOrderEvent::class])
+                ->actions([$cls, \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class])
                 ->save();
 
             $actions = json_decode($trigger->action, true);
 
             expect($actions)->toHaveCount(2)
                 ->and($actions[0])->toBe($cls)
-                ->and($actions[1])->toBe(\App\Actions\LogOrderEvent::class);
+                ->and($actions[1])->toBe(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class);
         });
 
         it('actionParams are encoded with multi-action classes format', function () {
@@ -247,7 +247,7 @@ describe('Phase 84 Production Audit', function () {
             $em = $app->make(\ZeroBoiler\Events\EventManager::class);
 
             $trigger = $em->on('test.params')
-                ->actions([\App\Actions\SendOrderNotification::class, \App\Actions\LogOrderEvent::class])
+                ->actions([\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class, \ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class])
                 ->actionParams(['url' => 'https://example.com/hook'])
                 ->save();
 

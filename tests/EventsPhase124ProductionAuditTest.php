@@ -143,7 +143,7 @@ describe('Phase 124 — TriggerBuilder validation', function (): void {
         $manager = new EventManager($engine, $resolver, $app);
 
         $builder = new TriggerBuilder($manager);
-        $builder->action(\App\Actions\SendOrderNotification::class);
+        $builder->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
 
         expect(fn (): mixed => $builder->save())->toThrow(InvalidArgumentException::class, 'Event name is required');
     });
@@ -167,7 +167,7 @@ describe('Phase 124 — TriggerBuilder validation', function (): void {
         $manager = new EventManager($engine, $resolver, $app);
 
         $builder = new TriggerBuilder($manager);
-        $builder->on('order.placed')->action(\App\Actions\SendOrderNotification::class);
+        $builder->on('order.placed')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class);
         $trigger = $builder->save();
 
         expect($trigger->name)->toBe('order.placed Trigger');

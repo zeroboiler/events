@@ -275,7 +275,7 @@ it('TriggerBuilder save() auto-generates name from event', function (): void {
     $event = 'test.auto.name.'.uniqid();
 
     $trigger = $manager->on($event)
-        ->action(\App\Actions\SendOrderNotification::class)
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
         ->save();
 
     expect($trigger->name)->toBe("{$event} Trigger");

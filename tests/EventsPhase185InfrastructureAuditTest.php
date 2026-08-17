@@ -26,7 +26,7 @@ final class EventsPhase185InfrastructureAuditTest extends TestCase
         $manager = app(\ZeroBoiler\Events\EventManager::class);
 
         // Fire an event to create a log
-        $manager->on('test.guard')->action(\App\Actions\SendOrderNotification::class)->save();
+        $manager->on('test.guard')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
         $manager->fire('test.guard', ['key' => 'val']);
 
         // '0' as event name should be skipped (not treated as a valid event filter)
@@ -70,7 +70,7 @@ final class EventsPhase185InfrastructureAuditTest extends TestCase
     {
         $manager = app(\ZeroBoiler\Events\EventManager::class);
 
-        $manager->on('test.zero')->action(\App\Actions\SendOrderNotification::class)->save();
+        $manager->on('test.zero')->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)->save();
 
         // '0' should return no results (guard prevents it from being used as a filter)
         $triggers = $manager->listTriggers(event: '0');

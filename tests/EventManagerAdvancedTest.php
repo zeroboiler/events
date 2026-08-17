@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-use App\Actions\HighPriority;
-use App\Actions\LogOrderEvent;
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\HighPriority;
+use ZeroBoiler\Events\Tests\Actions\LogOrderEvent;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use Illuminate\Support\Facades\Queue;
 use ZeroBoiler\Events\Facades\EventManager;
 use ZeroBoiler\Events\Models\EventLog;
@@ -16,7 +16,6 @@ use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\TriggerBuilder;
 
 // Load test action classes
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Queue::fake();
@@ -122,14 +121,14 @@ describe('executeTrigger exception propagation', function (): void {
     test('executeTrigger marks log as failed and re-throws exception', function (): void {
         Trigger::factory()->create([
             'event' => 'fail.event',
-            'action' => 'App\Actions\AlwaysFails',
+            'action' => 'ZeroBoiler\Events\Tests\Actions\AlwaysFails',
             'conditions' => null,
             'enabled' => true,
             'async' => false,
         ]);
 
         // Register a failing action class dynamically in the container
-        app()->bind('App\Actions\AlwaysFails', function () {
+        app()->bind('ZeroBoiler\Events\Tests\Actions\AlwaysFails', function () {
             return new class implements \ZeroBoiler\Events\Contracts\Triggerable {
                 public function handle(array $payload): void
                 {

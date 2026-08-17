@@ -374,7 +374,7 @@ test('trigger builder generates name from event when not provided', function ():
     $em = app(EventManager::class);
 
     $trigger = $em->on('order.shipped')
-        ->action('App\\Actions\\TestAction')
+        ->action(\ZeroBoiler\Events\Tests\Actions\TestAction')
         ->save();
 
     expect($trigger->name)->toBe('order.shipped Trigger');

@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
-use App\Actions\LogOrderEvent;
-use App\Actions\SendOrderNotification;
+use ZeroBoiler\Events\Tests\Actions\LogOrderEvent;
+use ZeroBoiler\Events\Tests\Actions\SendOrderNotification;
 use Illuminate\Support\Facades\Cache;
 use ZeroBoiler\Events\ActionResolver;
 use ZeroBoiler\Events\ConditionEngine;
@@ -21,7 +21,6 @@ use ZeroBoiler\Events\TriggerBuilder;
 use ZeroBoiler\Events\WildcardMatcher;
 
 // Load test action classes
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Trigger::query()->delete();
@@ -331,7 +330,7 @@ test('action resolver throws for non-existent class', function (): void {
     $this->expectException(\InvalidArgumentException::class);
     $this->expectExceptionMessage('does not exist');
 
-    $resolver->resolve('App\\Actions\\NonExistentAction');
+    $resolver->resolve(\ZeroBoiler\Events\Tests\Actions\NonExistentAction');
 });
 
 test('action resolver throws for class not implementing Triggerable', function (): void {

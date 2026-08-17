@@ -95,7 +95,7 @@ final class UnsubscribeCleansTriggerTest extends TestCase
         // Create an unrelated trigger
         $unrelatedTrigger = Trigger::factory()->enabled()->create([
             'event' => 'user.created',
-            'action' => 'App\\Actions\\SomeAction',
+            'action' => \ZeroBoiler\Events\Tests\Actions\SomeAction',
         ]);
 
         // Unsubscribe

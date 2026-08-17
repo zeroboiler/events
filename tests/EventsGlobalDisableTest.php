@@ -11,7 +11,6 @@ use ZeroBoiler\Events\Facades\EventsFacade;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
-require_once __DIR__.'/TestActions.php';
 
 uses(\ZeroBoiler\Events\Tests\TestCase::class);
 
@@ -77,7 +76,7 @@ describe('EventManager::fire with global disable', function (): void {
 
         $trigger = Trigger::factory()->create([
             'event' => 'test.global',
-            'action' => json_encode(\App\Actions\SendOrderNotification::class),
+            'action' => json_encode(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class),
             'enabled' => true,
         ]);
 
@@ -91,7 +90,7 @@ describe('EventManager::fire with global disable', function (): void {
 
         Trigger::factory()->create([
             'event' => 'test.global.disabled',
-            'action' => json_encode(\App\Actions\SendOrderNotification::class),
+            'action' => json_encode(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class),
             'enabled' => true,
         ]);
 

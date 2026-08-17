@@ -17,7 +17,6 @@ use ZeroBoiler\Events\Models\Subscription;
 use ZeroBoiler\Events\Models\Trigger;
 use ZeroBoiler\Events\WildcardMatcher;
 
-require_once __DIR__.'/TestActions.php';
 
 beforeEach(function (): void {
     Trigger::query()->delete();
@@ -277,7 +276,7 @@ describe('EventManager — wildcard cache invalidation on save', function (): vo
         $manager = app(EventManager::class);
 
         $manager->on('order.*')
-            ->action('App\Actions\LogOrderEvent')
+            ->action('ZeroBoiler\Events\Tests\Actions\LogOrderEvent')
             ->save();
 
         // Cache should be empty before first fire
@@ -292,7 +291,7 @@ describe('EventManager — wildcard cache invalidation on save', function (): vo
     test('disabling a wildcard trigger invalidates cache', function (): void {
         $trigger = Trigger::factory()->create([
             'event' => 'order.*',
-            'action' => 'App\Actions\LogOrderEvent',
+            'action' => 'ZeroBoiler\Events\Tests\Actions\LogOrderEvent',
             'enabled' => true,
             'async' => false,
         ]);
@@ -307,7 +306,7 @@ describe('EventManager — wildcard cache invalidation on save', function (): vo
     test('enabling a wildcard trigger invalidates cache', function (): void {
         $trigger = Trigger::factory()->create([
             'event' => 'order.*',
-            'action' => 'App\Actions\LogOrderEvent',
+            'action' => 'ZeroBoiler\Events\Tests\Actions\LogOrderEvent',
             'enabled' => false,
         ]);
 

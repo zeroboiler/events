@@ -593,7 +593,7 @@ test('TriggerBuilder::save generates auto-name from event', function (): void {
     $manager = app(EventManager::class);
 
     $trigger = $manager->on('payment.received')
-        ->action(\App\Actions\SendOrderNotification::class)
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
         ->save();
 
     expect($trigger->name)->toBe('payment.received Trigger');
@@ -603,23 +603,23 @@ test('TriggerBuilder::save with only actions() method works', function (): void 
     $manager = app(EventManager::class);
 
     $trigger = $manager->on('multi.action')
-        ->actions([\App\Actions\LogOrderEvent::class, \App\Actions\HighPriority::class])
+        ->actions([\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class, \ZeroBoiler\Events\Tests\Actions\HighPriority::class])
         ->save();
 
     $decoded = json_decode($trigger->action, true);
-    expect($decoded)->toBe([\App\Actions\LogOrderEvent::class, \App\Actions\HighPriority::class]);
+    expect($decoded)->toBe([\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class, \ZeroBoiler\Events\Tests\Actions\HighPriority::class]);
 });
 
 test('TriggerBuilder::save with actionParams and single action', function (): void {
     $manager = app(EventManager::class);
 
     $trigger = $manager->on('webhook.event')
-        ->action(\App\Actions\SendOrderNotification::class)
+        ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
         ->actionParams(['url' => 'https://example.com/hook'])
         ->save();
 
     $decoded = json_decode($trigger->action, true);
-    expect($decoded['class'])->toBe(\App\Actions\SendOrderNotification::class)
+    expect($decoded['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
         ->and($decoded['params']['url'])->toBe('https://example.com/hook');
 });
 
@@ -627,12 +627,12 @@ test('TriggerBuilder::save with actionParams and multiple actions uses classes k
     $manager = app(EventManager::class);
 
     $trigger = $manager->on('multi.params')
-        ->actions([\App\Actions\LogOrderEvent::class, \App\Actions\HighPriority::class])
+        ->actions([\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class, \ZeroBoiler\Events\Tests\Actions\HighPriority::class])
         ->actionParams(['url' => 'https://example.com/hook'])
         ->save();
 
     $decoded = json_decode($trigger->action, true);
-    expect($decoded['classes'])->toBe([\App\Actions\LogOrderEvent::class, \App\Actions\HighPriority::class])
+    expect($decoded['classes'])->toBe([\ZeroBoiler\Events\Tests\Actions\LogOrderEvent::class, \ZeroBoiler\Events\Tests\Actions\HighPriority::class])
         ->and($decoded['params']['url'])->toBe('https://example.com/hook');
 });
 

@@ -15,7 +15,7 @@ uses(Tests\TestCase::class);
 beforeEach(function (): void {
     $trigger = Trigger::factory()->enabled()->create([
         'event' => 'order.placed',
-        'action' => 'App\\Actions\\LogAction',
+        'action' => \ZeroBoiler\Events\Tests\Actions\LogAction',
     ]);
 
     EventLog::factory()->create([

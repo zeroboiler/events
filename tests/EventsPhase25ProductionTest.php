@@ -518,8 +518,8 @@ it('TriggerBuilder fluent interface returns self on all builder methods', functi
 
     expect($builder->name('Test'))->toBe($builder);
     expect($builder->on('test.event2'))->toBe($builder);
-    expect($builder->action(\App\Actions\SendOrderNotification::class))->toBe($builder);
-    expect($builder->actions([\App\Actions\SendOrderNotification::class]))->toBe($builder);
+    expect($builder->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class))->toBe($builder);
+    expect($builder->actions([\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class]))->toBe($builder);
     expect($builder->when(['key' => 'value']))->toBe($builder);
     expect($builder->async())->toBe($builder);
     expect($builder->priority(5))->toBe($builder);

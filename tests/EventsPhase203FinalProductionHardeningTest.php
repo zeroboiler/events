@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\NullAction;
+use ZeroBoiler\Events\Tests\Actions\NullAction;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Cache;
 use ZeroBoiler\Events\ActionResolver;
