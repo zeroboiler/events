@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.66.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.67.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 332](https://img.shields.io/badge/Tests-332-brightgreen)
+![Tests: 333](https://img.shields.io/badge/Tests-333-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 332 test files
+└── tests/                      # 333 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (327 test files)
-└── Total: 378 PHP files (33 src + 337 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (328 test files)
+└── Total: 379 PHP files (33 src + 338 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (332 test files)
+composer test        # Run Pest test suite (333 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,17 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 332 test files |
+| Test coverage | ✅ 333 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.67.0
+
+- Added: `EventsPhase203FinalProductionHardeningTest` — 70+ tests covering final production infrastructure hardening: WildcardMatcher boundary cases (dot-only patterns, long event names, extractWildcards multi-segment, findMatchingPatterns), ConditionEngine dot-notation edge cases (deeply nested null chain, between boundary values, empty conditions), DomainEvent reconstruction edge cases (invalid UUID graceful handling, invalid date graceful handling, empty eventType throw, round-trip preservation), EventManager public API validation (empty/"0" event throw, getTrigger/deleteTrigger/enable/disable empty-ID guards, register alias, container() return, isDisabled/setEnabled state), TriggerBuilder validation (empty event throw, no-action throw, auto-name generation, actions() validation), SubscriptionBuilder validation (empty event/URL throw, non-HTTP scheme rejection, short secret rejection), EventLog model constants and scopes (status constants, statuses array, markAsCompleted/markAsFailed), Subscription model operations (signPayload null/valid secret, hasExceededFailures config threshold, recordDelivery atomicity, recordFailure, resetFailures), ActionResolver edge cases (non-existent class, non-Triggerable class), EventScheduler config-driven behavior (null binding fallback, zero retention days), ServiceProvider binding verification (6 singleton/transient/contract assertions), wildcard trigger cache invalidation, config completeness (8 top-level keys, all sub-keys), DispatchTriggerJob config initialization (tries, backoff string/array), model config-driven table names, facade accessor verification, ManagesHistory/ManagesSubscriptions operations, EscapesWildcardLike SQL escaping.
+- Registered: 1 new test file in Pest.php test suite configuration (333 test files).
+- Updated: README version badge, test count badges (332→333), testing section, production readiness summary table.
+- Bumped: Version 5.67.0.
 
 ### v5.66.0
 
