@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-|| ![Latest Version](https://img.shields.io/badge/version-5.48.0-blue) |
+||| ![Latest Version](https://img.shields.io/badge/version-5.49.0-blue) |
 |![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)]()
 |[![Laravel](https://img.shields.io/badge/Laravel-13.x-red)]()
 | ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)()
-|| ![Tests: 316](https://img.shields.io/badge/Tests-316-brightgreen)]()|
+|| ![Tests: 317](https://img.shields.io/badge/Tests-317-brightgreen)]()|
 |[![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)](https://github.com/zeroboiler/events/actions/workflows/ci.yml)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 316 test files
+├── tests/                      # 317 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (316 test files)
-└── Total: 357 PHP files (33 src + 316 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (317 test files)
+└── Total: 358 PHP files (33 src + 317 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (316 test files)
+composer test        # Run Pest test suite (317 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,20 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-|| Test coverage | ✅ 316 test files |
+|| Test coverage | ✅ 317 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.49.0
+
+- Fixed: Added `'0'` (zero-string) guard to `ManagesHistory::getEventHistory()` and `ManagesSubscriptions::listSubscriptions()` for consistency with `EventManager::listTriggers()`, `getTrigger()`, `deleteTrigger()`, `enable()`, and `disable()` — which all skip `'0'` as a falsy sentinel value.
+- Fixed: Registered `EventSchedulerProductionReadinessTest.php`, `EventsPhase184InfrastructureAuditTest.php`, and `EventsPhase185InfrastructureAuditTest.php` in Pest.php test suite configuration (previously missing — tests would not run via `composer test`).
+- Added: `EventsPhase185InfrastructureAuditTest` — 40 test groups covering: string-zero guard consistency (getEventHistory, listSubscriptions, listTriggers, getTrigger, deleteTrigger, enable, disable), DomainEvent edge cases (fromArray with invalid UUID, invalid datetime, empty eventType, missing eventType, all-valid roundtrip, preserved identity), WildcardMatcher boundary conditions (empty input, single/double star, exact match/mismatch, single-segment, cross-segment, extractWildcards, findMatchingPatterns), ConditionEngine operator coverage (empty conditions, null/not_null, empty/not_empty, starts_with, ends_with, matches, between auto-normalize, in, not_in, dot notation), source file quality verification (strict_types, license headers, final classes, config completeness, ServiceProvider bindings, provides() count, EventLog status constants, facade accessor).
+- Verified: Full PHP 8.5 syntax compliance across all 33 source files (strict types, `#[Override]` on all overrides, `#[Pure]` on side-effect-free methods, `readonly` promoted properties, `final` classes).
+- Verified: PHPStan level 9 configuration with complete baseline (no new errors introduced).
+- Updated: README test count badges and file counts (316→317 test files, 357→358 total PHP files).
+- Bumped: Version 5.49.0.
 
 ### v5.48.0
 

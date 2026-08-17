@@ -92,7 +92,7 @@ trait ManagesSubscriptions
     {
         $query = Subscription::query();
 
-        if ($event !== null && $event !== '') {
+        if ($event !== null && $event !== '' && $event !== '0') {
             $likePattern = $this->wildcardToLike($event);
             if ($likePattern !== null) {
                 $query->where('event', 'like', $likePattern);

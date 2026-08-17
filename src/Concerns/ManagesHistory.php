@@ -48,7 +48,7 @@ trait ManagesHistory
     {
         $query = EventLog::query()->with('trigger');
 
-        if ($event !== null && $event !== '') {
+        if ($event !== null && $event !== '' && $event !== '0') {
             $likePattern = $this->wildcardToLike($event);
             if ($likePattern !== null) {
                 $query->where('event', 'like', $likePattern);
@@ -57,11 +57,11 @@ trait ManagesHistory
             }
         }
 
-        if ($status !== null && $status !== '') {
+        if ($status !== null && $status !== '' && $status !== '0') {
             $query->where('status', $status);
         }
 
-        if ($triggerId !== null && $triggerId !== '') {
+        if ($triggerId !== null && $triggerId !== '' && $triggerId !== '0') {
             $query->where('trigger_id', $triggerId);
         }
 
