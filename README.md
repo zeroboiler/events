@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.63.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.64.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 326](https://img.shields.io/badge/Tests-326-brightgreen)
+![Tests: 341](https://img.shields.io/badge/Tests-341-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 324 test files
+└── tests/                      # 341 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (321 test files)
-└── Total: 368 PHP files (33 src + 321 tests + 5 support + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (336 test files)
+└── Total: 379 PHP files (33 src + 341 tests + 5 support + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (322 test files)
+composer test        # Run Pest test suite (341 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,25 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 322 test files |
+| Test coverage | ✅ 341 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.64.0
+
+- Fixed: `DispatchTriggerJob::$backoff` — added default `[]` value to prevent uninitialized readonly property error when config `backoff` value is neither string nor array (e.g., bool, null).
+- Added: `EventsPhase197PayloadSanitizationAuditTest` — 9 tests covering recursive payload sanitization for queue serialization: scalar preservation, object/closure stripping, nested array recursion, empty array preservation, numeric arrays, anonymous class stripping, empty payload handling.
+- Added: `EventsPhase198SubscriptionBuilderConfigAuditTest` — 11 tests covering SubscriptionBuilder URL validation edge cases: file:// and ftp:// scheme rejection, mailto:// rejection, empty URL/event rejection, invalid URL rejection, short secret rejection, minimum-length secret acceptance, long secret acceptance, fluent interface chain, URL with no host handling.
+- Added: `EventsPhase199ConditionAndWildcardEdgeCaseAuditTest` — 45 tests covering comprehensive ConditionEngine and WildcardMatcher edge cases: empty conditions, null payload handling, null field equality, null/not_null operators, numeric string comparison, nested dot notation missing keys (2-level and 3-level), between inverted/exact/boundary values, empty array condition, regex validation/ReDoS rejection, in/contains/starts_with/ends_with with non-string actual, strict_equals cross-type, AND logic, WildcardMatcher exact/cross-segment/catch-all/empty/boundary patterns, extractWildcards, findMatchingPatterns, regex-safe patterns, empty pattern/event combinations.
+- Added: `EventsPhase200EventSchedulerConfigAuditTest` — 10 tests covering EventScheduler config-driven behavior: retention days 0/negative/non-numeric/null skipping, resolveEventManager null/wrong-type fallback, custom retention cron, empty cron fallback, custom cleanup cron, null config values.
+- Updated: README test count badges (331→341), structure section (336 test files, 379 total PHP files), testing section, production readiness summary table.
+- Registered: 4 new test files in Pest.php test suite configuration (337→341 test files).
+- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration with `checkExplicitMixed`.
+- Bumped: Version 5.64.0.
 
 ### v5.60.0
 
