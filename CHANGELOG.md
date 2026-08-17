@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.58.0] — 2026-08-17
+
+### Fixed
+- `tests/Pest.php` — registered missing Phase 191 test files (`EventsPhase191FinalProductionInfrastructureAuditTest.php`, `EventsPhase191TraitAndWebhookInfrastructureTest.php`) that were present on disk but not registered in the Pest test runner configuration.
+
+### Added
+- Phase 192 final production infrastructure audit test (55+ test cases): PHP 8.5 syntax compliance verification (strict types, promoted readonly properties, readonly final classes), return type declaration completeness for all public methods on EventManager, ConditionEngine, WildcardMatcher, DomainEvent, SubscriptionBuilder, TriggerBuilder, ActionResolver, and EventScheduler, final classes audit for all source classes and models, typed properties audit for builders and models, docblock completeness verification, `#[Override]` attribute audit for interface implementations and parent overrides, ServiceProvider binding correctness tests, config structure validation, advanced WildcardMatcher patterns (cross-segment, Unicode, extractWildcards), ConditionEngine safe regex edge cases, DomainEvent serialization roundtrip integrity, console commands existence and final-ness verification, ManagesHistory and ManagesSubscriptions trait contract verification, migration config-driven table name validation, and composer.json package metadata validation.
+
+### Changed
+- Version bumped to 5.58.0.
+- README test count badge updated from 326 to 327.
+- README version badge updated to 5.58.0.
+- Pest.php — registered `EventsPhase191FinalProductionInfrastructureAuditTest.php`, `EventsPhase191TraitAndWebhookInfrastructureTest.php`, and `EventsPhase192FinalProductionInfrastructureAuditTest.php`.
+
+---
+
 ## [5.51.0] — 2026-08-17
 
 ### Fixed
