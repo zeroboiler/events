@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.58.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.59.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 327](https://img.shields.io/badge/Tests-327-brightgreen)
+![Tests: 322](https://img.shields.io/badge/Tests-322-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,7 +458,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 319 test files
+└── tests/                      # 322 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (319 test files)
+composer test        # Run Pest test suite (322 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,20 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 319 test files |
+| Test coverage | ✅ 322 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.59.0
+
+- Fixed: README test count badge corrected from 327 to 322 (actual unique test files registered in Pest.php).
+- Removed: Invalid PHPStan 2.x parameters from `phpstan.neon.dist` (`checkFunctionNameCase`, `checkPropertyHookNameCase`, `checkEnumCaseValueNameCase`) — these were silently ignored by PHPStan 2.x but flagged as warnings.
+- Verified: Full PHP 8.5 syntax compliance across all 33 source files — strict types, `#[Override]` on all overrides, `#[Pure]` on side-effect-free methods, `readonly` promoted properties, `final` classes, typed properties, return type declarations.
+- Verified: EventsServiceProvider register/boot/provides() complete and correct (7 bindings).
+- Verified: Config completeness — 8 top-level keys (table_names, queue, retry, retention, subscriptions, disabled, wildcard_cache_ttl).
+- Updated: README version badge (5.58.0→5.59.0), test count badges (327→322).
+- Bumped: Version 5.59.0.
 
 ### v5.56.0
 

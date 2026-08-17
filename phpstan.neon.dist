@@ -13,10 +13,7 @@ parameters:
     checkMissingIterableValueType: true
     checkGenericClassInNonGenericObjectType: true
     checkUninitializedProperties: true
-    checkFunctionNameCase: true
     checkClassLikeNameCase: true
-    checkPropertyHookNameCase: true
-    checkEnumCaseValueNameCase: true
     checkAlwaysTrueInstanceof: true
     checkExplicitMixed: true
     universalObjectCratesClasses:
