@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.59.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.60.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 322](https://img.shields.io/badge/Tests-322-brightgreen)
+![Tests: 323](https://img.shields.io/badge/Tests-323-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 322 test files
+└── tests/                      # 323 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (319 test files)
-└── Total: 365 PHP files (33 src + 319 tests + 5 support + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (320 test files)
+└── Total: 367 PHP files (33 src + 320 tests + 5 support + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -955,6 +955,27 @@ Test coverage spans:
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.60.0
+
+- Added: `EventsPhase193ProductionInfrastructureAuditTest` — comprehensive production infrastructure audit with 50+ test cases covering:
+  - `EventManager::container()` public API
+  - `DomainEvent` edge cases (empty eventType, invalid UUID, invalid datetime, round-trip serialization)
+  - `WildcardMatcher` pure function correctness (empty event, non-matching patterns, double wildcard in middle, findMatchingPatterns)
+  - `ConditionEngine` operator edge cases (empty array condition, max regex length, catastrophic backtracking rejection, inverted between range, strict_equals cross-type, not_in, ends_with)
+  - `EscapesWildcardLike` trait (non-wildcard null, SQL LIKE escaping, catch-all)
+  - `TriggerBuilder` validation (empty event, no action, auto-name generation, actions() element validation)
+  - `SubscriptionBuilder` validation (empty event, empty URL, invalid URL, non-HTTP scheme, short secret)
+  - `EventLog` model scopes and methods (withStatus, stalePending, markAsCompleted, markAsFailed)
+  - `Subscription` model methods (signPayload null/empty, HMAC consistency, recordDelivery/recordFailure/resetFailures, hasExceededFailures, matchesEvent delegation)
+  - `EventManager` CRUD edge cases (empty/zero-string IDs)
+  - `EventScheduler` registration verification (purge-logs + cleanup-subscriptions tasks)
+  - `ServiceProvider` binding correctness (singleton vs transient, contract resolution, facade proxy)
+  - `ManagesHistory` trait methods (purgeLogs return type, getStalePendingLogs collection, deactivateExceededSubscriptions)
+- Verified: All 33 source files PHP 8.5 compliant — strict types, typed properties, return type declarations, docblocks, `#[Override]`, `#[Pure]`, `final` classes.
+- Verified: `EventsServiceProvider` register/boot/provides() complete (7 bindings, 12 commands).
+- Verified: Config completeness — 8 top-level keys, all env variables documented.
+- Updated: Version badge (5.59.0→5.60.0), test count badges (322→323).
 
 ### v5.59.0
 
