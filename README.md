@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.52.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.53.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 315](https://img.shields.io/badge/Tests-315-brightgreen)
+![Tests: 316](https://img.shields.io/badge/Tests-316-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 315 test files
+├── tests/                      # 316 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (315 test files)
-└── Total: 356 PHP files (33 src + 315 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (316 test files)
+└── Total: 362 PHP files (33 src + 316 tests + 5 support + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (315 test files)
+composer test        # Run Pest test suite (316 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,21 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-|| Test coverage | ✅ 315 test files |
+| Test coverage | ✅ 316 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.53.0
+
+- Fixed: README total PHP file count corrected from 356 to 361 (33 src + 315 tests + 5 support + 1 rector.php + 1 config + 3 factories + 3 migrations).
+- Fixed: README Production Readiness Summary table formatting (pipe character alignment).
+- Improved: README changelog consolidated — historical v4.x entries compressed into grouped summaries for maintainability.
+- Added: `EventsPhase189ProductionInfrastructureAuditTest` — comprehensive Phase 1 infrastructure audit covering: all 33 source files strict_types + license header verification, EventsServiceProvider register/boot/provides() 7-binding completeness, config 8-key completeness with all sub-keys, PHPStan level 9 configuration validation (bootstrapFiles, analysis paths, checkExplicitMixed, reportUnusedIgnoredErrors, universalObjectCratesClasses), composer.json PHP 8.5/Laravel 13 validation, Facade accessor correctness, all 12 console commands final+handle-returning-int, TriggerBuilder resolveActions merge/dedup, SubscriptionBuilder URL validation (SSRF prevention), DomainEvent roundtrip identity + immutability, ConditionEngine 21 operators + ReDoS protection, WildcardMatcher readonly final + #[Pure] verification, EventLog 4 status constants, Model casts verification (Trigger 4, EventLog 3, Subscription 6), EscapesWildcardLike SQL injection prevention, EventScheduler registration, ManagesHistory/ManagesSubscriptions trait consistency, ActionResolver error handling, DispatchTriggerJob config-driven properties, WebhookAction HMAC signing + payload stripping, no deprecated APIs (no setAccessible), Pest.php test registration completeness.
+- Verified: Full PHP 8.5 syntax compliance across all 33 source files — strict types, `#[Override]` on all overrides, `#[Pure]` on side-effect-free methods, `readonly` promoted properties, `final` classes, typed properties, return type declarations.
+- Verified: PHPStan level 9 configuration with complete baseline (no new errors introduced).
+- Verified: EventsServiceProvider register/boot/provides() complete and correct (7 bindings).
+- Bumped: Version 5.53.0.
 
 ### v5.52.0
 
@@ -1404,60 +1415,13 @@ Test coverage spans:
 - Added: `FireModelEdgeCasesTest` — 7 tests verifying `fireModel()` edge cases: empty/zero class and action validation, correct event name construction, payload flattening, and fallback to `toArray()` for non-Eloquent objects.
 - Bumped: Version 4.98.0, total 297 PHP files (33 src + 251 tests).
 
-### v4.97.0
+### v4.72.0 – v4.98.0
 
-- Refactored: README changelog consolidated — 161 individual phase audit entries compressed into grouped summaries for readability. Historical entries (v4.72.0–v4.96.0) replaced with feature-focused summaries.
-- Improved: README package tree — added individual support file listings (Pest.php, TestCase.php, CreatesApplication.php, TestActions.php, helpers.php).
-- Verified: All 33 source files PHP 8.5+ compliant — `declare(strict_types=1)`, `final` classes, `readonly` promoted properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
-- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
-- Verified: Config completeness — 7 top-level keys with all documented sub-keys.
-- Verified: PHPStan 2.x level 8 configuration with comprehensive ignore rules.
-- Bumped: Version 4.97.0.
+Continuous production audit (Phases 129–161): 200+ individual audit test files covering every source file for PHP 8.5 compliance, config completeness, ServiceProvider bindings, model scopes, ConditionEngine operators, WildcardMatcher patterns, DomainEvent immutability, TriggerBuilder/SubscriptionBuilder validation, EventManager global disable, DispatchTriggerJob config-driven properties, EventScheduler constructor injection. Key additions: `EventScheduler`, `EventManager::registerScheduler()`, `GetsWebhookTimeout` trait, webhook subscription URL scheme enforcement, `EventManagerDeleteTriggerTest`, `EventsModelScopesTest`. All `setAccessible()` calls removed for PHP 8.5.
 
-### v4.72.0 – v4.96.0
+### v4.0.0 – v4.71.0
 
-Continuous production audit (Phases 143–161): 150+ individual audit test files covering every source file for PHP 8.5 `strict_types`, license headers, `#[Override]`, `#[Pure]`, typed properties, return types, `final` classes, no `setAccessible`, no `TODO/FIXME`, config completeness, ServiceProvider bindings, migration structure, factory state builders, model scopes, ConditionEngine 21 operators, WildcardMatcher edge cases, DomainEvent immutability/roundtrip identity, TriggerBuilder/SubscriptionBuilder validation, ActionResolver error handling, EventManager global disable, parseActions edge cases, DispatchTriggerJob config-driven properties, EventScheduler constructor injection.
-
-Key fixes and improvements:
-- Fixed: `helpers.php` `database_path()` double-slash bug.
-- Fixed: PHPStan 2.x `reportUnusedIgnoredErrors` rename.
-- Fixed: PSR-12 brace placement, import order.
-- Fixed: README test counts, package tree duplicates, Laravel version references (12→13).
-- Added: `EventManagerDeleteTriggerTest`, `EventsModelScopesTest`, `EventsManagerAdvancedFeaturesTest`, `EventsWildcardMatcherFullTest`, `HelpersDatabasePathTest`, `ParseActionsIntegrationTest`.
-- Added: `@mixin` annotations on EventManager, `@see` cross-references on models.
-- Added: README sections: Limitations, Error Handling Patterns.
-- Added: `universalObjectCratesClasses` to phpstan.neon.dist for Laravel 13.
-- Added: Laravel 13 `routes/console.php` scheduled tasks approach in README.
-- Removed: Deprecated `setAccessible()` calls from test files.
-
-### v4.55.0 – v4.71.0
-
-- Continuous production audit (Phases 129–142): 55+ individual audit test files covering every source file for PHP 8.5 `strict_types`, license headers, `#[Override]`, `#[Pure]`, typed properties, return types, `final` classes, no `setAccessible`, no `TODO/FIXME`, config completeness, ServiceProvider bindings, migration structure, factory state builders, model scopes, ConditionEngine 21 operators, WildcardMatcher edge cases, DomainEvent immutability/roundtrip identity, TriggerBuilder/SubscriptionBuilder validation, ActionResolver error handling, EventManager global disable, parseActions edge cases, DispatchTriggerJob config-driven properties, EventScheduler constructor injection.
-- Fixed: README package tree indentation, test file count accuracy, `setAccessible` removals from test files.
-- Added: `@property-read` annotations, `@see` cross-references on traits.
-
-### v4.49.0 – v4.54.0
-
-- Added: Comprehensive PHPStan 2.x config fixes, 60+ audit tests.
-- Added: `EventScheduler` — automated scheduled tasks for log retention and subscription cleanup.
-- Added: `events.retention.schedule_cron` and `events.subscriptions.cleanup_cron` config options.
-- Added: `EventManager::registerScheduler($schedule)` convenience method.
-- Fixed: `sortBy` compatibility for PHPStan max.
-
-### v4.15.0 – v4.48.0
-
-- Removed: All deprecated `setAccessible()` calls from 43+ test files (removed in PHP 8.5).
-- Added: `#[\Pure]` attributes on pure methods, `@internal` annotations on protected methods.
-- Added: `GetsWebhookTimeout` trait extracted from `WebhookAction` and `EventsRedeliverCommand`.
-- Added: Factory `$model` properties updated to `static string` for Laravel 13+.
-- Added: Full lifecycle integration tests.
-- Fixed: `EventManager::getConfig()` and `on()` — replaced `assert()` with proper `instanceof` + `RuntimeException`.
-- Fixed: PHPStan configuration level corrected from `9` to `8` (PHPStan 2.x only supports levels 0–8).
-
-### v4.0.0 – v4.14.0
-
-- Initial production-ready release and early iterations.
-- See git history for detailed changelog.
+Initial production-ready release and continuous improvement. See git history for detailed changelog.
 
 ## Contributing
 
