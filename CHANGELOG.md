@@ -6,6 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.61.0] — 2026-08-17
+
+### Fixed
+- `EventManager::fireModel()` docblock — updated `@param object $model` description from "must have" to "should implement", clarifying that the method works with any object but payload flattening requires `attributesToArray()` or `toArray()`.
+- `EventManager::parseActions()` — added `@return` docblock with precise `list<string|array{class: string, params: array<string, mixed>}>` type, added `@var` PHPStan narrowing annotations on `array_map` return values for classes and sequential list branches.
+- `EventManager::parseActions()` docblock — fixed `params?` (optional) to `params` (always present) in return type to match actual implementation.
+
+### Added
+- `FireModelEdgeCasesTest.php` (7 test cases): tests for `fireModel()` with plain stdClass (no `attributesToArray`/`toArray`), empty and zero-string model class guards, empty and zero-string action guards, global disable during `fireModel`, and nested data preservation with condition matching.
+- `EventsPhase194InfrastructureAuditTest.php` (11 test cases): comprehensive `listTriggers()` tests covering exact-match filtering, wildcard LIKE pattern filtering, enabled/disabled status filtering, limit parameter, empty collection when no triggers, priority ordering, empty/zero-string event filter guards, plus `getTrigger()` and `deleteTrigger()` edge cases (empty string, zero-string, non-existent UUID, cache invalidation after delete).
+- Both test files registered in `tests/Pest.php`.
+
+### Changed
+- Version bumped to 5.61.0.
+- README version badge updated to 5.61.0.
+- README test count badge updated from 323 to 324.
+- README package structure counts updated (321 test files, 368 total PHP files).
+- Pest.php — registered `FireModelEdgeCasesTest.php` and `EventsPhase194InfrastructureAuditTest.php`.
+
+---
+
 ## [5.58.0] — 2026-08-17
 
 ### Fixed

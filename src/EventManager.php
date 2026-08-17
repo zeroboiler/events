@@ -329,9 +329,12 @@ final class EventManager
      * can reference them directly (e.g. `status == 'active'` instead of `model.status == 'active'`).
      * The original model object and metadata are also included in the payload.
      *
+     * If the model object has neither `attributesToArray()` nor `toArray()` method,
+     * the event fires with only the metadata keys (`model`, `model_class`, `action`).
+     *
      * @param  string  $modelClass  The fully-qualified model class name
      * @param  string  $action  The model action (e.g., 'created', 'updated', 'deleted')
-     * @param  object  $model  The model instance (must have attributesToArray or toArray method)
+     * @param  object  $model  The model instance (should implement attributesToArray or toArray for payload flattening)
      *
      * @return void
      *
@@ -599,7 +602,7 @@ final class EventManager
      * - JSON object with classes + params:  `{"classes": [...], "params": {...}}`
      * - JSON array of objects:  `[{"class": "...", "params": {...}}, ...]`
      *
-     * @return list<string|array{class: string, params?: array<string, mixed>}>
+     * @return list<string|array{class: string, params: array<string, mixed>}>
      *
      * @internal Not part of the public API.
      */
@@ -617,6 +620,7 @@ final class EventManager
             if (isset($decoded['classes']) && is_array($decoded['classes'])) {
                 $params = is_array($decoded['params'] ?? null) ? $decoded['params'] : [];
 
+                /** @var list<array{class: string, params: array<string, mixed>}> */
                 return array_map(
                     static fn (mixed $cls): array => [
                         'class' => is_string($cls) ? $cls : '',
@@ -628,6 +632,7 @@ final class EventManager
 
             // Sequential list → normalise each entry
             if (array_is_list($decoded)) {
+                /** @var list<string|array{class: string, params: array<string, mixed>}> */
                 return array_map(
                     static fn (mixed $entry): string|array => is_string($entry)
                         ? $entry
