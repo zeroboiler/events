@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.69.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.70.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 335](https://img.shields.io/badge/Tests-335-brightgreen)
+![Tests: 336](https://img.shields.io/badge/Tests-336-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -459,14 +459,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 340 test files (335 tests + 5 support)
+└── tests/                      # 341 test files (336 tests + 5 support)
     ├── Pest.php               # Test suite configuration
     ├── TestCase.php           # Base test case (Laravel bootstrap)
     ├── CreatesApplication.php # Application trait
     ├── TestActions.php        # Test action implementations
     ├── helpers.php            # Test helper functions
-    └── ... (335 test files)
-└── Total: 381 PHP files (33 src + 340 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
+    └── ... (336 test files)
+└── Total: 383 PHP files (33 src + 341 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -913,7 +913,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (334 test files)
+composer test        # Run Pest test suite (336 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -952,10 +952,21 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 334 test files |
+| Test coverage | ✅ 336 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.70.0
+
+- Added: `EventsPhase206ProductionInfrastructureAuditTest` — 20 comprehensive production infrastructure audit tests covering: all method parameters have type declarations, license header presence across all source files, no deprecated `setAccessible()` calls, no TODO/FIXME/HACK markers, composer.json structure validation (PSR-4, providers, aliases), phpstan.neon.dist configuration validation (level 9, bootstrap files, strict checks), EventManager internal methods visibility consistency (protected), ConditionEngine internal methods visibility consistency, namespace consistency across all directories and root-level files, ManagesHistory and ManagesSubscriptions trait public method completeness, facade docblock @method coverage, model casts count and key verification (Trigger 4, EventLog 3, Subscription 6), factory model reference correctness, migration file existence and ordering, EventManager complete public API surface (26 methods), ConditionEngine 20 operators in match expression, EscapesWildcardLike trait usage across all wildcard-consuming traits/classes, ServiceProvider provides() 7 bindings verification, all 12 console commands extend Illuminate\Console\Command, EventLog status constants uniqueness, Subscription hidden fields include secret.
+- Registered: 1 new test file in Pest.php test suite configuration (335→336 test files).
+- Updated: README version badge (5.69.0→5.70.0), test count badges (335→336), structure section file counts, production readiness summary table.
+- Verified: All 33 source files PHP 8.5 compliant — `declare(strict_types=1)`, `final` classes, `readonly` properties, typed properties, return type declarations, `#[Override]`, `#[Pure]`, docblocks, license headers.
+- Verified: EventsServiceProvider `register()`/`boot()`/`provides()` — 7 bindings consistent.
+- Verified: Config completeness — 8 top-level keys with all documented sub-keys.
+- Verified: PHPStan 2.x level 9 configuration.
+- Bumped: Version 5.70.0.
 
 ### v5.68.0
 
