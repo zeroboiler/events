@@ -7,6 +7,7 @@ parameters:
         - database/migrations
         - database/factories
         - tests
+    baselineFile: phpstan-baseline.neon
     reportUnusedIgnoredErrors: true
     treatPhpDocTypesAsCertain: false
     checkMissingIterableValueType: true

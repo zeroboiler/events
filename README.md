@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.53.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.54.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 316](https://img.shields.io/badge/Tests-316-brightgreen)
+![Tests: 317](https://img.shields.io/badge/Tests-317-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 316 test files
+├── tests/                      # 317 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (316 test files)
-└── Total: 362 PHP files (33 src + 316 tests + 5 support + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (317 test files)
+└── Total: 363 PHP files (33 src + 317 tests + 5 support + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (316 test files)
+composer test        # Run Pest test suite (317 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,23 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 316 test files |
+| Test coverage | ✅ 317 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.54.0
+
+- Improved: Added `baselineFile: phpstan-baseline.neon` to `phpstan.neon.dist` — PHPStan errors are now tracked via baseline file in addition to ignoreErrors patterns, following PHPStan best practices.
+- Improved: Cleaned up `phpstan.neon` local override file to only include the dist reference (no redundant level override).
+- Added: `WildcardMatcherArchitectureTest` — validates `WildcardMatcher` is a `readonly final class` with only `#[Pure] static` methods and no mutable state (6 test cases).
+- Registered: `WildcardMatcherArchitectureTest.php` in Pest.php test suite configuration (316→317 test files).
+- Verified: Full PHP 8.5 syntax compliance across all 33 source files — strict types, `#[Override]` on all overrides, `#[Pure]` on side-effect-free methods, `readonly` promoted properties, `final` classes, typed properties, return type declarations.
+- Verified: PHPStan level 9 configuration with baseline file reference.
+- Verified: EventsServiceProvider register/boot/provides() complete and correct (7 bindings).
+- Verified: Config completeness — 8 top-level keys (table_names, queue, retry, retention, subscriptions, disabled, wildcard_cache_ttl).
+- Updated: README version badge (5.53.0→5.54.0), test count badges (316→317), file counts (362→363).
+- Bumped: Version 5.54.0.
 
 ### v5.53.0
 
