@@ -54,3 +54,12 @@ final class LogOrderCreated implements Triggerable
         // Log order created
     }
 }
+
+final class NullAction implements Triggerable
+{
+    #[\Override]
+    public function handle(array $payload): void
+    {
+        // Intentionally empty — test action that does nothing
+    }
+}
