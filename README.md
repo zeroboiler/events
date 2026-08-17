@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.51.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.52.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 314](https://img.shields.io/badge/Tests-314-brightgreen)
+![Tests: 315](https://img.shields.io/badge/Tests-315-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -458,14 +458,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-├── tests/                      # 313 test files
+├── tests/                      # 315 test files
 │   ├── Pest.php               # Test suite configuration
 │   ├── TestCase.php           # Base test case (Laravel bootstrap)
 │   ├── CreatesApplication.php # Application trait
 │   ├── TestActions.php        # Test action implementations
 │   ├── helpers.php            # Test helper functions
-│   └── ... (313 test files)
-└── Total: 354 PHP files (33 src + 313 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
+│   └── ... (315 test files)
+└── Total: 356 PHP files (33 src + 315 tests + 1 rector.php + 1 config + 3 factories + 3 migrations)
 ```
 
 ### How It Works
@@ -912,7 +912,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (313 test files)
+composer test        # Run Pest test suite (315 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -951,10 +951,20 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-|| Test coverage | ✅ 313 test files |
+|| Test coverage | ✅ 315 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.52.0
+
+- Added: `EventsPhase188ProductionInfrastructureAuditTest` — 67 comprehensive tests covering: all 33 source files strict_types + license header verification, ConditionEngine #[Override] and #[Pure] attribute verification (matches, strictEquals, getNestedValue, contains, between), WildcardMatcher readonly final class + #[Pure] on all methods, EventManager final class with readonly promoted constructor properties, container() public method, fire/fireModel empty string validation, TriggerBuilder save() validation (no event, no action), auto-name generation, resolveActions() deduplication across action() and actions(), SubscriptionBuilder validation (empty URL, non-HTTP scheme, secret <16 chars), DomainEvent fromArray edge cases (missing eventType throws, invalid UUID graceful fallback, roundtrip identity preservation), WildcardMatcher boundary tests (catch-all, cross-segment, single-segment, findMatchingPatterns, extractWildcards for **, single *), ConditionEngine edge cases (empty conditions, empty operator array, dot notation 2-level nesting, between auto-normalize, nested quantifier rejection, >500 char regex rejection, null-safe numeric operators, strictEquals cross-type scalar comparison), ActionResolver error handling (non-existent class, non-Triggerable class), DispatchTriggerJob readonly promoted properties + eventLogId initial null, WebhookAction Triggerable implementation, EventScheduler register() signature, ServiceProvider provides() exactly 7 bindings, Facade accessor, Config completeness (8 top-level keys, 3 table_names, 6 subscription sub-keys), composer.json validation (PHP 8.5, Laravel 13, providers, aliases), phpstan.neon.dist level 9, migrations (3 files), factories (3 files), EventLog 4 status constants, Model casts (Trigger 4, EventLog 3, Subscription 6), Subscription hidden fields, EscapesWildcardLike (null for non-wildcard, *→%, SQL special char escaping), global disable toggle, EventManager getTrigger/deleteTrigger/enable/disable empty string guards, all 12 console commands final + handle() return int.
+- Verified: Full PHP 8.5 syntax compliance across all 33 source files — strict types, `#[Override]` on all overrides, `#[Pure]` on side-effect-free methods, `readonly` promoted properties, `final` classes, typed properties, return type declarations.
+- Verified: PHPStan level 9 configuration with complete baseline (no new errors introduced).
+- Verified: EventsServiceProvider register/boot/provides() complete and correct (7 bindings).
+- Updated: Pest.php registered 1 new test file (314→315).
+- Updated: README test count badges (314→315), version badge (5.51.0→5.52.0), file counts (354→356).
+- Bumped: Version 5.52.0.
 
 ### v5.50.0
 
