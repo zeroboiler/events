@@ -229,8 +229,9 @@ final class Subscription extends Model
     public function scopeExceededFailures(Builder $query): Builder
     {
         $max = $this->getConfigValue('events.subscriptions.max_failures', 10);
+        $threshold = is_int($max) ? $max : (is_numeric($max) ? (int) $max : 10);
 
-        return $query->where('failure_count', '>=', $max);
+        return $query->where('failure_count', '>=', $threshold);
     }
 
     /**
@@ -243,7 +244,12 @@ final class Subscription extends Model
      */
     public function hasExceededFailures(?int $max = null): bool
     {
-        $threshold = $max ?? $this->getConfigValue('events.subscriptions.max_failures', 10);
+        if ($max !== null) {
+            $threshold = $max;
+        } else {
+            $raw = $this->getConfigValue('events.subscriptions.max_failures', 10);
+            $threshold = is_int($raw) ? $raw : (is_numeric($raw) ? (int) $raw : 10);
+        }
 
         return $this->failure_count >= $threshold;
     }

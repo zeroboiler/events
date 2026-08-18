@@ -91,7 +91,8 @@ final class EventScheduler
     {
         $days = $this->getConfig()->get('events.retention.days');
 
-        if ($days === null || ! is_numeric($days) || (int) $days <= 0) {
+        // Accept int, numeric string, or float (e.g., 30.5 days)
+        if ($days === null || ! is_numeric($days) || (float) $days <= 0) {
             return;
         }
 

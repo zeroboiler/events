@@ -37,7 +37,16 @@ final class WebhookAction implements Triggerable
     {
         $max = $this->getWebhookConfig()->get('events.subscriptions.max_failures', 10);
 
-        return is_int($max) && $max > 0 ? $max : 10;
+        if (is_int($max) && $max > 0) {
+            return $max;
+        }
+
+        // env() always returns string|null, so handle numeric strings
+        if (is_numeric($max) && (int) $max > 0) {
+            return (int) $max;
+        }
+
+        return 10;
     }
 
     /**

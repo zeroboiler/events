@@ -105,11 +105,21 @@ final class EventManager
     {
         $ttl = $this->getConfig()->get('events.wildcard_cache_ttl', self::DEFAULT_TRIGGER_CACHE_TTL);
 
-        if ($ttl === 0) {
+        // Accept 0 (int or string) to disable caching
+        if ($ttl === 0 || $ttl === '0') {
             return 0;
         }
 
-        return is_int($ttl) && $ttl > 0 ? $ttl : self::DEFAULT_TRIGGER_CACHE_TTL;
+        if (is_int($ttl) && $ttl > 0) {
+            return $ttl;
+        }
+
+        // env() always returns string|null, so handle numeric strings
+        if (is_numeric($ttl) && (int) $ttl > 0) {
+            return (int) $ttl;
+        }
+
+        return self::DEFAULT_TRIGGER_CACHE_TTL;
     }
 
     /**

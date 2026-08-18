@@ -173,7 +173,9 @@ final class SubscriptionBuilder
         $autoGenerate = $this->getConfig()->get('events.subscriptions.auto_generate_secret', true);
         if ($this->secret === null && $autoGenerate !== false) {
             $secretLength = $this->getConfig()->get('events.subscriptions.secret_length', 32);
-            $length = is_int($secretLength) && $secretLength >= 16 ? $secretLength : 32;
+            $length = is_int($secretLength) && $secretLength >= 16
+                ? $secretLength
+                : (is_numeric($secretLength) && (int) $secretLength >= 16 ? (int) $secretLength : 32);
             $this->secret = 'whsec_'.Str::random($length);
         }
 

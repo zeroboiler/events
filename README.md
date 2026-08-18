@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.76.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.77.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 348](https://img.shields.io/badge/Tests-348-brightgreen)
+![Tests: 348](https://img.shields.io/badge/Tests-349-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -465,14 +465,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 348 files (343 test files + 5 support)
+└── tests/                      # 349 files (343 test files + 5 support)
     ├── Pest.php               # Test suite configuration
     ├── TestCase.php           # Base test case (Laravel bootstrap)
     ├── CreatesApplication.php # Application trait
     ├── TestActions.php        # Test action implementations (Triggerable)
     ├── helpers.php            # Test helper functions (env, app, config, fake)
     └── ... (343 test files)
-└── Total: 392 PHP files (38 src + 348 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
+└── Total: 393 PHP files (38 src + 349 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -919,7 +919,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (348 files)
+composer test        # Run Pest test suite (349 files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -958,15 +958,23 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 348 test files |
+| Test coverage | ✅ 349 test files |
 | No deprecated APIs | ✅ No setAccessible() in src |
 
 ## Changelog
 
+### v5.77.0
+
+- Fixed: **env() string-to-int config coercion** — All numeric config paths (wildcard_cache_ttl, retry.tries, subscriptions.timeout, subscriptions.max_failures, subscriptions.secret_length, retention.days) now properly accept string values from `env()` via `is_numeric()` coercion. Previously, `is_int()` checks silently ignored user-configured values and fell back to defaults.
+- Fixed: **EventScheduler::registerLogPurge()** — Corrected operator precedence in the retention.days validation.
+- Added: `EnvStringConfigCoercionTest` — 40+ tests: env string coercion for all numeric config paths, ConditionEngine between operator edge cases, sanitizePayloadForQueue nested structures, DomainEvent::fromArray edge cases, WildcardMatcher edge cases, parseActions edge cases, null/not_null operators.
+- Registered: 1 new test file in Pest.php (349 test files).
+- Bumped: Version 5.77.0.
+
 ### v5.76.0
 
 - Added: `EventsPhase210ServiceProviderFinalAuditTest` — 45 tests: ServiceProvider binding lifetime verification (singleton vs transient), config type coercion edge cases (wildcard_cache_ttl: 0/negative/string, retry.tries: non-positive/negative, retry.backoff: array, queue.connection: empty/valid, queue.queue: empty, subscriptions.secret_length: below-16/at-16, max_failures: 0, timeout: non-positive, retention.days: null/0), EventScheduler with disabled retention, runtime disable via setEnabled(), WildcardMatcher readonly/final/static class verification, exception hierarchy final+Throwable verification, model table name config resolution, DomainEvent round-trip identity, TriggerBuilder/SubscriptionBuilder validation, ActionResolver error cases, getStats structure and accuracy, purgeLogs with/without includePending, deactivateExceededSubscriptions.
-- Registered: 1 new test file in Pest.php (348 test files).
+- Registered: 1 new test file in Pest.php (349 test files).
 - Bumped: Version 5.76.0.
 
 ### v5.75.0

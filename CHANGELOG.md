@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ---
 
 
+## [5.77.0] - 2026-08-18
+
+### Fixed
+- **env() string-to-int config coercion**: All numeric config paths now properly accept string values from env() via is_numeric() coercion. Previously, is_int() checks silently ignored user-configured values from environment variables (which are always strings) and fell back to defaults. Fixed in: EventManager::getTriggerCacheTtl(), DispatchTriggerJob::__construct() (tries), GetsWebhookTimeout::getWebhookTimeout(), WebhookAction::getMaxFailures(), Subscription::hasExceededFailures(), Subscription::scopeExceededFailures(), SubscriptionBuilder::save() (secret_length), EventScheduler::registerLogPurge() (retention.days).
+- **EventScheduler::registerLogPurge()**: Fixed incorrect operator precedence in the retention.days validation check.
+
+### Added
+- EnvStringConfigCoercionTest - 40+ tests covering env string config coercion for all numeric config paths, ConditionEngine between operator edge cases, sanitizePayloadForQueue nested structures, DomainEvent::fromArray edge cases, WildcardMatcher edge cases, parseActions edge cases, null/not_null operators.
+- Registered 1 new test file in Pest.php (349 test files).
+
+### Changed
+- Bumped version to 5.77.0.
+
 ## [5.76.0] — 2026-08-18\n\n### Added\n- `EventsPhase210ServiceProviderFinalAuditTest` — 45 tests: ServiceProvider binding lifetimes (singleton vs transient), config type coercion edge cases (wildcard_cache_ttl: 0/negative/string, retry.tries: non-positive, retry.backoff: array, queue.connection/queue: empty/valid, subscriptions.secret_length: below-16/at-16, max_failures: 0, timeout: non-positive, retention.days: null/0), EventScheduler disabled retention, runtime disable via setEnabled(), WildcardMatcher readonly/final/static verification, exception hierarchy, model table name config, DomainEvent round-trip, builder validation, ActionResolver errors, getStats accuracy, purgeLogs, deactivateExceededSubscriptions.\n- Registered 1 new test file in Pest.php (348 test files).\n
 ## [5.72.0] — 2026-08-18
 

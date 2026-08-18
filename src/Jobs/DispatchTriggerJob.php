@@ -67,9 +67,11 @@ final class DispatchTriggerJob implements ShouldQueue
     ) {
         $config = $this->resolveConfig($app);
 
-        // Retry configuration
+        // Retry configuration — accept int or numeric string from env()
         $triesConfig = $config->get('events.retry.tries', 3);
-        $this->tries = is_int($triesConfig) && $triesConfig > 0 ? $triesConfig : 3;
+        $this->tries = is_int($triesConfig) && $triesConfig > 0
+            ? $triesConfig
+            : (is_numeric($triesConfig) && (int) $triesConfig > 0 ? (int) $triesConfig : 3);
 
         $backoffConfig = $config->get('events.retry.backoff', '60,300,900');
         if (is_array($backoffConfig)) {

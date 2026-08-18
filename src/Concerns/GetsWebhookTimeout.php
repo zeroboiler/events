@@ -60,6 +60,15 @@ trait GetsWebhookTimeout
     {
         $timeout = $this->getWebhookConfig()->get('events.subscriptions.timeout', 30);
 
-        return is_int($timeout) && $timeout > 0 ? $timeout : 30;
+        if (is_int($timeout) && $timeout > 0) {
+            return $timeout;
+        }
+
+        // env() always returns string|null, so handle numeric strings
+        if (is_numeric($timeout) && (int) $timeout > 0) {
+            return (int) $timeout;
+        }
+
+        return 30;
     }
 }
