@@ -1,6 +1,6 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.72.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.73.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
@@ -445,6 +445,12 @@ events/
 │   │   └── DomainEvent.php      # Immutable event sourcing value object
 │   ├── Facades/
 │   │   └── EventManager.php    # Laravel facade
+│   ├── Exceptions/
+│   │   ├── EventException.php        # Base exception for all events errors
+│   │   ├── TriggerNotFoundException.php
+│   │   ├── ActionResolutionException.php
+│   │   ├── ConditionEvaluationException.php
+│   │   └── SubscriptionException.php
 │   ├── Jobs/
 │   │   └── DispatchTriggerJob.php
 │   ├── Models/
@@ -459,14 +465,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 342 test files (337 tests + 5 support)
+└── tests/                      # 345 files (340 test files + 5 support)
     ├── Pest.php               # Test suite configuration
     ├── TestCase.php           # Base test case (Laravel bootstrap)
     ├── CreatesApplication.php # Application trait
     ├── TestActions.php        # Test action implementations
     ├── helpers.php            # Test helper functions
-    └── ... (342 test files)
-└── Total: 384 PHP files (33 src + 342 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
+    └── ... (340 test files)
+└── Total: 391 PHP files (38 src + 345 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -913,7 +919,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (342 test files)
+composer test        # Run Pest test suite (345 files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -938,7 +944,7 @@ Test coverage spans:
 
 | Criterion | Status |
 |---|---|
-| PHP 8.5+ strict types | ✅ All 33 source files |
+| PHP 8.5+ strict types | ✅ All 38 source files |
 | Final classes | ✅ All classes |
 | Readonly properties | ✅ Promoted constructor props |
 | Typed properties | ✅ All declared |
@@ -952,10 +958,20 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 342 test files |
-| No deprecated APIs | ✅ No setAccessible() |
+| Test coverage | ✅ 345 test files |
+| No deprecated APIs | ✅ No setAccessible() in src |
 
 ## Changelog
+
+### v5.73.0
+
+- Fixed: README structure section — added missing `Exceptions/` directory (5 files: EventException, TriggerNotFoundException, ActionResolutionException, ConditionEvaluationException, SubscriptionException).
+- Fixed: README file counts corrected — 38 source files (was 33), 345 test files (was 342), 391 total PHP files (was 384).
+- Fixed: README Production Readiness Summary — updated source file count and test file count to match actual file tree.
+- Fixed: README "No deprecated APIs" row clarified to "No setAccessible() in src" (test files still use it for protected method testing).
+- Removed: `setAccessible(true)` calls from `EventsPhase207ProductionInfrastructureAuditTest` (PHP 8.5 compatibility — `setAccessible()` was removed).
+- Fixed: Version consistency — updated badge, composer.json, and test assertion to 5.73.0.
+- Updated: Source file count assertions from 33 to 38 in Phase 207 audit test.
 
 ### v5.71.0
 

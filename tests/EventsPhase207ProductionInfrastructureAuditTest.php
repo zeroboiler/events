@@ -115,7 +115,6 @@ test('shouldDispatch returns true when conditions is empty array', function (): 
 
     // Use reflection to test the protected shouldDispatch method
     $ref = new ReflectionMethod(EventManager::class, 'shouldDispatch');
-    $ref->setAccessible(true);
 
     $result = $ref->invoke($manager, $trigger, ['key' => 'value']);
 
@@ -131,7 +130,6 @@ test('shouldDispatch delegates to condition engine for non-empty conditions', fu
     ]);
 
     $ref = new ReflectionMethod(EventManager::class, 'shouldDispatch');
-    $ref->setAccessible(true);
 
     // Matches
     expect($ref->invoke($manager, $trigger, ['status' => 'active']))->toBeTrue();
@@ -149,7 +147,6 @@ test('shouldDispatch handles nested dot-notation conditions', function (): void 
     ]);
 
     $ref = new ReflectionMethod(EventManager::class, 'shouldDispatch');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($manager, $trigger, ['user' => ['role' => 'admin']]))->toBeTrue();
     expect($ref->invoke($manager, $trigger, ['user' => ['role' => 'user']]))->toBeFalse();
@@ -164,7 +161,6 @@ test('shouldDispatch handles null conditions from database correctly', function 
     ]);
 
     $ref = new ReflectionMethod(EventManager::class, 'shouldDispatch');
-    $ref->setAccessible(true);
 
     // null is cast to array by Eloquent, but the model casts it
     // After cast, null becomes null. The empty check should handle this.
@@ -281,7 +277,6 @@ test('ConditionEngineContract binding resolves to ConditionEngine', function ():
 
 test('facade accessor returns EventManager class name', function (): void {
     $ref = new ReflectionMethod(\ZeroBoiler\Events\Facades\EventManager::class, 'getFacadeAccessor');
-    $ref->setAccessible(true);
     $result = $ref->invoke(null);
 
     expect($result)->toBe(EventManager::class);
@@ -298,7 +293,7 @@ test('all source files have declare strict_types', function (): void {
         expect($content)
             ->toContain('declare(strict_types=1)', "Missing strict_types in: {$file}");
     }
-    expect(count($files))->toBeGreaterThanOrEqual(33);
+    expect(count($files))->toBeGreaterThanOrEqual(38);
 })->skip(fn () => ! function_exists('glob_recursive'), 'glob_recursive helper not available');
 
 test('all source files have license header', function (): void {
@@ -317,7 +312,7 @@ test('all source files have license header', function (): void {
         }
     }
 
-    expect($count)->toBeGreaterThanOrEqual(33);
+    expect($count)->toBeGreaterThanOrEqual(38);
 });
 
 // ─── TriggerBuilder Edge Cases ───
@@ -358,7 +353,6 @@ test('TriggerBuilder resolveActions deduplicates properly', function (): void {
     $manager = app(EventManager::class);
 
     $ref = new ReflectionMethod(TriggerBuilder::class, 'resolveActions');
-    $ref->setAccessible(true);
 
     $builder = $manager->on('test.event')
         ->action(NullAction::class)
@@ -442,7 +436,6 @@ test('EventScheduler reads retention days from config', function (): void {
     $scheduler = app(EventScheduler::class);
 
     $ref = new ReflectionMethod(EventScheduler::class, 'getConfig');
-    $ref->setAccessible(true);
     $config = $ref->invoke($scheduler);
 
     expect($config->get('events.retention.days'))->toBe(30);
@@ -452,7 +445,6 @@ test('EventScheduler reads cleanup cron from config', function (): void {
     $scheduler = app(EventScheduler::class);
 
     $ref = new ReflectionMethod(EventScheduler::class, 'getConfig');
-    $ref->setAccessible(true);
     $config = $ref->invoke($scheduler);
 
     expect($config->get('events.subscriptions.cleanup_cron'))->toBe('0 3 * * *');
@@ -630,7 +622,6 @@ test('sanitizePayloadForQueue strips objects and keeps scalars', function (): vo
     $manager = app(EventManager::class);
 
     $ref = new ReflectionMethod(EventManager::class, 'sanitizePayloadForQueue');
-    $ref->setAccessible(true);
 
     $model = new Trigger([
         'name' => 'test',
@@ -667,7 +658,6 @@ test('sanitizePayloadForQueue handles empty array', function (): void {
     $manager = app(EventManager::class);
 
     $ref = new ReflectionMethod(EventManager::class, 'sanitizePayloadForQueue');
-    $ref->setAccessible(true);
 
     $result = $ref->invoke($manager, []);
 
@@ -912,7 +902,6 @@ test('wildcardToLike converts single star to percent', function (): void {
     $manager = app(EventManager::class);
 
     $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($manager, 'order.*'))->toBe('order\%');
     expect($ref->invoke($manager, '*.created'))->toBe('%created');
@@ -922,7 +911,6 @@ test('wildcardToLike returns null for non-wildcard pattern', function (): void {
     $manager = app(EventManager::class);
 
     $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($manager, 'order.placed'))->toBeNull();
 });
@@ -931,7 +919,6 @@ test('wildcardToLike escapes backslash, percent, and underscore', function (): v
     $manager = app(EventManager::class);
 
     $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     expect($ref->invoke($manager, 'user_%*'))->toBe('user\_\%\%');
 });
@@ -965,9 +952,9 @@ test('fireModel flattens model attributes into payload', function (): void {
 
 // ─── Version Consistency ───
 
-test('composer.json version is 5.71.0', function (): void {
+test('composer.json version is 5.73.0', function (): void {
     $composer = json_decode(file_get_contents(__DIR__.'/../composer.json'), true);
-    expect($composer['version'])->toBe('5.71.0');
+    expect($composer['version'])->toBe('5.73.0');
 });
 
 test('phpstan.neon.dist level is 9', function (): void {
@@ -987,7 +974,6 @@ test('getWebhookTimeout clamps invalid values to 30', function (): void {
     $command = new \ZeroBoiler\Events\Console\EventsRedeliverCommand;
 
     $ref = new ReflectionMethod(\ZeroBoiler\Events\Concerns\GetsWebhookTimeout::class, 'getWebhookTimeout');
-    $ref->setAccessible(true);
 
     // The default is 30 since our config has 30
     $result = $ref->invoke($command);
