@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.83.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.84.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 359](https://img.shields.io/badge/Tests-359-brightgreen)
+![Tests: 361](https://img.shields.io/badge/Tests-361-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -470,14 +470,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 359 test files (359 test files + 5 support)
+└── tests/                      # 361 test files (361 test files + 5 support)
     ├── Pest.php               # Test suite configuration
     ├── TestCase.php           # Base test case (Laravel bootstrap)
     ├── CreatesApplication.php # Application trait
     ├── TestActions.php        # Test action implementations (Triggerable)
     ├── helpers.php            # Test helper functions (env, app, config, fake)
-    └── ... (359 test files)
-└── Total: 410 PHP files (38 src + 359 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config + 3 support)
+    └── ... (361 test files)
+└── Total: 412 PHP files (38 src + 361 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config + 3 support)
 ```
 
 ### How It Works
@@ -963,10 +963,19 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 359 test files |
+| Test coverage | ✅ 361 test files |
 | No deprecated APIs | ✅ No setAccessible() in src |
 
 ## Changelog
+### v5.84.0
+
+- Added: `EventsPhase214ProductionInfrastructureAuditTest` — 100+ tests covering: TriggerBuilder multi-action JSON encoding (classes key, class key, plain array), action/actions merge and deduplication, WildcardMatcher with regex-special characters in non-wildcard events, ConditionEngine 5+ level deep dot notation and non-array intermediate keys, DomainEvent fromArray payload type edge cases (string, int, null, nested objects, extra keys), EventManager sanitizePayloadForQueue (nested scalars, objects, closures, empty array), parseActions edge cases (single class, JSON array, JSON object, classes+params, empty/whitespace/invalid JSON), EventScheduler registration idempotency and disabled-retention config, Subscription model operations (signPayload empty/null secret, deterministic HMAC, matchesEvent wildcard delegation, hasExceededFailures config/explicit, scopeForEvent), EventLog model operations (markAsCompleted, markAsFailed, status constants uniqueness), ServiceProvider binding verification (7 bindings with singleton/transient), config completeness (8 top-level keys with all sub-keys), exception hierarchy (final leaf classes, EventException extends RuntimeException, not final), source file quality audit (strict_types, license headers, composer.json PHP 8.5/Laravel 13), facade correctness (accessor, final class), EventManager public API surface (14 methods), Trigger model scopes (enabled, async), ManagesHistory operations (purgeLogs with/without includePending, getStalePendingLogs, getStats structure), ActionResolver error handling (non-existent class, non-Triggerable, valid resolution), ManagesSubscriptions operations (listSubscriptions filtering, activeOnly, getSubscription null), EventManager CRUD edge cases (empty/zero-string guards), global disable system, EscapesWildcardLike SQL injection prevention (null for non-wildcard, backslash/percent/underscore escaping, catch-all), model casts verification (Trigger 4, EventLog 3, Subscription 6), PHPStan config validation (level 9, checkExplicitMixed, baseline, bootstrap), DispatchTriggerJob config initialization (tries, queue, connection, eventLogId initial null), TriggerBuilder validation (empty event, no action, auto-name), SubscriptionBuilder validation (empty event/URL, non-HTTP/file scheme, short secret), WebhookAction edge cases (missing/empty URL), cache invalidation consistency (delete/enable), ReDoS protection (500-char limit, nested quantifiers, safe patterns), migrations and factories integrity (3+3 files), Subscription auto-generate secret config, registerScheduler delegation, EventManager registerScheduler @throws docblock.
+- Improved: `EventManager::registerScheduler()` docblock — added `@throws \RuntimeException` documentation.
+- Registered: 1 new test file in Pest.php (360→361 test files).
+- Updated: README version badge (5.83.0→5.84.0), test count badges (359→361), production readiness summary table.
+- Bumped: Version 5.84.0.
+
+
 ### v5.83.0
 
 - Refactored: **EventManager** — narrowed constructor-promoted properties from `protected readonly` to `private readonly` for PHPStan 9 compliance. Also narrowed constants from `protected` to `private`.

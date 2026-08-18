@@ -391,8 +391,9 @@ final class EventManager
      * `EventManagerFacade::registerScheduler($schedule)`.
      *
      * @param  Schedule  $schedule  The Laravel scheduler instance
-     *
      * @return void
+     *
+     * @throws \RuntimeException If EventScheduler cannot be resolved from the container
      */
     public function registerScheduler(Schedule $schedule): void
     {
