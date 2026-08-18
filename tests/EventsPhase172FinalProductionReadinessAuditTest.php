@@ -169,7 +169,6 @@ describe('Phase 172 — Final Production Readiness Audit', function (): void {
     test('EventManager facade accessor matches class name', function (): void {
         $facadeRef = new ReflectionClass(EventManagerFacade::class);
         $method = $facadeRef->getMethod('getFacadeAccessor');
-        $method->setAccessible(true);
         $accessor = $method->invoke(null);
 
         expect($accessor)->toBe(EventManager::class);
@@ -246,7 +245,6 @@ describe('Phase 172 — Final Production Readiness Audit', function (): void {
         // Test through EventManager which uses the trait
         $manager = $this->app->make(EventManager::class);
         $ref = new ReflectionMethod($manager, 'wildcardToLike');
-        $ref->setAccessible(true);
 
         // Pattern with wildcard should convert to LIKE
         $result = $ref->invoke($manager, 'order.*');

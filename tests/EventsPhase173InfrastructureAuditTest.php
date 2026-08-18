@@ -164,7 +164,6 @@ it('ServiceProvider provides all 7 bindings', function (): void {
 it('Facade accessor returns correct class name', function (): void {
     $facade = new ReflectionClass(\ZeroBoiler\Events\Facades\EventManager::class);
     $method = $facade->getMethod('getFacadeAccessor');
-    $method->setAccessible(true);
 
     expect($method->invoke(null))->toBe(\ZeroBoiler\Events\EventManager::class);
 });
@@ -316,7 +315,6 @@ it('EscapesWildcardLike correctly escapes SQL special chars', function (): void 
 it('has 12 console commands registered in ServiceProvider', function (): void {
     $provider = new ReflectionClass(EventsServiceProvider::class);
     $method = $provider->getMethod('boot');
-    $method->setAccessible(true);
 
     $app = app();
     $instance = new EventsServiceProvider($app);

@@ -252,7 +252,6 @@ test('EscapesWildcardLike escapes SQL special characters', function (): void {
     $trigger = new \ZeroBoiler\Events\Models\Trigger;
 
     $ref = new ReflectionMethod($trigger, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     // Pattern without wildcards returns null
     expect($ref->invoke($trigger, 'order.placed'))->toBeNull();
@@ -285,7 +284,6 @@ test('all 12 console commands have zeroboiler:events: prefix', function (): void
     foreach ($commands as $command) {
         $ref = new ReflectionClass($command);
         $prop = $ref->getProperty('signature');
-        $prop->setAccessible(true);
         $signature = $prop->getValue(new $command);
 
         expect($signature)->toContain('zeroboiler:events:');

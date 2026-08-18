@@ -624,7 +624,6 @@ it('ConditionEngine rejects regex patterns with nested quantifiers', function ()
     // Use reflection to access the protected safeRegexMatch method
     $engine = new ZeroBoiler\Events\ConditionEngine;
     $method = new ReflectionMethod($engine, 'safeRegexMatch');
-    $method->setAccessible(true);
 
     // (a+)+ — classic nested quantifier
     expect($method->invoke($engine, '/(a+)+/', 'aaa'))->toBeFalse();
@@ -633,7 +632,6 @@ it('ConditionEngine rejects regex patterns with nested quantifiers', function ()
 it('ConditionEngine rejects regex patterns exceeding 500 characters', function (): void {
     $engine = new ZeroBoiler\Events\ConditionEngine;
     $method = new ReflectionMethod($engine, 'safeRegexMatch');
-    $method->setAccessible(true);
 
     $longPattern = '/^'.str_repeat('a', 501).'$/';
     expect($method->invoke($engine, $longPattern, str_repeat('a', 501)))->toBeFalse();

@@ -664,7 +664,6 @@ describe('Phase 1 Infrastructure Final Audit', function () {
                 $class = "ZeroBoiler\\Events\\Console\\{$command}";
                 $ref = new ReflectionClass($class);
                 $prop = $ref->getProperty('signature');
-                $prop->setAccessible(true);
                 $signature = $prop->getValue(new $class);
                 expect(str_starts_with($signature, 'zeroboiler:events:'))
                     ->toBeTrue("{$command} signature must start with zeroboiler:events:");

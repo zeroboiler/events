@@ -583,7 +583,6 @@ describe('Phase 192 — Final Production Infrastructure Audit', function (): voi
         it('facade accessor returns EventManager class name', function (): void {
             $ref = new ReflectionClass(EventManagerFacade::class);
             $method = $ref->getMethod('getFacadeAccessor');
-            $method->setAccessible(true);
 
             expect($method->invoke(null))->toBe(EventManager::class);
         });

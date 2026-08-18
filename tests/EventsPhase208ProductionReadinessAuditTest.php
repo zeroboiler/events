@@ -502,7 +502,6 @@ describe('Phase 208: Production Readiness Audit', function () {
             $manager = app(EventManager::class);
             $ref = new ReflectionClass($manager);
             $method = $ref->getMethod('sanitizePayloadForQueue');
-            $method->setAccessible(true);
 
             $payload = [
                 'string' => 'hello',
@@ -522,7 +521,6 @@ describe('Phase 208: Production Readiness Audit', function () {
             $manager = app(EventManager::class);
             $ref = new ReflectionClass($manager);
             $method = $ref->getMethod('sanitizePayloadForQueue');
-            $method->setAccessible(true);
 
             $payload = [
                 'model' => new \stdClass,

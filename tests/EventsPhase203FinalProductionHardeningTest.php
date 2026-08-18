@@ -359,7 +359,6 @@ describe('Events Phase 203 — Final Production Infrastructure Hardening', funct
             $scheduler = new EventScheduler($app);
             // EventManager is not bound — should return null
             $reflection = new ReflectionMethod($scheduler, 'resolveEventManager');
-            $reflection->setAccessible(true);
             $result = $reflection->invoke($scheduler);
             expect($result)->toBeNull();
         });

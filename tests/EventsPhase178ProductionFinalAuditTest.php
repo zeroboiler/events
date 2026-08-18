@@ -626,7 +626,6 @@ describe('Phase 178 — Production Infrastructure Final Audit', function (): voi
         it('facade accessor returns EventManager class name', function (): void {
             $ref = new ReflectionClass(\ZeroBoiler\Events\Facades\EventManager::class);
             $method = $ref->getMethod('getFacadeAccessor');
-            $method->setAccessible(true);
             expect($method->invoke(null))->toBe(\ZeroBoiler\Events\EventManager::class);
         });
 

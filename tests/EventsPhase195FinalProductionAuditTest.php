@@ -329,7 +329,6 @@ test('EventManager::sanitizePayloadForQueue strips non-serializable values', fun
     // Use reflection to test the protected method
     $manager = app()->make(EventManager::class);
     $method = new ReflectionMethod(EventManager::class, 'sanitizePayloadForQueue');
-    $method->setAccessible(true);
 
     $payload = [
         'string' => 'hello',
@@ -393,7 +392,6 @@ test('ConditionEngine handles all documented operators', function (): void {
 test('ConditionEngine::safeRegexMatch rejects overly long patterns', function (): void {
     $engine = new ConditionEngine;
     $method = new ReflectionMethod(ConditionEngine::class, 'safeRegexMatch');
-    $method->setAccessible(true);
 
     $longPattern = '/'.str_repeat('a', 501).'/';
 

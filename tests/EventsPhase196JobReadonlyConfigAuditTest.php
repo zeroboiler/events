@@ -206,7 +206,6 @@ class EventsPhase196JobReadonlyConfigAuditTest extends TestCase
         // but we can verify it hasn't been set by construction
         $reflection = new \ReflectionClass($job);
         $prop = $reflection->getProperty('eventLogId');
-        $prop->setAccessible(true);
 
         expect($prop->getValue($job))->toBeNull();
     }

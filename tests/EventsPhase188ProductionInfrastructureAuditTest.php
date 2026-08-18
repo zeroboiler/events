@@ -247,7 +247,6 @@ it('TriggerBuilder save() throws when no event set', function (): void {
     $freshBuilder = $app = app(TriggerBuilder::class);
     $ref = new ReflectionClass(TriggerBuilder::class);
     $prop = $ref->getProperty('event');
-    $prop->setAccessible(true); // @phpstan-ignore-line
     $prop->setValue($freshBuilder, '');
 
     expect(fn () => $freshBuilder->save())->toThrow(InvalidArgumentException::class);
@@ -260,11 +259,9 @@ it('TriggerBuilder save() throws when no action set', function (): void {
     // Clear actions
     $ref = new ReflectionClass(TriggerBuilder::class);
     $prop = $ref->getProperty('action');
-    $prop->setAccessible(true); // @phpstan-ignore-line
     $prop->setValue($builder, '');
 
     $propActions = $ref->getProperty('actions');
-    $propActions->setAccessible(true); // @phpstan-ignore-line
     $propActions->setValue($builder, []);
 
     expect(fn () => $builder->save())->toThrow(InvalidArgumentException::class);
@@ -286,19 +283,16 @@ it('TriggerBuilder save() auto-generates name from event', function (): void {
 it('TriggerBuilder resolveActions deduplicates across action() and actions()', function (): void {
     $ref = new ReflectionClass(TriggerBuilder::class);
     $method = $ref->getMethod('resolveActions');
-    $method->setAccessible(true); // @phpstan-ignore-line
 
     $manager = app(EventManager::class);
     $builder = $manager->on('test.dedup');
 
     // Set action via action()
     $refAction = $ref->getProperty('action');
-    $refAction->setAccessible(true); // @phpstan-ignore-line
     $refAction->setValue($builder, 'ClassA');
 
     // Set actions via actions()
     $refActions = $ref->getProperty('actions');
-    $refActions->setAccessible(true); // @phpstan-ignore-line
     $refActions->setValue($builder, ['ClassA', 'ClassB', 'ClassA']);
 
     $result = $method->invoke($builder);
@@ -524,7 +518,6 @@ it('ServiceProvider provides() returns exactly 7 bindings', function (): void {
 
 it('Facade accessor returns EventManager class name', function (): void {
     $ref = new ReflectionMethod(\ZeroBoiler\Events\Facades\EventManager::class, 'getFacadeAccessor');
-    $ref->setAccessible(true); // @phpstan-ignore-line
     $result = $ref->invoke(null);
 
     expect($result)->toBe(EventManager::class);
@@ -670,7 +663,6 @@ it('Subscription hidden fields include secret', function (): void {
 it('EscapesWildcardLike returns null for non-wildcard patterns', function (): void {
     $manager = app(EventManager::class);
     $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-    $ref->setAccessible(true); // @phpstan-ignore-line
 
     expect($ref->invoke($manager, 'order.placed'))->toBeNull();
     expect($ref->invoke($manager, 'user.created'))->toBeNull();
@@ -679,7 +671,6 @@ it('EscapesWildcardLike returns null for non-wildcard patterns', function (): vo
 it('EscapesWildcardLike converts wildcards to LIKE patterns', function (): void {
     $manager = app(EventManager::class);
     $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-    $ref->setAccessible(true); // @phpstan-ignore-line
 
     $result = $ref->invoke($manager, 'order.*');
     expect($result)->toBe('order\%');
@@ -691,7 +682,6 @@ it('EscapesWildcardLike converts wildcards to LIKE patterns', function (): void 
 it('EscapesWildcardLike escapes SQL special chars', function (): void {
     $manager = app(EventManager::class);
     $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-    $ref->setAccessible(true); // @phpstan-ignore-line
 
     // Pattern with percent and underscore
     $result = $ref->invoke($manager, '100%*test_value*');

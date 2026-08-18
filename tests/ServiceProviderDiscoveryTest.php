@@ -49,7 +49,6 @@ describe('EventsServiceProvider discovery and binding verification', function ()
         $app = new Container;
         $provider = new EventsServiceProvider($app);
         $ref = new \ReflectionMethod(EventsServiceProvider::class, 'provides');
-        $ref->setAccessible(true);
         /** @var list<string> $provides */
         $provides = $ref->invoke($provider);
 

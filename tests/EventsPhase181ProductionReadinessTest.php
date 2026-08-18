@@ -249,19 +249,16 @@ describe('Phase 181 — Production Readiness Deep Audit', function (): void {
     it('verifies models have correct casts', function (): void {
         // Trigger
         $triggerReflection = new ReflectionMethod(Trigger::class, 'casts');
-        $triggerReflection->setAccessible(true);
         $triggerCasts = $triggerReflection->invoke(null);
         expect($triggerCasts)->toHaveKeys(['conditions', 'async', 'enabled', 'priority']);
 
         // EventLog
         $logReflection = new ReflectionMethod(EventLog::class, 'casts');
-        $logReflection->setAccessible(true);
         $logCasts = $logReflection->invoke(null);
         expect($logCasts)->toHaveKeys(['payload', 'duration_ms', 'error']);
 
         // Subscription
         $subReflection = new ReflectionMethod(Subscription::class, 'casts');
-        $subReflection->setAccessible(true);
         $subCasts = $subReflection->invoke(null);
         expect($subCasts)->toHaveKeys(['conditions', 'priority', 'active', 'failure_count', 'delivery_count', 'last_fired_at']);
     });
@@ -287,7 +284,6 @@ describe('Phase 181 — Production Readiness Deep Audit', function (): void {
 
     it('verifies sanitizePayloadForQueue strips objects but keeps scalars', function (): void {
         $reflection = new ReflectionMethod(EventManager::class, 'sanitizePayloadForQueue');
-        $reflection->setAccessible(true);
 
         $manager = app(EventManager::class);
 
@@ -328,18 +324,15 @@ describe('Phase 181 — Production Readiness Deep Audit', function (): void {
 
     it('verifies TriggerBuilder resolveActions merges single and multiple', function (): void {
         $reflectionMethod = new ReflectionMethod(TriggerBuilder::class, 'resolveActions');
-        $reflectionMethod->setAccessible(true);
 
         $manager = app(EventManager::class);
         $builder = new TriggerBuilder($manager);
 
         // Set up: both action() and actions() called
         $prop = new ReflectionProperty(TriggerBuilder::class, 'action');
-        $prop->setAccessible(true);
         $prop->setValue($builder, 'ClassA');
 
         $propActions = new ReflectionProperty(TriggerBuilder::class, 'actions');
-        $propActions->setAccessible(true);
         $propActions->setValue($builder, ['ClassB', 'ClassC']);
 
         $result = $reflectionMethod->invoke($builder);
@@ -348,17 +341,14 @@ describe('Phase 181 — Production Readiness Deep Audit', function (): void {
 
     it('verifies TriggerBuilder resolveActions deduplicates', function (): void {
         $reflectionMethod = new ReflectionMethod(TriggerBuilder::class, 'resolveActions');
-        $reflectionMethod->setAccessible(true);
 
         $manager = app(EventManager::class);
         $builder = new TriggerBuilder($manager);
 
         $propActions = new ReflectionProperty(TriggerBuilder::class, 'actions');
-        $propActions->setAccessible(true);
         $propActions->setValue($builder, ['ClassA', 'ClassA', 'ClassB', 'ClassA']);
 
         $prop = new ReflectionProperty(TriggerBuilder::class, 'action');
-        $prop->setAccessible(true);
         $prop->setValue($builder, '');
 
         $result = $reflectionMethod->invoke($builder);

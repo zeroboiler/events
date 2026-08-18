@@ -353,7 +353,6 @@ final class EventsPhase170Phase1InfrastructureAuditTest extends TestCase
     {
         // Use a concrete class that uses the trait
         $ref = new \ReflectionMethod(Subscription::class, 'wildcardToLike');
-        $ref->setAccessible(true);
 
         // Pattern with SQL special chars
         $result = $ref->invoke(new Subscription, 'user.%.test');

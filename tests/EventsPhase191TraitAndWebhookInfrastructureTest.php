@@ -22,7 +22,6 @@ describe('Phase 191 — Trait & Webhook Infrastructure Tests', function (): void
 
             // Access protected method via reflection
             $ref = new \ReflectionMethod($trait, 'wildcardToLike');
-            $ref->setAccessible(true);
 
             expect($ref->invoke($trait, 'order.placed'))->toBeNull();
             expect($ref->invoke($trait, 'user.profile.created'))->toBeNull();
@@ -35,7 +34,6 @@ describe('Phase 191 — Trait & Webhook Infrastructure Tests', function (): void
             };
 
             $ref = new \ReflectionMethod($trait, 'wildcardToLike');
-            $ref->setAccessible(true);
 
             expect($ref->invoke($trait, 'order.*'))->toBe('order.%');
             expect($ref->invoke($trait, 'user.*.created'))->toBe('user.%.created');
@@ -48,7 +46,6 @@ describe('Phase 191 — Trait & Webhook Infrastructure Tests', function (): void
             };
 
             $ref = new \ReflectionMethod($trait, 'wildcardToLike');
-            $ref->setAccessible(true);
 
             // Pattern with % and _ should be escaped
             expect($ref->invoke($trait, 'user%*'))->toBe('user\\%%');
@@ -62,7 +59,6 @@ describe('Phase 191 — Trait & Webhook Infrastructure Tests', function (): void
             };
 
             $ref = new \ReflectionMethod($trait, 'wildcardToLike');
-            $ref->setAccessible(true);
 
             expect($ref->invoke($trait, '*'))->toBe('%');
             expect($ref->invoke($trait, '**'))->toBe('%*%');

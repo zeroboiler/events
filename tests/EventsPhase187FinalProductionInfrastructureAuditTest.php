@@ -415,7 +415,6 @@ describe('Phase 187 Production Infrastructure Audit', function (): void {
 
             // Access protected method via reflection
             $ref = new ReflectionMethod($trait, 'wildcardToLike');
-            $ref->setAccessible(true);
 
             expect($ref->invoke($trait, 'order.placed'))->toBeNull();
             expect($ref->invoke($trait, 'user.created'))->toBeNull();
@@ -427,7 +426,6 @@ describe('Phase 187 Production Infrastructure Audit', function (): void {
             };
 
             $ref = new ReflectionMethod($trait, 'wildcardToLike');
-            $ref->setAccessible(true);
 
             expect($ref->invoke($trait, 'order.*'))->toBe('order.%');
             expect($ref->invoke($trait, '*'))->toBe('%');
@@ -439,7 +437,6 @@ describe('Phase 187 Production Infrastructure Audit', function (): void {
             };
 
             $ref = new ReflectionMethod($trait, 'wildcardToLike');
-            $ref->setAccessible(true);
 
             expect($ref->invoke($trait, 'user.%*'))
                 ->toBe('user.\\%\\%');

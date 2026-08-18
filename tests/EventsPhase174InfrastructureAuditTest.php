@@ -279,7 +279,6 @@ describe('EventsPhase174 Infrastructure Audit', function (): void {
         it('facade accessor returns EventManager class', function (): void {
             $ref = new ReflectionClass(EventManagerFacade::class);
             $method = $ref->getMethod('getFacadeAccessor');
-            $method->setAccessible(true);
             $result = $method->invoke(null);
             expect($result)->toBe(EventManager::class);
         });
@@ -344,7 +343,6 @@ describe('EventsPhase174 Infrastructure Audit', function (): void {
         it('Trigger model has correct casts', function (): void {
             $ref = new ReflectionClass(Trigger::class);
             $castsMethod = $ref->getMethod('casts');
-            $castsMethod->setAccessible(true);
             $casts = $castsMethod->invoke(new Trigger());
 
             expect($casts)->toHaveKey('conditions');
@@ -356,7 +354,6 @@ describe('EventsPhase174 Infrastructure Audit', function (): void {
         it('EventLog model has correct casts', function (): void {
             $ref = new ReflectionClass(EventLog::class);
             $castsMethod = $ref->getMethod('casts');
-            $castsMethod->setAccessible(true);
             $casts = $castsMethod->invoke(new EventLog());
 
             expect($casts)->toHaveKey('payload');
@@ -367,7 +364,6 @@ describe('EventsPhase174 Infrastructure Audit', function (): void {
         it('Subscription model has correct casts', function (): void {
             $ref = new ReflectionClass(Subscription::class);
             $castsMethod = $ref->getMethod('casts');
-            $castsMethod->setAccessible(true);
             $casts = $castsMethod->invoke(new Subscription());
 
             expect($casts)->toHaveKey('conditions');
@@ -523,7 +519,6 @@ describe('EventsPhase174 Infrastructure Audit', function (): void {
     describe('EscapesWildcardLike SQL injection prevention', function (): void {
         it('escapes percent signs', function (): void {
             $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-            $ref->setAccessible(true);
             $manager = $this->app->make(EventManager::class);
             $result = $ref->invoke($manager, 'test.%');
             expect($result)->not->toBeNull();
@@ -532,7 +527,6 @@ describe('EventsPhase174 Infrastructure Audit', function (): void {
 
         it('escapes underscores', function (): void {
             $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-            $ref->setAccessible(true);
             $manager = $this->app->make(EventManager::class);
             $result = $ref->invoke($manager, 'test._');
             expect($result)->not->toBeNull();
@@ -541,7 +535,6 @@ describe('EventsPhase174 Infrastructure Audit', function (): void {
 
         it('returns null for non-wildcard patterns', function (): void {
             $ref = new ReflectionMethod(EventManager::class, 'wildcardToLike');
-            $ref->setAccessible(true);
             $manager = $this->app->make(EventManager::class);
             $result = $ref->invoke($manager, 'order.placed');
             expect($result)->toBeNull();

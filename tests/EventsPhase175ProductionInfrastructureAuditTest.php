@@ -112,7 +112,6 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
         $em = $this->app->make(EventManager::class);
         // wildcard_cache_ttl is set to 300 in our test config
         $ref = new ReflectionMethod($em, 'getTriggerCacheTtl');
-        $ref->setAccessible(true);
         expect($ref->invoke($em))->toBe(300);
     });
 
@@ -122,7 +121,6 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
 
         $em = $this->app->make(EventManager::class);
         $ref = new ReflectionMethod($em, 'getTriggerCacheTtl');
-        $ref->setAccessible(true);
         expect($ref->invoke($em))->toBe(0);
     });
 
@@ -132,7 +130,6 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
 
         $em = $this->app->make(EventManager::class);
         $ref = new ReflectionMethod($em, 'getTriggerCacheTtl');
-        $ref->setAccessible(true);
         expect($ref->invoke($em))->toBe(300);
     });
 
@@ -142,7 +139,6 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
 
         $em = $this->app->make(EventManager::class);
         $ref = new ReflectionMethod($em, 'getTriggerCacheTtl');
-        $ref->setAccessible(true);
         expect($ref->invoke($em))->toBe(300);
     });
 
@@ -152,7 +148,6 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
 
         $em = $this->app->make(EventManager::class);
         $ref = new ReflectionMethod($em, 'getTriggerCacheTtl');
-        $ref->setAccessible(true);
         expect($ref->invoke($em))->toBe(300);
     });
 
@@ -162,7 +157,6 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
 
         $em = $this->app->make(EventManager::class);
         $ref = new ReflectionMethod($em, 'getTriggerCacheTtl');
-        $ref->setAccessible(true);
         expect($ref->invoke($em))->toBe(600);
     });
 
@@ -426,7 +420,6 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
         };
 
         $ref = new ReflectionMethod($trait, 'wildcardToLike');
-        $ref->setAccessible(true);
 
         // No wildcard returns null
         expect($ref->invoke($trait, 'order.placed'))->toBeNull();
@@ -643,7 +636,6 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
     test('ConditionEngine safeRegexMatch rejects long patterns', function (): void {
         $engine = new ConditionEngine;
         $ref = new ReflectionMethod($engine, 'safeRegexMatch');
-        $ref->setAccessible(true);
 
         $longPattern = str_repeat('a', 501);
         expect($ref->invoke($engine, $longPattern, 'some string'))->toBeFalse();
@@ -652,7 +644,6 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
     test('ConditionEngine safeRegexMatch rejects nested quantifiers', function (): void {
         $engine = new ConditionEngine;
         $ref = new ReflectionMethod($engine, 'safeRegexMatch');
-        $ref->setAccessible(true);
 
         // Nested quantifier pattern
         expect($ref->invoke($engine, '(a+)+b', 'aaab'))->toBeFalse();
@@ -662,7 +653,6 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
     test('ConditionEngine safeRegexMatch accepts valid short patterns', function (): void {
         $engine = new ConditionEngine;
         $ref = new ReflectionMethod($engine, 'safeRegexMatch');
-        $ref->setAccessible(true);
 
         expect($ref->invoke($engine, '/^test$/', 'test'))->toBeTrue();
         expect($ref->invoke($engine, '/^\\d+$/', '123'))->toBeTrue();
@@ -672,7 +662,6 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
     test('EventManager parseActions handles all input formats', function (): void {
         $em = $this->app->make(EventManager::class);
         $ref = new ReflectionMethod($em, 'parseActions');
-        $ref->setAccessible(true);
 
         // Simple class name
         $result = $ref->invoke($em, \ZeroBoiler\Events\Tests\Actions\Foo');

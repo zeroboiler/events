@@ -456,7 +456,6 @@ describe('Phase 215 — Production Readiness Audit', function (): void {
     describe('facade method coverage', function (): void {
         test('facade getFacadeAccessor returns EventManager class', function (): void {
             $ref = new ReflectionMethod(EventManager::class, 'getFacadeAccessor');
-            $ref->setAccessible(true);
             $accessor = $ref->invoke(null);
 
             expect($accessor)->toBe(\ZeroBoiler\Events\EventManager::class);

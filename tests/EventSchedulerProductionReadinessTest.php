@@ -95,7 +95,6 @@ test('scheduler resolveEventManager returns null when binding missing', function
 
     // Use reflection to call protected method
     $reflection = new \ReflectionMethod($scheduler, 'resolveEventManager');
-    $reflection->setAccessible(true);
 
     $result = $reflection->invoke($scheduler);
 

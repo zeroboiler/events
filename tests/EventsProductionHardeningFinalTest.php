@@ -618,7 +618,6 @@ describe('Events Production Hardening — Final Audit', function (): void {
         test('provides() returns all expected service classes', function (): void {
             $provider = new ReflectionClass(\ZeroBoiler\Events\EventsServiceProvider::class);
             $method = $provider->getMethod('provides');
-            $method->setAccessible(true);
 
             // Create a mock app to instantiate
             $app = app();

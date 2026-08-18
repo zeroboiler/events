@@ -292,7 +292,6 @@ describe('Env String Config Coercion', function (): void {
 
             // sanitizePayloadForQueue is protected, test via reflection
             $ref = new ReflectionMethod($manager, 'sanitizePayloadForQueue');
-            $ref->setAccessible(true);
             $result = $ref->invoke($manager, $payload);
 
             expect($result)->toBe($payload);
@@ -310,7 +309,6 @@ describe('Env String Config Coercion', function (): void {
             ];
 
             $ref = new ReflectionMethod($manager, 'sanitizePayloadForQueue');
-            $ref->setAccessible(true);
             $result = $ref->invoke($manager, $payload);
 
             expect($result['data']['model'])->toBe('[stripped:stdClass]');
@@ -324,7 +322,6 @@ describe('Env String Config Coercion', function (): void {
             ];
 
             $ref = new ReflectionMethod($manager, 'sanitizePayloadForQueue');
-            $ref->setAccessible(true);
             $result = $ref->invoke($manager, $payload);
 
             expect($result['callback'])->toBe('[stripped:Closure]');
@@ -338,7 +335,6 @@ describe('Env String Config Coercion', function (): void {
             ];
 
             $ref = new ReflectionMethod($manager, 'sanitizePayloadForQueue');
-            $ref->setAccessible(true);
             $result = $ref->invoke($manager, $payload);
 
             expect($result['nullable'])->toBeNull();
@@ -356,7 +352,6 @@ describe('Env String Config Coercion', function (): void {
             ];
 
             $ref = new ReflectionMethod($manager, 'sanitizePayloadForQueue');
-            $ref->setAccessible(true);
             $result = $ref->invoke($manager, $payload);
 
             expect($result['level1']['level2']['level3'])->toBe('[stripped:stdClass]');
@@ -478,7 +473,6 @@ describe('Env String Config Coercion', function (): void {
         it('returns empty for empty string', function (): void {
             $manager = app(\ZeroBoiler\Events\EventManager::class);
             $ref = new ReflectionMethod($manager, 'parseActions');
-            $ref->setAccessible(true);
 
             expect($ref->invoke($manager, ''))->toBe([]);
         });
@@ -486,7 +480,6 @@ describe('Env String Config Coercion', function (): void {
         it('returns empty for whitespace-only string', function (): void {
             $manager = app(\ZeroBoiler\Events\EventManager::class);
             $ref = new ReflectionMethod($manager, 'parseActions');
-            $ref->setAccessible(true);
 
             expect($ref->invoke($manager, '   '))->toBe([]);
         });
@@ -494,7 +487,6 @@ describe('Env String Config Coercion', function (): void {
         it('returns single class for plain string', function (): void {
             $manager = app(\ZeroBoiler\Events\EventManager::class);
             $ref = new ReflectionMethod($manager, 'parseActions');
-            $ref->setAccessible(true);
 
             $result = $ref->invoke($manager, 'App\\Actions\\SendNotification');
             expect($result)->toBe(['App\\Actions\\SendNotification']);
@@ -503,7 +495,6 @@ describe('Env String Config Coercion', function (): void {
         it('parses JSON array of classes', function (): void {
             $manager = app(\ZeroBoiler\Events\EventManager::class);
             $ref = new ReflectionMethod($manager, 'parseActions');
-            $ref->setAccessible(true);
 
             $json = json_encode(['App\\Actions\\A', 'App\\Actions\\B']);
             $result = $ref->invoke($manager, $json);
@@ -514,7 +505,6 @@ describe('Env String Config Coercion', function (): void {
         it('parses classes+params format', function (): void {
             $manager = app(\ZeroBoiler\Events\EventManager::class);
             $ref = new ReflectionMethod($manager, 'parseActions');
-            $ref->setAccessible(true);
 
             $json = json_encode([
                 'classes' => ['App\\Actions\\A', 'App\\Actions\\B'],
@@ -536,7 +526,6 @@ describe('Env String Config Coercion', function (): void {
         it('parses single class+params format', function (): void {
             $manager = app(\ZeroBoiler\Events\EventManager::class);
             $ref = new ReflectionMethod($manager, 'parseActions');
-            $ref->setAccessible(true);
 
             $json = json_encode([
                 'class' => 'App\\Actions\\Webhook',
@@ -554,7 +543,6 @@ describe('Env String Config Coercion', function (): void {
         it('returns raw string as single-element array for invalid JSON', function (): void {
             $manager = app(\ZeroBoiler\Events\EventManager::class);
             $ref = new ReflectionMethod($manager, 'parseActions');
-            $ref->setAccessible(true);
 
             $result = $ref->invoke($manager, 'not-valid-json');
 

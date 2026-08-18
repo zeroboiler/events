@@ -565,7 +565,6 @@ test('parseActions handles all documented formats', function (): void {
     // Use reflection to access the protected method
     $manager = app(EventManager::class);
     $ref = new ReflectionMethod($manager, 'parseActions');
-    $ref->setAccessible(true);
 
     // Single class name
     expect($ref->invoke($manager, \ZeroBoiler\Events\Tests\Actions\Foo'))
@@ -600,7 +599,6 @@ test('EscapesWildcardLike trait converts patterns correctly', function (): void 
     $sub = new Subscription;
 
     $ref = new ReflectionMethod($sub, 'wildcardToLike');
-    $ref->setAccessible(true);
 
     // No wildcard returns null
     expect($ref->invoke($sub, 'order.placed'))->toBeNull();
@@ -662,7 +660,6 @@ test('config events.disabled handles all boolean-ish values', function (): void 
 test('EventManager getTriggerCacheTtl reads from config', function (): void {
     $manager = app(EventManager::class);
     $ref = new ReflectionMethod($manager, 'getTriggerCacheTtl');
-    $ref->setAccessible(true);
 
     // Default value is 300
     $ttl = $ref->invoke($manager);

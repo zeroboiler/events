@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.86.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.87.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 363](https://img.shields.io/badge/Tests-363-brightgreen)
+![Tests: 357](https://img.shields.io/badge/Tests-357-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -470,14 +470,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 363 test files (363 test files + 5 support)
+└── tests/                      # 357 test files (357 test files + 5 support)
     ├── Pest.php               # Test suite configuration
     ├── TestCase.php           # Base test case (Laravel bootstrap)
     ├── CreatesApplication.php # Application trait
     ├── TestActions.php        # Test action implementations (Triggerable)
     ├── helpers.php            # Test helper functions (env, app, config, fake)
-    └── ... (363 test files)
-└── Total: 414 PHP files (38 src + 363 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config + 3 support)
+    └── ... (357 test files)
+└── Total: 408 PHP files (38 src + 357 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config + 3 support)
 ```
 
 ### How It Works
@@ -924,7 +924,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (362 files)
+composer test        # Run Pest test suite (357 files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -963,10 +963,21 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 362 test files |
-| No deprecated APIs | ✅ No setAccessible() in src |
+| Test coverage | ✅ 357 test files |
+| No deprecated APIs | ✅ No setAccessible() in src or tests |
 
 ## Changelog
+### v5.87.0
+
+- Fixed: Removed all `setAccessible(true)` calls from 27 test files for PHP 8.5 compatibility — `ReflectionMethod::setAccessible()` and `ReflectionProperty::setAccessible()` were removed in PHP 8.5; all methods/properties are now always accessible by default.
+- Fixed: Registered 3 missing test files in `tests/Pest.php`: `ServiceProviderDiscoveryTest.php`, `ConditionEngineEmptyNotEmptyEdgeCasesTest.php`, `DomainEventFromArrayEdgeCasesTest` (these tests existed on disk but were never registered and would not run in CI).
+- Updated: README test count badges (363→357), file counts (414→408), production readiness summary table (test coverage, no deprecated APIs now includes tests).
+- Bumped: Version 5.87.0.
+
+### v5.86.0
+
+- Added: `SourceFilesSyntaxValidationTest` — syntax validation of all source files.
+
 ### v5.85.0
 
 - Added: `EventsPhase215ProductionReadinessAuditTest` — 80+ tests covering Phase 1 infrastructure production readiness audit: strict_types declaration verification (all 38 src + 3 factory files), final classes verification (all core + exception leaf classes), return type declarations on all public methods, typed properties on DomainEvent/DispatchTriggerJob/TriggerBuilder/SubscriptionBuilder, class-level docblock presence on all core classes, GetsWebhookTimeout is_numeric() syntax verification, EventsUnsubscribeCommand string interpolation fix verification, ServiceProvider completeness (provides() 7 bindings, ConditionEngineContract resolution, boot() safe to call), config completeness (8 top-level keys with all sub-keys), facade method coverage (25 @method annotations), exception hierarchy (EventException extends RuntimeException, all 4 leaf exceptions final), constructor-promoted readonly properties count verification, no deprecated APIs (no setAccessible in src, no deprecated PHP functions), model casts count verification (Trigger 4, EventLog 3, Subscription 6), composer.json alignment (PHP 8.5, Laravel 13, PSR-4, providers, aliases), PHPStan configuration validation (level 9, baseline, paths), license headers on all source files, DomainEvent immutability (readonly properties, fromArray identity preservation, __toString format), WildcardMatcher static-only verification (all methods static, no constructor, #[Pure] on all), migrations existence (3 files), EventManager public API surface (14+ methods).

@@ -154,7 +154,6 @@ test('Phase 171: config has 8 top-level keys', function (): void {
 
 test('Phase 171: Facade accessor returns EventManager class name', function (): void {
     $ref = new ReflectionMethod(EventManagerFacade::class, 'getFacadeAccessor');
-    $ref->setAccessible(true);
     $accessor = $ref->invoke(null);
 
     expect($accessor)->toBe(EventManager::class);
@@ -439,7 +438,6 @@ test('Phase 171: all 12 console commands have valid signatures', function (): vo
 
         // Verify signature property exists and starts with 'zeroboiler:events:'
         $prop = $ref->getProperty('signature');
-        $prop->setAccessible(true);
         $signature = $prop->getValue($ref->newInstanceWithoutConstructor());
         expect($signature)->toBeString();
         expect($signature)->toStartWith('zeroboiler:events:');
