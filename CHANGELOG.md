@@ -5,6 +5,18 @@ All notable changes to the **ZeroBoiler Events** package are documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [5.78.0] - 2026-08-18
+
+### Added
+- `DispatchTriggerJobFailedMethodEdgeCasesTest` — 5 tests: failed() marks log as failed when log exists, handles deleted log gracefully (instanceof guard), does nothing when eventLogId is null, preserves long error messages, structural brace-balance verification of failed() method body.
+- Registered 1 new test file in Pest.php (350 test files).
+
+### Changed
+- Updated README: test count 349 → 350, added DispatchTriggerJob failed() edge cases to test coverage list.
+- Bumped version to 5.78.0.
+
+---
+
 
 
 ## [5.77.0] - 2026-08-18
