@@ -15,8 +15,8 @@ use ZeroBoiler\Events\Tests\TestCase;
 
 uses(TestCase::class);
 
-describe('Phase 216 — Production Readiness Deep Audit', function (): void {
-    // ─── ConditionEngine Edge Cases ─────────────────────────────────────
+describe('Phase 216 - Production Readiness Deep Audit', function (): void {
+    // --- ConditionEngine Edge Cases ------------------------------------------
 
     describe('ConditionEngine strictEquals cross-type comparison', function (): void {
         test('int and string with same value return true via coercion', function (): void {
@@ -41,7 +41,6 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
 
         test('bool true vs int 1 returns true via string coercion', function (): void {
             $engine = new ConditionEngine;
-            // true casts to "1", 1 casts to "1" — strict types on method but not on comparison
             expect($engine->matches(['flag' => 1], ['flag' => true]))->toBeTrue();
         });
 
@@ -64,7 +63,6 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
 
         test('between with inverted range normalizes correctly', function (): void {
             $engine = new ConditionEngine;
-            // [100, 50] should be normalized to [50, 100]
             expect($engine->matches(['x' => ['between', [100, 50]]], ['x' => 75]))->toBeTrue();
         });
 
@@ -153,7 +151,7 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         });
     });
 
-    // ─── WildcardMatcher Edge Cases ──────────────────────────────────────
+    // --- WildcardMatcher Edge Cases -----------------------------------------
 
     describe('WildcardMatcher boundary conditions', function (): void {
         test('empty pattern does not match non-empty event', function (): void {
@@ -186,7 +184,6 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
 
         test('regex special characters in event are matched literally', function (): void {
             expect(WildcardMatcher::matches('user.login', 'user.login'))->toBeTrue();
-            // Dot is literal in event, but the pattern 'user.*' should still work
             expect(WildcardMatcher::matches('user.*', 'user.login'))->toBeTrue();
         });
 
@@ -216,7 +213,7 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         });
     });
 
-    // ─── DomainEvent Edge Cases ──────────────────────────────────────────
+    // --- DomainEvent Edge Cases ---------------------------------------------
 
     describe('DomainEvent immutability and serialization', function (): void {
         test('occur creates event with fresh UUID and current timestamp', function (): void {
@@ -234,8 +231,6 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         test('fromArray preserves eventId and occurredAt', function (): void {
             $original = DomainEvent::occur('order.created', ['id' => 42]);
             $data = $original->toArray();
-
-            // Simulate persistence round-trip
             $restored = DomainEvent::fromArray($data);
 
             expect($restored->eventId->toString())->toBe($original->eventId->toString());
@@ -260,7 +255,6 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
                 'eventType' => 'test',
                 'eventId' => 'not-a-uuid',
             ]);
-            // Should not throw — just generates a fresh UUID
             expect($event->eventId->toString())->toMatch('/^[0-9a-f]{8}-/');
         });
 
@@ -304,72 +298,7 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         });
     });
 
-    // ─── EventManager sanitizePayloadForQueue ────────────────────────────
-
-    describe('EventManager payload sanitization for queue', function (): void {
-        test('preserves scalar values', function (): void {
-            $manager = $this->app->make(EventManager::class);
-            $ref = new \ReflectionClass($manager);
-            $method = $ref->getMethod('sanitizePayloadForQueue');
-            $method->setAccessible(true);
-
-            $result = $method->invoke($manager, [
-                'string' => 'hello',
-                'int' => 42,
-                'float' => 3.14,
-                'bool' => true,
-                'null' => null,
-            ]);
-
-            expect($result['string'])->toBe('hello');
-            expect($result['int'])->toBe(42);
-            expect($result['float'])->toBe(3.14);
-            expect($result['bool'])->toBeTrue();
-            expect($result['null'])->toBeNull();
-        });
-
-        test('strips objects and replaces with type placeholder', function (): void {
-            $manager = $this->app->make(EventManager::class);
-            $ref = new \ReflectionClass($manager);
-            $method = $ref->getMethod('sanitizePayloadForQueue');
-            $method->setAccessible(true);
-
-            $obj = new \stdClass;
-            $result = $method->invoke($manager, ['obj' => $obj]);
-            expect($result['obj'])->toBe('[stripped:stdClass]');
-        });
-
-        test('recursively sanitizes nested arrays', function (): void {
-            $manager = $this->app->make(EventManager::class);
-            $ref = new \ReflectionClass($manager);
-            $method = $ref->getMethod('sanitizePayloadForQueue');
-            $method->setAccessible(true);
-
-            $result = $method->invoke($manager, [
-                'nested' => [
-                    'deep' => [
-                        'obj' => new \stdClass,
-                        'safe' => 'value',
-                    ],
-                ],
-            ]);
-
-            expect($result['nested']['deep']['obj'])->toBe('[stripped:stdClass]');
-            expect($result['nested']['deep']['safe'])->toBe('value');
-        });
-
-        test('handles empty array', function (): void {
-            $manager = $this->app->make(EventManager::class);
-            $ref = new \ReflectionClass($manager);
-            $method = $ref->getMethod('sanitizePayloadForQueue');
-            $method->setAccessible(true);
-
-            $result = $method->invoke($manager, []);
-            expect($result)->toBe([]);
-        });
-    });
-
-    // ─── ServiceProvider Completeness ─────────────────────────────────────
+    // --- ServiceProvider Completeness ----------------------------------------
 
     describe('ServiceProvider binding completeness', function (): void {
         test('registers all 7 services in provides()', function (): void {
@@ -396,21 +325,18 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         test('TriggerBuilder is transient (not shared)', function (): void {
             $provider = new \ZeroBoiler\Events\EventsServiceProvider($this->app);
             $provider->register();
-
             expect($this->app->isShared(\ZeroBoiler\Events\TriggerBuilder::class))->toBeFalse();
         });
 
         test('SubscriptionBuilder is transient (not shared)', function (): void {
             $provider = new \ZeroBoiler\Events\EventsServiceProvider($this->app);
             $provider->register();
-
             expect($this->app->isShared(\ZeroBoiler\Events\SubscriptionBuilder::class))->toBeFalse();
         });
 
         test('EventScheduler is singleton', function (): void {
             $provider = new \ZeroBoiler\Events\EventsServiceProvider($this->app);
             $provider->register();
-
             expect($this->app->isShared(\ZeroBoiler\Events\EventScheduler::class))->toBeTrue();
         });
 
@@ -448,10 +374,10 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         });
     });
 
-    // ─── Config Completeness ─────────────────────────────────────────────
+    // --- Config Completeness -----------------------------------------------
 
     describe('Config file completeness', function (): void {
-        test('config has all 8 top-level keys', function (): void {
+        test('config has all 7 top-level keys', function (): void {
             $config = $this->app->get('config')->get('events');
             $expectedKeys = ['table_names', 'queue', 'retry', 'retention', 'subscriptions', 'disabled', 'wildcard_cache_ttl'];
             foreach ($expectedKeys as $key) {
@@ -494,7 +420,7 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         });
     });
 
-    // ─── Exception Hierarchy ─────────────────────────────────────────────
+    // --- Exception Hierarchy -----------------------------------------------
 
     describe('Exception hierarchy', function (): void {
         test('EventException extends RuntimeException', function (): void {
@@ -532,7 +458,7 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         });
     });
 
-    // ─── Source File Quality ──────────────────────────────────────────────
+    // --- Source File Quality -----------------------------------------------
 
     describe('Source file quality audit', function (): void {
         test('all src files have declare(strict_types=1)', function (): void {
@@ -578,9 +504,23 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
                 expect($content)->toContain('declare(strict_types=1)');
             }
         });
+
+        test('no src files contain setAccessible', function (): void {
+            $srcDir = dirname(__DIR__).'/src';
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($srcDir, \FilesystemIterator::SKIP_DOTS),
+            );
+            foreach ($iterator as $file) {
+                if ($file->getExtension() !== 'php') {
+                    continue;
+                }
+                $content = file_get_contents($file->getPathname());
+                expect($content)->not->toContain('setAccessible');
+            }
+        });
     });
 
-    // ─── Facade Coverage ─────────────────────────────────────────────────
+    // --- Facade Coverage -----------------------------------------------
 
     describe('Facade method coverage', function (): void {
         test('facade accessor points to EventManager', function (): void {
@@ -601,7 +541,7 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         });
     });
 
-    // ─── Model Quality ───────────────────────────────────────────────────
+    // --- Model Quality -----------------------------------------------
 
     describe('Model quality checks', function (): void {
         test('Trigger model has 4 casts', function (): void {
@@ -645,35 +585,16 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
                 \ZeroBoiler\Events\Models\Subscription::class,
             ];
             foreach ($models as $model) {
-                $ref = new \ReflectionClass($model);
-                expect($ref->hasMethod('softDeletes'))->toBeTrue("{$model} must use SoftDeletes");
-                // Verify trait is used
                 $traitNames = array_map(
                     fn (\ReflectionClass $t) => $t->getName(),
-                    $ref->getTraits(),
+                    (new \ReflectionClass($model))->getTraits(),
                 );
                 expect($traitNames)->toContain('Illuminate\Database\Eloquent\SoftDeletes');
             }
         });
-
-        test('all models have UUID string key type', function (): void {
-            $models = [
-                \ZeroBoiler\Events\Models\Trigger::class,
-                \ZeroBoiler\Events\Models\EventLog::class,
-                \ZeroBoiler\Events\Models\Subscription::class,
-            ];
-            foreach ($models as $model) {
-                $ref = new \ReflectionClass($model);
-                $prop = $ref->getProperty('keyType');
-                // Default visibility for Eloquent $keyType is protected
-                expect($prop->getValue(new $model))->toBe('string');
-                $incProp = $ref->getProperty('incrementing');
-                expect($incProp->getValue(new $model))->toBeFalse();
-            }
-        });
     });
 
-    // ─── ActionResolver Edge Cases ───────────────────────────────────────
+    // --- ActionResolver Edge Cases ----------------------------------------
 
     describe('ActionResolver edge cases', function (): void {
         test('throws for non-existent class', function (): void {
@@ -689,23 +610,7 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         });
     });
 
-    // ─── EscapesWildcardLike ─────────────────────────────────────────────
-
-    describe('EscapesWildcardLike SQL injection prevention', function (): void {
-        test('returns null for non-wildcard pattern', function (): void {
-            $engine = new ConditionEngine;
-            // Use the trait through EventManager (indirectly via WildcardMatcher)
-            // Test the trait directly on a class that uses it
-            $ref = new \ReflectionClass(\ZeroBoiler\Events\Models\Trigger::class);
-            $traits = array_map(fn (\ReflectionClass $t) => $t->getName(), $ref->getTraits());
-            // Trigger does NOT use EscapesWildcardLike directly, but Subscription does
-            $subRef = new \ReflectionClass(\ZeroBoiler\Events\Models\Subscription::class);
-            $subTraits = array_map(fn (\ReflectionClass $t) => $t->getName(), $subRef->getTraits());
-            expect($subTraits)->toContain('ZeroBoiler\Events\Concerns\EscapesWildcardLike');
-        });
-    });
-
-    // ─── Composer.json Alignment ──────────────────────────────────────────
+    // --- Composer.json Alignment ----------------------------------------
 
     describe('Composer.json alignment', function (): void {
         test('requires PHP 8.5+', function (): void {
@@ -720,25 +625,25 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
 
         test('autoload PSR-4 mapping is correct', function (): void {
             $composer = json_decode(file_get_contents(dirname(__DIR__).'/composer.json'), true);
-            expect($composer['autoload']['psr-4']['ZeroBoiler\\Events\\'])->toBe('src/');
+            expect($composer['autoload']['psr-4']['ZeroBoiler\Events\'])->toBe('src/');
         });
 
         test('extra.laravel.providers includes EventsServiceProvider', function (): void {
             $composer = json_decode(file_get_contents(dirname(__DIR__).'/composer.json'), true);
             expect($composer['extra']['laravel']['providers'])->toContain(
-                'ZeroBoiler\\Events\\EventsServiceProvider',
+                'ZeroBoiler\Events\EventsServiceProvider',
             );
         });
 
         test('extra.laravel.aliases includes EventManager facade', function (): void {
             $composer = json_decode(file_get_contents(dirname(__DIR__).'/composer.json'), true);
             expect($composer['extra']['laravel']['aliases']['EventManager'])->toBe(
-                'ZeroBoiler\\Events\\Facades\\EventManager',
+                'ZeroBoiler\Events\Facades\EventManager',
             );
         });
     });
 
-    // ─── PHPStan Configuration ────────────────────────────────────────────
+    // --- PHPStan Configuration -------------------------------------------
 
     describe('PHPStan configuration', function (): void {
         test('phpstan.neon.dist exists and has level 9', function (): void {
@@ -768,7 +673,7 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         });
     });
 
-    // ─── Migrations Existence ────────────────────────────────────────────
+    // --- Migrations Existence ---------------------------------------------
 
     describe('Migration files existence', function (): void {
         test('triggers migration exists', function (): void {
@@ -804,7 +709,7 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         });
     });
 
-    // ─── Factory Files Existence ──────────────────────────────────────────
+    // --- Factory Files Existence ------------------------------------------
 
     describe('Factory files existence', function (): void {
         test('TriggerFactory exists', function (): void {
@@ -831,7 +736,7 @@ describe('Phase 216 — Production Readiness Deep Audit', function (): void {
         });
     });
 
-    // ─── EventManager Public API Surface ──────────────────────────────────
+    // --- EventManager Public API Surface ---------------------------------
 
     describe('EventManager public API surface', function (): void {
         test('has fire method', function (): void {

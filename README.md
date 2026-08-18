@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.88.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.89.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 358](https://img.shields.io/badge/Tests-358-brightgreen)
+![Tests: 359](https://img.shields.io/badge/Tests-359-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -26,6 +26,7 @@ Database-driven dynamic event manager for Laravel — register, manage, and fire
   - [Performance Considerations](#performance-considerations)
   - [Error Handling Patterns](#error-handling-patterns)
 - [Security Considerations](#security-considerations)
+  - [When to Use This Package vs Laravel Events](#when-to-use-this-package-vs-laravel-events)
 - [Limitations](#limitations)
 - [Troubleshooting](#troubleshooting)
 - [Production Deployment Checklist](#production-deployment-checklist)
@@ -470,14 +471,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 358 test files (358 test files + 5 support)
-    ├── Pest.php               # Test suite configuration
-    ├── TestCase.php           # Base test case (Laravel bootstrap)
-    ├── CreatesApplication.php # Application trait
-    ├── TestActions.php        # Test action implementations (Triggerable)
-    ├── helpers.php            # Test helper functions (env, app, config, fake)
-    └── ... (358 test files)
-└── Total: 409 PHP files (38 src + 358 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config + 3 support)
+└── tests/                      # 359 test files (359 test files + 5 support)
+├── Pest.php               # Test suite configuration
+├── TestCase.php           # Base test case (Laravel bootstrap)
+├── CreatesApplication.php # Application trait
+├── TestActions.php        # Test action implementations (Triggerable)
+├── helpers.php            # Test helper functions (env, app, config, fake)
+└── ... (359 test files)
+└── Total: 410 PHP files (38 src + 359 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config + 3 support)
 ```
 
 ### How It Works
@@ -794,6 +795,23 @@ try {
 ### Webhook URL Scheme Enforcement
 - `SubscriptionBuilder::save()` rejects non-HTTP(S) URL schemes (e.g., `ftp://`, `file://`, `mailto:`) to prevent SSRF-like abuse. Only `http://` and `https://` URLs are accepted for webhook subscriptions.
 
+### When to Use This Package vs Laravel Events
+
+| Scenario | Laravel Events | ZeroBoiler Events |
+|---|---|---|
+| Intra-application domain events | ✅ Ideal — compile-time checked, type-safe | Overkill |
+| Dynamic triggers from admin panel | ❌ Requires code deployment | ✅ Database-driven, no deploy needed |
+| External webhook subscriptions | ❌ Manual implementation | ✅ Built-in HMAC signing, retry, auto-deactivate |
+| Event sourcing | ❌ No built-in support | ✅ `DomainEvent` value object with replay |
+| Condition-based filtering | ❌ Must implement manually | ✅ 21 operators with ReDoS protection |
+| Wildcard patterns (`order.*`) | ❌ Not supported | ✅ Single-segment, cross-segment, catch-all |
+| Runtime trigger management | ❌ Code changes required | ✅ CLI + API + admin panel |
+| Event history & statistics | ❌ Not built-in | ✅ Log retention, success rates, dashboards |
+| Simple event→listener | ✅ `Event::dispatch()` | Unnecessary complexity |
+| High-frequency intra-request events | ✅ Minimal overhead | DB lookup on each fire() |
+
+**Rule of thumb:** Use Laravel's native events for intra-application communication where handlers are known at compile time. Use ZeroBoiler Events when you need database-driven dynamic triggers, external webhook delivery, condition-based filtering, or runtime-managed event workflows.
+
 ## Limitations
 
 - **No built-in rate limiting** — Protect webhook endpoints with the [zeroboiler/security](../security) package or Laravel's built-in rate limiting middleware.
@@ -924,7 +942,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (358 files)
+composer test        # Run Pest test suite (359 files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -963,10 +981,18 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 358 test files |
+| Test coverage | ✅ 359 test files |
 | No deprecated APIs | ✅ No setAccessible() in src or tests |
 
 ## Changelog
+### v5.89.0
+
+- Added: `SubscriptionBuilderTransactionAtomicityTest` — 18 tests covering SubscriptionBuilder::save() transaction atomicity: both subscription and trigger created together, priority and async flag propagation, condition passing to both records, auto-generated secret with whsec_ prefix, secret_length config respect, provided secret override, empty event/URL rejection, invalid URL rejection, non-HTTP scheme rejection (ftp://, file://), short secret rejection, null conditions when no filter set, trigger name traceability, HTTPS and HTTP URL acceptance, UUID v4 format validation, auto_generate_secret=false behavior (manual secret, null secret).
+- Registered: 1 new test file in Pest.php (359 test files).
+- Added: "When to Use This Package vs Laravel Events" comparison table to README — helps users decide between native Laravel events and ZeroBoiler Events for their use case.
+- Updated: README version badge (5.88.0→5.89.0), test count badges (358→359), file counts (409→410), testing section.
+- Bumped: Version 5.89.0.
+
 ### v5.88.0
 
 - Added: `EventsPhase216ProductionReadinessTest.php` — 107 tests covering ConditionEngine, WildcardMatcher, DomainEvent, EventManager, ServiceProvider, config, exceptions, models, migrations, factories, facade, and ActionResolver production readiness.

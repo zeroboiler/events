@@ -375,6 +375,7 @@ uses(TestCase::class)->in(
     'ConditionEngineEmptyNotEmptyEdgeCasesTest.php',
     'DomainEventFromArrayEdgeCasesTest.php',
     'EventsPhase216ProductionReadinessTest.php',
+    'SubscriptionBuilderTransactionAtomicityTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)
