@@ -132,3 +132,4 @@ class TriggerFactory extends Factory
         ]);
     }
 }
+
