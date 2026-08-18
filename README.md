@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.73.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.74.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 345](https://img.shields.io/badge/Tests-345-brightgreen)
+![Tests: 346](https://img.shields.io/badge/Tests-346-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -465,14 +465,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 345 files (340 test files + 5 support)
+└── tests/                      # 346 files (341 test files + 5 support)
     ├── Pest.php               # Test suite configuration
     ├── TestCase.php           # Base test case (Laravel bootstrap)
     ├── CreatesApplication.php # Application trait
     ├── TestActions.php        # Test action implementations
     ├── helpers.php            # Test helper functions
-    └── ... (340 test files)
-└── Total: 391 PHP files (38 src + 345 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
+    └── ... (341 test files)
+└── Total: 390 PHP files (38 src + 346 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -919,7 +919,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (345 files)
+composer test        # Run Pest test suite (346 files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -958,10 +958,17 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 345 test files |
+| Test coverage | ✅ 346 test files |
 | No deprecated APIs | ✅ No setAccessible() in src |
 
 ## Changelog
+
+### v5.74.0
+
+- Fixed: `DispatchTriggerJob::$connection` readonly property now has a default value of `null` to prevent "uninitialized readonly property" errors in PHP 8.5 when `events.queue.connection` config is not set or is empty.
+- Added: `EventsPhase208ProductionReadinessAuditTest` — 45+ tests covering: DispatchTriggerJob readonly property defaults and config edge cases, complete exception hierarchy verification (all 5 exceptions + Throwable catchability), facade accessor correctness, WildcardMatcher readonly class verification, DomainEvent immutability and round-trip preservation, config key coverage verification (all 7 top-level keys + sub-keys), service provider binding correctness (provides/register consistency, ConditionEngineContract binding, singleton/transient verification), all 20 condition engine operators, wildcard matcher edge cases (catch-all, single-segment, cross-segment, extraction), model table name config resolution, EventManager sanitizePayloadForQueue (scalar preservation, object/resource stripping), PHP 8.5 syntax compliance (strict_types, license headers, final classes), EventLog status constants, and EventManager global disable behavior.
+- Registered: 1 new test file in Pest.php (346 test files).
+- Bumped: Version 5.74.0.
 
 ### v5.73.0
 

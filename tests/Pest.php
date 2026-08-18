@@ -357,6 +357,7 @@ uses(TestCase::class)->in(
     'ExceptionHierarchyTest.php',
     'DomainEventToStringTest.php',
     'ActionResolutionExceptionCompatibilityTest.php',
+    'EventsPhase208ProductionReadinessAuditTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)

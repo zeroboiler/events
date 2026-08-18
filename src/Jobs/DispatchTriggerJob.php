@@ -47,8 +47,8 @@ final class DispatchTriggerJob implements ShouldQueue
     /** @var int Number of times the job may be attempted. Read from `events.retry.tries` config. */
     public readonly int $tries;
 
-    /** @var string|null Queue connection name (read from events.queue.connection config) */
-    public readonly ?string $connection;
+    /** @var string|null Queue connection name (read from events.queue.connection config). Defaults to null (uses the default queue connection). */
+    public readonly ?string $connection = null;
 
     /**
      * Create a new dispatch trigger job.
