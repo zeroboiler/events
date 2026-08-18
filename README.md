@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.78.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.79.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 350](https://img.shields.io/badge/Tests-350-brightgreen)
+![Tests: 351](https://img.shields.io/badge/Tests-351-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -46,8 +46,13 @@ Database-driven dynamic event manager for Laravel — register, manage, and fire
 | ext-ctype | Required (for Laravel framework) |
 
 Optional peer packages for enhanced functionality:
-- **zeroboiler/security** — Rate limiting for webhook endpoints
-- **zeroboiler/observability** — Structured logging and metrics integration
+- **zeroboiler/security** — Rate limiting for webhook endpoints, HMAC verification middleware, API key authentication
+- **zeroboiler/observability** — Structured logging, metrics (Prometheus/StatsD), distributed tracing (OpenTelemetry)
+- **zeroboiler/config** — Centralized config management with caching, cascading overrides, and validation
+- **zeroboiler/errors** — Structured error handling, automated reporting, error classification
+- **zeroboiler/module** — Module registration, discovery, and dependency resolution
+- **zeroboiler/i18n** — Internationalization with locale management, translation caching, and pluralization
+- **zeroboiler/search** — Full-text search abstraction with driver support (Algolia, Meilisearch, Elasticsearch)
 
 ## Quick Start
 
@@ -471,8 +476,8 @@ events/
     ├── CreatesApplication.php # Application trait
     ├── TestActions.php        # Test action implementations (Triggerable)
     ├── helpers.php            # Test helper functions (env, app, config, fake)
-    └── ... (344 test files)
-└── Total: 394 PHP files (38 src + 350 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
+    └── ... (345 test files)
+└── Total: 395 PHP files (38 src + 351 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -919,7 +924,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (350 files)
+composer test        # Run Pest test suite (351 files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -958,7 +963,7 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 350 test files |
+| Test coverage | ✅ 351 test files |
 | No deprecated APIs | ✅ No setAccessible() in src |
 
 ## Changelog

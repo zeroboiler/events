@@ -5,6 +5,20 @@ All notable changes to the **ZeroBoiler Events** package are documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [5.79.0] - 2026-08-18
+
+### Added
+- `EventsPhase211InfrastructureProductionAuditTest` — 30 tests: WildcardMatcher consecutive-dot edge cases, TriggerBuilder actionParams-without-action validation, EventsListCommand/EventsSubscriptionsCommand/EventsLogCommand pagination overflow protection, SubscriptionBuilder duplicate handling, EventManager deleteTrigger idempotency, ManagesHistory::purgeLogs edge cases, ConditionEngine all-null payload, DomainEvent null payload round-trip, Subscription signPayload edge cases, WildcardMatcher empty input, EventManager enable/disable idempotency.
+- Registered 1 new test file in Pest.php (351 test files).
+
+### Changed
+- README: Expanded ecosystem peer package references (7 packages), updated test count 350 → 351, updated file count 394 → 395.
+- Bumped version to 5.79.0.
+
+---
+
+
+
 ## [5.78.0] - 2026-08-18
 
 ### Added
