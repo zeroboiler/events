@@ -3,7 +3,7 @@
     "description": "DB-driven dynamic event manager for Laravel — manage triggers via admin panel, API, or CLI without code changes",
     "type": "library",
     "license": "proprietary",
-    "version": "5.80.0",
+    "version": "5.81.0",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
@@ -12,7 +12,9 @@
         "illuminate/support": "^13.0",
         "illuminate/database": "^13.0",
         "illuminate/queue": "^13.0",
+        "illuminate/bus": "^13.0",
         "illuminate/cache": "^13.0",
+        "illuminate/console": "^13.0",
         "illuminate/http": "^13.0",
         "ramsey/uuid": "^4.7"
     },
