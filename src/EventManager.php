@@ -486,7 +486,7 @@ final class EventManager
      */
     protected function shouldDispatch(Trigger $trigger, array $payload): bool
     {
-        if (empty($trigger->conditions)) {
+        if ($trigger->conditions === []) {
             return true;
         }
 

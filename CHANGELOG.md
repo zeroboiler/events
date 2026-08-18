@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.71.0] — 2026-08-18
+
+### Fixed
+- Replaced `empty()` with strict `=== []` comparison in `EventManager::shouldDispatch()` for PHPStan 9 type precision
+- Replaced `empty()` with strict `$id === '' || $id === null` comparison in all three model `boot()` methods (Trigger, EventLog, Subscription) for PHPStan 9 type precision
+
+### Added
+- **Phase 207 Production Infrastructure Audit**: 80+ new test cases covering strict empty() elimination verification, shouldDispatch condition paths (empty/non-empty/nested/null), config completeness (7 top-level keys, all sub-keys), ServiceProvider binding consistency (singleton/transient verification for all 6 bindings), Facade accessor correctness, TriggerBuilder/SubscriptionBuilder validation edge cases, WebhookAction missing URL handling, EventScheduler config reads, DomainEvent immutability and reconstruction, WildcardMatcher readonly+final enforcement, ActionResolver edge cases, ManagesHistory/ManagesSubscriptions trait coverage, sanitizePayloadForQueue edge cases, fireModel flattening, EscapesWildcardLike trait coverage, model scope verification, and version consistency checks
+- Registered `EventsPhase207ProductionInfrastructureAuditTest.php` in `Pest.php` test suite
+
+### Changed
+- Bumped version to 5.71.0
+
+---
+
 ## [5.62.0] — 2026-08-17
 
 ### Fixed

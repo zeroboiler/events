@@ -97,7 +97,7 @@ final class Trigger extends Model
         parent::boot();
 
         static::creating(function (self $model): void {
-            if (empty($model->id)) {
+            if ($model->id === '' || $model->id === null) {
                 $model->id = (string) Str::uuid();
             }
         });

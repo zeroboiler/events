@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.70.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.71.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 336](https://img.shields.io/badge/Tests-336-brightgreen)
+![Tests: 342](https://img.shields.io/badge/Tests-342-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -459,14 +459,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 341 test files (336 tests + 5 support)
+└── tests/                      # 342 test files (337 tests + 5 support)
     ├── Pest.php               # Test suite configuration
     ├── TestCase.php           # Base test case (Laravel bootstrap)
     ├── CreatesApplication.php # Application trait
     ├── TestActions.php        # Test action implementations
     ├── helpers.php            # Test helper functions
-    └── ... (336 test files)
-└── Total: 383 PHP files (33 src + 341 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
+    └── ... (342 test files)
+└── Total: 384 PHP files (33 src + 342 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -913,7 +913,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (336 test files)
+composer test        # Run Pest test suite (342 test files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -952,10 +952,17 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 336 test files |
+| Test coverage | ✅ 342 test files |
 | No deprecated APIs | ✅ No setAccessible() |
 
 ## Changelog
+
+### v5.71.0
+
+- Fixed: Replaced `empty()` with strict type comparisons in `EventManager::shouldDispatch()` and all three model `boot()` methods for PHPStan 9 type precision.
+- Added: `EventsPhase207ProductionInfrastructureAuditTest` — 80+ tests covering strict empty() elimination, shouldDispatch paths, config completeness, ServiceProvider binding consistency, TriggerBuilder/SubscriptionBuilder validation, WebhookAction edge cases, EventScheduler config, DomainEvent immutability, WildcardMatcher enforcement, ActionResolver edge cases, ManagesHistory/ManagesSubscriptions coverage, sanitizePayloadForQueue, fireModel flattening, EscapesWildcardLike trait, model scopes, and version consistency.
+- Registered new test file in `Pest.php`.
+- Bumped: Version 5.71.0, 342 test files, 34 total PHP source files.
 
 ### v5.70.0
 
