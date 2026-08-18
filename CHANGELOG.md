@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+
+## [5.76.0] — 2026-08-18\n\n### Added\n- `EventsPhase210ServiceProviderFinalAuditTest` — 45 tests: ServiceProvider binding lifetimes (singleton vs transient), config type coercion edge cases (wildcard_cache_ttl: 0/negative/string, retry.tries: non-positive, retry.backoff: array, queue.connection/queue: empty/valid, subscriptions.secret_length: below-16/at-16, max_failures: 0, timeout: non-positive, retention.days: null/0), EventScheduler disabled retention, runtime disable via setEnabled(), WildcardMatcher readonly/final/static verification, exception hierarchy, model table name config, DomainEvent round-trip, builder validation, ActionResolver errors, getStats accuracy, purgeLogs, deactivateExceededSubscriptions.\n- Registered 1 new test file in Pest.php (348 test files).\n
 ## [5.72.0] — 2026-08-18
 
 ### Added
