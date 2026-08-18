@@ -47,7 +47,7 @@ final class TriggerBuilder
     protected array $actionParams = [];
 
     public function __construct(
-        protected readonly EventManager $eventManager,
+        private readonly EventManager $eventManager,
     ) {}
 
     /**

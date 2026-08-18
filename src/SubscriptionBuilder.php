@@ -42,7 +42,7 @@ final class SubscriptionBuilder
     protected bool $async = false;
 
     public function __construct(
-        protected readonly EventManager $eventManager,
+        private readonly EventManager $eventManager,
     ) {}
 
     /**

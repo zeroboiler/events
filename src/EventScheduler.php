@@ -29,7 +29,7 @@ use Illuminate\Support\Carbon;
 final class EventScheduler
 {
     public function __construct(
-        protected readonly Container $app,
+        private readonly Container $app,
     ) {}
 
     /**

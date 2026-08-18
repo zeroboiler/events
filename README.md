@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.82.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.83.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 353](https://img.shields.io/badge/Tests-353-brightgreen)
+![Tests: 359](https://img.shields.io/badge/Tests-359-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -470,14 +470,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 349 test files (349 test files + 5 support)
+└── tests/                      # 359 test files (359 test files + 5 support)
     ├── Pest.php               # Test suite configuration
     ├── TestCase.php           # Base test case (Laravel bootstrap)
     ├── CreatesApplication.php # Application trait
     ├── TestActions.php        # Test action implementations (Triggerable)
     ├── helpers.php            # Test helper functions (env, app, config, fake)
-    └── ... (349 test files)
-└── Total: 400 PHP files (38 src + 349 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
+    └── ... (359 test files)
+└── Total: 410 PHP files (38 src + 359 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config + 3 support)
 ```
 
 ### How It Works
@@ -924,7 +924,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (349 files)
+composer test        # Run Pest test suite (359 files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -963,10 +963,21 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 349 test files |
+| Test coverage | ✅ 359 test files |
 | No deprecated APIs | ✅ No setAccessible() in src |
 
 ## Changelog
+### v5.83.0
+
+- Refactored: **EventManager** — narrowed constructor-promoted properties from `protected readonly` to `private readonly` for PHPStan 9 compliance. Also narrowed constants from `protected` to `private`.
+- Refactored: **EventScheduler** — narrowed constructor `Container $app` from `protected readonly` to `private readonly`.
+- Refactored: **TriggerBuilder** — narrowed constructor `EventManager $eventManager` from `protected readonly` to `private readonly`.
+- Refactored: **SubscriptionBuilder** — narrowed constructor `EventManager $eventManager` from `protected readonly` to `private readonly`.
+- Added: `EventsPhase213Phase1InfrastructureAuditTest` — 60+ tests covering private readonly verification, ConditionEngine operators, WildcardMatcher, DomainEvent, EventManager fire(), EventScheduler, ServiceProvider bindings, config completeness, exception hierarchy.
+- Registered: 1 new test file in Pest.php (359 test files).
+- Updated: README version badge, test count badges, structure section, testing section, production readiness summary table.
+- Bumped: Version 5.83.0.
+
 
 ### v5.82.0
 

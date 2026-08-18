@@ -51,17 +51,17 @@ final class EventManager
     /**
      * Cache key for the enabled wildcard triggers collection.
      */
-    protected const WILDCARD_TRIGGER_CACHE_KEY = 'zeroboiler:events:enabled_wildcard_triggers';
+    private const WILDCARD_TRIGGER_CACHE_KEY = 'zeroboiler:events:enabled_wildcard_triggers';
 
     /**
      * Default cache TTL in seconds (5 minutes).
      */
-    protected const DEFAULT_TRIGGER_CACHE_TTL = 300;
+    private const DEFAULT_TRIGGER_CACHE_TTL = 300;
 
     public function __construct(
-        protected readonly ConditionEngine $conditionEngine,
-        protected readonly ActionResolver $actionResolver,
-        protected readonly Container $app,
+        private readonly ConditionEngine $conditionEngine,
+        private readonly ActionResolver $actionResolver,
+        private readonly Container $app,
     ) {}
 
     /**
