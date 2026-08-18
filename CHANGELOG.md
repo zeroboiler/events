@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [5.79.0] - 2026-08-18
 
 ### Added
-- `EventsPhase211InfrastructureProductionAuditTest` — 30 tests: WildcardMatcher consecutive-dot edge cases, TriggerBuilder actionParams-without-action validation, EventsListCommand/EventsSubscriptionsCommand/EventsLogCommand pagination overflow protection, SubscriptionBuilder duplicate handling, EventManager deleteTrigger idempotency, ManagesHistory::purgeLogs edge cases, ConditionEngine all-null payload, DomainEvent null payload round-trip, Subscription signPayload edge cases, WildcardMatcher empty input, EventManager enable/disable idempotency.
+- `EventsPhase211InfrastructureProductionAuditTest` — 33 tests: WildcardMatcher consecutive-dot edge cases (6), TriggerBuilder actionParams validation (2), EventsListCommand pagination protection (2), EventsSubscriptionsCommand pagination protection (2), EventsLogCommand limit edge case (1), EventManager deleteTrigger idempotency (4), ManagesHistory purgeLogs edge cases (2), ConditionEngine all-null payload (4), DomainEvent null payload round-trip (2), Subscription signPayload edge cases (3), WildcardMatcher empty input (2), EventManager enable/disable idempotency (3).
 - Registered 1 new test file in Pest.php (351 test files).
 
 ### Changed
