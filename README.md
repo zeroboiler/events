@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.71.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.72.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 342](https://img.shields.io/badge/Tests-342-brightgreen)
+![Tests: 345](https://img.shields.io/badge/Tests-345-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -775,7 +775,7 @@ try {
 - All database queries use Eloquent's parameterized query builder.
 
 ### Action Resolution
-- Only classes that implement `Triggerable` can be dispatched. Non-existent classes or non-implementing classes are rejected with an `InvalidArgumentException`.
+- Only classes that implement `Triggerable` can be dispatched. Non-existent classes or non-implementing classes are rejected with an `ActionResolutionException` (extends `EventException` → `RuntimeException`). All events-package exceptions are catchable via `\Throwable` for backward compatibility.
 
 ### Rate Limiting & Abuse
 - The package does **not** include built-in rate limiting. Use the [zeroboiler/security](../security) package or Laravel's built-in rate limiting middleware to protect webhook endpoints.

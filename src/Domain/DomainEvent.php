@@ -115,4 +115,19 @@ final class DomainEvent
             $occurredAt,
         );
     }
+
+    /**
+     * String representation for logging and debugging.
+     *
+     * Format: "DomainEvent[order.placed] id=uuid-... at=2024-01-15T10:30:00+00:00"
+     */
+    public function __toString(): string
+    {
+        return sprintf(
+            'DomainEvent[%s] id=%s at=%s',
+            $this->eventType,
+            $this->eventId->toString(),
+            $this->occurredAt->format(DateTimeImmutable::ATOM),
+        );
+    }
 }

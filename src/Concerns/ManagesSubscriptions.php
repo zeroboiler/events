@@ -61,6 +61,10 @@ trait ManagesSubscriptions
      */
     public function unsubscribe(string $subscriptionId): bool
     {
+        if ($subscriptionId === '' || $subscriptionId === '0') {
+            return false;
+        }
+
         $subscription = Subscription::find($subscriptionId);
 
         if ($subscription === null) {
@@ -70,8 +74,12 @@ trait ManagesSubscriptions
         // Clean up the internal trigger that was created by SubscriptionBuilder.
         // The trigger's action is WebhookAction and its action_params contain
         // the subscription_id — match on that to find the correct trigger.
-        Trigger::where('action', 'like', '%WebhookAction%')
-            ->whereRaw("JSON_EXTRACT(action, '$.params.subscription_id') = ?", [$subscriptionId])
+        //
+        // Uses a LIKE search on the subscription_id within the JSON-encoded
+        // action column instead of MySQL-specific JSON_EXTRACT() to ensure
+        // cross-database portability (works with MySQL, PostgreSQL, SQLite).
+        $searchPattern = '%"subscription_id":"' . str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $subscriptionId) . '"';
+        Trigger::where('action', 'like', '%' . $searchPattern . '%')
             ->delete();
 
         $subscription->delete();

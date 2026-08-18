@@ -184,20 +184,21 @@ final class Subscription extends Model
      *
      * Updates `last_fired_at` to now and atomically increments `delivery_count`.
      *
-     * Uses a database transaction to ensure both operations (increment and
-     * timestamp update) are applied atomically, preventing partial updates
-     * when multiple webhook deliveries succeed concurrently for the same
-     * subscription.
+     * Uses a single atomic SQL UPDATE to set both columns in one query,
+     * avoiding unnecessary transaction overhead. The DB driver handles
+     * row-level locking for concurrent delivery attempts.
      */
     public function recordDelivery(): void
     {
-        $this->getConnection()->transaction(function (): void {
-            $this->increment('delivery_count');
-
-            $this->update([
+        $this->newQuery()
+            ->where($this->getKeyName(), $this->getKey())
+            ->update([
+                'delivery_count' => $this->getConnection()->raw('delivery_count + 1'),
                 'last_fired_at' => Carbon::now(),
             ]);
-        });
+
+        // Refresh in-memory model state to stay consistent with DB.
+        $this->refresh();
     }
 
     /**

@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [5.72.0] — 2026-08-18
+
+### Added
+- **Exception hierarchy**: New `EventException` base class (extends `RuntimeException`) with domain-specific subclasses: `TriggerNotFoundException`, `ConditionEvaluationException`, `ActionResolutionException`, `SubscriptionException`. All catchable via `\Throwable` for backward compatibility.
+- `DomainEvent::__toString()` — String representation for logging and debugging (format: `DomainEvent[order.placed] id=uuid at=2024-01-15T10:30:00+00:00`)
+- Empty-string guard in `ManagesSubscriptions::unsubscribe()` for consistency with other ID-based methods
+- **Tests**: `ExceptionHierarchyTest.php`, `DomainEventToStringTest.php`, `ActionResolutionExceptionCompatibilityTest.php`
+
+### Changed
+- `ActionResolver::resolve()` now throws `ActionResolutionException` instead of generic `\InvalidArgumentException`
+- `Subscription::recordDelivery()` — replaced unnecessary database transaction with a single atomic SQL UPDATE (`delivery_count + 1` + `last_fired_at`), avoiding transaction overhead for concurrent webhook deliveries
+- `ManagesSubscriptions::unsubscribe()` — replaced MySQL-specific `JSON_EXTRACT()` raw query with a portable LIKE search for cross-database compatibility (MySQL, PostgreSQL, SQLite)
+- Bumped version to 5.72.0
+
+---
+
 ## [5.71.0] — 2026-08-18
 
 ### Fixed
