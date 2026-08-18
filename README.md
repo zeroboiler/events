@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.74.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.75.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 346](https://img.shields.io/badge/Tests-346-brightgreen)
+![Tests: 347](https://img.shields.io/badge/Tests-347-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -465,14 +465,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 346 files (341 test files + 5 support)
+└── tests/                      # 347 files (342 test files + 5 support)
     ├── Pest.php               # Test suite configuration
     ├── TestCase.php           # Base test case (Laravel bootstrap)
     ├── CreatesApplication.php # Application trait
-    ├── TestActions.php        # Test action implementations
-    ├── helpers.php            # Test helper functions
-    └── ... (341 test files)
-└── Total: 390 PHP files (38 src + 346 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
+    ├── TestActions.php        # Test action implementations (Triggerable)
+    ├── helpers.php            # Test helper functions (env, app, config, fake)
+    └── ... (342 test files)
+└── Total: 391 PHP files (38 src + 347 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config)
 ```
 
 ### How It Works
@@ -919,7 +919,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (346 files)
+composer test        # Run Pest test suite (347 files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -958,10 +958,18 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 346 test files |
+| Test coverage | ✅ 347 test files |
 | No deprecated APIs | ✅ No setAccessible() in src |
 
 ## Changelog
+
+### v5.75.0
+
+- Fixed: `GetsWebhookTimeout` trait — removed dead `$this->app` property access path that triggered PHPStan errors on using classes without `$app` property. Simplified to 2-step resolution: `getConfig()` method → global `app()` helper fallback. Removed unused `Illuminate\Container\Container` import.
+- Fixed: `phpstan.neon.dist` — removed 2 stale ignore rules for `$app` property access on `GetsWebhookTimeout` and `EventsRedeliverCommand` (no longer needed after trait fix).
+- Added: `EventsPhase209ProductionReadinessTest` — 40+ tests covering: GetsWebhookTimeout trait fallback without getConfig method, custom timeout config, EventManager::container() return type, executeTrigger payload merge order, executeTrigger error re-throw and log status, DomainEvent::fromArray edge cases (missing eventType throw, invalid UUID graceful fallback, invalid datetime graceful fallback, round-trip identity preservation), EventManager empty/zero string validation (fire, fireModel, deleteTrigger, enable/disable), fireModel attribute flattening, TriggerBuilder save validation (no action, empty event), SubscriptionBuilder save validation (empty URL, non-HTTP scheme, short secret), DomainEvent __toString format, ActionResolver error handling (non-existent class, non-Triggerable), exception hierarchy Throwable catchability, Subscription operations (signPayload null/valid, recordFailure, resetFailures, hasExceededFailures), EventLog markAsCompleted/markAsFailed, ConditionEngine empty conditions, WildcardMatcher patterns (catch-all, extractWildcards, ** returns empty).
+- Registered: 1 new test file in Pest.php (347 test files).
+- Bumped: Version 5.75.0.
 
 ### v5.74.0
 
