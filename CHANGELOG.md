@@ -5,6 +5,21 @@ All notable changes to the **ZeroBoiler Events** package are documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [5.86.0] - 2026-08-18
+
+### Fixed
+- **CRITICAL** `EscapesWildcardLike::wildcardToLike()` — missing closing parenthesis in `str_contains()` call.
+- **CRITICAL** `2024_01_01_000001_create_triggers_table.php` migration — missing closing bracket in compound index definition.
+
+### Added
+- `SourceFilesSyntaxValidationTest.php` — validates all PHP files have balanced delimiters.
+
+### Changed
+- README test count updated to 363, total PHP file count updated to 414.
+- Version bumped to 5.86.0.
+
+---
+
 ## [5.79.0] - 2026-08-18
 
 ### Added

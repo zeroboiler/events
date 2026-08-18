@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.85.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.86.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 361](https://img.shields.io/badge/Tests-362-brightgreen)
+![Tests: 363](https://img.shields.io/badge/Tests-363-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -470,14 +470,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 362 test files (362 test files + 5 support)
+└── tests/                      # 363 test files (363 test files + 5 support)
     ├── Pest.php               # Test suite configuration
     ├── TestCase.php           # Base test case (Laravel bootstrap)
     ├── CreatesApplication.php # Application trait
     ├── TestActions.php        # Test action implementations (Triggerable)
     ├── helpers.php            # Test helper functions (env, app, config, fake)
-    └── ... (362 test files)
-└── Total: 413 PHP files (38 src + 362 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config + 3 support)
+    └── ... (363 test files)
+└── Total: 414 PHP files (38 src + 363 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config + 3 support)
 ```
 
 ### How It Works
