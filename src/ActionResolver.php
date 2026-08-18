@@ -23,7 +23,7 @@ use ZeroBoiler\Events\Exceptions\ActionResolutionException;
 final class ActionResolver
 {
     public function __construct(
-        protected readonly Container $app,
+        private readonly Container $app,
     ) {}
 
     /**
