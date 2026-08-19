@@ -5,6 +5,13 @@ All notable changes to the **ZeroBoiler Events** package are documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [5.91.0] - 2026-08-19
+
+### Changed
+- **README rewritten** — Removed 730+ lines of inline changelog (duplicated from CHANGELOG.md), fixed outdated file counts, cleaned up package structure section. README reduced from 1731 lines to a focused ~580-line production reference document.
+- Updated version badge to 5.91.0.
+
+---
 ## [5.86.0] - 2026-08-18
 
 ### Fixed
