@@ -650,7 +650,7 @@ $this->app->instance(ActionResolver::class, $mockResolver);
 ### Performance Considerations
 
 - **Wildcard caching**: Enabled wildcard triggers are cached for `events.wildcard_cache_ttl` seconds (default: 300s). Set to `0` to disable.
-- **Cache invalidation`: Automatically triggered on trigger create, enable, and disable operations. Call `invalidateTriggerCache()` manually after direct DB edits.
+- **Cache invalidation**: Automatically triggered on trigger create, enable, and disable operations. Call `invalidateTriggerCache()` manually after direct DB edits.
 - **Queue tuning**: Set `EVENTS_QUEUE_CONNECTION` to a dedicated Redis connection for high-throughput scenarios.
 - **Index usage**: The `triggers` table has a composite index on `(event, enabled)` for fast exact-match lookups.
 - **No orphaned logs**: Async jobs create `EventLog` entries inside the job handler, preventing orphaned records if the queue fails.
@@ -787,7 +787,7 @@ $this->app->instance(ActionResolver::class, $mockResolver);
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (388 files)
+composer test        # Run Pest test suite (389 files)
 composer analyse     # PHPStan level 9 (PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -812,7 +812,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 388 test files |
+| Test coverage | ✅ 389 test files |
 
 ## Changelog
 

@@ -10,6 +10,7 @@ namespace ZeroBoiler\Events\Console;
 
 use Illuminate\Console\Command;
 use ZeroBoiler\Events\EventManager;
+
 /**
  * Remove an external webhook subscription by ID.
  *
@@ -27,6 +28,9 @@ final class EventsUnsubscribeCommand extends Command
 
     /**
      * Execute the command.
+     *
+     * @return int Command exit code (SUCCESS or FAILURE)
+     * @since 1.0.0
      */
     #[\Override]
     public function handle(EventManager $eventManager): int

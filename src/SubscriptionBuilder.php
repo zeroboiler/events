@@ -154,6 +154,8 @@ final class SubscriptionBuilder
      * subscription ID and URL so the WebhookAction can look up the signing
      * secret for HMAC payload verification.
      *
+     * @return Subscription The created subscription record
+     *
      * @throws \InvalidArgumentException If event name is empty, URL is empty/invalid, or URL is non-HTTP(S)
      * @throws \JsonException If JSON encoding of webhook payload fails during signing
      * @since 1.0.0
