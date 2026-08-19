@@ -378,6 +378,13 @@ uses(TestCase::class)->in(
     'EventsPhase216ProductionReadinessTest.php',
     'SubscriptionBuilderTransactionAtomicityTest.php',
     'EventsPhase217InfrastructureFinalTest.php',
+    'SubscriptionMatchesEventTest.php',
+    'SubscriptionSignPayloadEdgeCasesTest.php',
+    'DomainEventToStringFormatTest.php',
+    'EventLogStatusConstantsTest.php',
+    'EventManagerContainerAccessorTest.php',
+    'ConditionEngineGetNestedValueTest.php',
+    'TriggerBuilderActionsMergeIntegrationTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)
