@@ -94,6 +94,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Payload Size Limit
+    |--------------------------------------------------------------------------
+    |
+    | Maximum JSON-encoded payload size in bytes for fire() calls.
+    | Payloads exceeding this limit are rejected with an InvalidArgumentException
+    | to prevent OOM during queue serialization or database storage.
+    | Default: 1048576 (1 MB). Set to 0 to disable the limit.
+    |
+    */
+
+    'payload_max_bytes' => (int) env('EVENTS_PAYLOAD_MAX_BYTES', 1048576),
+
+    /*
+    |--------------------------------------------------------------------------
     | Wildcard Cache
     |--------------------------------------------------------------------------
     |

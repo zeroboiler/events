@@ -19,7 +19,7 @@ describe('EventManager payload size guard', function (): void {
         $largePayload = ['data' => str_repeat('x', 1_100_000)];
 
         expect(fn () => $this->app->make(EventManager::class)->fire('test.event', $largePayload))
-            ->toThrow(\InvalidArgumentException::class, 'Event payload exceeds the maximum allowed size (1 MB).');
+            ->toThrow(\InvalidArgumentException::class, 'exceeds the maximum allowed size');
     });
 
     it('accepts payloads under 1 MB', function (): void {

@@ -20,6 +20,7 @@ describe('Events config completeness', function (): void {
                 'retention',
                 'subscriptions',
                 'disabled',
+                'payload_max_bytes',
                 'wildcard_cache_ttl',
             ]);
     });
@@ -77,11 +78,18 @@ describe('Events config completeness', function (): void {
             ->and($subs['signature_algorithm'])->toBeString();
     });
 
-    test('config wildcard_cache_ttl is a positive integer', function (): void {
+    test('config wildcard_cache_ttl is a non-negative integer', function (): void {
         $ttl = config('events.wildcard_cache_ttl');
 
         expect($ttl)->toBeInt()
             ->and($ttl)->toBeGreaterThanOrEqual(0);
+    });
+
+    test('config payload_max_bytes is a non-negative integer', function (): void {
+        $max = config('events.payload_max_bytes');
+
+        expect($max)->toBeInt()
+            ->and($max)->toBeGreaterThanOrEqual(0);
     });
 
     test('config disabled is a boolean', function (): void {

@@ -279,8 +279,9 @@ final class Subscription extends Model
         }
 
         $algorithm = $this->getConfigValue('events.subscriptions.signature_algorithm', 'sha256');
+        $algo = is_string($algorithm) && $algorithm !== '' ? $algorithm : 'sha256';
 
-        $result = hash_hmac(is_string($algorithm) ? $algorithm : 'sha256', $payload, $this->secret);
+        $result = hash_hmac($algo, $payload, $this->secret);
 
         return $result !== false ? $result : '';
     }

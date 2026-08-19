@@ -5,6 +5,22 @@ All notable changes to the **ZeroBoiler Events** package are documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [5.98.0] - 2026-08-19
+
+### Fixed
+- **`Subscription::signPayload()`** — Empty-string `events.subscriptions.signature_algorithm` config now falls back to `sha256` instead of passing an empty string to `hash_hmac()` (which throws `ValueError`).
+
+### Added
+- **Configurable payload size limit** — New `events.payload_max_bytes` config key (env: `EVENTS_PAYLOAD_MAX_BYTES`, default: 1 MB). Set to `0` to disable the size check entirely.
+- `EventManagerPayloadMaxBytesConfigTest.php` — 5 test cases covering default, custom, disabled (0), string coercion, and negative fallback behaviors.
+- `SubscriptionSignEmptyAlgorithmTest.php` — 3 test cases covering empty-string, null, and valid algorithm config values.
+
+### Changed
+- `EventManager::fire()` payload size check now reads from `events.payload_max_bytes` config instead of hardcoded 1 MB constant.
+- Version bumped to 5.98.0, test count updated to 391.
+- README updated with new `EVENTS_PAYLOAD_MAX_BYTES` env var, updated config code block, and payload guard documentation.
+
+---
 ## [5.97.0] - 2026-08-19
 
 ### Fixed

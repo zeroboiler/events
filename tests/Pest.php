@@ -400,6 +400,8 @@ uses(TestCase::class)->in(
     // Phase 219 — uncovered public API and scope tests
     'EventManagerUncoveredPublicApiTest.php',
     'SubscriptionScopeForEventNonWildcardTest.php',
+    // Phase 220 — ManagesHistory deactivation tests
+    'ManagesHistoryDeactivateExceededSubscriptionsTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)

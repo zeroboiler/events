@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.97.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.98.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 389](https://img.shields.io/badge/Tests-389-brightgreen)
+![Tests: 391](https://img.shields.io/badge/Tests-391-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -138,6 +138,8 @@ return [
 
     'disabled' => env('EVENTS_DISABLED') === 'true' || env('EVENTS_DISABLED') === '1' || env('EVENTS_DISABLED') === true,
 
+    'payload_max_bytes' => (int) env('EVENTS_PAYLOAD_MAX_BYTES', 1048576),
+
     'wildcard_cache_ttl' => env('EVENTS_WILDCARD_CACHE_TTL', 300),
 ];
 ```
@@ -158,6 +160,7 @@ return [
 | `EVENTS_SUB_SIGNATURE_ALGORITHM` | `sha256` | HMAC algorithm for webhook payload signing |
 | `EVENTS_SUB_SECRET_LENGTH` | `32` | Length of auto-generated webhook secrets (minimum 16) |
 | `EVENTS_SUB_CLEANUP_CRON` | `0 3 * * *` | Cron expression for automatic subscription cleanup schedule |
+| `EVENTS_PAYLOAD_MAX_BYTES` | `1048576` | Maximum JSON-encoded payload size in bytes for `fire()`; set to `0` to disable |
 | `EVENTS_DISABLED` | `false` | Set `true` to globally disable the entire event system |
 | `EVENTS_WILDCARD_CACHE_TTL` | `300` | Cache TTL (seconds) for enabled wildcard triggers; set to `0` to disable |
 
@@ -434,7 +437,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                  389 test files
+└── tests/                  391 test files
 ```
 
 ### How It Works
@@ -497,7 +500,7 @@ events/
 - **No orphaned logs** — Async jobs create their `EventLog` inside the job handler, so queue failures don't leave orphaned entries.
 - **O(1) dedup** — Trigger deduplication uses a hash set instead of O(n) linear scans.
 - **Cache invalidation** — Automatically triggered on trigger create, enable, and disable operations.
-- **Payload size guard** — `fire()` rejects payloads that exceed 1 MB (JSON-encoded) to prevent OOM. Non-encodable payloads (containing NaN/Inf) throw `InvalidArgumentException` before any DB/queue operations.
+- **Payload size guard** — `fire()` rejects payloads exceeding the configurable `events.payload_max_bytes` limit (default: 1 MB; set to `0` to disable). Non-encodable payloads (containing NaN/Inf) throw `InvalidArgumentException` before any DB/queue operations.
 
 ### PHP 8.5 Compatibility
 
@@ -787,7 +790,7 @@ $this->app->instance(ActionResolver::class, $mockResolver);
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (389 files)
+composer test        # Run Pest test suite (391 files)
 composer analyse     # PHPStan level 9 (PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -808,11 +811,11 @@ composer ci          # All checks (lint → analyse → rector → test)
 | #[Pure] attributes | ✅ Side-effect-free methods |
 | PHPStan level 9 | ✅ phpstan.neon.dist |
 | ServiceProvider provides() | ✅ 7 bindings |
-| Config completeness | ✅ 8 top-level keys |
+| Config completeness | ✅ 9 top-level keys |
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 389 test files |
+| Test coverage | ✅ 391 test files |
 
 ## Changelog
 

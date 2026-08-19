@@ -98,6 +98,28 @@ final class EventManager
     }
 
     /**
+     * Get the maximum allowed payload size in bytes from config.
+     *
+     * Returns 0 to disable the size check.
+     *
+     * @internal Not part of the public API.
+     */
+    protected function getPayloadMaxBytes(): int
+    {
+        $max = $this->getConfig()->get('events.payload_max_bytes', 1_048_576);
+
+        if (is_int($max) && $max >= 0) {
+            return $max;
+        }
+
+        if (is_numeric($max) && (int) $max >= 0) {
+            return (int) $max;
+        }
+
+        return 1_048_576;
+    }
+
+    /**
      * Get the wildcard trigger cache TTL from config or use default.
      *
      * Returns 0 when `events.wildcard_cache_ttl` is explicitly set to 0,
@@ -352,8 +374,10 @@ final class EventManager
             throw new \InvalidArgumentException('Event payload is not JSON-encodable: '.$e->getMessage(), 0, $e);
         }
 
-        if (strlen((string) $encoded) > 1_048_576) {
-            throw new \InvalidArgumentException('Event payload exceeds the maximum allowed size (1 MB).');
+        $maxBytes = $this->getPayloadMaxBytes();
+        if ($maxBytes > 0 && strlen((string) $encoded) > $maxBytes) {
+            $maxMb = round($maxBytes / 1_048_576, 1);
+            throw new \InvalidArgumentException("Event payload exceeds the maximum allowed size ({$maxMb} MB).");
         }
 
         // Global disable check — allows maintenance-mode-like suppression
