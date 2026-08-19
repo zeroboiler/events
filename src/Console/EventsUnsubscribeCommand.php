@@ -16,7 +16,6 @@ use ZeroBoiler\Events\EventManager;
  * Deletes the subscription record and its associated internal trigger
  * to prevent orphaned webhook dispatches.
  */
-
 final class EventsUnsubscribeCommand extends Command
 {
     protected string $signature = 'zeroboiler:events:unsubscribe

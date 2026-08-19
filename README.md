@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.91.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.92.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 369](https://img.shields.io/badge/Tests-369-brightgreen)
+![Tests: 379](https://img.shields.io/badge/Tests-379-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -375,7 +375,20 @@ When disabled, all `fire()` calls silently return without dispatching any trigge
 
 ### Scheduled Tasks
 
-Register the scheduler in your console routes:
+Register the scheduler via the `EventManager` facade (recommended):
+
+```php
+// app/Console/Kernel.php
+use Illuminate\Support\Facades\Schedule;
+use ZeroBoiler\Events\Facades\EventManager;
+
+protected function schedule(Schedule $schedule): void
+{
+    EventManager::registerScheduler($schedule);
+}
+```
+
+Or resolve the `EventScheduler` directly:
 
 ```php
 // routes/console.php
@@ -383,18 +396,6 @@ use Illuminate\Support\Facades\Schedule;
 use ZeroBoiler\Events\EventScheduler;
 
 app(EventScheduler::class)->register(app(Schedule::class));
-```
-
-Or via the `EventManager` facade:
-
-```php
-// app/Console/Kernel.php
-use ZeroBoiler\Events\Facades\EventManager;
-
-protected function schedule(Schedule $schedule): void
-{
-    EventManager::registerScheduler($schedule);
-}
 ```
 
 | Task | Default Schedule | Config Key |
@@ -433,7 +434,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                  369 test files
+└── tests/                  379 test files
 ```
 
 ### How It Works
@@ -785,7 +786,7 @@ $this->app->instance(ActionResolver::class, $mockResolver);
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (369 files)
+composer test        # Run Pest test suite (379 files)
 composer analyse     # PHPStan level 9 (PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -810,7 +811,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 369 test files |
+| Test coverage | ✅ 379 test files |
 
 ## Changelog
 
