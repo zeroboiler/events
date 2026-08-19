@@ -434,7 +434,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                  388 test files
+└── tests/                  389 test files
 ```
 
 ### How It Works
