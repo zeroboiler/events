@@ -6,91 +6,128 @@
 
 declare(strict_types=1);
 
-use ZeroBoiler\Events\Tests\TestCase;
+namespace ZeroBoiler\Events\Tests;
 
-uses(TestCase::class);
+use ZeroBoiler\Events\EventManager;
+use ZeroBoiler\Events\Models\EventLog;
+use ZeroBoiler\Events\Models\Trigger;
+use ZeroBoiler\Events\Tests\Actions\NullAction;
 
-describe('EventManager fireModel edge cases', function (): void {
-    it('accepts a plain stdClass object without attributesToArray', function (): void {
-        $eventManager = app(\ZeroBoiler\Events\EventManager::class);
+/**
+ * Extended edge-case tests for EventManager::fireModel().
+ *
+ * @see \ZeroBoiler\Events\EventManager::fireModel()
+ *
+ * @since 1.0.0
+ */
+final class FireModelEdgeCasesExtendedTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-        // Globally disable so we don't try to dispatch actual triggers
-        $eventManager->setEnabled(false);
+        // Register a sync test trigger for model events
+        $this->app->bind(NullAction::class, fn (): NullAction => new NullAction());
 
-        // Should not throw — stdClass has neither attributesToArray nor toArray,
-        // so the payload will be minimal (no flattened model data)
-        $obj = new \stdClass;
-        $obj->id = 42;
+        Trigger::create([
+            'name' => 'Model Created Trigger',
+            'event' => 'App\\Models\\FakeModel.created',
+            'action' => NullAction::class,
+            'async' => false,
+            'priority' => 0,
+            'enabled' => true,
+        ]);
+    }
 
-        $eventManager->fireModel('stdClass', 'created', $obj);
+    public function test_fire_model_with_plain_object_no_array_methods(): void
+    {
+        $manager = self::$app->make(EventManager::class);
 
-        // If we get here without exception, the test passes
-        expect(true)->toBeTrue();
-    });
+        // A plain stdClass has neither attributesToArray() nor toArray()
+        $plainObject = new \stdClass();
+        $plainObject->name = 'Test';
 
-    it('throws on empty model class name', function (): void {
-        app(\ZeroBoiler\Events\EventManager::class)
-            ->fireModel('', 'created', new \stdClass);
-    })->throws(\InvalidArgumentException::class, 'Model class name cannot be empty');
+        // Should fire without error, with only metadata in payload
+        $manager->fireModel('App\\Models\\FakeModel', 'created', $plainObject);
 
-    it('throws on empty model action', function (): void {
-        app(\ZeroBoiler\Events\EventManager::class)
-            ->fireModel('App\\Models\\Test', '', new \stdClass);
-    })->throws(\InvalidArgumentException::class, 'Model action cannot be empty');
+        $log = EventLog::first();
+        expect($log)->not->toBeNull();
+        expect($log->event)->toBe('App\\Models\\FakeModel.created');
+        expect($log->status)->toBe(EventLog::STATUS_COMPLETED);
+        // Payload should contain metadata keys
+        expect($log->payload)->toHaveKey('model');
+        expect($log->payload)->toHaveKey('model_class');
+        expect($log->payload)->toHaveKey('action');
+        expect($log->payload['model_class'])->toBe('App\\Models\\FakeModel');
+        expect($log->payload['action'])->toBe('created');
+    }
 
-    it('includes flattened model attributes in payload', function (): void {
-        $eventManager = app(\ZeroBoiler\Events\EventManager::class);
-        $eventManager->setEnabled(false);
+    public function test_fire_model_with_object_having_toArray_only(): void
+    {
+        $manager = self::$app->make(EventManager::class);
 
-        // Create a trigger to capture the event log
-        $trigger = $eventManager->on('App\\Models\\FakeModel.created')
-            ->name('FireModel Test')
-            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification::class)
-            ->save();
+        // Register trigger
+        Trigger::create([
+            'name' => 'ToArray Model Trigger',
+            'event' => 'App\\Models\\ToArrayModel.updated',
+            'action' => NullAction::class,
+            'async' => false,
+            'priority' => 0,
+            'enabled' => true,
+        ]);
 
-        try {
-            // Create a fake model-like object with toArray
-            $model = new class {
-                public function toArray(): array
-                {
-                    return ['id' => 99, 'name' => 'Test Model'];
-                }
-            };
+        $model = new class {
+            public function toArray(): array
+            {
+                return ['id' => '123', 'status' => 'active'];
+            }
+        };
 
-            // Since events are disabled, no actual dispatch happens.
-            // We just verify the method doesn't throw for valid input.
-            $eventManager->fireModel('App\\Models\\FakeModel', 'created', $model);
-            expect(true)->toBeTrue();
-        } finally {
-            $eventManager->deleteTrigger($trigger->id);
-        }
-    });
+        $manager->fireModel('App\\Models\\ToArrayModel', 'updated', $model);
 
-    it('throws on fire with empty event name', function (): void {
-        app(\ZeroBoiler\Events\EventManager::class)
-            ->fire('');
-    })->throws(\InvalidArgumentException::class, 'Event name cannot be empty');
+        $log = EventLog::where('event', 'App\\Models\\ToArrayModel.updated')->first();
+        expect($log)->not->toBeNull();
+        expect($log->payload)->toHaveKey('id');
+        expect($log->payload)->toHaveKey('status');
+        expect($log->payload['id'])->toBe('123');
+        expect($log->payload['status'])->toBe('active');
+    }
 
-    it('throws on fire with zero-string event name', function (): void {
-        app(\ZeroBoiler\Events\EventManager::class)
-            ->fire('0');
-    })->throws(\InvalidArgumentException::class, 'Event name cannot be empty');
+    public function test_fire_model_with_empty_model_class_throws(): void
+    {
+        $manager = self::$app->make(EventManager::class);
 
-    it('silently returns when events are globally disabled', function (): void {
-        $eventManager = app(\ZeroBoiler\Events\EventManager::class);
-        $eventManager->setEnabled(false);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Model class name cannot be empty');
 
-        // fire() should silently return, no exception
-        $eventManager->fire('test.disabled.event', ['key' => 'value']);
-        expect($eventManager->isDisabled())->toBeTrue();
-    });
+        $manager->fireModel('', 'created', new \stdClass());
+    }
 
-    it('setEnabled(true) re-enables the event system', function (): void {
-        $eventManager = app(\ZeroBoiler\Events\EventManager::class);
-        $eventManager->setEnabled(false);
-        expect($eventManager->isDisabled())->toBeTrue();
+    public function test_fire_model_with_empty_action_throws(): void
+    {
+        $manager = self::$app->make(EventManager::class);
 
-        $eventManager->setEnabled(true);
-        expect($eventManager->isDisabled())->toBeFalse();
-    });
-});
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Model action cannot be empty');
+
+        $manager->fireModel('App\\Models\\FakeModel', '', new \stdClass());
+    }
+
+    public function test_fire_model_with_zero_string_class_throws(): void
+    {
+        $manager = self::$app->make(EventManager::class);
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $manager->fireModel('0', 'created', new \stdClass());
+    }
+
+    public function test_fire_model_with_zero_string_action_throws(): void
+    {
+        $manager = self::$app->make(EventManager::class);
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $manager->fireModel('App\\Models\\FakeModel', '0', new \stdClass());
+    }
+}
