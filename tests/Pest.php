@@ -389,6 +389,14 @@ uses(TestCase::class)->in(
     'ConditionEngineGetNestedValueTest.php',
     'EventManagerSanitizePayloadIntegrationTest.php',
     'TriggerBuilderActionsMergeIntegrationTest.php',
+    // Phase 218 — newly registered tests (previously missing from Pest.php)
+    'ConditionEngineEmptyAndMixedOperatorsTest.php',
+    'DispatchTriggerJobConfigNullSafeTest.php',
+    'EventsSanitizePayloadTest.php',
+    'ServiceProviderDeferredAndProvidesTest.php',
+    'SubscriptionBuilderSecretConfigTest.php',
+    'WildcardMatcherEmptyEventTest.php',
+    'EventsPhase218InfrastructureProductionAuditTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)
