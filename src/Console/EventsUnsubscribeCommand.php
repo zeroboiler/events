@@ -15,6 +15,8 @@ use ZeroBoiler\Events\EventManager;
  *
  * Deletes the subscription record and its associated internal trigger
  * to prevent orphaned webhook dispatches.
+ *
+ * @since 1.0.0
  */
 final class EventsUnsubscribeCommand extends Command
 {
@@ -25,7 +27,6 @@ final class EventsUnsubscribeCommand extends Command
 
     /**
      * Execute the command.
-     * @since 1.0.0
      */
     #[\Override]
     public function handle(EventManager $eventManager): int

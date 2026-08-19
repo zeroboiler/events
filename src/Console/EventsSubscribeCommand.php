@@ -16,7 +16,7 @@ use ZeroBoiler\Events\EventManager;
  *
  * Creates a subscription with optional HMAC secret, condition filters,
  * priority, and async delivery mode.
-     * @since 1.0.0
+ * @since 1.0.0
  */
 final class EventsSubscribeCommand extends Command
 {

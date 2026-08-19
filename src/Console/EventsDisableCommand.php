@@ -14,7 +14,7 @@ use ZeroBoiler\Events\Models\Trigger;
 
 /**
  * Disable an active event trigger.
-     * @since 1.0.0
+ * @since 1.0.0
  */
 final class EventsDisableCommand extends Command
 {

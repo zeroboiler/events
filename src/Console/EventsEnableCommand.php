@@ -14,7 +14,7 @@ use ZeroBoiler\Events\Models\Trigger;
 
 /**
  * Enable a previously disabled event trigger.
-     * @since 1.0.0
+ * @since 1.0.0
  */
 final class EventsEnableCommand extends Command
 {
