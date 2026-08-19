@@ -45,6 +45,7 @@ final class EventLog extends Model
      *
      * Uses the container's ConfigRepository for testability instead of
      * the static config() facade.
+     * @since 1.0.0
      */
     #[\Override]
     public function getTable(): string
@@ -120,6 +121,7 @@ final class EventLog extends Model
      * Get the trigger that owns this event log.
      *
      * @return BelongsTo<Trigger, covariant $this>
+     * @since 1.0.0
      */
     public function trigger(): BelongsTo
     {
@@ -131,6 +133,7 @@ final class EventLog extends Model
      *
      * @param  Builder<EventLog>  $query
      * @return Builder<EventLog>
+     * @since 1.0.0
      */
     public function scopeWithStatus(Builder $query, string $status): Builder
     {
@@ -142,6 +145,7 @@ final class EventLog extends Model
      *
      * @param  Builder<EventLog>  $query
      * @return Builder<EventLog>
+     * @since 1.0.0
      */
     public function scopeFailed(Builder $query): Builder
     {
@@ -153,6 +157,7 @@ final class EventLog extends Model
      *
      * @param  Builder<EventLog>  $query
      * @return Builder<EventLog>
+     * @since 1.0.0
      */
     public function scopePending(Builder $query): Builder
     {
@@ -164,6 +169,7 @@ final class EventLog extends Model
      *
      * @param  Builder<EventLog>  $query
      * @return Builder<EventLog>
+     * @since 1.0.0
      */
     public function scopeCompleted(Builder $query): Builder
     {
@@ -178,6 +184,7 @@ final class EventLog extends Model
      *
      * @param  Builder<EventLog>  $query
      * @return Builder<EventLog>
+     * @since 1.0.0
      */
     public function scopeStalePending(Builder $query, Carbon $before): Builder
     {
@@ -187,6 +194,7 @@ final class EventLog extends Model
 
     /**
      * Mark the log as completed.
+     * @since 1.0.0
      */
     public function markAsCompleted(int $durationMs): void
     {
@@ -198,6 +206,7 @@ final class EventLog extends Model
 
     /**
      * Mark the log as failed.
+     * @since 1.0.0
      */
     public function markAsFailed(string $error): void
     {

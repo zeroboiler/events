@@ -16,6 +16,7 @@ use ZeroBoiler\Events\EventManager;
  *
  * Supports key=value payload pairs, JSON payloads via --json,
  * file-based JSON via --json=@path, and forced async dispatch.
+     * @since 1.0.0
  */
 final class EventsFireCommand extends Command
 {

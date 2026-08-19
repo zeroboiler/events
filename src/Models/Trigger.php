@@ -47,6 +47,7 @@ final class Trigger extends Model
      *
      * Uses the container's ConfigRepository for testability instead of
      * the static config() facade.
+     * @since 1.0.0
      */
     #[\Override]
     public function getTable(): string
@@ -107,6 +108,7 @@ final class Trigger extends Model
      * Get the event logs for this trigger.
      *
      * @return HasMany<EventLog, covariant $this>
+     * @since 1.0.0
      */
     public function eventLogs(): HasMany
     {
@@ -118,6 +120,7 @@ final class Trigger extends Model
      *
      * @param  Builder<Trigger>  $query
      * @return Builder<Trigger>
+     * @since 1.0.0
      */
     public function scopeEnabled(Builder $query): Builder
     {
@@ -129,6 +132,7 @@ final class Trigger extends Model
      *
      * @param  Builder<Trigger>  $query
      * @return Builder<Trigger>
+     * @since 1.0.0
      */
     public function scopeAsync(Builder $query): Builder
     {
@@ -140,6 +144,7 @@ final class Trigger extends Model
      *
      * @param  Builder<Trigger>  $query
      * @return Builder<Trigger>
+     * @since 1.0.0
      */
     public function scopeOrderByPriority(Builder $query): Builder
     {

@@ -16,6 +16,8 @@ use ZeroBoiler\Events\Models\Subscription;
  *
  * Supports filtering by event name (with wildcards), active/inactive
  * status, and pagination via --per-page and --page options.
+ *
+ * @since 1.0.0
  */
 final class EventsSubscriptionsCommand extends Command
 {

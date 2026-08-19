@@ -20,6 +20,7 @@ use ZeroBoiler\Events\Models\Trigger;
  *
  * Re-queues async triggers or re-executes sync triggers for logs
  * matching the specified status filter.
+     * @since 1.0.0
  */
 final class EventsRetryCommand extends Command
 {

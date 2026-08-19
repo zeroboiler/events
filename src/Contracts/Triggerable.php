@@ -20,6 +20,8 @@ interface Triggerable
      * @param  array<string, mixed>  $payload  The event payload (may include action params merged in)
      *
      * @throws \Throwable Implementations may throw to indicate failure
+     *
+     * @since 1.0.0
      */
     public function handle(array $payload): void;
 }

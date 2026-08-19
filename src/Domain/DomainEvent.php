@@ -38,6 +38,8 @@ final class DomainEvent
      * @param  array<string, mixed>  $payload  Arbitrary event data
      * @param  UuidInterface|null  $eventId  Pre-existing UUID for replay/reconstruction; generates a fresh v4 if null
      * @param  DateTimeImmutable|null  $occurredAt  Pre-existing timestamp for replay/reconstruction; defaults to now()
+     *
+     * @since 1.0.0
      */
     public function __construct(
         public readonly string $eventType,
@@ -51,6 +53,8 @@ final class DomainEvent
 
     /**
      * @param  array<string, mixed>  $payload
+     *
+     * @since 1.0.0
      */
     public static function occur(string $eventType, array $payload = []): self
     {
@@ -59,6 +63,8 @@ final class DomainEvent
 
     /**
      * @return array<string, mixed>
+     *
+     * @since 1.0.0
      */
     public function toArray(): array
     {
@@ -75,6 +81,8 @@ final class DomainEvent
      * eventId and occurredAt to prevent information loss during event replay.
      *
      * @param  array<string, mixed>  $data
+     *
+     * @since 1.0.0
      */
     public static function fromArray(array $data): self
     {
@@ -120,6 +128,8 @@ final class DomainEvent
      * String representation for logging and debugging.
      *
      * Format: "DomainEvent[order.placed] id=uuid-... at=2024-01-15T10:30:00+00:00"
+     *
+     * @since 1.0.0
      */
     public function __toString(): string
     {

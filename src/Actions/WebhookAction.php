@@ -61,6 +61,7 @@ final class WebhookAction implements Triggerable
      *
      * @throws \InvalidArgumentException When payload is missing a non-empty "url" key
      * @throws \Throwable When the HTTP request fails (re-thrown after logging)
+     * @since 1.0.0
      */
     #[\Override]
     public function handle(array $payload): void

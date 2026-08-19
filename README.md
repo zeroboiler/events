@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.95.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.96.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 388](https://img.shields.io/badge/Tests-388-brightgreen)
+![Tests: 387](https://img.shields.io/badge/Tests-387-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -505,7 +505,7 @@ events/
 - **`#[\Pure]` attribute** — Applied to side-effect-free methods in `ConditionEngine` and `WildcardMatcher`.
 - **`readonly` classes** — `WildcardMatcher` is a `readonly final class` with only static methods.
 - **`readonly` promoted properties** — Used across `EventManager`, `ActionResolver`, `EventScheduler`, `TriggerBuilder`, `SubscriptionBuilder`, `DomainEvent`, and `DispatchTriggerJob`.
-- **`final` classes** — All service classes, commands, models, and exceptions are `final`.
+- **`final` classes** — All service classes, commands, models, and leaf exceptions are `final`. The `EventException` base class is intentionally non-final to allow extension.
 - **Typed properties** — Every class property has an explicit type declaration.
 - **Return type declarations** — Every method has an explicit return type.
 - **Strict types** — All source files use `declare(strict_types=1)`.
@@ -812,7 +812,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 388 test files |
+| Test coverage | ✅ 386 test files |
 
 ## Changelog
 

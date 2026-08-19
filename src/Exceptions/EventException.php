@@ -27,6 +27,8 @@ class EventException extends \RuntimeException
      * @param  string  $message  Human-readable error description
      * @param  int  $code  Error code (default: 0)
      * @param  \Throwable|null  $previous  Previous exception for chaining
+     *
+     * @since 1.0.0
      */
     public function __construct(string $message = '', int $code = 0, ?\Throwable $previous = null)
     {

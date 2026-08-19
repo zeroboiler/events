@@ -22,6 +22,9 @@ final class ConditionEngine implements ConditionEngineContract
      *
      * @param  array<string, mixed>  $conditions
      * @param  array<string, mixed>  $payload
+     * @return bool True if all conditions match, false otherwise
+     *
+     * @since 1.0.0
      */
     #[\Override]
     public function matches(array $conditions, array $payload): bool

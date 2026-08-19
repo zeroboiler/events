@@ -25,6 +25,8 @@ use Illuminate\Support\Carbon;
  * global `app()` helper, which improves testability and PHPStan compliance.
  * Reads config through the container's `ConfigRepository` for consistency
  * with EventManager's `getConfig()` pattern.
+ *
+ * @since 1.0.0
  */
 final class EventScheduler
 {
@@ -54,6 +56,7 @@ final class EventScheduler
      * @param  Schedule  $schedule  The Laravel scheduler instance
      *
      * @return void
+     * @since 1.0.0
      */
     public function register(Schedule $schedule): void
     {

@@ -58,6 +58,7 @@ final class DispatchTriggerJob implements ShouldQueue
      *
      * @param  array<string, mixed>  $payload
      * @param  Container|null  $app  Container for config resolution; falls back to app() helper
+     * @since 1.0.0
      */
     public function __construct(
         public readonly string $triggerId,
@@ -124,6 +125,7 @@ final class DispatchTriggerJob implements ShouldQueue
     /**
      * The EventLog ID once created, stored on the instance so failed()
      * can reference it without a DB lookup by construction-time ID.
+     * @since 1.0.0
      */
     protected ?string $eventLogId = null;
 

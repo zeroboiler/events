@@ -41,6 +41,7 @@ trait ManagesSubscriptions
      *
      * @param  string  $event  Event name (supports wildcards)
      * @param  string  $url  Webhook endpoint URL
+     * @since 1.0.0
      */
     public function subscribe(string $event, string $url): SubscriptionBuilder
     {
@@ -61,6 +62,7 @@ trait ManagesSubscriptions
      * Deletes the subscription record and its associated internal trigger
      * (created by SubscriptionBuilder::save()) to prevent orphaned triggers
      * that would continue dispatching webhooks after unsubscribe.
+     * @since 1.0.0
      */
     public function unsubscribe(string $subscriptionId): bool
     {
@@ -98,6 +100,7 @@ trait ManagesSubscriptions
      * @param  string|null  $event  Filter by event name (supports wildcards)
      * @param  bool  $activeOnly  Show only active subscriptions
      * @return Collection<int, Subscription>
+     * @since 1.0.0
      */
     public function listSubscriptions(?string $event = null, bool $activeOnly = false): Collection
     {
@@ -123,6 +126,7 @@ trait ManagesSubscriptions
 
     /**
      * Get a subscription by ID.
+     * @since 1.0.0
      */
     public function getSubscription(string $subscriptionId): ?Subscription
     {
@@ -138,6 +142,7 @@ trait ManagesSubscriptions
      *
      * @param  array<string, mixed>  $conditions  Optional condition filters
      * @return string The created trigger ID
+     * @since 1.0.0
      */
     public function subscribeWebhook(
         string $event,

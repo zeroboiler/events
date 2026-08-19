@@ -16,6 +16,8 @@ final class ActionResolutionException extends EventException
     /**
      * @param  string  $class  The action class FQN that failed resolution
      * @param  string  $reason  Human-readable reason for the failure
+     *
+     * @since 1.0.0
      */
     public function __construct(string $class, string $reason = '')
     {

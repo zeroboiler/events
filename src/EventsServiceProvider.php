@@ -33,6 +33,7 @@ final class EventsServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
+     * @since 1.0.0
      */
     #[\Override]
     public function register(): void
@@ -67,6 +68,7 @@ final class EventsServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap services.
+     * @since 1.0.0
      */
     #[\Override]
     public function boot(): void
@@ -108,6 +110,7 @@ final class EventsServiceProvider extends ServiceProvider
      * services are requested by the container.
      *
      * @return list<string>
+     * @since 1.0.0
      */
     #[\Override]
     public function provides(): array

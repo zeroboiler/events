@@ -41,6 +41,8 @@ use ZeroBoiler\Events\Models\Trigger;
  * @see \ZeroBoiler\Events\Concerns\EscapesWildcardLike Provides wildcard-to-SQL-LIKE pattern conversion
  *
  * @see \ZeroBoiler\Events\Facades\EventManager
+ *
+ * @since 1.0.0
  */
 final class EventManager
 {
@@ -68,6 +70,8 @@ final class EventManager
      * Get the config repository from the container with type narrowing.
      *
      * @internal Not part of the public API.
+     *
+     * @since 1.0.0
      */
     protected function getConfig(): ConfigRepository
     {
@@ -85,6 +89,8 @@ final class EventManager
      *
      * Exposed as public so that collaborators (e.g., SubscriptionBuilder)
      * can access the container without reaching into protected properties.
+     *
+     * @since 1.0.0
      */
     public function container(): Container
     {
@@ -126,6 +132,8 @@ final class EventManager
      * Start building a new trigger.
      *
      * @param  string  $event  The event name (supports wildcards)
+     *
+     * @since 1.0.0
      */
     public function on(string $event): TriggerBuilder
     {
@@ -144,6 +152,8 @@ final class EventManager
      * Alias for on().
      *
      * @param  string  $event  The event name (supports wildcards)
+     *
+     * @since 1.0.0
      */
     public function register(string $event): TriggerBuilder
     {
@@ -156,6 +166,8 @@ final class EventManager
      * Call after register / unregister / enable / disable.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function invalidateTriggerCache(): void
     {
@@ -166,6 +178,8 @@ final class EventManager
      * Check if the event system is globally disabled.
      *
      * Reads the `events.disabled` config value.
+     *
+     * @since 1.0.0
      */
     public function isDisabled(): bool
     {
@@ -180,6 +194,8 @@ final class EventManager
      * persistent disable.
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function setEnabled(bool $enabled): void
     {
@@ -193,6 +209,8 @@ final class EventManager
      * @param  bool|null  $enabled  Filter by enabled status (true=enabled, false=disabled, null=all)
      * @param  int  $limit  Maximum number of results
      * @return Collection<int, Trigger>
+     *
+     * @since 1.0.0
      */
     public function listTriggers(?string $event = null, ?bool $enabled = null, int $limit = 100): Collection
     {
@@ -221,6 +239,8 @@ final class EventManager
      * Get a trigger by ID.
      *
      * @param  string  $triggerId  The UUID of the trigger
+     *
+     * @since 1.0.0
      */
     public function getTrigger(string $triggerId): ?Trigger
     {
@@ -238,6 +258,8 @@ final class EventManager
      * Automatically invalidates the trigger cache.
      *
      * @param  string  $triggerId  The UUID of the trigger to delete
+     *
+     * @since 1.0.0
      */
     public function deleteTrigger(string $triggerId): bool
     {
@@ -261,6 +283,8 @@ final class EventManager
      * Enable a trigger by ID.
      *
      * @param  string  $triggerId  The UUID of the trigger to enable
+     *
+     * @since 1.0.0
      */
     public function enable(string $triggerId): bool
     {
@@ -281,6 +305,8 @@ final class EventManager
      * Disable a trigger by ID.
      *
      * @param  string  $triggerId  The UUID of the trigger to disable
+     *
+     * @since 1.0.0
      */
     public function disable(string $triggerId): bool
     {
@@ -308,6 +334,8 @@ final class EventManager
      *
      * @throws \InvalidArgumentException If the event name is empty or payload exceeds size limit
      * @throws \Throwable If a synchronous trigger action fails (re-thrown after logging)
+     *
+     * @since 1.0.0
      */
     public function fire(string $event, array $payload = [], bool $async = false): void
     {
@@ -362,6 +390,8 @@ final class EventManager
      * @return void
      *
      * @throws \InvalidArgumentException If the model class or action is empty
+     *
+     * @since 1.0.0
      */
     public function fireModel(string $modelClass, string $action, object $model): void
     {
@@ -407,6 +437,8 @@ final class EventManager
      * @return void
      *
      * @throws \RuntimeException If EventScheduler cannot be resolved from the container
+     *
+     * @since 1.0.0
      */
     public function registerScheduler(Schedule $schedule): void
     {
@@ -564,6 +596,8 @@ final class EventManager
      * Execute a trigger synchronously.
      *
      * @throws \Throwable If the action handler fails (re-thrown after logging and updating log status)
+     *
+     * @since 1.0.0
      */
     public function executeTrigger(Trigger $trigger, EventLog $log): void
     {

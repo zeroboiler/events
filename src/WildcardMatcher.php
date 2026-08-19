@@ -24,6 +24,8 @@ readonly final class WildcardMatcher
      *
      * @param  string  $pattern  The pattern with * wildcards (e.g., "order.*")
      * @param  string  $event  The event to match (e.g., "order.placed")
+     *
+     * @since 1.0.0
      */
     #[\Pure]
     public static function matches(string $pattern, string $event): bool
@@ -59,6 +61,8 @@ readonly final class WildcardMatcher
      *
      * @param  array<int, string>  $patterns
      * @return list<string> Patterns from the input that match the event
+     *
+     * @since 1.0.0
      */
     #[\Pure]
     public static function findMatchingPatterns(array $patterns, string $event): array
@@ -81,6 +85,8 @@ readonly final class WildcardMatcher
      * an empty array is returned.
      *
      * @return list<string> Extracted wildcard values from the event
+     *
+     * @since 1.0.0
      */
     #[\Pure]
     public static function extractWildcards(string $pattern, string $event): array

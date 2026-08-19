@@ -19,6 +19,8 @@ use ZeroBoiler\Events\Exceptions\ActionResolutionException;
  * Validates that the resolved class implements the Triggerable contract.
  *
  * @see \ZeroBoiler\Events\Contracts\Triggerable
+ *
+ * @since 1.0.0
  */
 final class ActionResolver
 {
@@ -30,6 +32,8 @@ final class ActionResolver
      * Resolve a class FQN to a Triggerable instance.
      *
      * @throws \ZeroBoiler\Events\Exceptions\ActionResolutionException if the class does not exist or does not implement Triggerable
+     *
+     * @since 1.0.0
      */
     public function resolve(string $class): Triggerable
     {

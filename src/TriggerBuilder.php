@@ -24,6 +24,8 @@ use ZeroBoiler\Events\Models\Trigger;
  *     ->priority(10)
  *     ->save();
  * ```
+ *
+ * @since 1.0.0
  */
 final class TriggerBuilder
 {
@@ -52,6 +54,8 @@ final class TriggerBuilder
 
     /**
      * Set the trigger name.
+     *
+     * @since 1.0.0
      */
     public function name(string $name): self
     {
@@ -62,6 +66,8 @@ final class TriggerBuilder
 
     /**
      * Set the event name.
+     *
+     * @since 1.0.0
      */
     public function on(string $event): self
     {
@@ -72,6 +78,8 @@ final class TriggerBuilder
 
     /**
      * Set the action handler class.
+     *
+     * @since 1.0.0
      */
     public function action(string $class): self
     {
@@ -85,6 +93,8 @@ final class TriggerBuilder
      *
      * @param  array<int, string>  $classes
      * @throws \InvalidArgumentException If any class name is not a non-empty string
+     *
+     * @since 1.0.0
      */
     public function actions(array $classes): self
     {
@@ -141,6 +151,8 @@ final class TriggerBuilder
      * Set the conditions.
      *
      * @param  array<string, mixed>  $conditions
+     *
+     * @since 1.0.0
      */
     public function when(array $conditions): self
     {
@@ -151,6 +163,8 @@ final class TriggerBuilder
 
     /**
      * Set whether the trigger should be dispatched asynchronously.
+     *
+     * @since 1.0.0
      */
     public function async(bool $async = true): self
     {
@@ -161,6 +175,8 @@ final class TriggerBuilder
 
     /**
      * Set the priority (higher values execute first).
+     *
+     * @since 1.0.0
      */
     public function priority(int $priority): self
     {
@@ -176,6 +192,8 @@ final class TriggerBuilder
      * when the trigger is dispatched.
      *
      * @param  array<string, mixed>  $params
+     *
+     * @since 1.0.0
      */
     public function actionParams(array $params): self
     {
@@ -192,6 +210,8 @@ final class TriggerBuilder
      *
      * @throws \InvalidArgumentException If event name is empty or no action is provided
      * @throws \JsonException If JSON encoding of action string fails
+     *
+     * @since 1.0.0
      */
     public function save(): Trigger
     {

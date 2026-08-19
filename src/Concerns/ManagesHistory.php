@@ -39,6 +39,7 @@ trait ManagesHistory
      * @param  string|null  $triggerId  Filter by trigger ID
      * @param  int  $limit  Maximum number of results
      * @return Collection<int, EventLog>
+     * @since 1.0.0
      */
     public function getEventHistory(
         ?string $event = null,
@@ -90,6 +91,7 @@ trait ManagesHistory
      *     top_events: array<int, array{event: string, count: int}>,
      *     top_failed_events: array<int, array{event: string, count: int}>
      * }
+     * @since 1.0.0
      */
     public function getStats(?Carbon $since = null): array
     {
@@ -177,6 +179,7 @@ trait ManagesHistory
      * @param  Carbon  $before  Delete logs created before this datetime
      * @param  bool  $includePending  Also purge pending/dispatched logs
      * @return int Number of deleted logs
+     * @since 1.0.0
      */
     public function purgeLogs(Carbon $before, bool $includePending = false): int
     {
@@ -196,6 +199,7 @@ trait ManagesHistory
      * to identify logs stuck in pending status (e.g., queue worker crash).
      *
      * @return Collection<int, EventLog>
+     * @since 1.0.0
      */
     public function getStalePendingLogs(Carbon $before, int $limit = 100): Collection
     {
@@ -211,6 +215,7 @@ trait ManagesHistory
      * Deactivate all subscriptions that have exceeded the failure threshold.
      *
      * @return int Number of deactivated subscriptions
+     * @since 1.0.0
      */
     public function deactivateExceededSubscriptions(): int
     {

@@ -22,6 +22,8 @@ use ZeroBoiler\Events\Models\Subscription;
  * Re-signs the payload with the subscription's HMAC secret and
  * re-sends it to the original webhook endpoint. Supports --force
  * to skip the confirmation prompt.
+ *
+ * @since 1.0.0
  */
 final class EventsRedeliverCommand extends Command
 {
@@ -67,6 +69,7 @@ final class EventsRedeliverCommand extends Command
      * Strips internal payload keys before redelivery to prevent leaks.
      *
      * @return int Command exit code (SUCCESS or FAILURE)
+     * @since 1.0.0
      */
     #[\Override]
     public function handle(): int

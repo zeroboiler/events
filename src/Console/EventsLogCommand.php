@@ -17,6 +17,7 @@ use ZeroBoiler\Events\Models\EventLog;
  *
  * Supports filtering by event name (with wildcards), trigger ID, status,
  * and result limiting.
+     * @since 1.0.0
  */
 final class EventsLogCommand extends Command
 {

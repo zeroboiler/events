@@ -18,6 +18,8 @@ interface ConditionEngineContract
      * @param  array<string, mixed>  $conditions  Field => expected value or operator array
      * @param  array<string, mixed>  $payload  The event payload to evaluate against
      * @return bool True if all conditions match, false otherwise
+     *
+     * @since 1.0.0
      */
     public function matches(array $conditions, array $payload): bool;
 }

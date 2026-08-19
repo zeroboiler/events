@@ -16,6 +16,8 @@ final class SubscriptionException extends EventException
     /**
      * @param  string  $message  Human-readable error description
      * @param  \Throwable|null  $previous  Previous exception for chaining
+     *
+     * @since 1.0.0
      */
     public function __construct(string $message, ?\Throwable $previous = null)
     {

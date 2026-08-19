@@ -16,6 +16,7 @@ use ZeroBoiler\Events\EventManager;
  *
  * Creates a trigger with the specified event name and action handler class.
  * Optional flags for async dispatch, priority, and display name.
+     * @since 1.0.0
  */
 final class EventsRegisterCommand extends Command
 {

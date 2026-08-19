@@ -25,6 +25,7 @@ final class EventsUnsubscribeCommand extends Command
 
     /**
      * Execute the command.
+     * @since 1.0.0
      */
     #[\Override]
     public function handle(EventManager $eventManager): int

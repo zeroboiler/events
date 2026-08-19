@@ -15,6 +15,8 @@ final class TriggerNotFoundException extends EventException
 {
     /**
      * @param  string  $triggerId  The trigger ID that was not found
+     *
+     * @since 1.0.0
      */
     public function __construct(string $triggerId)
     {

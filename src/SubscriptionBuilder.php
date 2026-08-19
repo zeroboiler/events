@@ -25,6 +25,8 @@ use ZeroBoiler\Events\Models\Subscription;
  *     ->async()
  *     ->save();
  * ```
+ *
+ * @since 1.0.0
  */
 final class SubscriptionBuilder
 {
@@ -41,6 +43,9 @@ final class SubscriptionBuilder
 
     protected bool $async = false;
 
+    /**
+     * @since 1.0.0
+     */
     public function __construct(
         private readonly EventManager $eventManager,
     ) {}
@@ -64,6 +69,7 @@ final class SubscriptionBuilder
 
     /**
      * Set the event name to subscribe to.
+     * @since 1.0.0
      */
     public function on(string $event): self
     {
@@ -74,6 +80,7 @@ final class SubscriptionBuilder
 
     /**
      * Set the webhook URL to deliver to.
+     * @since 1.0.0
      */
     public function to(string $url): self
     {
@@ -86,6 +93,7 @@ final class SubscriptionBuilder
      * Set the HMAC signing secret for webhook payload verification.
      *
      * @throws \InvalidArgumentException If the secret is too short (minimum 16 characters)
+     * @since 1.0.0
      */
     public function withSecret(string $secret): self
     {
@@ -102,6 +110,7 @@ final class SubscriptionBuilder
      * Set condition filters — webhook only fires when conditions match.
      *
      * @param  array<string, mixed>  $conditions
+     * @since 1.0.0
      */
     public function withFilter(array $conditions): self
     {
@@ -112,6 +121,7 @@ final class SubscriptionBuilder
 
     /**
      * Set the priority (higher = dispatched first).
+     * @since 1.0.0
      */
     public function priority(int $priority): self
     {
@@ -122,6 +132,7 @@ final class SubscriptionBuilder
 
     /**
      * Mark the subscription for async dispatch (queued delivery).
+     * @since 1.0.0
      */
     public function async(bool $async = true): self
     {
@@ -145,6 +156,7 @@ final class SubscriptionBuilder
      *
      * @throws \InvalidArgumentException If event name is empty, URL is empty/invalid, or URL is non-HTTP(S)
      * @throws \JsonException If JSON encoding of webhook payload fails during signing
+     * @since 1.0.0
      */
     public function save(): Subscription
     {

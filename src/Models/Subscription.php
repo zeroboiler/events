@@ -58,6 +58,7 @@ final class Subscription extends Model
      *
      * Uses the container's ConfigRepository for testability instead of
      * the static config() facade.
+     * @since 1.0.0
      */
     #[\Override]
     public function getTable(): string
@@ -122,6 +123,7 @@ final class Subscription extends Model
      *
      * @param  Builder<Subscription>  $query
      * @return Builder<Subscription>
+     * @since 1.0.0
      */
     public function scopeActive(Builder $query): Builder
     {
@@ -135,6 +137,7 @@ final class Subscription extends Model
      *
      * @param  Builder<Subscription>  $query
      * @return Builder<Subscription>
+     * @since 1.0.0
      */
     public function scopeForEvent(Builder $query, string $event): Builder
     {
@@ -155,6 +158,7 @@ final class Subscription extends Model
      *
      * @param  Builder<Subscription>  $query
      * @return Builder<Subscription>
+     * @since 1.0.0
      */
     public function scopeOrderByPriority(Builder $query): Builder
     {
@@ -169,6 +173,7 @@ final class Subscription extends Model
      * for patterns containing `*` or `**`.
      *
      * @see WildcardMatcher::matches()
+     * @since 1.0.0
      */
     public function matchesEvent(string $event): bool
     {
@@ -189,6 +194,7 @@ final class Subscription extends Model
      * Uses a single atomic SQL UPDATE to set both columns in one query,
      * avoiding unnecessary transaction overhead. The DB driver handles
      * row-level locking for concurrent delivery attempts.
+     * @since 1.0.0
      */
     public function recordDelivery(): void
     {
@@ -205,6 +211,7 @@ final class Subscription extends Model
 
     /**
      * Record a delivery failure and increment the failure counter.
+     * @since 1.0.0
      */
     public function recordFailure(): void
     {
@@ -213,6 +220,7 @@ final class Subscription extends Model
 
     /**
      * Reset the failure counter to zero.
+     * @since 1.0.0
      */
     public function resetFailures(): void
     {
@@ -227,6 +235,7 @@ final class Subscription extends Model
      *
      * @param  Builder<Subscription>  $query
      * @return Builder<Subscription>
+     * @since 1.0.0
      */
     public function scopeExceededFailures(Builder $query): Builder
     {
@@ -243,6 +252,7 @@ final class Subscription extends Model
      * when no explicit max is provided.
      *
      * @param  int|null  $max  Explicit failure threshold override, or null to use config
+     * @since 1.0.0
      */
     public function hasExceededFailures(?int $max = null): bool
     {
@@ -260,6 +270,7 @@ final class Subscription extends Model
      * Generate an HMAC signature for a payload using this subscription's secret.
      *
      * The hash algorithm is configurable via `events.subscriptions.signature_algorithm`.
+     * @since 1.0.0
      */
     public function signPayload(string $payload): string
     {

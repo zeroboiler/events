@@ -16,6 +16,8 @@ final class ConditionEvaluationException extends EventException
     /**
      * @param  string  $field  The condition field that caused the error
      * @param  string  $reason  Human-readable reason for the failure
+     *
+     * @since 1.0.0
      */
     public function __construct(string $field, string $reason)
     {
