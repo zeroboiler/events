@@ -306,13 +306,26 @@ final class EventManager
      *
      * @return void
      *
-     * @throws \InvalidArgumentException If the event name is empty
+     * @throws \InvalidArgumentException If the event name is empty or payload exceeds size limit
      * @throws \Throwable If a synchronous trigger action fails (re-thrown after logging)
      */
     public function fire(string $event, array $payload = [], bool $async = false): void
     {
         if ($event === '' || $event === '0') {
             throw new \InvalidArgumentException('Event name cannot be empty.');
+        }
+
+        // Guard against unreasonably large payloads that could cause OOM
+        // when serialized to JSON for storage or queue dispatch.
+        // 1 MB is a generous upper bound for event payloads.
+        try {
+            $encoded = json_encode($payload, \JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new \InvalidArgumentException('Event payload is not JSON-encodable: '.$e->getMessage(), 0, $e);
+        }
+
+        if (strlen((string) $encoded) > 1_048_576) {
+            throw new \InvalidArgumentException('Event payload exceeds the maximum allowed size (1 MB).');
         }
 
         // Global disable check — allows maintenance-mode-like suppression

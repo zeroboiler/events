@@ -5,6 +5,17 @@ All notable changes to the **ZeroBoiler Events** package are documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [5.93.0] - 2026-08-19
+
+### Added
+- **Payload size guard** — `EventManager::fire()` now validates that payloads are JSON-encodable and under 1 MB (JSON-encoded size). Rejects non-encodable payloads (NaN, Inf, resources) and oversized payloads with `InvalidArgumentException` before any database or queue operations. This prevents OOM and serialization failures in production.
+- `EventManagerPayloadSizeGuardTest.php` — 7 test cases covering payload size boundary, non-encodable payloads, empty payloads, and interaction with global disable.
+
+### Changed
+- Version bumped to 5.93.0, test count updated to 380.
+- README updated with payload size guard documentation in Features and Performance sections.
+
+---
 ## [5.91.0] - 2026-08-19
 
 ### Changed

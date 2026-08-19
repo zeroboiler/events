@@ -383,6 +383,7 @@ uses(TestCase::class)->in(
     'DomainEventToStringFormatTest.php',
     'EventLogStatusConstantsTest.php',
     'EventManagerContainerAccessorTest.php',
+    'EventManagerPayloadSizeGuardTest.php',
     'ConditionEngineGetNestedValueTest.php',
     'TriggerBuilderActionsMergeIntegrationTest.php',
 );
