@@ -17,6 +17,8 @@ use ZeroBoiler\Events\Models\Trigger;
  *
  * Supports filtering by event name (with wildcard support), enabled/disabled
  * status, and pagination via --per-page and --page options.
+ *
+ * @since 1.0.0
  */
 final class EventsListCommand extends Command
 {

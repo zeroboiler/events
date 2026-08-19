@@ -24,6 +24,8 @@ use ZeroBoiler\Events\Models\Trigger;
  * subscription health, queue configuration, and cache status.
  *
  * @property-read \Illuminate\Contracts\Foundation\Application|null $laravel
+ *
+ * @since 1.0.0
  */
 final class EventsHealthCommand extends Command
 {
