@@ -10,6 +10,12 @@ namespace ZeroBoiler\Events\Console;
 
 use Illuminate\Console\Command;
 use ZeroBoiler\Events\EventManager;
+/**
+ * Remove an external webhook subscription by ID.
+ *
+ * Deletes the subscription record and its associated internal trigger
+ * to prevent orphaned webhook dispatches.
+ */
 
 final class EventsUnsubscribeCommand extends Command
 {
