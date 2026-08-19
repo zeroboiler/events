@@ -11,6 +11,7 @@ namespace ZeroBoiler\Events\Console;
 use Illuminate\Console\Command;
 use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\Models\Subscription;
+
 /**
  * List external webhook subscriptions with optional filtering.
  *
@@ -89,7 +90,7 @@ final class EventsSubscriptionsCommand extends Command
         $this->table($headers, $rows);
 
         $totalPages = (int) ceil($total / $perPage);
-        $this->info("Page {$page} of {$totalPages} ({$total} subscription(s), showing ".$subscriptions->count().')');
+        $this->info("Page {$page} of {$totalPages} ({$total} subscription(s), showing {$subscriptions->count()})");
 
         return Command::SUCCESS;
     }

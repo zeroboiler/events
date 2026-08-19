@@ -402,6 +402,10 @@ uses(TestCase::class)->in(
     'SubscriptionScopeForEventNonWildcardTest.php',
     // Phase 220 — ManagesHistory deactivation tests
     'ManagesHistoryDeactivateExceededSubscriptionsTest.php',
+    // Phase 225 — Scope and edge-case coverage
+    'EventLogScopeStalePendingTest.php',
+    'ConditionEngineDeepNestingTest.php',
+    'TriggerBuilderClassesParamsJsonTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)

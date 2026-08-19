@@ -127,6 +127,7 @@ trait CreatesApplication
                 ],
                 'wildcard_cache_ttl' => 300,
                 'disabled' => false,
+                'payload_max_bytes' => 1_048_576,
             ],
         ]);
         $app->instance('config', $config);

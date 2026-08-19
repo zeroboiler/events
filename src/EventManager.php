@@ -743,7 +743,8 @@ final class EventManager
      * a value was stripped.
      *
      * @param  array<string, mixed>  $payload
-     * @return array<string, mixed>
+     * @return array<mixed, mixed> Array with non-serializable values replaced by type placeholders.
+     *                               Nested arrays may have integer keys from recursive calls.
      *
      * @internal Not part of the public API.
      */
