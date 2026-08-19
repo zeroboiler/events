@@ -43,6 +43,8 @@ use ZeroBoiler\Events\WildcardMatcher;
  *
  * @see \ZeroBoiler\Events\SubscriptionBuilder
  * @see \ZeroBoiler\Events\Actions\WebhookAction
+ *
+ * @method wildcardToLike(string $pattern): string|null For wildcard-to-SQL-LIKE conversion (from EscapesWildcardLike)
  */
 final class Subscription extends Model
 {

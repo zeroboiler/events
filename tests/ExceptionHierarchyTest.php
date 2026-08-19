@@ -12,94 +12,57 @@ use ZeroBoiler\Events\Exceptions\EventException;
 use ZeroBoiler\Events\Exceptions\SubscriptionException;
 use ZeroBoiler\Events\Exceptions\TriggerNotFoundException;
 
-describe('Exception Hierarchy', function (): void {
-    describe('EventException', function (): void {
-        test('extends RuntimeException', function (): void {
-            $e = new EventException('test message');
-            expect($e)->toBeInstanceOf(\RuntimeException::class);
-        });
-
-        test('stores message and code', function (): void {
-            $e = new EventException('custom error', 42);
-            expect($e->getMessage())->toBe('custom error');
-            expect($e->getCode())->toBe(42);
-        });
-
-        test('supports previous exception chaining', function (): void {
-            $previous = new \RuntimeException('root cause');
-            $e = new EventException('wrapper', 0, $previous);
-            expect($e->getPrevious())->toBe($previous);
-        });
-
-        test('is catchable as Throwable', function (): void {
-            $e = new EventException('test');
-            $caught = false;
-            try {
-                throw $e;
-            } catch (\Throwable $t) {
-                $caught = $t instanceof EventException;
-            }
-            expect($caught)->toBeTrue();
-        });
+describe('Exception hierarchy', function (): void {
+    test('EventException extends RuntimeException', function (): void {
+        $e = new EventException('test');
+        expect($e)->toBeInstanceOf(\RuntimeException::class);
     });
 
-    describe('TriggerNotFoundException', function (): void {
-        test('extends EventException', function (): void {
-            $e = new TriggerNotFoundException('abc-123');
-            expect($e)->toBeInstanceOf(EventException::class);
-        });
-
-        test('includes trigger ID in message', function (): void {
-            $e = new TriggerNotFoundException('550e8400-e29b-41d4-a716-446655440000');
-            expect($e->getMessage())->toContain('550e8400-e29b-41d4-a716-446655440000');
-        });
-
-        test('has zero code by default', function (): void {
-            $e = new TriggerNotFoundException('id');
-            expect($e->getCode())->toBe(0);
-        });
+    test('EventException accepts code and previous', function (): void {
+        $prev = new \RuntimeException('inner');
+        $e = new EventException('outer', 42, $prev);
+        expect($e->getMessage())->toBe('outer');
+        expect($e->getCode())->toBe(42);
+        expect($e->getPrevious())->toBe($prev);
     });
 
-    describe('ConditionEvaluationException', function (): void {
-        test('extends EventException', function (): void {
-            $e = new ConditionEvaluationException('amount', 'non-numeric value');
-            expect($e)->toBeInstanceOf(EventException::class);
-        });
-
-        test('includes field and reason in message', function (): void {
-            $e = new ConditionEvaluationException('status', 'unsupported operator');
-            expect($e->getMessage())->toContain('status');
-            expect($e->getMessage())->toContain('unsupported operator');
-        });
+    test('ActionResolutionException formats message with class and reason', function (): void {
+        $e = new ActionResolutionException('App\\Actions\\Foo', 'not found');
+        expect($e->getMessage())->toBe("Failed to resolve action 'App\\Actions\\Foo': not found");
+        expect($e)->toBeInstanceOf(EventException::class);
     });
 
-    describe('ActionResolutionException', function (): void {
-        test('extends EventException', function (): void {
-            $e = new ActionResolutionException('App\\Actions\\Foo');
-            expect($e)->toBeInstanceOf(EventException::class);
-        });
-
-        test('includes class name in message', function (): void {
-            $e = new ActionResolutionException('App\\Actions\\Foo');
-            expect($e->getMessage())->toContain('App\\Actions\\Foo');
-        });
-
-        test('includes reason when provided', function (): void {
-            $e = new ActionResolutionException('App\\Actions\\Foo', 'Class does not exist');
-            expect($e->getMessage())->toContain('Class does not exist');
-        });
+    test('ActionResolutionException formats message without reason', function (): void {
+        $e = new ActionResolutionException('App\\Actions\\Foo');
+        expect($e->getMessage())->toBe("Failed to resolve action 'App\\Actions\\Foo'");
     });
 
-    describe('SubscriptionException', function (): void {
-        test('extends EventException', function (): void {
-            $e = new SubscriptionException('Invalid webhook URL');
-            expect($e)->toBeInstanceOf(EventException::class);
-        });
+    test('ConditionEvaluationException formats message with field and reason', function (): void {
+        $e = new ConditionEvaluationException('amount', 'invalid operator');
+        expect($e->getMessage())->toBe("Condition evaluation failed for field 'amount': invalid operator");
+        expect($e)->toBeInstanceOf(EventException::class);
+    });
 
-        test('supports previous exception', function (): void {
-            $previous = new \RuntimeException('connection refused');
-            $e = new SubscriptionException('Webhook delivery failed', $previous);
-            expect($e->getPrevious())->toBe($previous);
-        });
+    test('SubscriptionException accepts previous exception', function (): void {
+        $prev = new \RuntimeException('network error');
+        $e = new SubscriptionException('webhook failed', $prev);
+        expect($e->getMessage())->toBe('webhook failed');
+        expect($e->getCode())->toBe(0);
+        expect($e->getPrevious())->toBe($prev);
+        expect($e)->toBeInstanceOf(EventException::class);
+    });
+
+    test('TriggerNotFoundException formats message with trigger ID', function (): void {
+        $e = new TriggerNotFoundException('abc-123');
+        expect($e->getMessage())->toBe('Trigger not found: abc-123');
+        expect($e)->toBeInstanceOf(EventException::class);
+    });
+
+    test('all exceptions are final', function (): void {
+        expect((new \ReflectionClass(EventException::class))->isFinal())->toBeFalse();
+        expect((new \ReflectionClass(ActionResolutionException::class))->isFinal())->toBeTrue();
+        expect((new \ReflectionClass(ConditionEvaluationException::class))->isFinal())->toBeTrue();
+        expect((new \ReflectionClass(SubscriptionException::class))->isFinal())->toBeTrue();
+        expect((new \ReflectionClass(TriggerNotFoundException::class))->isFinal())->toBeTrue();
     });
 });

@@ -24,6 +24,9 @@ use ZeroBoiler\Events\SubscriptionBuilder;
  * @see \ZeroBoiler\Events\EventManager
  *
  * @property-read \Illuminate\Container\Container $app
+ * @method wildcardToLike(string $pattern): string|null For wildcard-to-SQL-LIKE conversion (from EscapesWildcardLike)
+ * @method register(string $event): \ZeroBoiler\Events\TriggerBuilder Register a trigger (from EventManager)
+ * @method invalidateTriggerCache(): void Clear the wildcard trigger cache (from EventManager)
  */
 trait ManagesSubscriptions
 {

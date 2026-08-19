@@ -326,6 +326,7 @@ uses(TestCase::class)->in(
     'EventsPhase182ProductionInfrastructureAuditTest.php',
     'EventsPhase183ProductionReadinessTest.php',
     'EventsPhase184InfrastructureAuditTest.php',
+    'EventSchedulerConfigEdgeCasesTest.php',
     'EventSchedulerProductionReadinessTest.php',
     'EventsPhase185InfrastructureAuditTest.php',
     'EventsPhase186ProductionReadinessAuditTest.php',
@@ -374,6 +375,7 @@ uses(TestCase::class)->in(
     'SourceFilesSyntaxValidationTest.php',
     'ServiceProviderDiscoveryTest.php',
     'ConditionEngineEmptyNotEmptyEdgeCasesTest.php',
+    'DomainEventConstructorValidationTest.php',
     'DomainEventFromArrayEdgeCasesTest.php',
     'EventsPhase216ProductionReadinessTest.php',
     'SubscriptionBuilderTransactionAtomicityTest.php',
@@ -385,6 +387,7 @@ uses(TestCase::class)->in(
     'EventManagerContainerAccessorTest.php',
     'EventManagerPayloadSizeGuardTest.php',
     'ConditionEngineGetNestedValueTest.php',
+    'EventManagerSanitizePayloadIntegrationTest.php',
     'TriggerBuilderActionsMergeIntegrationTest.php',
 );
 

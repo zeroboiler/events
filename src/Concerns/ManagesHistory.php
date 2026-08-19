@@ -25,6 +25,7 @@ use ZeroBoiler\Events\Models\Trigger;
  * @see \ZeroBoiler\Events\EventManager
  *
  * @property-read \Illuminate\Container\Container $app
+ * @method wildcardToLike(string $pattern): string|null For wildcard-to-SQL-LIKE conversion (from EscapesWildcardLike)
  */
 trait ManagesHistory
 {
