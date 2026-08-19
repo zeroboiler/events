@@ -158,6 +158,7 @@ final class DispatchTriggerJob implements ShouldQueue
         $eventManager->executeTrigger($trigger, $log);
     }
 
+    #[\Override]
     public function failed(Throwable $exception): void
     {
         Log::error('DispatchTriggerJob failed permanently', [

@@ -116,7 +116,7 @@ final class TriggerBuilder
      * silently discarding it (BUG-2 fix). Deduplication ensures the same class
      * doesn't appear twice (preserves first-occurrence order).
      *
-     * @return list<string> Resolved action class FQNs (plain strings only; no array entries)
+     * @return list<string|array{class: string, params: array<string, mixed>}> Resolved action class FQNs or structured action entries with params
      *
      * @internal Not part of the public API.
      */

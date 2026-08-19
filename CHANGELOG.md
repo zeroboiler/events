@@ -5,6 +5,19 @@ All notable changes to the **ZeroBoiler Events** package are documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [5.97.0] - 2026-08-19
+
+### Fixed
+- Added missing `#[\\Override]` attribute to `DispatchTriggerJob::failed()` method for PHPStan 9 compliance.
+- Fixed inaccurate `@return` docblock on `TriggerBuilder::resolveActions()` — was `list<string>` but can return mixed string/array entries.
+
+### Added
+- `DispatchTriggerJobOverrideAttributeTest.php` — 3 test cases verifying `#[\\Override]` on `failed()` and `handle()`, and readonly property types.
+
+### Changed
+- Version bumped to 5.97.0, test count updated to 389.
+
+---
 ## [5.93.0] - 2026-08-19
 
 ### Added
