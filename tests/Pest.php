@@ -406,6 +406,8 @@ uses(TestCase::class)->in(
     'EventLogScopeStalePendingTest.php',
     'ConditionEngineDeepNestingTest.php',
     'TriggerBuilderClassesParamsJsonTest.php',
+    // Phase 226 — getSubscription empty string guard
+    'GetSubscriptionEmptyGuardTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)

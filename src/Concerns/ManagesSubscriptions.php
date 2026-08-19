@@ -130,6 +130,10 @@ trait ManagesSubscriptions
      */
     public function getSubscription(string $subscriptionId): ?Subscription
     {
+        if ($subscriptionId === '' || $subscriptionId === '0') {
+            return null;
+        }
+
         return Subscription::find($subscriptionId);
     }
 

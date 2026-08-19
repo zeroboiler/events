@@ -45,6 +45,8 @@ final class EventsRedeliverCommand extends Command
      * @return array<string, mixed>
      *
      * @internal Not part of the public API.
+     *
+     * @since 1.0.0
      */
     private function buildRedeliverBody(EventLog $log): array
     {

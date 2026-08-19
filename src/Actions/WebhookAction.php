@@ -144,6 +144,8 @@ final class WebhookAction implements Triggerable
      * (from the handle() method) to avoid a redundant DB query.
      *
      * @param  Subscription|null  $subscription  Already-loaded subscription instance, or null to query by ID
+     *
+     * @since 1.0.0
      */
     private function recordSubscriptionFailure(?string $subscriptionId, ?Subscription $subscription = null): void
     {
