@@ -364,6 +364,7 @@ uses(TestCase::class)->in(
     'DispatchTriggerJobFailedMethodEdgeCasesTest.php',
     'EventsPhase211InfrastructureProductionAuditTest.php',
     'EventManagerContainerMethodTest.php',
+    'EventManagerContainerApiTest.php',
     'ConditionEngineSafeRegexTest.php',
     'EventsPhase212InfrastructureAuditTest.php',
     'EventsProductionHardeningFinalTest.php',

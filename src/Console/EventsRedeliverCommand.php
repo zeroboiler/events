@@ -16,6 +16,13 @@ use ZeroBoiler\Events\Concerns\GetsWebhookTimeout;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Subscription;
 
+/**
+ * Manually redeliver a failed or completed webhook delivery.
+ *
+ * Re-signs the payload with the subscription's HMAC secret and
+ * re-sends it to the original webhook endpoint. Supports --force
+ * to skip the confirmation prompt.
+ */
 final class EventsRedeliverCommand extends Command
 {
     use GetsWebhookTimeout;

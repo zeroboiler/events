@@ -11,6 +11,12 @@ namespace ZeroBoiler\Events\Console;
 use Illuminate\Console\Command;
 use ZeroBoiler\Events\EventManager;
 
+/**
+ * Manually fire an event from the CLI.
+ *
+ * Supports key=value payload pairs, JSON payloads via --json,
+ * file-based JSON via --json=@path, and forced async dispatch.
+ */
 final class EventsFireCommand extends Command
 {
     protected string $signature = 'zeroboiler:events:fire

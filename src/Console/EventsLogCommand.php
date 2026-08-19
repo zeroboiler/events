@@ -12,6 +12,12 @@ use Illuminate\Console\Command;
 use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\Models\EventLog;
 
+/**
+ * View event logs with optional filtering.
+ *
+ * Supports filtering by event name (with wildcards), trigger ID, status,
+ * and result limiting.
+ */
 final class EventsLogCommand extends Command
 {
     use EscapesWildcardLike;

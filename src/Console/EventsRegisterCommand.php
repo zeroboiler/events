@@ -11,6 +11,12 @@ namespace ZeroBoiler\Events\Console;
 use Illuminate\Console\Command;
 use ZeroBoiler\Events\EventManager;
 
+/**
+ * Register a new event trigger from the CLI.
+ *
+ * Creates a trigger with the specified event name and action handler class.
+ * Optional flags for async dispatch, priority, and display name.
+ */
 final class EventsRegisterCommand extends Command
 {
     protected string $signature = 'zeroboiler:events:register

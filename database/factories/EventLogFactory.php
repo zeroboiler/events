@@ -16,7 +16,7 @@ use ZeroBoiler\Events\Models\Trigger;
 /**
  * @extends Factory<EventLog>
  */
-class EventLogFactory extends Factory
+final class EventLogFactory extends Factory
 {
     protected static string $model = EventLog::class;
 

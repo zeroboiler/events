@@ -15,6 +15,12 @@ use ZeroBoiler\Events\Jobs\DispatchTriggerJob;
 use ZeroBoiler\Events\Models\EventLog;
 use ZeroBoiler\Events\Models\Trigger;
 
+/**
+ * Retry failed or pending event dispatches.
+ *
+ * Re-queues async triggers or re-executes sync triggers for logs
+ * matching the specified status filter.
+ */
 final class EventsRetryCommand extends Command
 {
     protected string $signature = 'zeroboiler:events:retry

@@ -12,6 +12,9 @@ use Illuminate\Console\Command;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Models\Trigger;
 
+/**
+ * Enable a previously disabled event trigger.
+ */
 final class EventsEnableCommand extends Command
 {
     protected string $signature = 'zeroboiler:events:enable {id : Trigger ID}';

@@ -15,7 +15,7 @@ use ZeroBoiler\Events\Models\Trigger;
 /**
  * @extends Factory<Trigger>
  */
-class TriggerFactory extends Factory
+final class TriggerFactory extends Factory
 {
     protected static string $model = Trigger::class;
 

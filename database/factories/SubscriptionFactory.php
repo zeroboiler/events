@@ -15,7 +15,7 @@ use ZeroBoiler\Events\Models\Subscription;
 /**
  * @extends Factory<Subscription>
  */
-class SubscriptionFactory extends Factory
+final class SubscriptionFactory extends Factory
 {
     protected static string $model = Subscription::class;
 

@@ -11,6 +11,12 @@ namespace ZeroBoiler\Events\Console;
 use Illuminate\Console\Command;
 use ZeroBoiler\Events\EventManager;
 
+/**
+ * Register an external webhook subscription for an event.
+ *
+ * Creates a subscription with optional HMAC secret, condition filters,
+ * priority, and async delivery mode.
+ */
 final class EventsSubscribeCommand extends Command
 {
     protected string $signature = 'zeroboiler:events:subscribe

@@ -12,6 +12,12 @@ use Illuminate\Console\Command;
 use ZeroBoiler\Events\Concerns\EscapesWildcardLike;
 use ZeroBoiler\Events\Models\Trigger;
 
+/**
+ * List event triggers with optional filtering.
+ *
+ * Supports filtering by event name (with wildcard support), enabled/disabled
+ * status, and pagination via --per-page and --page options.
+ */
 final class EventsListCommand extends Command
 {
     use EscapesWildcardLike;

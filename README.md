@@ -1,10 +1,10 @@
 # ZeroBoiler Events
 
-![Latest Version](https://img.shields.io/badge/version-5.89.0-blue)
+![Latest Version](https://img.shields.io/badge/version-5.90.0-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 359](https://img.shields.io/badge/Tests-359-brightgreen)
+![Tests: 360](https://img.shields.io/badge/Tests-360-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -471,14 +471,14 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                      # 359 test files (359 test files + 5 support)
+└── tests/                      # 360 test files (360 test files + 5 support)
 ├── Pest.php               # Test suite configuration
 ├── TestCase.php           # Base test case (Laravel bootstrap)
 ├── CreatesApplication.php # Application trait
 ├── TestActions.php        # Test action implementations (Triggerable)
 ├── helpers.php            # Test helper functions (env, app, config, fake)
-└── ... (359 test files)
-└── Total: 410 PHP files (38 src + 359 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config + 3 support)
+└── ... (360 test files)
+└── Total: 411 PHP files (38 src + 360 tests + 3 factories + 3 migrations + 2 phpstan configs + 1 rector.php + 1 config + 3 support)
 ```
 
 ### How It Works
@@ -942,7 +942,7 @@ Before deploying to production, verify:
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (359 files)
+composer test        # Run Pest test suite (360 files)
 composer analyse     # PHPStan level 9 (uses phpstan.neon.dist; PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -981,10 +981,19 @@ Test coverage spans:
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 359 test files |
+| Test coverage | ✅ 360 test files |
 | No deprecated APIs | ✅ No setAccessible() in src or tests |
 
 ## Changelog
+### v5.90.0
+
+- Improved: Made all 3 database factories `final` (`TriggerFactory`, `EventLogFactory`, `SubscriptionFactory`) — consistent with all other classes in the package.
+- Added: Class-level docblocks to 9 console commands missing them (`EventsFireCommand`, `EventsListCommand`, `EventsRegisterCommand`, `EventsEnableCommand`, `EventsDisableCommand`, `EventsRetryCommand`, `EventsLogCommand`, `EventsRedeliverCommand`, `EventsSubscribeCommand`, `EventsSubscriptionsCommand`).
+- Added: `EventManagerContainerApiTest` — 9 tests covering EventManager::container() public API: container instance identity, service resolution, singleton vs transient verification, config repository access, facade proxy delegation.
+- Registered: 1 new test file in Pest.php (360 test files).
+- Updated: README version badge (5.89.0→5.90.0), test count badges (359→360), file counts (410→411).
+- Bumped: Version 5.90.0.
+
 ### v5.89.0
 
 - Added: `SubscriptionBuilderTransactionAtomicityTest` — 18 tests covering SubscriptionBuilder::save() transaction atomicity: both subscription and trigger created together, priority and async flag propagation, condition passing to both records, auto-generated secret with whsec_ prefix, secret_length config respect, provided secret override, empty event/URL rejection, invalid URL rejection, non-HTTP scheme rejection (ftp://, file://), short secret rejection, null conditions when no filter set, trigger name traceability, HTTPS and HTTP URL acceptance, UUID v4 format validation, auto_generate_secret=false behavior (manual secret, null secret).

@@ -12,6 +12,9 @@ use Illuminate\Console\Command;
 use ZeroBoiler\Events\EventManager;
 use ZeroBoiler\Events\Models\Trigger;
 
+/**
+ * Disable an active event trigger.
+ */
 final class EventsDisableCommand extends Command
 {
     protected string $signature = 'zeroboiler:events:disable {id : Trigger ID}';
