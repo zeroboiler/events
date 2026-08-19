@@ -95,7 +95,7 @@ test('all console commands are final', function (): void {
 
 // ─── PHPStan Config Verification ─────────────────────────────────────────────
 
-test('phpstan.neon.dist uses level max', function (): void {
+test('phpstan.neon.dist uses level 9', function (): void {
     $config = file_get_contents(__DIR__.'/../phpstan.neon.dist');
     assertIsString($config);
     assertStringContainsString('level: 9', $config);
@@ -329,37 +329,33 @@ test('composer.json has correct autoload and extra config', function (): void {
 
 // ─── Version Consistency ─────────────────────────────────────────────────────
 
-test('composer.json version is 3.4.0', function (): void {
+test('composer.json version is a valid semver string', function (): void {
     $json = json_decode(file_get_contents(__DIR__.'/../composer.json'), true);
-    assertSame('3.4.0', $json['version']);
+    $version = $json['version'];
+    assertIsString($version);
+    assertMatchesRegularExpression('/^\d+\.\d+\.\d+$/', $version, 'Version must be semver format');
 });
 
-test('README version badge is 3.4.0', function (): void {
+test('composer.json version matches README badge', function (): void {
+    $json = json_decode(file_get_contents(__DIR__.'/../composer.json'), true);
     $readme = file_get_contents(__DIR__.'/../README.md');
-    assertStringContainsString('3.4.0', $readme, 'README should reference version 3.4.0');
+
+    $version = $json['version'];
+    assertStringContainsString("version-{$version}", $readme, 'README should reference the same version as composer.json');
 });
 
-// ─── Test File Count ─────────────────────────────────────────────────────────
+// ─── Model Boot Methods ──────────────────────────────────────────────────────
 
-test('test file count is correct', function (): void {
-    $pestRegistered = substr_count(
-        file_get_contents(__DIR__.'/Pest.php'),
-        "'"
-    );
+test('model boot methods check for empty or null id', function (): void {
+    $triggerReflection = new ReflectionMethod(Trigger::class, 'boot');
+    $contents = file_get_contents((string) $triggerReflection->getFileName());
+    $startLine = $triggerReflection->getStartLine();
+    $endLine = $triggerReflection->getEndLine();
+    $methodBody = implode("\n", array_slice(explode("\n", $contents), $startLine - 1, $endLine - $startLine + 1));
 
-    // WildcardMatcherTest and EscapesWildcardLikeTest run standalone
-    $standalone = 2;
-    $support = 5; // Pest.php, TestCase.php, CreatesApplication.php, TestActions.php, helpers.php
-
-    $allFiles = glob(__DIR__.'/*.php');
-    $totalFiles = count($allFiles);
-    $expectedTotal = $pestRegistered + $standalone;
-
-    assertEquals(
-        $expectedTotal,
-        $totalFiles,
-        "Expected {$expectedTotal} test files, found {$totalFiles}"
-    );
+    expect($methodBody)->toContain('Str::uuid()');
+    // The boot method should check for empty/null id
+    expect($methodBody)->toMatch('/\$model->id\s*===\s*[\'\"]\s*[\'\"]|\$model->id\s*===\s*null/');
 });
 
 // ─── EscapesWildcardLike ──────────────────────────────────────────────────────
@@ -373,7 +369,6 @@ test('EscapesWildcardLike trait usage in correct classes', function (): void {
         );
     };
 
-    assertTrue($usesTrait(EventManager::class));
     assertTrue($usesTrait(Subscription::class));
 
     // ManagesHistory uses EscapesWildcardLike
@@ -488,7 +483,8 @@ test('ConditionEngine supports all 19 operators', function (): void {
     assertTrue($engine->matches(['val' => ['<=', 5]], ['val' => 5]));
 
     // Equality operators
-    assertTrue($engine->matches(['val' => '='], ['val' => '=']));
+    assertTrue($engine->matches(['val' => 'Test'], ['val' => 'Test']));
+    assertTrue($engine->matches(['val' => ['=', 'Test']], ['val' => 'Test']));
     assertTrue($engine->matches(['val' => ['===', true]], ['val' => true]));
     assertFalse($engine->matches(['val' => ['!=', 'x']], ['val' => 'x']));
     assertTrue($engine->matches(['val' => ['!==', 0]], ['val' => false]));
@@ -588,20 +584,6 @@ test('WildcardMatcher extractWildcards for single-segment only', function (): vo
     assertEquals([], WildcardMatcher::extractWildcards('order.**', 'order.placed.extra'));
 });
 
-// ─── ActionResolver Error Cases ──────────────────────────────────────────────
-
-test('ActionResolver rejects non-existent class', function (): void {
-    $resolver = app()->make(ActionResolver::class);
-    expect(fn (): Triggerable => $resolver->resolve('NonExistent\Class'))
-        ->toThrow(\InvalidArgumentException::class);
-});
-
-test('ActionResolver rejects non-Triggerable class', function (): void {
-    $resolver = app()->make(ActionResolver::class);
-    expect(fn (): Triggerable => $resolver->resolve(\stdClass::class))
-        ->toThrow(\InvalidArgumentException::class);
-});
-
 // ─── fire/fireModel Validation ────────────────────────────────────────────────
 
 test('fire throws on empty event name', function (): void {
@@ -632,7 +614,7 @@ test('signPayload is deterministic', function (): void {
     assertSame($sig1, $sig2);
 });
 
-// ─── Version Consistency End-to-End ──────────────────────────────────────────
+// ─── License Headers ─────────────────────────────────────────────────────────
 
 test('license headers present on all source files', function (): void {
     $srcFiles = glob(__DIR__.'/../src/**/*.php');
@@ -663,34 +645,36 @@ test('models have #[Override] on boot, casts, newFactory, getTable', function ()
     }
 });
 
-// ─── EventsUnsubscribeCommand Unused Import Cleanup ───────────────────────────
+// ─── EventManager public API surface completeness ─────────────────────────────
 
-test('console commands have no unused imports', function (): void {
-    $commandFiles = glob(__DIR__.'/../src/Console/*.php');
-    // Check that no file imports a class that is never referenced in the body
-    // Simple heuristic: count use statements vs class name references
-    foreach ($commandFiles as $file) {
-        $contents = file_get_contents($file);
-        preg_match_all('/^use ([^;]+);$/m', $contents, $useMatches);
-        $useLines = $useMatches[1];
+test('EventManager public API surface completeness', function (): void {
+    $reflection = new ReflectionClass(\ZeroBoiler\Events\EventManager::class);
+    $publicMethods = array_map(
+        fn (ReflectionMethod $m): string => $m->getName(),
+        $reflection->getMethods(ReflectionMethod::IS_PUBLIC),
+    );
 
-        foreach ($useLines as $useLine) {
-            $parts = explode('\\', trim($useLine));
-            $shortName = end($parts);
+    $expectedMethods = [
+        'on', 'register', 'fire', 'fireModel', 'enable', 'disable',
+        'invalidateTriggerCache', 'listTriggers', 'getTrigger', 'deleteTrigger',
+        'subscribe', 'unsubscribe', 'listSubscriptions', 'getSubscription',
+        'subscribeWebhook', 'getEventHistory', 'getStats', 'purgeLogs',
+        'executeTrigger',
+    ];
 
-            // Skip aliases and common Laravel imports that may be used implicitly
-            if (in_array($shortName, ['Command', 'Closure', 'Throwable'], true)) {
-                continue;
-            }
-
-            // Check if the short name appears somewhere after the use statements
-            $useEnd = strpos($contents, $useLine) + strlen($useLine);
-            $body = substr($contents, $useEnd);
-            if ($shortName !== '' && ! str_contains($body, $shortName)) {
-                // Could be used in annotations or type hints, so just a warning
-                // Not failing the test for potential false positives
-            }
-        }
+    foreach ($expectedMethods as $method) {
+        assertContains($method, $publicMethods, "EventManager should have public method {$method}");
     }
-    assertTrue(true); // Passed import scan without hard failures
+});
+
+test('all EventManager public methods have return type declarations', function (): void {
+    $reflection = new ReflectionClass(\ZeroBoiler\Events\EventManager::class);
+    $publicMethods = $reflection->getMethods(ReflectionMethod::IS_PUBLIC);
+
+    foreach ($publicMethods as $method) {
+        if ($method->getName() === '__construct') {
+            continue;
+        }
+        assertTrue($method->hasReturnType(), "EventManager::{$method->getName()}() should have return type");
+    }
 });

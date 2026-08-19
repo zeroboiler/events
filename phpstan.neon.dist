@@ -9,6 +9,7 @@ parameters:
         - tests
     baselineFile: phpstan-baseline.neon
     reportUnusedIgnoredErrors: true
+    reportUnmatchedIgnoredErrors: true
     treatPhpDocTypesAsCertain: false
     checkMissingIterableValueType: true
     checkGenericClassInNonGenericObjectType: true

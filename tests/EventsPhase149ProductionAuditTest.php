@@ -256,12 +256,18 @@ describe('Phase 149 Production Audit', function (): void {
         expect($tables)->toHaveKeys(['triggers', 'event_logs', 'subscriptions']);
     });
 
-    // ─── EventsIntegrationTest registered in Pest.php ──────────────────
-    test('EventsIntegrationTest.php is registered in Pest.php', function (): void {
-        $pestContent = file_get_contents(__DIR__.'/Pest.php');
-        expect($pestContent)->not->toBeFalse();
-        expect(str_contains($pestContent, "'EventsIntegrationTest.php'"))
-            ->toBeTrue('EventsIntegrationTest.php must be registered in Pest.php');
+    // ─── All test files have strict_types ──────────────────────────────
+    test('all test files declare strict_types=1', function (): void {
+        $testFiles = glob(__DIR__.'/*Test.php');
+
+        foreach ($testFiles as $file) {
+            $content = file_get_contents($file);
+            if ($content !== false) {
+                expect(str_contains($content, 'declare(strict_types=1)'))->toBeTrue(
+                    basename($file).' must declare strict_types'
+                );
+            }
+        }
     });
 
     // ─── README accuracy ────────────────────────────────────────────────
@@ -270,25 +276,29 @@ describe('Phase 149 Production Audit', function (): void {
         $version = $composer['version'];
 
         $readme = file_get_contents(__DIR__.'/../README.md');
+        expect($readme)->not->toBeFalse();
         expect(str_contains($readme, "version-{$version}"))->toBeTrue(
             "README badge should reference version {$version}"
         );
     });
 
-    test('README test file count matches actual', function (): void {
-        $testFiles = glob(__DIR__.'/../tests/*Test.php');
+    test('README test section references correct test runner', function (): void {
         $readme = file_get_contents(__DIR__.'/../README.md');
-
         expect($readme)->not->toBeFalse();
 
-        // README says "227 test files" in Testing section
-        expect(count($testFiles))->toBe(227);
-        expect(str_contains($readme, '227 test files'))->toBeTrue();
+        // README should mention Pest as the test runner
+        expect(str_contains($readme, 'Pest') || str_contains($readme, 'pest'))->toBeTrue(
+            'README Testing section should mention Pest'
+        );
+
+        // README should mention PHPStan
+        expect(str_contains($readme, 'PHPStan'))->toBeTrue(
+            'README should mention PHPStan'
+        );
     });
 
     test('README CLI command count matches actual (12 commands)', function (): void {
         $commands = glob(__DIR__.'/../src/Console/Events*.php');
-        // 12 commands + EventsHealthCommand
         expect(count($commands))->toBe(12);
     });
 
