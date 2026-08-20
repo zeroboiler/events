@@ -90,6 +90,8 @@ final class EventManager
      * Exposed as public so that collaborators (e.g., SubscriptionBuilder)
      * can access the container without reaching into protected properties.
      *
+     * @return \Illuminate\Container\Container
+     *
      * @since 1.0.0
      */
     public function container(): Container
@@ -154,6 +156,7 @@ final class EventManager
      * Start building a new trigger.
      *
      * @param  string  $event  The event name (supports wildcards)
+     * @return TriggerBuilder
      *
      * @since 1.0.0
      */
@@ -174,6 +177,7 @@ final class EventManager
      * Alias for on().
      *
      * @param  string  $event  The event name (supports wildcards)
+     * @return TriggerBuilder
      *
      * @since 1.0.0
      */
