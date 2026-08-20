@@ -8,19 +8,10 @@ declare(strict_types=1);
 
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
-use ZeroBoiler\Events\Concerns\GetsWebhookTimeout;
 use ZeroBoiler\Events\Contracts\Triggerable;
 
 /**
- * Concrete class using GetsWebhookTimeout for testing config fallback.
- */
-final class TestWebhookTimeoutClass
-{
-    use GetsWebhookTimeout;
-}
-
-/**
- * Tests for GetsWebhookTimeout trait config reading and WebhookAction
+ * Tests for webhook timeout config coercion patterns and WebhookAction
  * edge cases related to config-driven behavior.
  */
 test('getWebhookTimeout returns 30 when config is missing', function () {
@@ -28,9 +19,7 @@ test('getWebhookTimeout returns 30 when config is missing', function () {
     $app = new Container;
     $app->instance('config', $config);
 
-    // We can't directly instantiate the trait, but we can verify
-    // the config reading pattern via a concrete test class.
-    // Since the trait uses app() fallback, we test the default path.
+    // Verify the config reading pattern that GetsWebhookTimeout uses.
     $timeoutConfig = $config->get('events.subscriptions.timeout', 30);
 
     expect($timeoutConfig)->toBe(30);
