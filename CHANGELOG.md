@@ -4,6 +4,19 @@ All notable changes to the **ZeroBoiler Events** package are documented in this 
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [6.0.2] - 2026-08-20
+
+### Fixed
+- README test counts corrected to 405 across badge, package structure, testing section, and production readiness table (was 408 — verified actual `*Test.php` file count).
+
+### Added
+- `EventManagerFireModelToArrayOnlyTest.php` — 4 test cases covering `fireModel()` with models that have only `toArray()` (without `attributesToArray`), priority of `attributesToArray` over `toArray`, models with neither method (metadata-only payload), and event name construction as `modelClass.action`.
+
+### Changed
+- Version bumped to 6.0.2.
+
+---
+---
 ## [6.0.1] - 2026-08-20
 
 ### Fixed

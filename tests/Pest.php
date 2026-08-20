@@ -420,6 +420,8 @@ uses(TestCase::class)->in(
     'SubscriptionBuilderEmptyConditionsTest.php',
     // EventManager::getStats() edge cases — zero data, filtering, rates
     'EventManagerGetStatsEdgeCasesTest.php',
+    // fireModel() with toArray-only and stdClass models
+    'EventManagerFireModelToArrayOnlyTest.php',
 );
 
 // Phase 229 — multi-action with params, webhook URL edge cases, builder edge cases
