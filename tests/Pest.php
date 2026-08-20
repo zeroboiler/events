@@ -416,6 +416,10 @@ uses(TestCase::class)->in(
     'DispatchTriggerJobConstructorDefaultsTest.php',
     // Phase 228 — WebhookAction config & exception hierarchy
     'WebhookActionConfigAndEdgeCasesTest.php',
+    // SubscriptionBuilder empty conditions storage, auto-secret generation
+    'SubscriptionBuilderEmptyConditionsTest.php',
+    // EventManager::getStats() edge cases — zero data, filtering, rates
+    'EventManagerGetStatsEdgeCasesTest.php',
 );
 
 // Phase 229 — multi-action with params, webhook URL edge cases, builder edge cases
