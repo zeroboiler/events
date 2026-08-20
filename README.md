@@ -4,7 +4,8 @@
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 408](https://img.shields.io/badge/Tests-408-brightgreen)
+![Tests: 402](https://img.shields.io/badge/Tests-402-brightgreen)
+![Tests: 402](https://img.shields.io/badge/Tests-402-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 Database-driven dynamic event manager for Laravel — register, manage, and fire event triggers via admin panel, API, or CLI without code changes.
@@ -437,7 +438,8 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                  408 test files
+└── tests/                  402 test files
+└── tests/                  402 test files
 ```
 
 ### How It Works
@@ -792,7 +794,8 @@ $this->app->instance(ActionResolver::class, $mockResolver);
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (408 files)
+composer test        # Run Pest test suite (402 files)
+composer test        # Run Pest test suite (402 files)
 composer analyse     # PHPStan level 9 (PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -817,7 +820,8 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 408 test files |
+| Test coverage | ✅ 402 test files |
+| Test coverage | ✅ 402 test files |
 
 ## Changelog
 
