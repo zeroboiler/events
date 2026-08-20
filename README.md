@@ -4,7 +4,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209%20(2.x)-success)
-![Tests: 416](https://img.shields.io/badge/Tests-416-brightgreen)
+![Tests: 417](https://img.shields.io/badge/Tests-417-brightgreen)
 ![CI](https://github.com/zeroboiler/events/actions/workflows/ci.yml/badge.svg)
 
 
@@ -160,6 +160,7 @@ return [
 | `EVENTS_SUB_MAX_FAILURES` | `10` | Auto-deactivate subscription after this many consecutive failures |
 | `EVENTS_SUB_TIMEOUT` | `30` | HTTP timeout for webhook delivery (seconds) |
 | `EVENTS_SUB_SIGNATURE_ALGORITHM` | `sha256` | HMAC algorithm for webhook payload signing |
+| `EVENTS_SUB_AUTO_GENERATE_SECRET` | `true` | Set `false` to disable automatic HMAC secret generation for subscriptions |
 | `EVENTS_SUB_SECRET_LENGTH` | `32` | Length of auto-generated webhook secrets (minimum 16) |
 | `EVENTS_SUB_CLEANUP_CRON` | `0 3 * * *` | Cron expression for automatic subscription cleanup schedule |
 | `EVENTS_PAYLOAD_MAX_BYTES` | `1048576` | Maximum JSON-encoded payload size in bytes for `fire()`; set to `0` to disable |
@@ -439,7 +440,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                  416 test files (Pest)
+└── tests/                  417 test files (Pest)
 ```
 
 ### How It Works
@@ -794,7 +795,7 @@ $this->app->instance(ActionResolver::class, $mockResolver);
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (416 test files)
+composer test        # Run Pest test suite (417 test files)
 composer analyse     # PHPStan level 9 (PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -819,7 +820,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 416 test files |
+| Test coverage | ✅ 417 test files |
 
 ## Changelog
 

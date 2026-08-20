@@ -110,7 +110,7 @@ final class EventLog extends Model
     public const STATUS_FAILED = 'failed';
 
     /** @var array<int, string> */
-    public static array $statuses = [
+    public readonly static array $statuses = [
         self::STATUS_PENDING,
         self::STATUS_DISPATCHED,
         self::STATUS_COMPLETED,
