@@ -408,6 +408,8 @@ uses(TestCase::class)->in(
     'TriggerBuilderClassesParamsJsonTest.php',
     // Phase 226 — getSubscription empty string guard
     'GetSubscriptionEmptyGuardTest.php',
+    // Phase 227 — comprehensive production integration test
+    'EventsProductionIntegrationTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)

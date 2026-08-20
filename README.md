@@ -437,7 +437,7 @@ events/
 │   ├── SubscriptionBuilder.php
 │   ├── TriggerBuilder.php
 │   └── WildcardMatcher.php
-└── tests/                  397 test files
+└── tests/                  398 test files
 ```
 
 ### How It Works
@@ -792,7 +792,7 @@ $this->app->instance(ActionResolver::class, $mockResolver);
 ## Testing
 
 ```bash
-composer test        # Run Pest test suite (397 files)
+composer test        # Run Pest test suite (398 files)
 composer analyse     # PHPStan level 9 (PHPStan 2.x)
 composer lint        # Laravel Pint
 composer rector      # Rector code upgrades
@@ -817,7 +817,7 @@ composer ci          # All checks (lint → analyse → rector → test)
 | Migrations | ✅ 3 tables |
 | CLI commands | ✅ 12 commands |
 | Facade | ✅ EventManager |
-| Test coverage | ✅ 397 test files |
+| Test coverage | ✅ 398 test files |
 
 ## Changelog
 
