@@ -437,3 +437,10 @@ uses(TestCase::class)->in(
     'EventsWildcardMatcherFullTest.php',
     'WildcardMatcherTest.php',
 );
+
+// Phase 230 — register tests that were previously missing from Pest.php
+uses(TestCase::class)->in(
+    'EventsProductionContractAndOrderingTest.php',
+    'TriggerBuilderMultipleActionsTest.php',
+    'EventManagerPayloadMaxBytesConfigTest.php',
+);
