@@ -59,8 +59,9 @@ describe('DispatchTriggerJob readonly properties', function (): void {
             ->and($params[1]->getType()?->getName())->toBe('string');
         expect($params[2]->getName())->toBe('payload')
             ->and($params[2]->getType()?->getName())->toBe('array');
-        expect($params[3]->getName())->toBe('tries')
-            ->and($params[3]->getType()?->getName())->toBe('int');
+        expect($params[3]->getName())->toBe('app')
+            ->and($params[3]->getType()?->getName())->toBe(\Illuminate\Container\Container::class)
+            ->and($params[3]->allowsNull())->toBeTrue();
     });
 });
 
