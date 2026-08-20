@@ -410,6 +410,12 @@ uses(TestCase::class)->in(
     'GetSubscriptionEmptyGuardTest.php',
     // Phase 227 — comprehensive production integration test
     'EventsProductionIntegrationTest.php',
+    // Phase 228 — factory state method validation
+    'FactoryStateMethodsTest.php',
+    // Phase 228 — DispatchTriggerJob constructor defaults
+    'DispatchTriggerJobConstructorDefaultsTest.php',
+    // Phase 228 — WebhookAction config & exception hierarchy
+    'WebhookActionConfigAndEdgeCasesTest.php',
 );
 
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)
