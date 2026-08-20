@@ -17,6 +17,11 @@ use ZeroBoiler\Events\Contracts\Triggerable;
  * in the test application container so they can be resolved by
  * ActionResolver during integration tests.
  */
+
+/**
+ * Test action that handles order placement notifications.
+ * Tracks call state for test assertions.
+ */
 final class SendOrderNotification implements Triggerable
 {
     /** Track whether handle() was called for verification in tests. */
@@ -42,6 +47,9 @@ final class SendOrderNotification implements Triggerable
     }
 }
 
+/**
+ * Test action for logging order events. Intentionally no-op.
+ */
 final class LogOrderEvent implements Triggerable
 {
     #[\Override]
@@ -51,6 +59,9 @@ final class LogOrderEvent implements Triggerable
     }
 }
 
+/**
+ * Test action for high-priority triggers. Intentionally no-op.
+ */
 final class HighPriority implements Triggerable
 {
     #[\Override]
@@ -60,6 +71,9 @@ final class HighPriority implements Triggerable
     }
 }
 
+/**
+ * Test action for low-priority triggers. Intentionally no-op.
+ */
 final class LowPriority implements Triggerable
 {
     #[\Override]
@@ -69,6 +83,9 @@ final class LowPriority implements Triggerable
     }
 }
 
+/**
+ * Test action for order creation logging. Intentionally no-op.
+ */
 final class LogOrderCreated implements Triggerable
 {
     #[\Override]
@@ -78,6 +95,9 @@ final class LogOrderCreated implements Triggerable
     }
 }
 
+/**
+ * Test action that does nothing. Used for testing action resolution.
+ */
 final class NullAction implements Triggerable
 {
     #[\Override]
@@ -116,3 +136,4 @@ final class CountingAction implements Triggerable
         $this->calls[] = $payload;
     }
 }
+

@@ -8,93 +8,114 @@ declare(strict_types=1);
 
 use ZeroBoiler\Events\WildcardMatcher;
 
-describe('WildcardMatcher edge cases', function (): void {
-    test('empty pattern matches nothing (except empty is also rejected)', function (): void {
-        expect(WildcardMatcher::matches('', ''))->toBeFalse();
-        expect(WildcardMatcher::matches('', 'order.placed'))->toBeFalse();
-    });
-
-    test('exact match works', function (): void {
-        expect(WildcardMatcher::matches('order.placed', 'order.placed'))->toBeTrue();
-        expect(WildcardMatcher::matches('order.placed', 'order.shipped'))->toBeFalse();
-    });
-
-    test('single asterisk matches any non-empty event', function (): void {
-        expect(WildcardMatcher::matches('*', 'order.placed'))->toBeTrue();
-        expect(WildcardMatcher::matches('*', 'a'))->toBeTrue();
-        expect(WildcardMatcher::matches('*', ''))->toBeFalse();
-    });
-
-    test('double asterisk matches any non-empty event', function (): void {
-        expect(WildcardMatcher::matches('**', 'order.placed'))->toBeTrue();
-        expect(WildcardMatcher::matches('**', 'a.b.c.d'))->toBeTrue();
-        expect(WildcardMatcher::matches('**', ''))->toBeFalse();
-    });
-
-    test('single-segment wildcard does not cross dot boundaries', function (): void {
-        expect(WildcardMatcher::matches('order.*', 'order.placed'))->toBeTrue();
-        expect(WildcardMatcher::matches('order.*', 'order.placed.extra'))->toBeFalse();
-        expect(WildcardMatcher::matches('order.*', 'user.placed'))->toBeFalse();
-    });
-
-    test('cross-segment wildcard crosses dot boundaries', function (): void {
-        expect(WildcardMatcher::matches('order.**', 'order.placed'))->toBeTrue();
-        expect(WildcardMatcher::matches('order.**', 'order.placed.extra'))->toBeTrue();
-        expect(WildcardMatcher::matches('order.**', 'order.a.b.c'))->toBeTrue();
-        expect(WildcardMatcher::matches('order.**', 'user.placed'))->toBeFalse();
-    });
-
-    test('multiple wildcards', function (): void {
-        expect(WildcardMatcher::matches('*.order.*', 'user.order.created'))->toBeTrue();
-        expect(WildcardMatcher::matches('*.order.*', 'user.order'))->toBeFalse();
-        expect(WildcardMatcher::matches('*.*.created', 'user.order.created'))->toBeTrue();
-        expect(WildcardMatcher::matches('*.*.created', 'user.order.updated'))->toBeFalse();
-    });
-
-    test('regex special characters are properly escaped', function (): void {
-        expect(WildcardMatcher::matches('order.placed', 'order.placed'))->toBeTrue();
-        expect(WildcardMatcher::matches('user.login', 'user.login'))->toBeTrue();
-    });
-
-    test('findMatchingPatterns returns correct matches in order', function (): void {
-        $patterns = ['order.placed', 'order.*', '*.created', 'user.*'];
-        $matches = WildcardMatcher::findMatchingPatterns($patterns, 'order.placed');
-
-        expect($matches)->toContain('order.placed')
-            ->and($matches)->toContain('order.*')
-            ->and($matches)->not->toContain('*.created')
-            ->and($matches)->not->toContain('user.*');
-    });
-
-    test('findMatchingPatterns with empty input returns empty array', function (): void {
-        expect(WildcardMatcher::findMatchingPatterns([], 'order.placed'))->toBe([]);
-    });
-
-    test('extractWildcards returns correct values for single-segment wildcards', function (): void {
-        $result = WildcardMatcher::extractWildcards('user.*.created', 'user.admin.created');
-
-        expect($result)->toBe(['admin']);
-    });
-
-    test('extractWildcards with multiple wildcards', function (): void {
-        $result = WildcardMatcher::extractWildcards('*.order.*', 'user.order.created');
-
-        expect($result)->toBe(['user', 'created']);
-    });
-
-    test('extractWildcards returns empty for cross-segment patterns', function (): void {
-        $result = WildcardMatcher::extractWildcards('order.**', 'order.placed');
-
-        expect($result)->toBe([]);
-    });
-
-    test('extractWildcards returns empty for mismatched segment count', function (): void {
-        $result = WildcardMatcher::extractWildcards('order.*', 'order.placed.extra');
-
-        expect($result)->toBe([]);
-    });
-
-    test('backslash in event name is handled', function (): void {
-        expect(WildcardMatcher::matches('order.*', 'order.something'))->toBeTrue();
-    });
+test('WildcardMatcher rejects empty event for non-catch-all patterns', function (): void {
+    expect(WildcardMatcher::matches('order.*', ''))->toBeFalse();
+    expect(WildcardMatcher::matches('order.**', ''))->toBeFalse();
 });
+
+test('WildcardMatcher catch-all * matches any non-empty event', function (): void {
+    expect(WildcardMatcher::matches('*', 'anything'))->toBeTrue();
+    expect(WildcardMatcher::matches('*', 'a.b.c.d'))->toBeTrue();
+    expect(WildcardMatcher::matches('*', ''))->toBeFalse();
+});
+
+test('WildcardMatcher catch-all ** matches any non-empty event', function (): void {
+    expect(WildcardMatcher::matches('**', 'anything'))->toBeTrue();
+    expect(WildcardMatcher::matches('**', 'a.b.c.d'))->toBeTrue();
+    expect(WildcardMatcher::matches('**', ''))->toBeFalse();
+});
+
+test('WildcardMatcher single-segment * does not match across dots', function (): void {
+    expect(WildcardMatcher::matches('order.*', 'order.placed'))->toBeTrue();
+    expect(WildcardMatcher::matches('order.*', 'order.placed.extra'))->toBeFalse();
+    expect(WildcardMatcher::matches('order.*', 'order'))->toBeFalse();
+});
+
+test('WildcardMatcher double-segment ** matches across dots', function (): void {
+    expect(WildcardMatcher::matches('order.**', 'order.placed'))->toBeTrue();
+    expect(WildcardMatcher::matches('order.**', 'order.placed.extra'))->toBeTrue();
+    expect(WildcardMatcher::matches('order.**', 'order.a.b.c.d'))->toBeTrue();
+});
+
+test('WildcardMatcher multiple single-segment wildcards', function (): void {
+    expect(WildcardMatcher::matches('*.*.created', 'user.profile.created'))->toBeTrue();
+    expect(WildcardMatcher::matches('*.*.created', 'user.profile.updated'))->toBeFalse();
+    expect(WildcardMatcher::matches('*.*.created', 'user.profile.action.created'))->toBeFalse();
+});
+
+test('WildcardMatcher exact match without wildcards', function (): void {
+    expect(WildcardMatcher::matches('order.placed', 'order.placed'))->toBeTrue();
+    expect(WildcardMatcher::matches('order.placed', 'order.shipped'))->toBeFalse();
+    expect(WildcardMatcher::matches('order.placed', 'order.placed.extra'))->toBeFalse();
+});
+
+test('WildcardMatcher escapes regex special characters', function (): void {
+    expect(WildcardMatcher::matches('user.login', 'user.login'))->toBeTrue();
+    expect(WildcardMatcher::matches('user.login', 'userXlogin'))->toBeFalse();
+});
+
+test('WildcardMatcher findMatchingPatterns returns only matching patterns', function (): void {
+    $patterns = ['order.*', 'user.*', '*.placed', 'order.placed'];
+
+    $result = WildcardMatcher::findMatchingPatterns($patterns, 'order.placed');
+
+    expect($result)->toContain('order.*')
+        ->toContain('*.placed')
+        ->toContain('order.placed')
+        ->not->toContain('user.*');
+});
+
+test('WildcardMatcher findMatchingPatterns returns empty for no matches', function (): void {
+    $patterns = ['user.*', 'invoice.*'];
+
+    $result = WildcardMatcher::findMatchingPatterns($patterns, 'order.placed');
+
+    expect($result)->toBeEmpty();
+});
+
+test('WildcardMatcher extractWildcards returns extracted segments', function (): void {
+    $result = WildcardMatcher::extractWildcards('user.*.created', 'user.profile.created');
+
+    expect($result)->toBe(['profile']);
+});
+
+test('WildcardMatcher extractWildcards returns empty for ** patterns', function (): void {
+    $result = WildcardMatcher::extractWildcards('order.**', 'order.placed.extra');
+
+    expect($result)->toBeEmpty();
+});
+
+test('WildcardMatcher extractWildcards returns empty when segments dont align', function (): void {
+    $result = WildcardMatcher::extractWildcards('user.*', 'user.profile.created');
+
+    expect($result)->toBeEmpty();
+});
+
+test('WildcardMatcher extractWildcards returns empty when event does not match pattern', function (): void {
+    $result = WildcardMatcher::extractWildcards('user.*.deleted', 'user.profile.created');
+
+    expect($result)->toBeEmpty();
+});
+
+test('WildcardMatcher extractWildcards with multiple wildcards', function (): void {
+    $result = WildcardMatcher::extractWildcards('*.*.created', 'user.profile.created');
+
+    expect($result)->toBe(['user', 'profile']);
+});
+
+test('WildcardMatcher handles pattern with trailing dot', function (): void {
+    expect(WildcardMatcher::matches('order.', 'order.'))->toBeTrue();
+    expect(WildcardMatcher::matches('order.', 'order.placed'))->toBeFalse();
+});
+
+test('WildcardMatcher pattern with leading dot', function (): void {
+    expect(WildcardMatcher::matches('.placed', '.placed'))->toBeTrue();
+    expect(WildcardMatcher::matches('.placed', 'order.placed'))->toBeFalse();
+});
+
+test('WildcardMatcher handles backslash in event name', function (): void {
+    // Backslash is a regex escape character — should be treated literally
+    expect(WildcardMatcher::matches('user\\login', 'user\\login'))->toBeTrue();
+    expect(WildcardMatcher::matches('user\\login', 'userXlogin'))->toBeFalse();
+});
+

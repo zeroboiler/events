@@ -23,3 +23,4 @@ final class TriggerNotFoundException extends EventException
         parent::__construct("Trigger not found: {$triggerId}");
     }
 }
+
