@@ -54,6 +54,8 @@ final class DomainEvent
     /**
      * @param  array<string, mixed>  $payload
      *
+     * @throws \InvalidArgumentException If eventType is empty when using fromArray()
+     *
      * @since 1.0.0
      */
     public static function occur(string $eventType, array $payload = []): self

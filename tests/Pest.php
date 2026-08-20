@@ -418,6 +418,9 @@ uses(TestCase::class)->in(
     'WebhookActionConfigAndEdgeCasesTest.php',
 );
 
+// Phase 229 — multi-action with params, webhook URL edge cases, builder edge cases
+uses(TestCase::class)->in('EventsPhase229ProductionReadinessTest.php');
+
 // WildcardMatcherTest, EscapesWildcardLikeTest, and EventsWildcardMatcherFullTest run without TestCase (plain PHP tests)
 // Also registered separately to ensure they run in CI:
 uses(TestCase::class)->in(

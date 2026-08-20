@@ -27,8 +27,8 @@ test('TriggerFactory::withName overrides the name', function () {
     expect($attrs['name'])->toBe('Custom Trigger Name');
 });
 
-test('TriggerFactory::withPriority overrides priority', function () {
-    $factory = TriggerFactory::new()->withPriority(42);
+test('TriggerFactory::priority overrides priority', function () {
+    $factory = TriggerFactory::new()->priority(42);
     $attrs = $factory->raw();
 
     expect($attrs['priority'])->toBe(42);
@@ -261,7 +261,7 @@ test('TriggerFactory chained state methods compose correctly', function () {
     $factory = TriggerFactory::new()
         ->forEvent('order.*')
         ->withName('Order Wildcard')
-        ->withPriority(50)
+        ->priority(50)
         ->enabled()
         ->async();
     $attrs = $factory->raw();
