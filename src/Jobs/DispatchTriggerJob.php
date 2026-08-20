@@ -38,17 +38,17 @@ final class DispatchTriggerJob implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
 
-    /** @var list<int> Backoff intervals in seconds between retry attempts. Read from `events.retry.backoff` config. */
-    public readonly array $backoff = [];
+    /** @var list<int> Backoff intervals in seconds between retry attempts. Populated from `events.retry.backoff` config in the constructor. */
+    public readonly array $backoff;
 
-    /** @var string Queue name. Read from `events.queue.queue` config. */
+    /** @var string Queue name. Populated from `events.queue.queue` config in the constructor. */
     public readonly string $queue;
 
-    /** @var int Number of times the job may be attempted. Read from `events.retry.tries` config. */
+    /** @var int Number of times the job may be attempted. Populated from `events.retry.tries` config in the constructor. */
     public readonly int $tries;
 
-    /** @var string|null Queue connection name (read from events.queue.connection config). Defaults to null (uses the default queue connection). */
-    public readonly ?string $connection = null;
+    /** @var string|null Queue connection name. Populated from `events.queue.connection` config in the constructor. Null means use the default queue connection. */
+    public readonly ?string $connection;
 
     /**
      * Create a new dispatch trigger job.
@@ -81,12 +81,14 @@ final class DispatchTriggerJob implements ShouldQueue
                 fn (mixed $v): int => (int) $v,
                 $backoffConfig,
             ));
-        } elseif (is_string($backoffConfig)) {
+        } elseif (is_string($backoffConfig) && $backoffConfig !== '') {
             $parts = explode(',', $backoffConfig);
             $this->backoff = array_values(array_map(
                 fn (string $v): int => (int) trim($v),
                 $parts,
             ));
+        } else {
+            $this->backoff = [60, 300, 900];
         }
 
         // Queue configuration
@@ -94,9 +96,7 @@ final class DispatchTriggerJob implements ShouldQueue
         $this->queue = is_string($queueConfig) && $queueConfig !== '' ? $queueConfig : 'default';
 
         $connectionConfig = $config->get('events.queue.connection', null);
-        if (is_string($connectionConfig) && $connectionConfig !== '') {
-            $this->connection = $connectionConfig;
-        }
+        $this->connection = (is_string($connectionConfig) && $connectionConfig !== '') ? $connectionConfig : null;
     }
 
     /**
