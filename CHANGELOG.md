@@ -4,6 +4,15 @@ All notable changes to the **ZeroBoiler Events** package are documented in this 
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [6.0.1] - 2026-08-20
+
+### Fixed
+- README test counts corrected to 408 across badge, package structure, testing section, and production readiness table (was 404 in all places).
+
+### Changed
+- Version bumped to 6.0.1.
+
+---
 ---
 ## [5.98.0] - 2026-08-19
 
