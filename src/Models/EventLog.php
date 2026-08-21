@@ -63,12 +63,12 @@ final class EventLog extends Model
         return 'event_logs';
     }
 
-    protected string $keyType = 'string';
+    protected $keyType = 'string';
 
     public bool $incrementing = false;
 
     /** @var list<string> */
-    protected array $fillable = [
+    protected $fillable = [
         'id',
         'trigger_id',
         'event',
@@ -79,7 +79,7 @@ final class EventLog extends Model
     ];
 
     /** @var array<int, string> */
-    protected array $hidden = [
+    protected $hidden = [
         'deleted_at',
     ];
 
@@ -110,7 +110,7 @@ final class EventLog extends Model
     public const STATUS_FAILED = 'failed';
 
     /** @var array<int, string> */
-    public readonly static array $statuses = [
+    public static array $statuses = [
         self::STATUS_PENDING,
         self::STATUS_DISPATCHED,
         self::STATUS_COMPLETED,

@@ -76,12 +76,12 @@ final class Subscription extends Model
         return 'event_subscriptions';
     }
 
-    protected string $keyType = 'string';
+    protected $keyType = 'string';
 
     public bool $incrementing = false;
 
     /** @var list<string> */
-    protected array $fillable = [
+    protected $fillable = [
         'id',
         'event',
         'url',
@@ -95,7 +95,7 @@ final class Subscription extends Model
     ];
 
     /** @var array<int, string> */
-    protected array $hidden = [
+    protected $hidden = [
         'secret',
         'deleted_at',
     ];

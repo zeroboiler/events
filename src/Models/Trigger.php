@@ -65,12 +65,12 @@ final class Trigger extends Model
         return 'triggers';
     }
 
-    protected string $keyType = 'string';
+    protected $keyType = 'string';
 
     public bool $incrementing = false;
 
     /** @var list<string> */
-    protected array $fillable = [
+    protected $fillable = [
         'id',
         'name',
         'event',
@@ -82,7 +82,7 @@ final class Trigger extends Model
     ];
 
     /** @var array<int, string> */
-    protected array $hidden = [
+    protected $hidden = [
         'deleted_at',
     ];
 
