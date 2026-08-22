@@ -1,0 +1,9 @@
+/tests export-ignore
+/database/factories export-ignore
+/phpunit.xml export-ignore
+/phpstan.neon export-ignore
+/phpstan.neon.dist export-ignore
+/phpstan-baseline.neon export-ignore
+/.github export-ignore
+/pint.json export-ignore
+/_ide_helper.php export-ignore
