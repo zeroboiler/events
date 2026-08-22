@@ -29,11 +29,11 @@ final class EventsRedeliverCommand extends Command
 {
     use GetsWebhookTimeout;
 
-    protected string $signature = 'zeroboiler:events:redeliver
+    protected $signature = 'zeroboiler:events:redeliver
                            {log_id : The EventLog ID of the failed delivery to redeliver}
                            {--force : Skip confirmation prompt}';
 
-    protected string $description = 'Redeliver a failed webhook delivery';
+    protected $description = 'Redeliver a failed webhook delivery';
 
     /**
      * Build the redeliver webhook body, stripping internal keys from

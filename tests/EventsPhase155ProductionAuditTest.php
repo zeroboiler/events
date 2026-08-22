@@ -410,7 +410,7 @@ test('TriggerBuilder save() validates empty event name')
             $builder->save();
         } catch (\InvalidArgumentException $e) {
             return str_contains($e->getMessage(), 'Event name is required');
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
             // Other errors are expected since we're not in a full Laravel context
         }
 
@@ -429,7 +429,7 @@ test('SubscriptionBuilder save() rejects non-HTTP URL scheme')
             $builder->save();
         } catch (\InvalidArgumentException $e) {
             return str_contains($e->getMessage(), 'HTTP or HTTPS');
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
             // Other errors expected outside full Laravel context
         }
 

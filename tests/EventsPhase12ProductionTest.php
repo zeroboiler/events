@@ -351,7 +351,7 @@ test('EventManager fireModel constructs correct event name', function () {
     // fire() with no matching triggers completes silently
     try {
         $manager->fireModel('App\\Models\\Order', 'created', $model);
-    } catch (\Throwable) {
+    } catch (\Throwable $e) {
         // May throw if action resolution fails, but event name is correct
     }
 

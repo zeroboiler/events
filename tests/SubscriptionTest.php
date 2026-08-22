@@ -405,7 +405,7 @@ describe('WebhookAction with subscriptions', function (): void {
                 'subscription_id' => $subscription->id,
                 'event' => 'test.event',
             ]);
-        } catch (Throwable) {
+        } catch (Throwable $e) {
             // WebhookAction doesn't throw on non-2xx, just logs
         }
 

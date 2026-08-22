@@ -20,7 +20,7 @@ use ZeroBoiler\Events\EventManager;
  */
 final class EventsSubscribeCommand extends Command
 {
-    protected string $signature = 'zeroboiler:events:subscribe
+    protected $signature = 'zeroboiler:events:subscribe
                            {event : The event name to subscribe to (supports wildcards)}
                            {url : The webhook URL to deliver payloads to}
                            {--secret= : HMAC signing secret (auto-generated if not provided)}
@@ -28,7 +28,7 @@ final class EventsSubscribeCommand extends Command
                            {--priority=0 : Subscription priority (higher = first)}
                            {--async : Deliver asynchronously via queue}';
 
-    protected string $description = 'Register an external webhook subscription for an event';
+    protected $description = 'Register an external webhook subscription for an event';
 
     public function handle(EventManager $eventManager): int
     {

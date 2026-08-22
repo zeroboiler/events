@@ -204,7 +204,7 @@ describe('Phase 201 Production Readiness', function () {
             // so it will throw. We catch the error and verify log exists.
             try {
                 $manager->fire('test.sync.dispatch', ['key' => 'value']);
-            } catch (Throwable) {
+            } catch (Throwable $e) {
                 // Expected — action class doesn't exist
             }
 

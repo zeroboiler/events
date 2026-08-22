@@ -184,7 +184,7 @@ test('sync trigger failure marks log as failed', function (): void {
 
     try {
         EventManagerFacade::fire('fail.event', []);
-    } catch (Throwable) {
+    } catch (Throwable $e) {
         // Expected — the action class doesn't exist
     }
 

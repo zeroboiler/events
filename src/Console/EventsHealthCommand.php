@@ -29,11 +29,11 @@ use ZeroBoiler\Events\Models\Trigger;
  */
 final class EventsHealthCommand extends Command
 {
-    protected string $signature = 'zeroboiler:events:health
+    protected $signature = 'zeroboiler:events:health
                            {--check-cache : Verify wildcard trigger cache is reachable}
                            {--json : Output results as JSON}';
 
-    protected string $description = 'Check event system health and configuration';
+    protected $description = 'Check event system health and configuration';
 
     /**
      * Get the config repository from the container.

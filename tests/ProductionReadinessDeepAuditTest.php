@@ -53,7 +53,7 @@ describe('Production Readiness Deep Audit', function (): void {
             // fire() should throw, but log should not contain trace
             try {
                 $em->fire('security.test', ['secret' => 'password123']);
-            } catch (\Throwable) {
+            } catch (\Throwable $e) {
                 // Expected
             }
 

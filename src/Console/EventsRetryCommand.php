@@ -24,10 +24,10 @@ use ZeroBoiler\Events\Models\Trigger;
  */
 final class EventsRetryCommand extends Command
 {
-    protected string $signature = 'zeroboiler:events:retry
+    protected $signature = 'zeroboiler:events:retry
                            {--status=failed : Status to retry (failed|pending)}';
 
-    protected string $description = 'Retry failed or pending event dispatches';
+    protected $description = 'Retry failed or pending event dispatches';
 
     public function handle(EventManager $eventManager): int
     {

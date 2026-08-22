@@ -21,7 +21,7 @@ use Ramsey\Uuid\UuidInterface;
  */
 final class DomainEvent
 {
-    public readonly UuidInterface $eventId;
+    public UuidInterface $eventId;
 
     /**
      * Timestamp when the event occurred.
@@ -30,7 +30,7 @@ final class DomainEvent
      * value depends on a `new DateTimeImmutable()` call, which is not
      * a simple literal default.
      */
-    public readonly DateTimeImmutable $occurredAt;
+    public DateTimeImmutable $occurredAt;
 
     /**
      * Create a new domain event.
@@ -43,7 +43,7 @@ final class DomainEvent
      */
     public function __construct(
         public readonly string $eventType,
-        public readonly array $payload = [],
+        public array $payload = [],
         ?UuidInterface $eventId = null,
         ?DateTimeImmutable $occurredAt = null,
     ) {
@@ -104,7 +104,7 @@ final class DomainEvent
         if (isset($data['eventId']) && is_string($data['eventId'])) {
             try {
                 $eventId = Uuid::fromString($data['eventId']);
-            } catch (\InvalidArgumentException) {
+            } catch (\InvalidArgumentException $e) {
                 // Invalid UUID — generate a fresh one (default)
             }
         }
@@ -113,7 +113,7 @@ final class DomainEvent
         if (isset($data['occurredAt']) && is_string($data['occurredAt'])) {
             try {
                 $occurredAt = new DateTimeImmutable($data['occurredAt']);
-            } catch (\Exception) {
+            } catch (\Exception $e) {
                 // Invalid datetime — use default (now)
             }
         }

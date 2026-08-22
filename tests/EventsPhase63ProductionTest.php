@@ -356,7 +356,7 @@ test('phase 63: DomainEvent fromArray rejects empty eventType')
     ->expect(function (): bool {
         try {
             DomainEvent::fromArray(['eventType' => '']);
-        } catch (\InvalidArgumentException) {
+        } catch (\InvalidArgumentException $e) {
             return true;
         }
 

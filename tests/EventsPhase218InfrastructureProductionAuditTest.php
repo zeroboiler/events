@@ -296,7 +296,7 @@ describe('Phase 218 — Infrastructure Production Audit', function (): void {
                 );
                 expect($result)->toBeString();
                 expect(strlen($result))->toBeGreaterThan(0);
-            } catch (\Throwable) {
+            } catch (\Throwable $e) {
                 // May fail in test env if WebhookAction class resolution fails
                 // but the string interpolation itself must be valid PHP
                 $this->addToAssertionCount(1);

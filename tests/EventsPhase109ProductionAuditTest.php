@@ -179,7 +179,7 @@ describe('Phase 109 — ConditionEngine operators complete coverage', function (
 
                 $result = $engine->matches($conditions, ['field' => 'abc']);
                 expect(is_bool($result))->toBeTrue("Operator '{$op}' should return bool");
-            } catch (Throwable) {
+            } catch (Throwable $e) {
                 // Some operators may fail on specific payloads — that's OK
                 // as long as they don't produce non-boolean results
             }

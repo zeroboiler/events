@@ -924,7 +924,7 @@ describe('Phase 178 — Production Infrastructure Final Audit', function (): voi
             try {
                 $manager->fire('test.event', ['key' => 'value']);
                 $result = 'no-exception';
-            } catch (\Throwable) {
+            } catch (\Throwable $e) {
                 $result = 'exception';
             }
             $manager->setEnabled(true); // cleanup

@@ -21,10 +21,10 @@ use ZeroBoiler\Events\EventManager;
  */
 final class EventsUnsubscribeCommand extends Command
 {
-    protected string $signature = 'zeroboiler:events:unsubscribe
+    protected $signature = 'zeroboiler:events:unsubscribe
                            {id : The subscription ID to remove}';
 
-    protected string $description = 'Remove an external webhook subscription';
+    protected $description = 'Remove an external webhook subscription';
 
     /**
      * Execute the command.

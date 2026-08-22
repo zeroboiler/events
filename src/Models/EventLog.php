@@ -64,7 +64,7 @@ final class EventLog extends Model
 
     protected $keyType = 'string';
 
-    public bool $incrementing = false;
+    public $incrementing = false;
 
     /** @var list<string> */
     protected $fillable = [

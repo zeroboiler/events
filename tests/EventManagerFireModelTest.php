@@ -33,9 +33,9 @@ describe('EventManager::fireModel', function (): void {
 
         $model = new class extends \Illuminate\Database\Eloquent\Model
         {
-            protected string $keyType = 'string';
+            protected $keyType = 'string';
 
-            public bool $incrementing = false;
+            public $incrementing = false;
 
             public function attributesToArray(): array
             {
@@ -129,9 +129,9 @@ describe('EventManager::fireModel', function (): void {
 
         $model = new class extends \Illuminate\Database\Eloquent\Model
         {
-            protected string $keyType = 'string';
+            protected $keyType = 'string';
 
-            public bool $incrementing = false;
+            public $incrementing = false;
 
             public function attributesToArray(): array
             {
@@ -164,9 +164,9 @@ describe('EventManager::fireModel', function (): void {
 
         $model = new class extends \Illuminate\Database\Eloquent\Model
         {
-            protected string $keyType = 'string';
+            protected $keyType = 'string';
 
-            public bool $incrementing = false;
+            public $incrementing = false;
 
             public function attributesToArray(): array
             {
@@ -193,9 +193,9 @@ describe('EventManager::fireModel', function (): void {
 
         $model = new class extends \Illuminate\Database\Eloquent\Model
         {
-            protected string $keyType = 'string';
+            protected $keyType = 'string';
 
-            public bool $incrementing = false;
+            public $incrementing = false;
 
             public function attributesToArray(): array
             {
@@ -224,9 +224,9 @@ describe('EventManager::fireModel', function (): void {
         // Model returns attributes that include model_class and action keys
         $model = new class extends \Illuminate\Database\Eloquent\Model
         {
-            protected string $keyType = 'string';
+            protected $keyType = 'string';
 
-            public bool $incrementing = false;
+            public $incrementing = false;
 
             public function attributesToArray(): array
             {

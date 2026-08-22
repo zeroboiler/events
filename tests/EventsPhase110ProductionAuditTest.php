@@ -598,7 +598,7 @@ test('EventManager cache invalidation works', function (): void {
     // Fire a matching event to populate cache
     try {
         $manager->fire('test.cache.foobar');
-    } catch (Throwable) {
+    } catch (Throwable $e) {
         // Action will fail but cache should be populated
     }
 

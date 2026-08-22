@@ -23,13 +23,13 @@ final class EventsLogCommand extends Command
 {
     use EscapesWildcardLike;
 
-    protected string $signature = 'zeroboiler:events:log
+    protected $signature = 'zeroboiler:events:log
                            {--event= : Filter by event name (supports wildcards)}
                            {--trigger= : Filter by trigger ID}
                            {--status= : Filter by status (pending|dispatched|completed|failed)}
                            {--limit=50 : Number of logs to show}';
 
-    protected string $description = 'View event logs';
+    protected $description = 'View event logs';
 
     public function handle(): int
     {

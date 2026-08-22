@@ -20,13 +20,13 @@ use ZeroBoiler\Events\EventManager;
  */
 final class EventsFireCommand extends Command
 {
-    protected string $signature = 'zeroboiler:events:fire
+    protected $signature = 'zeroboiler:events:fire
                            {event : The event name}
                            {--payload=* : Key=value pairs for payload}
                            {--json= : JSON string (or @file path) for complex/nested payloads}
                            {--async : Dispatch event triggers asynchronously via queue}';
 
-    protected string $description = 'Manually fire an event';
+    protected $description = 'Manually fire an event';
 
     public function handle(EventManager $eventManager): int
     {
