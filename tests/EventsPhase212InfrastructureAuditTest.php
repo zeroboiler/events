@@ -51,15 +51,15 @@ test('ActionResolver resolves valid Triggerable from container', function (): vo
 test('ActionResolver throws for non-existent class', function (): void {
     $resolver = new ActionResolver($this->app);
 
-    $resolver->resolve('NonExistent\\Action\\Class');
+    $resolver->resolve('NonExistent\Action\Class');
 })->throws(ActionResolutionException::class, "Class does not exist");
 
 test('ActionResolver throws for class that does not implement Triggerable', function (): void {
     $app = $this->app;
-    $app->bind(\\stdClass::class, fn (): \\stdClass => new \\stdClass);
+    $app->bind(\stdClass::class, fn (): \stdClass => new \stdClass);
 
     $resolver = new ActionResolver($app);
-    $resolver->resolve(\\stdClass::class);
+    $resolver->resolve(\stdClass::class);
 })->throws(ActionResolutionException::class, 'Class must implement');
 
 // ---------------------------------------------------------------------------
@@ -71,14 +71,14 @@ test('fireModel with stdClass (no attributesToArray/toArray) fires with only met
     $action = new CountingAction;
     $app->instance(CountingAction::class, $action);
 
-    $manager = $app->make(\\ZeroBoiler\\Events\\EventManager::class);
+    $manager = $app->make(\ZeroBoiler\Events\EventManager::class);
     $manager->on('StdClass.created')
         ->action(CountingAction::class)
         ->sync()
         ->name('Test Trigger')
         ->save();
 
-    $obj = new \\stdClass;
+    $obj = new \stdClass;
     $manager->fireModel('StdClass', 'created', $obj);
 
     expect($action->callCount)->toBe(1);
@@ -96,7 +96,7 @@ test('fireModel with object having only toArray() (not attributesToArray) fires 
     $action = new CountingAction;
     $app->instance(CountingAction::class, $action);
 
-    $manager = $app->make(\\ZeroBoiler\\Events\\EventManager::class);
+    $manager = $app->make(\ZeroBoiler\Events\EventManager::class);
 
     $obj = new class {
         public function toArray(): array
@@ -130,7 +130,7 @@ test('SubscriptionBuilder with auto_generate_secret false and no secret saves wi
     $config = $app->get('config');
     $config->set('events.subscriptions.auto_generate_secret', false);
 
-    $manager = $app->make(\\ZeroBoiler\\Events\\EventManager::class);
+    $manager = $app->make(\ZeroBoiler\Events\EventManager::class);
     $subscription = $manager->subscribe('test.event', 'https://example.com/webhook')
         ->save();
 
@@ -145,7 +145,7 @@ test('SubscriptionBuilder with auto_generate_secret false and no secret saves wi
 
 test('TriggerBuilder with actions() containing duplicates deduplicates preserving order', function (): void {
     $app = $this->app;
-    $manager = $app->make(\\ZeroBoiler\\Events\\EventManager::class);
+    $manager = $app->make(\ZeroBoiler\Events\EventManager::class);
 
     $trigger = $manager->on('test.dedup')
         ->actions([
@@ -165,7 +165,7 @@ test('TriggerBuilder with actions() containing duplicates deduplicates preservin
 
 test('TriggerBuilder with both action() and actions() merges and deduplicates', function (): void {
     $app = $this->app;
-    $manager = $app->make(\\ZeroBoiler\\Events\\EventManager::class);
+    $manager = $app->make(\ZeroBoiler\Events\EventManager::class);
 
     $trigger = $manager->on('test.merge')
         ->action(NullAction::class)
@@ -182,7 +182,7 @@ test('TriggerBuilder with both action() and actions() merges and deduplicates', 
 
 test('TriggerBuilder with multiple actions and actionParams uses classes key', function (): void {
     $app = $this->app;
-    $manager = $app->make(\\ZeroBoiler\\Events\\EventManager::class);
+    $manager = $app->make(\ZeroBoiler\Events\EventManager::class);
 
     $trigger = $manager->on('test.multi-params')
         ->actions([NullAction::class, SendOrderNotification::class])
@@ -202,7 +202,7 @@ test('TriggerBuilder with multiple actions and actionParams uses classes key', f
 // ---------------------------------------------------------------------------
 
 test('ConditionEngine simple equality coerces int and string to string comparison', function (): void {
-    $engine = new \\ZeroBoiler\\Events\\ConditionEngine;
+    $engine = new \ZeroBoiler\Events\ConditionEngine;
 
     $result = $engine->matches(
         ['code' => '42'],
@@ -224,7 +224,7 @@ test('ConditionEngine simple equality coerces int and string to string compariso
 });
 
 test('ConditionEngine returns false for array vs string cross-type equality', function (): void {
-    $engine = new \\ZeroBoiler\\Events\\ConditionEngine;
+    $engine = new \ZeroBoiler\Events\ConditionEngine;
 
     $result = $engine->matches(
         ['items' => 'not-an-array'],
@@ -252,7 +252,7 @@ test('DomainEvent occur factory creates fresh UUID and timestamp', function (): 
     expect($event->eventType)->toBe('test.created');
     expect($event->payload)->toBe(['key' => 'value']);
     expect($event->eventId)->not->toBeNull();
-    $diff = $event->occurredAt->getTimestamp() - (new \\DateTimeImmutable)->getTimestamp();
+    $diff = $event->occurredAt->getTimestamp() - (new \DateTimeImmutable)->getTimestamp();
     expect(abs($diff))->toBeLessThanOrEqual(2);
 });
 
@@ -270,7 +270,7 @@ test('DomainEvent toArray contains all fields', function (): void {
 // ---------------------------------------------------------------------------
 
 test('WildcardMatcher is readonly final class with only static methods', function (): void {
-    $reflection = new ReflectionClass(\\ZeroBoiler\\Events\\WildcardMatcher::class);
+    $reflection = new ReflectionClass(\ZeroBoiler\Events\WildcardMatcher::class);
 
     expect($reflection->isFinal())->toBeTrue('WildcardMatcher must be final');
     expect($reflection->isReadOnly())->toBeTrue('WildcardMatcher must be readonly');
@@ -287,26 +287,26 @@ test('WildcardMatcher is readonly final class with only static methods', functio
 
 test('all events exceptions extend EventException which extends RuntimeException', function (): void {
     $exceptions = [
-        \\ZeroBoiler\\Events\\Exceptions\\EventException::class,
-        \\ZeroBoiler\\Events\\Exceptions\\ActionResolutionException::class,
-        \\ZeroBoiler\\Events\\Exceptions\\ConditionEvaluationException::class,
-        \\ZeroBoiler\\Events\\Exceptions\\SubscriptionException::class,
-        \\ZeroBoiler\\Events\\Exceptions\\TriggerNotFoundException::class,
+        \ZeroBoiler\Events\Exceptions\EventException::class,
+        \ZeroBoiler\Events\Exceptions\ActionResolutionException::class,
+        \ZeroBoiler\Events\Exceptions\ConditionEvaluationException::class,
+        \ZeroBoiler\Events\Exceptions\SubscriptionException::class,
+        \ZeroBoiler\Events\Exceptions\TriggerNotFoundException::class,
     ];
 
     foreach ($exceptions as $class) {
-        expect($class)->toBeInstanceOf(\\Throwable::class);
+        expect($class)->toBeInstanceOf(\Throwable::class);
     }
 
     expect(is_a(
-        \\ZeroBoiler\\Events\\Exceptions\\ActionResolutionException::class,
-        \\ZeroBoiler\\Events\\Exceptions\\EventException::class,
+        \ZeroBoiler\Events\Exceptions\ActionResolutionException::class,
+        \ZeroBoiler\Events\Exceptions\EventException::class,
         true,
     ))->toBeTrue();
 
     expect(is_a(
-        \\ZeroBoiler\\Events\\Exceptions\\EventException::class,
-        \\RuntimeException::class,
+        \ZeroBoiler\Events\Exceptions\EventException::class,
+        \RuntimeException::class,
         true,
     ))->toBeTrue();
 });
@@ -318,21 +318,21 @@ test('all events exceptions extend EventException which extends RuntimeException
 test('EventsServiceProvider registers all bindings correctly', function (): void {
     $app = $this->app;
 
-    expect($app->isSingleton(\\ZeroBoiler\\Events\\ConditionEngine::class))->toBeTrue();
+    expect($app->isSingleton(\ZeroBoiler\Events\ConditionEngine::class))->toBeTrue();
     expect($app->isSingleton(ConditionEngineContract::class))->toBeTrue();
     expect($app->isSingleton(ActionResolver::class))->toBeTrue();
-    expect($app->isSingleton(\\ZeroBoiler\\Events\\EventManager::class))->toBeTrue();
-    expect($app->isSingleton(\\ZeroBoiler\\Events\\EventScheduler::class))->toBeTrue();
+    expect($app->isSingleton(\ZeroBoiler\Events\EventManager::class))->toBeTrue();
+    expect($app->isSingleton(\ZeroBoiler\Events\EventScheduler::class))->toBeTrue();
 
-    expect($app->isSingleton(\\ZeroBoiler\\Events\\TriggerBuilder::class))->toBeFalse();
-    expect($app->isSingleton(\\ZeroBoiler\\Events\\SubscriptionBuilder::class))->toBeFalse();
+    expect($app->isSingleton(\ZeroBoiler\Events\TriggerBuilder::class))->toBeFalse();
+    expect($app->isSingleton(\ZeroBoiler\Events\SubscriptionBuilder::class))->toBeFalse();
 });
 
 test('ConditionEngineContract resolves to ConditionEngine instance', function (): void {
     $app = $this->app;
     $resolved = $app->make(ConditionEngineContract::class);
 
-    expect($resolved)->toBeInstanceOf(\\ZeroBoiler\\Events\\ConditionEngine::class);
+    expect($resolved)->toBeInstanceOf(\ZeroBoiler\Events\ConditionEngine::class);
 });
 
 // ---------------------------------------------------------------------------
@@ -416,19 +416,19 @@ test('Subscription model has expected casts', function (): void {
 // ---------------------------------------------------------------------------
 
 test('WebhookAction throws on empty URL in payload', function (): void {
-    $webhook = new \\ZeroBoiler\\Events\\Actions\\WebhookAction;
+    $webhook = new \ZeroBoiler\Events\Actions\WebhookAction;
     $webhook->handle(['url' => '']);
-})->throws(\\InvalidArgumentException::class, 'non-empty "url"');
+})->throws(\InvalidArgumentException::class, 'non-empty "url"');
 
 test('WebhookAction throws on missing URL in payload', function (): void {
-    $webhook = new \\ZeroBoiler\\Events\\Actions\\WebhookAction;
+    $webhook = new \ZeroBoiler\Events\Actions\WebhookAction;
     $webhook->handle(['data' => 'something']);
-})->throws(\\InvalidArgumentException::class, 'non-empty "url"');
+})->throws(\InvalidArgumentException::class, 'non-empty "url"');
 
 test('WebhookAction throws on non-string URL in payload', function (): void {
-    $webhook = new \\ZeroBoiler\\Events\\Actions\\WebhookAction;
+    $webhook = new \ZeroBoiler\Events\Actions\WebhookAction;
     $webhook->handle(['url' => 12345]);
-})->throws(\\InvalidArgumentException::class, 'non-empty "url"');
+})->throws(\InvalidArgumentException::class, 'non-empty "url"');
 
 // ---------------------------------------------------------------------------
 // 13. Subscription HMAC with different algorithms
@@ -467,14 +467,14 @@ test('Subscription signPayload with empty secret returns empty string', function
 // ---------------------------------------------------------------------------
 
 test('EventManager facade accessor returns correct class name', function (): void {
-    $facade = new ReflectionClass(\\ZeroBoiler\\Events\\Facades\\EventManager::class);
+    $facade = new ReflectionClass(\ZeroBoiler\Events\Facades\EventManager::class);
     $method = $facade->getMethod('getFacadeAccessor');
     $result = $method->invoke(null);
 
-    expect($result)->toBe(\\ZeroBoiler\\Events\\EventManager::class);
+    expect($result)->toBe(\ZeroBoiler\Events\EventManager::class);
 });
 
 test('EventManager facade is final', function (): void {
-    $reflection = new ReflectionClass(\\ZeroBoiler\\Events\\Facades\\EventManager::class);
+    $reflection = new ReflectionClass(\ZeroBoiler\Events\Facades\EventManager::class);
     expect($reflection->isFinal())->toBeTrue();
 });

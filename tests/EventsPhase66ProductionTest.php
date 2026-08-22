@@ -396,7 +396,7 @@ test('core classes are final', function (): void {
 
     foreach ($coreClasses as $class) {
         $ref = new ReflectionClass($class);
-        expect($ref->isFinal())->toBeTrue(), "{$class} must be final");
+        expect($ref->isFinal())->toBeTrue();
     }
 });
 
@@ -418,7 +418,7 @@ test('console commands are final', function (): void {
 
     foreach ($commandClasses as $class) {
         $ref = new ReflectionClass($class);
-        expect($ref->isFinal())->toBeTrue(), "{$class} must be final";
+        expect($ref->isFinal())->toBeTrue();
     }
 });
 

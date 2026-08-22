@@ -753,13 +753,4 @@ function glob_recursive(string $pattern): array
     return $files;
 }
 
-function array_first(array $array, callable $callback): mixed
-{
-    foreach ($array as $item) {
-        if ($callback($item)) {
-            return $item;
-        }
-    }
 
-    return null;
-}

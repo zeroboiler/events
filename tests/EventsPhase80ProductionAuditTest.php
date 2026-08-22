@@ -308,10 +308,10 @@ test('all models use UUID string keys', function (): void {
     foreach ($models as $model) {
         $ref = new ReflectionClass($model);
         $prop = $ref->getProperty('keyType');
-        expect($prop->getDefaultValue())->toBe('string', "{$model::class} must use string key type");
+        expect($prop->getDefaultValue())->toBe('string');
 
         $prop = $ref->getProperty('incrementing');
-        expect($prop->getDefaultValue())->toBeFalse("{$model::class} must not auto-increment");
+        expect($prop->getDefaultValue())->toBeFalse();
     }
 });
 
@@ -325,7 +325,7 @@ test('all models have SoftDeletes trait', function (): void {
     foreach ($models as $model) {
         $ref = new ReflectionClass($model);
         expect(in_array('SoftDeletes', array_map(fn (\ReflectionClass $t) => $t->getShortName(), $ref->getTraits())))
-            ->toBeTrue("{$model::class} must use SoftDeletes");
+            ->toBeTrue();
     }
 });
 
@@ -339,12 +339,12 @@ test('all models have config-driven table names', function (): void {
     foreach ($models as $model => $defaultTable) {
         $ref = new ReflectionClass($model);
         $method = $ref->getMethod('getTable');
-        expect($method->hasReturnType())->toBeTrue("{$model::class}::getTable() must have return type");
+        expect($method->hasReturnType())->toBeTrue();
 
         // Override attribute
         $attrs = $method->getAttributes();
         $hasOverride = count(array_filter($attrs, fn (\ReflectionAttribute $a) => $a->getName() === 'Override')) > 0;
-        expect($hasOverride)->toBeTrue("{$model::class}::getTable() missing #[Override]");
+        expect($hasOverride)->toBeTrue();
     }
 });
 

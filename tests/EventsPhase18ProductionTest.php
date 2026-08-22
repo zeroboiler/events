@@ -87,7 +87,7 @@ describe('EventManager fire validation', function (): void {
         ");
 
         $this->eventManager->on('App\\Models\\User.created')
-            ->action(\ZeroBoiler\Events\Tests\Actions\' . $actionClass)
+            ->action('\\ZeroBoiler\\Events\\Tests\\Actions\\' . $actionClass)
             ->save();
 
         $model = new class
@@ -101,7 +101,7 @@ describe('EventManager fire validation', function (): void {
         $this->eventManager->fireModel('App\\Models\\User', 'created', $model);
 
         // Check that attributes are flattened into the payload
-        $captured = (\ZeroBoiler\Events\Tests\Actions\' . $actionClass)::$captured;
+        $captured = ('\\ZeroBoiler\\Events\\Tests\\Actions\\' . $actionClass)::$captured;
         expect($captured['id'])->toBe(42);
         expect($captured['email'])->toBe('test@example.com');
         expect($captured['role'])->toBe('admin');

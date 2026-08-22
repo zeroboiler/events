@@ -625,7 +625,7 @@ describe('Phase 216 - Production Readiness Deep Audit', function (): void {
 
         test('autoload PSR-4 mapping is correct', function (): void {
             $composer = json_decode(file_get_contents(dirname(__DIR__).'/composer.json'), true);
-            expect($composer['autoload']['psr-4']['ZeroBoiler\Events\'])->toBe('src/');
+            expect($composer['autoload']['psr-4']['ZeroBoiler\Events\\'])->toBe('src/');
         });
 
         test('extra.laravel.providers includes EventsServiceProvider', function (): void {

@@ -403,7 +403,7 @@ describe('Events Production Hardening — Final Audit', function (): void {
 
             expect($engine->matches(['status' => ['in', ['active', 'pending']]], ['status' => 'active']))->toBeTrue();
             expect($engine->matches(['status' => ['in', ['active', 'pending']]], ['status' => 'deleted']))->toBeFalse();
-            expect($engine->matches(['status' => ['not_in', ['deleted']], ['status' => 'active']))->toBeTrue();
+            expect($engine->matches(['status' => ['not_in', ['deleted']]], ['status' => 'active']))->toBeTrue();
         });
 
         test('empty and not_empty operators', function (): void {
