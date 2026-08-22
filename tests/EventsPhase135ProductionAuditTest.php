@@ -439,9 +439,9 @@ test('EventManager parseActions handles single class name', function (): void {
     $manager = app(EventManager::class);
     $ref = new ReflectionMethod($manager, 'parseActions');
 
-    $result = $ref->invoke($manager, \ZeroBoiler\Events\Tests\Actions\SendNotification');
+    $result = $ref->invoke($manager, '\ZeroBoiler\Events\Tests\Actions\SendNotification');
 
-    expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\SendNotification']);
+    expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\SendNotification']);
 });
 
 test('EventManager parseActions handles empty string', function (): void {

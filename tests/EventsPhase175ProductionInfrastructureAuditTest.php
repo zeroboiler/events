@@ -664,16 +664,16 @@ describe('Phase 1 Infrastructure Production Audit v175', function (): void {
         $ref = new ReflectionMethod($em, 'parseActions');
 
         // Simple class name
-        $result = $ref->invoke($em, \ZeroBoiler\Events\Tests\Actions\Foo');
-        expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo']);
+        $result = $ref->invoke($em, '\ZeroBoiler\Events\Tests\Actions\Foo');
+        expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\Foo']);
 
         // JSON array of class names
         $result = $ref->invoke($em, '["App\\\\Actions\\\\Foo", "App\\\\Actions\\\\Bar"]');
-        expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar']);
+        expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\Foo', '\ZeroBoiler\Events\Tests\Actions\Bar']);
 
         // JSON object with class + params
         $result = $ref->invoke($em, '{"class":"App\\\\Actions\\\\Foo","params":{"url":"https://test.com"}}');
-        expect($result)->toBe([['class' => \ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://test.com']]]);
+        expect($result)->toBe([['class' => '\ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://test.com']]]);
 
         // JSON with classes key
         $result = $ref->invoke($em, '{"classes":["A","B"],"params":{"key":"val"}}');

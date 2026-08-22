@@ -226,7 +226,7 @@ test('EventsRedeliverCommand reads timeout from config', function (): void {
 test('Trigger model CRUD still works with typed properties', function (): void {
     $trigger = Trigger::factory()->enabled()->create([
         'event' => 'test.typed',
-        'action' => \ZeroBoiler\Events\Tests\Actions\TestAction',
+        'action' => '\ZeroBoiler\Events\Tests\Actions\TestAction',
     ]);
 
     expect($trigger->id)->toBeString()

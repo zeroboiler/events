@@ -330,7 +330,7 @@ test('action resolver throws for non-existent class', function (): void {
     $this->expectException(\InvalidArgumentException::class);
     $this->expectExceptionMessage('does not exist');
 
-    $resolver->resolve(\ZeroBoiler\Events\Tests\Actions\NonExistentAction');
+    $resolver->resolve('\ZeroBoiler\Events\Tests\Actions\NonExistentAction');
 });
 
 test('action resolver throws for class not implementing Triggerable', function (): void {

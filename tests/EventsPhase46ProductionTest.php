@@ -55,11 +55,11 @@ test('parseActions trims whitespace before JSON decode', function () {
 
     // JSON with surrounding whitespace
     $result = $method->invoke($manager, '  ["App\\\\Actions\\\\Foo"]  ');
-    expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo']);
+    expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\Foo']);
 
     // JSON with leading newline
     $result = $method->invoke($manager, "\n{\"class\":\"App\\\\Actions\\\\Bar\"}");
-    expect($result)->toBe([['class' => \ZeroBoiler\Events\Tests\Actions\Bar']]);
+    expect($result)->toBe([['class' => '\ZeroBoiler\Events\Tests\Actions\Bar']]);
 });
 
 test('parseActions still handles empty string and zero string correctly', function () {
@@ -79,7 +79,7 @@ test('parseActions handles plain class name with surrounding whitespace', functi
     // Whitespace around plain class name should be trimmed
     $result = $method->invoke($manager, '  App\\Actions\\TestAction  ');
     // After trim it's a valid non-JSON string, so returns as single entry
-    expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\TestAction']);
+    expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\TestAction']);
 });
 
 // ---------------------------------------------------------------------------

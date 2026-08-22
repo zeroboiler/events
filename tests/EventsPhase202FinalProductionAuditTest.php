@@ -171,26 +171,26 @@ describe('Phase 202 — Final Production Audit', function () {
         it('creates trigger with classes key when multiple actions with params', function (): void {
             $manager = app(EventManager::class);
             $trigger = $manager->on('multi.action')
-                ->actions([\ZeroBoiler\Events\Tests\Actions\FirstAction', \ZeroBoiler\Events\Tests\Actions\SecondAction'])
+                ->actions(['\ZeroBoiler\Events\Tests\Actions\FirstAction', '\ZeroBoiler\Events\Tests\Actions\SecondAction'])
                 ->actionParams(['webhook_url' => 'https://example.com'])
                 ->save();
 
             $decoded = json_decode($trigger->action, true);
             expect($decoded)->toBeArray();
-            expect($decoded['classes'])->toBe([\ZeroBoiler\Events\Tests\Actions\FirstAction', \ZeroBoiler\Events\Tests\Actions\SecondAction']);
+            expect($decoded['classes'])->toBe(['\ZeroBoiler\Events\Tests\Actions\FirstAction', '\ZeroBoiler\Events\Tests\Actions\SecondAction']);
             expect($decoded['params'])->toBe(['webhook_url' => 'https://example.com']);
         });
 
         it('creates trigger with class key when single action with params', function (): void {
             $manager = app(EventManager::class);
             $trigger = $manager->on('single.action')
-                ->action(\ZeroBoiler\Events\Tests\Actions\OnlyAction')
+                ->action('\ZeroBoiler\Events\Tests\Actions\OnlyAction')
                 ->actionParams(['webhook_url' => 'https://example.com'])
                 ->save();
 
             $decoded = json_decode($trigger->action, true);
             expect($decoded)->toBeArray();
-            expect($decoded['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\OnlyAction');
+            expect($decoded['class'])->toBe('\ZeroBoiler\Events\Tests\Actions\OnlyAction');
             expect($decoded['params'])->toBe(['webhook_url' => 'https://example.com']);
         });
     });

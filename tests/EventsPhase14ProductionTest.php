@@ -49,8 +49,8 @@ test('TriggerBuilder save with action() and actions() overlapping produces corre
 
     $builder = app(\ZeroBoiler\Events\TriggerBuilder::class);
     $builder->on('order.placed');
-    $builder->action(\ZeroBoiler\Events\Tests\Actions\NotifyAction');
-    $builder->actions([\ZeroBoiler\Events\Tests\Actions\NotifyAction', \ZeroBoiler\Events\Tests\Actions\LogAction']);
+    $builder->action('\ZeroBoiler\Events\Tests\Actions\NotifyAction');
+    $builder->actions(['\ZeroBoiler\Events\Tests\Actions\NotifyAction', '\ZeroBoiler\Events\Tests\Actions\LogAction']);
 
     // Access the save logic without actually saving
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
@@ -58,25 +58,25 @@ test('TriggerBuilder save with action() and actions() overlapping produces corre
 
     // NotifyAction should appear only once (first occurrence preserved)
     expect($resolved)->toBe([
-        \ZeroBoiler\Events\Tests\Actions\NotifyAction',
-        \ZeroBoiler\Events\Tests\Actions\LogAction',
+        '\ZeroBoiler\Events\Tests\Actions\NotifyAction',
+        '\ZeroBoiler\Events\Tests\Actions\LogAction',
     ]);
 });
 
 test('TriggerBuilder save with action() not in actions() prepends correctly', function (): void {
     $builder = app(\ZeroBoiler\Events\TriggerBuilder::class);
     $builder->on('user.created');
-    $builder->action(\ZeroBoiler\Events\Tests\Actions\FirstAction');
-    $builder->actions([\ZeroBoiler\Events\Tests\Actions\SecondAction', \ZeroBoiler\Events\Tests\Actions\ThirdAction']);
+    $builder->action('\ZeroBoiler\Events\Tests\Actions\FirstAction');
+    $builder->actions(['\ZeroBoiler\Events\Tests\Actions\SecondAction', '\ZeroBoiler\Events\Tests\Actions\ThirdAction']);
 
     $resolveReflection = new ReflectionMethod($builder, 'resolveActions');
     $resolved = $resolveReflection->invoke($builder);
 
     // action() should be prepended since it's not in the actions() list
     expect($resolved)->toBe([
-        \ZeroBoiler\Events\Tests\Actions\FirstAction',
-        \ZeroBoiler\Events\Tests\Actions\SecondAction',
-        \ZeroBoiler\Events\Tests\Actions\ThirdAction',
+        '\ZeroBoiler\Events\Tests\Actions\FirstAction',
+        '\ZeroBoiler\Events\Tests\Actions\SecondAction',
+        '\ZeroBoiler\Events\Tests\Actions\ThirdAction',
     ]);
 });
 
@@ -503,52 +503,52 @@ test('EventManager fire with empty payload works when no triggers match', functi
 test('EventManager fire throws for empty event', function (): void {
     $manager = app(\ZeroBoiler\Events\EventManager::class);
 
-    expect(fn (): void => $manager->fire(''))
+    expect(fn () => $manager->fire(''))
         ->toThrow(\InvalidArgumentException::class, 'Event name cannot be empty');
 
-    expect(fn (): void => $manager->fire('0'))
+    expect(fn () => $manager->fire('0'))
         ->toThrow(\InvalidArgumentException::class, 'Event name cannot be empty');
 });
 
 test('EventManager fireModel throws for empty model class', function (): void {
     $manager = app(\ZeroBoiler\Events\EventManager::class);
 
-    expect(fn (): void => $manager->fireModel('', 'created', new \stdClass))
+    expect(fn () => $manager->fireModel('', 'created', new \stdClass))
         ->toThrow(\InvalidArgumentException::class, 'Model class name cannot be empty');
 
-    expect(fn (): void => $manager->fireModel('0', 'created', new \stdClass))
+    expect(fn () => $manager->fireModel('0', 'created', new \stdClass))
         ->toThrow(\InvalidArgumentException::class, 'Model class name cannot be empty');
 });
 
 test('EventManager fireModel throws for empty action', function (): void {
     $manager = app(\ZeroBoiler\Events\EventManager::class);
 
-    expect(fn (): void => $manager->fireModel(\stdClass::class, '', new \stdClass))
+    expect(fn () => $manager->fireModel(\stdClass::class, '', new \stdClass))
         ->toThrow(\InvalidArgumentException::class, 'Model action cannot be empty');
 
-    expect(fn (): void => $manager->fireModel(\stdClass::class, '0', new \stdClass))
+    expect(fn () => $manager->fireModel(\stdClass::class, '0', new \stdClass))
         ->toThrow(\InvalidArgumentException::class, 'Model action cannot be empty');
 });
 
 test('WebhookAction handle throws for missing URL', function (): void {
     $action = new WebhookAction;
 
-    expect(fn (): void => $action->handle([]))
+    expect(fn () => $action->handle([]))
         ->toThrow(\InvalidArgumentException::class, 'requires a non-empty "url"');
 
-    expect(fn (): void => $action->handle(['url' => '']))
+    expect(fn () => $action->handle(['url' => '']))
         ->toThrow(\InvalidArgumentException::class, 'requires a non-empty "url"');
 
-    expect(fn (): void => $action->handle(['url' => null]))
+    expect(fn () => $action->handle(['url' => null]))
         ->toThrow(\InvalidArgumentException::class, 'requires a non-empty "url"');
 
-    expect(fn (): void => $action->handle(['url' => 123]))
+    expect(fn () => $action->handle(['url' => 123]))
         ->toThrow(\InvalidArgumentException::class, 'requires a non-empty "url"');
 });
 
 test('TriggerBuilder save throws for empty event', function (): void {
     $builder = app(\ZeroBoiler\Events\TriggerBuilder::class);
-    $builder->action(\ZeroBoiler\Events\Tests\Actions\Test');
+    $builder->action('\ZeroBoiler\Events\Tests\Actions\Test');
 
     expect(fn (): Trigger => $builder->save())
         ->toThrow(\InvalidArgumentException::class, 'Event name is required');
@@ -603,8 +603,8 @@ test('TriggerBuilder fluent interface returns self', function (): void {
 
     expect($builder->name('Test'))->toBe($builder);
     expect($builder->on('test.event'))->toBe($builder);
-    expect($builder->action(\ZeroBoiler\Events\Tests\Actions\Test'))->toBe($builder);
-    expect($builder->actions([\ZeroBoiler\Events\Tests\Actions\Test']))->toBe($builder);
+    expect($builder->action('\ZeroBoiler\Events\Tests\Actions\Test'))->toBe($builder);
+    expect($builder->actions(['\ZeroBoiler\Events\Tests\Actions\Test']))->toBe($builder);
     expect($builder->when(['status' => 'active']))->toBe($builder);
     expect($builder->async(true))->toBe($builder);
     expect($builder->priority(10))->toBe($builder);

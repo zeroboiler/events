@@ -113,7 +113,7 @@ describe('EventManager fire validation', function (): void {
 describe('TriggerBuilder save validation', function (): void {
     test('save throws on empty event name', function (): void {
         $builder = $this->app->make(TriggerBuilder::class);
-        $builder->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')->save();
+        $builder->action('\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')->save();
     })->throws(\InvalidArgumentException::class, 'Event name is required');
 
     test('save throws when no action is set', function (): void {

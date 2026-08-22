@@ -521,16 +521,16 @@ test('composer.json has correct service provider and facade aliases', function (
 test('EventManager fire rejects empty string event', function (): void {
     $manager = $this->app->make(EventManager::class);
 
-    expect(fn (): void => $manager->fire(''))->toThrow(InvalidArgumentException::class);
-    expect(fn (): void => $manager->fire('0'))->toThrow(InvalidArgumentException::class);
+    expect(fn () => $manager->fire(''))->toThrow(InvalidArgumentException::class);
+    expect(fn () => $manager->fire('0'))->toThrow(InvalidArgumentException::class);
 });
 
 test('EventManager fireModel rejects empty class and action', function (): void {
     $manager = $this->app->make(EventManager::class);
 
-    expect(fn (): void => $manager->fireModel('', 'created', new stdClass))
+    expect(fn () => $manager->fireModel('', 'created', new stdClass))
         ->toThrow(InvalidArgumentException::class);
-    expect(fn (): void => $manager->fireModel('App\\Model', '', new stdClass))
+    expect(fn () => $manager->fireModel('App\\Model', '', new stdClass))
         ->toThrow(InvalidArgumentException::class);
 });
 
@@ -549,30 +549,30 @@ test('EventManager global disable works correctly', function (): void {
 test('TriggerBuilder rejects empty event and action', function (): void {
     $manager = $this->app->make(EventManager::class);
 
-    expect(fn (): void => $manager->on('')->save())
+    expect(fn () => $manager->on('')->save())
         ->toThrow(InvalidArgumentException::class, 'Event name is required');
 
-    expect(fn (): void => $manager->on('test.event')->save())
+    expect(fn () => $manager->on('test.event')->save())
         ->toThrow(InvalidArgumentException::class, 'At least one action is required');
 });
 
 test('SubscriptionBuilder rejects non-HTTP URL schemes', function (): void {
     $manager = $this->app->make(EventManager::class);
 
-    expect(fn (): void => $manager->subscribe('test.event', 'ftp://evil.com/hook')->save())
+    expect(fn () => $manager->subscribe('test.event', 'ftp://evil.com/hook')->save())
         ->toThrow(InvalidArgumentException::class, 'HTTP or HTTPS');
 
-    expect(fn (): void => $manager->subscribe('test.event', 'file:///etc/passwd')->save())
+    expect(fn () => $manager->subscribe('test.event', 'file:///etc/passwd')->save())
         ->toThrow(InvalidArgumentException::class);
 
-    expect(fn (): void => $manager->subscribe('test.event', 'javascript:alert(1)')->save())
+    expect(fn () => $manager->subscribe('test.event', 'javascript:alert(1)')->save())
         ->toThrow(InvalidArgumentException::class);
 });
 
 test('ActionResolver rejects non-existent class', function (): void {
     $resolver = $this->app->make(ActionResolver::class);
 
-    expect(fn (): void => $resolver->resolve('NonExistent\Action\Class'))
+    expect(fn () => $resolver->resolve('NonExistent\Action\Class'))
         ->toThrow(InvalidArgumentException::class, 'does not exist');
 });
 
@@ -580,7 +580,7 @@ test('ActionResolver rejects class that does not implement Triggerable', functio
     $resolver = $this->app->make(ActionResolver::class);
 
     // stdClass exists but doesn't implement Triggerable
-    expect(fn (): void => $resolver->resolve('stdClass'))
+    expect(fn () => $resolver->resolve('stdClass'))
         ->toThrow(InvalidArgumentException::class, 'must implement');
 });
 
@@ -672,7 +672,7 @@ test('EventManager registerScheduler throws on missing binding', function (): vo
 
     $schedule = new \Illuminate\Console\Scheduling\Schedule;
 
-    expect(fn (): void => $manager->registerScheduler($schedule))
+    expect(fn () => $manager->registerScheduler($schedule))
         ->toThrow(\RuntimeException::class, 'EventScheduler could not be resolved');
 });
 

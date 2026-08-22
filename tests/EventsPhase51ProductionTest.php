@@ -145,7 +145,7 @@ test('ActionResolver throws for non-existent class', function (): void {
     $app = app();
     $resolver = $app->make(ActionResolver::class);
 
-    $resolver->resolve(\ZeroBoiler\Events\Tests\Actions\NonExistentClass12345');
+    $resolver->resolve('\ZeroBoiler\Events\Tests\Actions\NonExistentClass12345');
 })->throws(\InvalidArgumentException::class);
 
 test('ActionResolver error message includes class name for non-existent class', function (): void {
@@ -153,10 +153,10 @@ test('ActionResolver error message includes class name for non-existent class', 
     $resolver = $app->make(ActionResolver::class);
 
     try {
-        $resolver->resolve(\ZeroBoiler\Events\Tests\Actions\NonExistentClass12345');
+        $resolver->resolve('\ZeroBoiler\Events\Tests\Actions\NonExistentClass12345');
         $this->fail('Expected InvalidArgumentException');
     } catch (\InvalidArgumentException $e) {
-        expect($e->getMessage())->toContain(\ZeroBoiler\Events\Tests\Actions\NonExistentClass12345');
+        expect($e->getMessage())->toContain('\ZeroBoiler\Events\Tests\Actions\NonExistentClass12345');
         expect($e->getMessage())->toContain('does not exist');
     }
 });

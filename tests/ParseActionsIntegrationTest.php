@@ -42,7 +42,7 @@ test('parseActions handles classes+params JSON format via trigger save', functio
     // Build a trigger with classes + params and save it
     $trigger = $eventManager->on('parse.test')
         ->name('Parse Test')
-        ->actions([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar'])
+        ->actions(['\ZeroBoiler\Events\Tests\Actions\Foo', '\ZeroBoiler\Events\Tests\Actions\Bar'])
         ->actionParams(['url' => 'https://example.com'])
         ->save();
 
@@ -52,7 +52,7 @@ test('parseActions handles classes+params JSON format via trigger save', functio
 
     $decoded = json_decode($reloaded->action, true);
     expect($decoded)->toHaveKey('classes');
-    expect($decoded['classes'])->toBe([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar']);
+    expect($decoded['classes'])->toBe(['\ZeroBoiler\Events\Tests\Actions\Foo', '\ZeroBoiler\Events\Tests\Actions\Bar']);
     expect($decoded['params'])->toBe(['url' => 'https://example.com']);
 });
 
@@ -61,7 +61,7 @@ test('parseActions handles single class with params via trigger save', function 
 
     $trigger = $eventManager->on('parse.single')
         ->name('Parse Single Test')
-        ->action(\ZeroBoiler\Events\Tests\Actions\Single')
+        ->action('\ZeroBoiler\Events\Tests\Actions\Single')
         ->actionParams(['key' => 'value'])
         ->save();
 
@@ -70,7 +70,7 @@ test('parseActions handles single class with params via trigger save', function 
 
     $decoded = json_decode($reloaded->action, true);
     expect($decoded)->toHaveKey('class');
-    expect($decoded['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\Single');
+    expect($decoded['class'])->toBe('\ZeroBoiler\Events\Tests\Actions\Single');
     expect($decoded['params'])->toBe(['key' => 'value']);
 });
 
@@ -79,12 +79,12 @@ test('parseActions handles plain class name via trigger save', function (): void
 
     $trigger = $eventManager->on('parse.plain')
         ->name('Parse Plain Test')
-        ->action(\ZeroBoiler\Events\Tests\Actions\Plain')
+        ->action('\ZeroBoiler\Events\Tests\Actions\Plain')
         ->save();
 
     $reloaded = Trigger::find($trigger->id);
     expect($reloaded)->not->toBeNull();
-    expect($reloaded->action)->toBe(\ZeroBoiler\Events\Tests\Actions\Plain');
+    expect($reloaded->action)->toBe('\ZeroBoiler\Events\Tests\Actions\Plain');
 });
 
 test('parseActions handles JSON array of class names via trigger save', function (): void {
@@ -92,14 +92,14 @@ test('parseActions handles JSON array of class names via trigger save', function
 
     $trigger = $eventManager->on('parse.array')
         ->name('Parse Array Test')
-        ->actions([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar'])
+        ->actions(['\ZeroBoiler\Events\Tests\Actions\Foo', '\ZeroBoiler\Events\Tests\Actions\Bar'])
         ->save();
 
     $reloaded = Trigger::find($trigger->id);
     expect($reloaded)->not->toBeNull();
 
     $decoded = json_decode($reloaded->action, true);
-    expect($decoded)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar']);
+    expect($decoded)->toBe(['\ZeroBoiler\Events\Tests\Actions\Foo', '\ZeroBoiler\Events\Tests\Actions\Bar']);
 });
 
 test('trigger save with both action() and actions() merges without duplicates', function (): void {
@@ -107,8 +107,8 @@ test('trigger save with both action() and actions() merges without duplicates', 
 
     $trigger = $eventManager->on('merge.test')
         ->name('Merge Test')
-        ->action(\ZeroBoiler\Events\Tests\Actions\First')
-        ->actions([\ZeroBoiler\Events\Tests\Actions\Second', \ZeroBoiler\Events\Tests\Actions\Third'])
+        ->action('\ZeroBoiler\Events\Tests\Actions\First')
+        ->actions(['\ZeroBoiler\Events\Tests\Actions\Second', '\ZeroBoiler\Events\Tests\Actions\Third'])
         ->save();
 
     $reloaded = Trigger::find($trigger->id);
@@ -116,9 +116,9 @@ test('trigger save with both action() and actions() merges without duplicates', 
 
     $decoded = json_decode($reloaded->action, true);
     expect($decoded)->toBe([
-        \ZeroBoiler\Events\Tests\Actions\First',
-        \ZeroBoiler\Events\Tests\Actions\Second',
-        \ZeroBoiler\Events\Tests\Actions\Third',
+        '\ZeroBoiler\Events\Tests\Actions\First',
+        '\ZeroBoiler\Events\Tests\Actions\Second',
+        '\ZeroBoiler\Events\Tests\Actions\Third',
     ]);
 });
 
@@ -127,8 +127,8 @@ test('trigger save with duplicate action classes deduplicates', function (): voi
 
     $trigger = $eventManager->on('dedup.test')
         ->name('Dedup Test')
-        ->action(\ZeroBoiler\Events\Tests\Actions\First')
-        ->actions([\ZeroBoiler\Events\Tests\Actions\First', \ZeroBoiler\Events\Tests\Actions\Second'])
+        ->action('\ZeroBoiler\Events\Tests\Actions\First')
+        ->actions(['\ZeroBoiler\Events\Tests\Actions\First', '\ZeroBoiler\Events\Tests\Actions\Second'])
         ->save();
 
     $reloaded = Trigger::find($trigger->id);
@@ -136,7 +136,7 @@ test('trigger save with duplicate action classes deduplicates', function (): voi
 
     $decoded = json_decode($reloaded->action, true);
     expect($decoded)->toBe([
-        \ZeroBoiler\Events\Tests\Actions\First',
-        \ZeroBoiler\Events\Tests\Actions\Second',
+        '\ZeroBoiler\Events\Tests\Actions\First',
+        '\ZeroBoiler\Events\Tests\Actions\Second',
     ]);
 });

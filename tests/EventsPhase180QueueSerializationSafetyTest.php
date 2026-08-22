@@ -96,7 +96,7 @@ describe('EventsPhase180 — Queue Serialization Safety & Infrastructure Audit',
                 'id' => (string) Str::uuid(),
                 'name' => 'Test',
                 'event' => 'test.event',
-                'action' => \ZeroBoiler\Events\Tests\Actions\Test',
+                'action' => '\ZeroBoiler\Events\Tests\Actions\Test',
             ]);
             $model->save();
 

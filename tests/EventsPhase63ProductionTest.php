@@ -683,14 +683,14 @@ test('phase 63: TriggerBuilder resolveActions deduplicates and preserves order')
         $builder = app(TriggerBuilder::class);
         // Set action() and actions() to create overlap
         $actionProp = $ref->getProperty('action');
-        $actionProp->setValue($builder, \ZeroBoiler\Events\Tests\Actions\A');
+        $actionProp->setValue($builder, '\ZeroBoiler\Events\Tests\Actions\A');
         $actionsProp = $ref->getProperty('actions');
-        $actionsProp->setValue($builder, [\ZeroBoiler\Events\Tests\Actions\B', \ZeroBoiler\Events\Tests\Actions\A', \ZeroBoiler\Events\Tests\Actions\C']);
+        $actionsProp->setValue($builder, ['\ZeroBoiler\Events\Tests\Actions\B', '\ZeroBoiler\Events\Tests\Actions\A', '\ZeroBoiler\Events\Tests\Actions\C']);
 
         $result = $method->invoke($builder);
 
         // A should be first (prepended), then B, C
-        return $result === [\ZeroBoiler\Events\Tests\Actions\A', \ZeroBoiler\Events\Tests\Actions\B', \ZeroBoiler\Events\Tests\Actions\C'];
+        return $result === ['\ZeroBoiler\Events\Tests\Actions\A', '\ZeroBoiler\Events\Tests\Actions\B', '\ZeroBoiler\Events\Tests\Actions\C'];
     })->toBeTrue();
 
 test('phase 63: all source files have return type declarations on public methods')

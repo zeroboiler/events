@@ -136,7 +136,7 @@ describe('EventManager executeTrigger failure', function (): void {
     test('executeTrigger marks log as failed and re-throws exception', function (): void {
         $trigger = Trigger::factory()->create([
             'event' => 'fail.test',
-            'action' => \ZeroBoiler\Events\Tests\Actions\FailingAction',
+            'action' => '\ZeroBoiler\Events\Tests\Actions\FailingAction',
             'enabled' => true,
             'async' => false,
         ]);
@@ -149,7 +149,7 @@ describe('EventManager executeTrigger failure', function (): void {
 
         // Register a class that throws
         $app = app();
-        $app->bind(\ZeroBoiler\Events\Tests\Actions\FailingAction', function () {
+        $app->bind('\ZeroBoiler\Events\Tests\Actions\FailingAction', function () {
             return new class implements \ZeroBoiler\Events\Contracts\Triggerable
             {
                 public function handle(array $payload): void
@@ -174,7 +174,7 @@ describe('EventManager executeTrigger failure', function (): void {
 
         $app = app();
 
-        $app->bind(\ZeroBoiler\Events\Tests\Actions\CountAction', function () use (&$callCount) {
+        $app->bind('\ZeroBoiler\Events\Tests\Actions\CountAction', function () use (&$callCount) {
             return new class($callCount) implements \ZeroBoiler\Events\Contracts\Triggerable
             {
                 public function __construct(public int &$count) {}
@@ -188,7 +188,7 @@ describe('EventManager executeTrigger failure', function (): void {
 
         $trigger = Trigger::factory()->create([
             'event' => 'multi.success',
-            'action' => json_encode([\ZeroBoiler\Events\Tests\Actions\CountAction', \ZeroBoiler\Events\Tests\Actions\CountAction']),
+            'action' => json_encode(['\ZeroBoiler\Events\Tests\Actions\CountAction', '\ZeroBoiler\Events\Tests\Actions\CountAction']),
             'enabled' => true,
             'async' => false,
         ]);

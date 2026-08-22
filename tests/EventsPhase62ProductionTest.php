@@ -62,7 +62,7 @@ describe('TriggerBuilder Actions Validation', function () {
         $manager = app(\ZeroBoiler\Events\EventManager::class);
 
         expect(fn () => $manager->on('validate.actions')
-            ->actions([123, \ZeroBoiler\Events\Tests\Actions\SendOrderNotification'])
+            ->actions([123, '\ZeroBoiler\Events\Tests\Actions\SendOrderNotification'])
             ->save()
         )->toThrow(\InvalidArgumentException::class, 'non-empty string');
     });
@@ -71,7 +71,7 @@ describe('TriggerBuilder Actions Validation', function () {
         $manager = app(\ZeroBoiler\Events\EventManager::class);
 
         expect(fn () => $manager->on('validate.actions.empty')
-            ->actions(['', \ZeroBoiler\Events\Tests\Actions\SendOrderNotification'])
+            ->actions(['', '\ZeroBoiler\Events\Tests\Actions\SendOrderNotification'])
             ->save()
         )->toThrow(\InvalidArgumentException::class, 'non-empty string');
     });
@@ -81,8 +81,8 @@ describe('TriggerBuilder Actions Validation', function () {
 
         $trigger = $manager->on('validate.actions.valid')
             ->actions([
-                \ZeroBoiler\Events\Tests\Actions\SendOrderNotification',
-                \ZeroBoiler\Events\Tests\Actions\LogOrderEvent',
+                '\ZeroBoiler\Events\Tests\Actions\SendOrderNotification',
+                '\ZeroBoiler\Events\Tests\Actions\LogOrderEvent',
             ])
             ->save();
 
@@ -96,14 +96,14 @@ describe('TriggerBuilder Actions Validation', function () {
         $manager = app(\ZeroBoiler\Events\EventManager::class);
 
         $trigger = $manager->on('dedup.merge')
-            ->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')
-            ->actions([\ZeroBoiler\Events\Tests\Actions\LogOrderEvent', \ZeroBoiler\Events\Tests\Actions\SendOrderNotification'])
+            ->action('\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')
+            ->actions(['\ZeroBoiler\Events\Tests\Actions\LogOrderEvent', '\ZeroBoiler\Events\Tests\Actions\SendOrderNotification'])
             ->save();
 
         $decoded = json_decode($trigger->action, true);
         // First action prepended, dedup removes duplicate SendOrderNotification
-        expect($decoded[0])->toBe(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification');
-        expect($decoded[1])->toBe(\ZeroBoiler\Events\Tests\Actions\LogOrderEvent');
+        expect($decoded[0])->toBe('\ZeroBoiler\Events\Tests\Actions\SendOrderNotification');
+        expect($decoded[1])->toBe('\ZeroBoiler\Events\Tests\Actions\LogOrderEvent');
         expect(count($decoded))->toBe(2);
     });
 });

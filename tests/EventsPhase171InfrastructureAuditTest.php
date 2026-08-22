@@ -334,7 +334,7 @@ test('Phase 171: TriggerBuilder deduplicates actions', function (): void {
 
     $trigger = $em->on('test.dedup.event')
         ->action(TestNullAction::class)
-        ->actions([TestNullAction::class, \ZeroBoiler\Events\Tests\Actions\AnotherAction'])
+        ->actions([TestNullAction::class, '\ZeroBoiler\Events\Tests\Actions\AnotherAction'])
         ->name('Dedup Test')
         ->save();
 
@@ -344,7 +344,7 @@ test('Phase 171: TriggerBuilder deduplicates actions', function (): void {
     expect($actions)->toBeArray();
     expect(count($actions))->toBe(2);
     expect($actions[0])->toBe(TestNullAction::class);
-    expect($actions[1])->toBe(\ZeroBoiler\Events\Tests\Actions\AnotherAction');
+    expect($actions[1])->toBe('\ZeroBoiler\Events\Tests\Actions\AnotherAction');
 });
 
 test('Phase 171: phpstan.neon.dist has level 9 and bootstrapFiles', function (): void {

@@ -935,8 +935,8 @@ test('parseActions handles single class name', function (): void {
     $ref = new ReflectionMethod(EventManager::class, 'parseActions');
     $manager = $this->app->make(EventManager::class);
 
-    $result = $ref->invoke($manager, \ZeroBoiler\Events\Tests\Actions\TestAction');
-    expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\TestAction']);
+    $result = $ref->invoke($manager, '\ZeroBoiler\Events\Tests\Actions\TestAction');
+    expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\TestAction']);
 });
 
 test('parseActions handles JSON array of classes', function (): void {

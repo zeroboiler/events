@@ -124,7 +124,7 @@ test('trigger can be updated', function (): void {
 });
 
 test('trigger can store multiple actions as JSON', function (): void {
-    $actions = [\ZeroBoiler\Events\Tests\Actions\ActionOne', \ZeroBoiler\Events\Tests\Actions\ActionTwo'];
+    $actions = ['\ZeroBoiler\Events\Tests\Actions\ActionOne', '\ZeroBoiler\Events\Tests\Actions\ActionTwo'];
     $trigger = Trigger::factory()->create([
         'action' => json_encode($actions),
     ]);

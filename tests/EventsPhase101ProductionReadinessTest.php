@@ -141,7 +141,7 @@ describe('Phase 101 — Production Readiness Audit', function (): void {
             $trigger = Trigger::factory()->enabled()->create([
                 'event' => 'test.empty',
                 'conditions' => null,
-                'action' => json_encode(\ZeroBoiler\Events\Tests\Actions\DummyAction'),
+                'action' => json_encode('\ZeroBoiler\Events\Tests\Actions\DummyAction'),
             ]);
 
             $eventManager = $this->app->make(EventManager::class);

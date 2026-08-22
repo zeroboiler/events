@@ -107,8 +107,8 @@ describe('Phase 42: Final Production Hardening', function (): void {
         $reflection = new ReflectionClass($manager);
         $method = $reflection->getMethod('parseActions');
 
-        $result = $method->invoke($manager, \ZeroBoiler\Events\Tests\Actions\SomeAction');
-        expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\SomeAction']);
+        $result = $method->invoke($manager, '\ZeroBoiler\Events\Tests\Actions\SomeAction');
+        expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\SomeAction']);
     });
 
     test('parseActions handles JSON with empty classes array', function (): void {
@@ -129,7 +129,7 @@ describe('Phase 42: Final Production Hardening', function (): void {
 
         $result = $method->invoke($manager, '{"classes": ["App\\\\Actions\\\\Foo"], "params": {"url": "https://example.com"}}');
         expect($result)->toBe([
-            ['class' => \ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://example.com']],
+            ['class' => '\ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://example.com']],
         ]);
     });
 

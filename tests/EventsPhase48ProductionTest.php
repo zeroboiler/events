@@ -61,8 +61,8 @@ test('parseActions returns list type for all formats', function (): void {
     $r = new ReflectionMethod($mgr, 'parseActions');
 
     // Single class string
-    $result = $r->invoke($mgr, \ZeroBoiler\Events\Tests\Actions\Foo');
-    expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo']);
+    $result = $r->invoke($mgr, '\ZeroBoiler\Events\Tests\Actions\Foo');
+    expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\Foo']);
     expect(array_is_list($result))->toBeTrue();
 
     // JSON array of classes
@@ -76,7 +76,7 @@ test('parseActions returns list type for all formats', function (): void {
     expect($result)->toBeArray();
     expect(count($result))->toBe(1);
     expect(is_array($result[0]))->toBeTrue();
-    expect($result[0]['class'])->toBe(\ZeroBoiler\Events\Tests\Actions\Foo');
+    expect($result[0]['class'])->toBe('\ZeroBoiler\Events\Tests\Actions\Foo');
     expect(isset($result[0]['params']))->toBeTrue();
 
     // JSON classes + shared params

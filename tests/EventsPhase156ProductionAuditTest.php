@@ -40,28 +40,28 @@ describe('EventManager parseActions Edge Cases', function (): void {
     test('single class name string returns single-element array', function (): void {
         $manager = app(EventManager::class);
         $reflection = new ReflectionMethod($manager, 'parseActions');
-        $result = $reflection->invoke($manager, \ZeroBoiler\Events\Tests\Actions\SendEmail');
+        $result = $reflection->invoke($manager, '\ZeroBoiler\Events\Tests\Actions\SendEmail');
 
-        expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\SendEmail']);
+        expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\SendEmail']);
     });
 
     test('JSON array of class names is returned as-is when sequential', function (): void {
         $manager = app(EventManager::class);
         $reflection = new ReflectionMethod($manager, 'parseActions');
-        $json = json_encode([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar']);
+        $json = json_encode(['\ZeroBoiler\Events\Tests\Actions\Foo', '\ZeroBoiler\Events\Tests\Actions\Bar']);
         $result = $reflection->invoke($manager, $json);
 
-        expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar']);
+        expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\Foo', '\ZeroBoiler\Events\Tests\Actions\Bar']);
     });
 
     test('JSON object with class key returns single-element array', function (): void {
         $manager = app(EventManager::class);
         $reflection = new ReflectionMethod($manager, 'parseActions');
-        $json = json_encode(['class' => \ZeroBoiler\Events\Tests\Actions\Webhook', 'params' => ['url' => 'https://example.com']]);
+        $json = json_encode(['class' => '\ZeroBoiler\Events\Tests\Actions\Webhook', 'params' => ['url' => 'https://example.com']]);
         $result = $reflection->invoke($manager, $json);
 
         expect($result)->toBe([
-            ['class' => \ZeroBoiler\Events\Tests\Actions\Webhook', 'params' => ['url' => 'https://example.com']],
+            ['class' => '\ZeroBoiler\Events\Tests\Actions\Webhook', 'params' => ['url' => 'https://example.com']],
         ]);
     });
 
@@ -69,14 +69,14 @@ describe('EventManager parseActions Edge Cases', function (): void {
         $manager = app(EventManager::class);
         $reflection = new ReflectionMethod($manager, 'parseActions');
         $json = json_encode([
-            'classes' => [\ZeroBoiler\Events\Tests\Actions\Log', \ZeroBoiler\Events\Tests\Actions\Notify'],
+            'classes' => ['\ZeroBoiler\Events\Tests\Actions\Log', '\ZeroBoiler\Events\Tests\Actions\Notify'],
             'params' => ['channel' => 'slack'],
         ]);
         $result = $reflection->invoke($manager, $json);
 
         expect($result)->toBe([
-            ['class' => \ZeroBoiler\Events\Tests\Actions\Log', 'params' => ['channel' => 'slack']],
-            ['class' => \ZeroBoiler\Events\Tests\Actions\Notify', 'params' => ['channel' => 'slack']],
+            ['class' => '\ZeroBoiler\Events\Tests\Actions\Log', 'params' => ['channel' => 'slack']],
+            ['class' => '\ZeroBoiler\Events\Tests\Actions\Notify', 'params' => ['channel' => 'slack']],
         ]);
     });
 });

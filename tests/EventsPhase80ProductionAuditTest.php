@@ -214,22 +214,22 @@ test('EventManager parseActions handles all JSON formats', function (): void {
     $manager = new \ZeroBoiler\Events\EventManager($engine, $resolver, $app);
 
     // Single class name string
-    $result = $method->invoke($manager, \ZeroBoiler\Events\Tests\Actions\Foo');
-    expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo']);
+    $result = $method->invoke($manager, '\ZeroBoiler\Events\Tests\Actions\Foo');
+    expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\Foo']);
 
     // JSON array of class names
     $result = $method->invoke($manager, '["App\\\\Actions\\\\Foo", "App\\\\Actions\\\\Bar"]');
-    expect($result)->toEqual([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar']);
+    expect($result)->toEqual(['\ZeroBoiler\Events\Tests\Actions\Foo', '\ZeroBoiler\Events\Tests\Actions\Bar']);
 
     // JSON object with class + params
     $result = $method->invoke($manager, '{"class": "App\\\\Actions\\\\Foo", "params": {"url": "https://example.com"}}');
-    expect($result)->toEqual([['class' => \ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://example.com']]]);
+    expect($result)->toEqual([['class' => '\ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://example.com']]]);
 
     // JSON classes + params (multiple actions)
     $result = $method->invoke($manager, '{"classes": ["App\\\\Actions\\\\Foo", "App\\\\Actions\\\\Bar"], "params": {"key": "value"}}');
     expect($result)->toHaveCount(2);
-    expect($result[0])->toEqual(['class' => \ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['key' => 'value']]);
-    expect($result[1])->toEqual(['class' => \ZeroBoiler\Events\Tests\Actions\Bar', 'params' => ['key' => 'value']]);
+    expect($result[0])->toEqual(['class' => '\ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['key' => 'value']]);
+    expect($result[1])->toEqual(['class' => '\ZeroBoiler\Events\Tests\Actions\Bar', 'params' => ['key' => 'value']]);
 
     // Empty string
     $result = $method->invoke($manager, '');

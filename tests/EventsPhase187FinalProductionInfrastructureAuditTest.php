@@ -277,7 +277,7 @@ describe('Phase 187 Production Infrastructure Audit', function (): void {
             $decoded = json_decode($parsed, true);
             expect(is_array($decoded))->toBeTrue();
             // HighPriority should only appear once
-            $count = count(array_filter($decoded, fn (mixed $v): bool => $v === \ZeroBoiler\Events\Tests\Actions\HighPriority' || (is_array($v) && ($v['class'] ?? '') === \ZeroBoiler\Events\Tests\Actions\HighPriority')));
+            $count = count(array_filter($decoded, fn (mixed $v): bool => $v === '\ZeroBoiler\Events\Tests\Actions\HighPriority' || (is_array($v) && ($v['class'] ?? '') === '\ZeroBoiler\Events\Tests\Actions\HighPriority')));
             expect($count)->toBe(1);
         });
     });

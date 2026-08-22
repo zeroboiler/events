@@ -70,7 +70,7 @@ describe('Events Phase 165 — Final Production Hardening Audit', function (): v
             $builder = $em->on('test.dedup');
 
             // Set single action
-            $builder->action(\ZeroBoiler\Events\Tests\Actions\LogAction');
+            $builder->action('\ZeroBoiler\Events\Tests\Actions\LogAction');
 
             // Set multiple actions containing the same class
             // We can't call actions() directly as it's on the builder, so test
@@ -81,7 +81,7 @@ describe('Events Phase 165 — Final Production Hardening Audit', function (): v
         test('TriggerBuilder save() with only actions() (no action()) works', function (): void {
             $em = app(EventManager::class);
             $trigger = $em->on('test.actions-only')
-                ->actions([\ZeroBoiler\Events\Tests\Actions\FirstAction', \ZeroBoiler\Events\Tests\Actions\SecondAction'])
+                ->actions(['\ZeroBoiler\Events\Tests\Actions\FirstAction', '\ZeroBoiler\Events\Tests\Actions\SecondAction'])
                 ->save();
 
             expect($trigger)->toBeInstanceOf(Trigger::class);

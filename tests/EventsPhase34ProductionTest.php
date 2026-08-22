@@ -751,7 +751,7 @@ it('Trigger boot generates UUID for empty id', function (): void {
     $trigger = new Trigger([
         'name' => 'Boot UUID Test',
         'event' => 'test.boot.trigger',
-        'action' => \ZeroBoiler\Events\Tests\Actions\TestAction',
+        'action' => '\ZeroBoiler\Events\Tests\Actions\TestAction',
         'enabled' => true,
     ]);
 

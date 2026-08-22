@@ -543,15 +543,15 @@ describe('Production Readiness Deep Audit', function (): void {
         test('single class name string', function (): void {
             $em = app()->make(EventManager::class);
             $ref = new ReflectionMethod($em, 'parseActions');
-            $result = $ref->invoke($em, \ZeroBoiler\Events\Tests\Actions\Foo');
-            expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo']);
+            $result = $ref->invoke($em, '\ZeroBoiler\Events\Tests\Actions\Foo');
+            expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\Foo']);
         });
 
         test('JSON array of class names', function (): void {
             $em = app()->make(EventManager::class);
             $ref = new ReflectionMethod($em, 'parseActions');
             $result = $ref->invoke($em, '["App\\Actions\\Foo","App\\Actions\\Bar"]');
-            expect($result)->toBe([\ZeroBoiler\Events\Tests\Actions\Foo', \ZeroBoiler\Events\Tests\Actions\Bar']);
+            expect($result)->toBe(['\ZeroBoiler\Events\Tests\Actions\Foo', '\ZeroBoiler\Events\Tests\Actions\Bar']);
         });
 
         test('JSON object with class + params', function (): void {
@@ -559,7 +559,7 @@ describe('Production Readiness Deep Audit', function (): void {
             $ref = new ReflectionMethod($em, 'parseActions');
             $result = $ref->invoke($em, '{"class":"App\\Actions\\Foo","params":{"url":"https://example.com"}}');
             expect($result)->toEqual([
-                ['class' => \ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://example.com']],
+                ['class' => '\ZeroBoiler\Events\Tests\Actions\Foo', 'params' => ['url' => 'https://example.com']],
             ]);
         });
 

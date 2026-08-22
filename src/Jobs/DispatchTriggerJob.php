@@ -41,14 +41,8 @@ final class DispatchTriggerJob implements ShouldQueue
     /** @var list<int> Backoff intervals in seconds between retry attempts. Populated from `events.retry.backoff` config in the constructor. */
     public readonly array $backoff;
 
-    /** @var string Queue name. Populated from `events.queue.queue` config in the constructor. */
-    public readonly string $queue;
-
     /** @var int Number of times the job may be attempted. Populated from `events.retry.tries` config in the constructor. */
     public readonly int $tries;
-
-    /** @var string|null Queue connection name. Populated from `events.queue.connection` config in the constructor. Null means use the default queue connection. */
-    public readonly ?string $connection;
 
     /**
      * Create a new dispatch trigger job.

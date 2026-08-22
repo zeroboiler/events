@@ -20,7 +20,7 @@ uses(TestCase::class);
 describe('ActionResolver edge cases', function (): void {
     it('rejects non-existent class', function (): void {
         $resolver = app(ActionResolver::class);
-        $resolver->resolve(\ZeroBoiler\Events\Tests\Actions\NonExistentClass');
+        $resolver->resolve('\ZeroBoiler\Events\Tests\Actions\NonExistentClass');
     })->throws(\InvalidArgumentException::class, 'does not exist');
 
     it('rejects class that does not implement Triggerable', function (): void {

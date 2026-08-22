@@ -132,7 +132,7 @@ describe('EventManager Edge Cases', function (): void {
         // Create a trigger that would normally fire
         $trigger = Trigger::factory()->enabled()->create([
             'event' => 'test.silent',
-            'action' => \ZeroBoiler\Events\Tests\Actions\SendOrderNotification',
+            'action' => '\ZeroBoiler\Events\Tests\Actions\SendOrderNotification',
         ]);
 
         // Should not throw, should silently return
@@ -211,14 +211,14 @@ describe('TriggerBuilder Validation', function (): void {
         $manager = app()->make(\ZeroBoiler\Events\EventManager::class);
         $builder = $manager->on('');
 
-        $builder->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')->save();
+        $builder->action('\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')->save();
     })->throws(\InvalidArgumentException::class, 'Event name is required');
 
     it('save throws on zero-string event name', function (): void {
         $manager = app()->make(\ZeroBoiler\Events\EventManager::class);
         $builder = $manager->on('0');
 
-        $builder->action(\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')->save();
+        $builder->action('\ZeroBoiler\Events\Tests\Actions\SendOrderNotification')->save();
     })->throws(\InvalidArgumentException::class, 'Event name is required');
 
     it('save throws when no action is provided', function (): void {

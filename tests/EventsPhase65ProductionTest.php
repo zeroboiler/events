@@ -53,7 +53,7 @@ describe('Phase 65 — Final production readiness audit', function (): void {
         $manager = app(EventManager::class);
         $builder = $manager->on('');
 
-        expect(fn (): mixed => $builder->action(\ZeroBoiler\Events\Tests\Actions\Foo')->save())
+        expect(fn (): mixed => $builder->action('\ZeroBoiler\Events\Tests\Actions\Foo')->save())
             ->toThrow(\InvalidArgumentException::class, 'Event name is required');
     });
 
@@ -61,7 +61,7 @@ describe('Phase 65 — Final production readiness audit', function (): void {
         $manager = app(EventManager::class);
         $builder = $manager->on('0');
 
-        expect(fn (): mixed => $builder->action(\ZeroBoiler\Events\Tests\Actions\Foo')->save())
+        expect(fn (): mixed => $builder->action('\ZeroBoiler\Events\Tests\Actions\Foo')->save())
             ->toThrow(\InvalidArgumentException::class, 'Event name is required');
     });
 
@@ -77,7 +77,7 @@ describe('Phase 65 — Final production readiness audit', function (): void {
         $manager = app(EventManager::class);
         $builder = $manager->on('test.event');
 
-        expect(fn (): mixed => $builder->actions([\ZeroBoiler\Events\Tests\Actions\Foo', '']))
+        expect(fn (): mixed => $builder->actions(['\ZeroBoiler\Events\Tests\Actions\Foo', '']))
             ->toThrow(\InvalidArgumentException::class, 'Each action class must be a non-empty string');
     });
 
@@ -85,7 +85,7 @@ describe('Phase 65 — Final production readiness audit', function (): void {
         $manager = app(EventManager::class);
         $builder = $manager->on('test.event');
 
-        expect(fn (): mixed => $builder->actions([\ZeroBoiler\Events\Tests\Actions\Foo', '0']))
+        expect(fn (): mixed => $builder->actions(['\ZeroBoiler\Events\Tests\Actions\Foo', '0']))
             ->toThrow(\InvalidArgumentException::class, 'Each action class must be a non-empty string');
     });
 
