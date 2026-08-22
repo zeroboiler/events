@@ -32,7 +32,6 @@ final class EventsUnsubscribeCommand extends Command
      * @return int Command exit code (SUCCESS or FAILURE)
      * @since 1.0.0
      */
-    #[\Override]
     public function handle(EventManager $eventManager): int
     {
         $id = (string) $this->argument('id');

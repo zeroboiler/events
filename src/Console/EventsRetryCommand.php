@@ -29,7 +29,6 @@ final class EventsRetryCommand extends Command
 
     protected string $description = 'Retry failed or pending event dispatches';
 
-    #[\Override]
     public function handle(EventManager $eventManager): int
     {
         $statusOption = $this->option('status');

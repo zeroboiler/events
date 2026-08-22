@@ -22,7 +22,6 @@ final class EventsEnableCommand extends Command
 
     protected string $description = 'Enable an event trigger';
 
-    #[\Override]
     public function handle(EventManager $eventManager): int
     {
         $id = (string) $this->argument('id');

@@ -33,7 +33,6 @@ final class EventsSubscriptionsCommand extends Command
 
     protected string $description = 'List external webhook subscriptions';
 
-    #[\Override]
     public function handle(): int
     {
         $query = Subscription::query();

@@ -73,7 +73,6 @@ final class EventsRedeliverCommand extends Command
      * @return int Command exit code (SUCCESS or FAILURE)
      * @since 1.0.0
      */
-    #[\Override]
     public function handle(): int
     {
         $logId = (string) $this->argument('log_id');

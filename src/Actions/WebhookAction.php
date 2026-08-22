@@ -63,7 +63,6 @@ final class WebhookAction implements Triggerable
      * @throws \Throwable When the HTTP request fails (re-thrown after logging)
      * @since 1.0.0
      */
-    #[\Override]
     public function handle(array $payload): void
     {
         $url = $payload['url'] ?? null;

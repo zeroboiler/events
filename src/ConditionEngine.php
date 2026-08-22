@@ -26,7 +26,6 @@ final class ConditionEngine implements ConditionEngineContract
      *
      * @since 1.0.0
      */
-    #[\Override]
     public function matches(array $conditions, array $payload): bool
     {
         foreach ($conditions as $field => $expected) {

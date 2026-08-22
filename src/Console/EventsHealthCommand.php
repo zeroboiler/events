@@ -63,7 +63,6 @@ final class EventsHealthCommand extends Command
      * @return int Command exit code (SUCCESS if all checks pass, FAILURE if any critical check fails)
      * @since 1.0.0
      */
-    #[\Override]
     public function handle(): int
     {
         $results = [];

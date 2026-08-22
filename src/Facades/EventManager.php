@@ -59,7 +59,6 @@ use Illuminate\Support\Facades\Facade;
  */
 final class EventManager extends Facade
 {
-    #[\Override]
     protected static function getFacadeAccessor(): string
     {
         return \ZeroBoiler\Events\EventManager::class;

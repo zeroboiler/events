@@ -60,7 +60,6 @@ final class Subscription extends Model
      * the static config() facade.
      * @since 1.0.0
      */
-    #[\Override]
     public function getTable(): string
     {
         $config = app('config');
@@ -106,7 +105,6 @@ final class Subscription extends Model
      * Auto-generates a UUID primary key when creating a new model
      * instance without an explicit ID.
      */
-    #[\Override]
     protected static function boot(): void
     {
         parent::boot();
@@ -309,7 +307,6 @@ final class Subscription extends Model
     /**
      * @return SubscriptionFactory<Subscription>
      */
-    #[\Override]
     protected static function newFactory(): SubscriptionFactory
     {
         return SubscriptionFactory::new();
@@ -318,7 +315,6 @@ final class Subscription extends Model
     /**
      * @return array<string, string>
      */
-    #[\Override]
     protected function casts(): array
     {
         return [

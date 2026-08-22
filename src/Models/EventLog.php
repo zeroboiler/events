@@ -47,7 +47,6 @@ final class EventLog extends Model
      * the static config() facade.
      * @since 1.0.0
      */
-    #[\Override]
     public function getTable(): string
     {
         $config = app('config');
@@ -89,7 +88,6 @@ final class EventLog extends Model
      * Auto-generates a UUID primary key when creating a new model
      * instance without an explicit ID.
      */
-    #[\Override]
     protected static function boot(): void
     {
         parent::boot();
@@ -219,7 +217,6 @@ final class EventLog extends Model
     /**
      * @return EventLogFactory<EventLog>
      */
-    #[\Override]
     protected static function newFactory(): EventLogFactory
     {
         return EventLogFactory::new();
@@ -228,7 +225,6 @@ final class EventLog extends Model
     /**
      * @return array<string, string>
      */
-    #[\Override]
     protected function casts(): array
     {
         return [

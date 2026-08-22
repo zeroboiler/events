@@ -35,7 +35,6 @@ final class EventsServiceProvider extends ServiceProvider
      * Register services.
      * @since 1.0.0
      */
-    #[\Override]
     public function register(): void
     {
         $this->mergeConfigFrom(
@@ -70,7 +69,6 @@ final class EventsServiceProvider extends ServiceProvider
      * Bootstrap services.
      * @since 1.0.0
      */
-    #[\Override]
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
@@ -112,7 +110,6 @@ final class EventsServiceProvider extends ServiceProvider
      * @return list<string>
      * @since 1.0.0
      */
-    #[\Override]
     public function provides(): array
     {
         return [
